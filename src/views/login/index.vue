@@ -60,10 +60,10 @@
         </el-form-item>
       </el-tooltip>
 
-      <div class="forget-pwd">
+      <!-- <div class="forget-pwd">
         <el-checkbox v-model="checked">记住密码</el-checkbox>
         <el-link>忘记密码</el-link>
-      </div>
+      </div> -->
 
       <el-button
         :loading="loading"
