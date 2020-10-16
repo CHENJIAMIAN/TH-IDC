@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  title: '潼湖数据中心动环监控系统',
 
   /**
    * @type {boolean} true | false

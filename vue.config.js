@@ -6,24 +6,20 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'vue Element Admin' // page title
+const name = defaultSettings.title || '潼湖数据中心动环监控系统' // page title
 
-// If your port is set to 80,
-// use administrator privileges to execute the command line.
-// For example, Mac: sudo npm run
-// You can change the port by the following method:
-// port = 9527 npm run dev OR npm run dev --port = 9527
+//如果您的端口设置为80，请使用管理员权限执行命令行。
+//例如，Mac：sudo npm run
+//您可以通过以下方法更改端口：port = 9527 npm run dev或npm run dev --port = 9527
 const port = process.env.port || process.env.npm_config_port || 9527 // dev port
 
-// All configuration item explanations can be find in https://cli.vuejs.org/config/
+//所有配置项说明均可在https://cli.vuejs.org/config/中找到 
 module.exports = {
   /**
-   * You will need to set publicPath if you plan to deploy your site under a sub path,
-   * for example GitHub Pages. If you plan to deploy your site to https://foo.github.io/bar/,
-   * then publicPath should be set to "/bar/".
-   * In most cases please use '/' !!!
-   * Detail: https://cli.vuejs.org/config/#publicpath
-   */
+    *如果您打算在子路径（例如GitHub Pages）下部署站点，则需要设置publicPath。如果您打算将站点部署到https://foo.github.io/bar/，则publicPath应该设置为“ /bar /”。
+    *在大多数情况下，请使用'/'！
+    *详细信息：https://cli.vuejs.org/config/#publicpath
+    */
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
@@ -39,8 +35,8 @@ module.exports = {
     // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
-    // provide the app's title in webpack's name field, so that
-    // it can be accessed in index.html to inject the correct title.
+    //在webpack的名称字段中提供应用程序的标题，以便
+    //可以在index.html中对其进行访问以注入正确的标题。 
     name: name,
     resolve: {
       alias: {
@@ -49,19 +45,19 @@ module.exports = {
     }
   },
   chainWebpack(config) {
-    // it can improve the speed of the first screen, it is recommended to turn on preload
-    // it can improve the speed of the first screen, it is recommended to turn on preload
+    //可以提高第一个屏幕的速度，建议打开预加载
+    //可以提高第一个屏幕的速度，建议打开预加载
     config.plugin('preload').tap(() => [
       {
         rel: 'preload',
-        // to ignore runtime.js
+        //忽略runtime.js 
         // https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/config/app.js#L171
         fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
         include: 'initial'
       }
     ])
 
-    // when there are many pages, it will cause too many meaningless requests
+    //当页面很多时，它将导致太多无意义的请求 
     config.plugins.delete('prefetch')
 
     // set svg-sprite-loader
@@ -88,7 +84,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+              // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()
@@ -100,11 +96,11 @@ module.exports = {
                   name: 'chunk-libs',
                   test: /[\\/]node_modules[\\/]/,
                   priority: 10,
-                  chunks: 'initial' // only package third parties that are initially dependent
+                  chunks: 'initial' //仅打包最初依赖的第三方 
                 },
                 elementUI: {
-                  name: 'chunk-elementUI', // split elementUI into a single package
-                  priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
+                  name: 'chunk-elementUI', //将elementUI拆分为一个包 
+                  priority: 20, //权重必须大于libs和app，否则将打包到libs或app中 
                   test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
                 },
                 commons: {
