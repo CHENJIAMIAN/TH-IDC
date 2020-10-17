@@ -1,4 +1,33 @@
-// cover some element-ui styles
+// 被'@/styles/index.scss'引用
+//涵盖一些element-ui样式
+
+.el-button {
+  background: red;
+  background: url(../assets/img/jx.png) 0 0 / 100% 100% no-repeat;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  width: 150px;
+}
+.el-button:hover,
+.el-button:focus {
+  color: #e39f40;
+  border: none;
+  background: url(../assets/img/jx2.png) 0 0 / 100% 100% no-repeat;
+}
+
+.el-breadcrumb__inner.is-link,
+.el-breadcrumb__inner a {
+  color: #00f7ff;
+  font-size: 1.3rem;
+}
+.el-breadcrumb__item:last-child .el-breadcrumb__inner,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner:hover,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner a,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover {
+  color: #00f7ff;
+  font-size: 1.3rem;
+}
 
 .el-breadcrumb__inner,
 .el-breadcrumb__inner a {
@@ -69,7 +98,7 @@
 // dropdown
 .el-dropdown-menu {
   a {
-    display: block
+    display: block;
   }
 }
 

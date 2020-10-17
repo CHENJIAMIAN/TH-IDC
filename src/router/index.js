@@ -73,7 +73,8 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/nested',
+    // redirect: '/device-monitor',
+    redirect: '/system-setting',
     // children: [
     //   {
     //     path: 'nested',
@@ -189,6 +190,51 @@ export const asyncRoutes = [
   // chartsRouter,
   nestedRouter,
   // tableRouter,
+
+
+  {
+    path: '/system-setting',
+    component: Layout,
+    redirect: '/system-setting/user-manage',
+    name: '系统设置',
+    meta: {
+      title: '系统设置',
+      icon: 'nested',
+      affix: true
+    },
+    children: [
+      {
+        path: 'user-manage',
+        component: () => import('@/views/system-setting/user-manage/index'),
+        name: 'Icons',
+        meta: { title: '用户管理', icon: 'icon' }
+      },
+      {
+        path: 'role-manage',
+        component: () => import('@/views/system-setting/role-manage/index'),
+        name: 'Icons',
+        meta: { title: '角色管理', icon: 'icon' }
+      },
+      {
+        path: 'column-manage',
+        component: () => import('@/views/system-setting/column-manage/index'),
+        name: 'Icons',
+        meta: { title: '栏目管理', icon: 'icon' }
+      },
+      {
+        path: 'module-manage',
+        component: () => import('@/views/system-setting/module-manage/index'),
+        name: 'Icons',
+        meta: { title: '模块管理', icon: 'icon' }
+      },
+      {
+        path: 'authority-manage',
+        component: () => import('@/views/system-setting/authority-manage/index'),
+        name: 'Icons',
+        meta: { title: '权限管理', icon: 'icon' }
+      }
+    ]
+  },
 
   // {
   //   path: '/example',

@@ -7,10 +7,8 @@
       @toggleClick="toggleSideBar"
     /> -->
 
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-
     <div class="right-menu">
-      <template v-if="device!=='mobile'">
+      <template v-if="device !== 'mobile'">
         <!-- <search id="header-search" class="right-menu-item" /> -->
 
         <error-log class="errLog-container right-menu-item hover-effect" />
@@ -20,13 +18,15 @@
         <!-- <el-tooltip content="Global Size" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip> -->
-
       </template>
 
       <!-- <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click"> -->
       <div class="avatar-wrapper">
-        <img src="@/assets/img/dlr.png" />
-        张三
+        <img src="@/assets/img/xx.png" />
+        <div class="user">
+          <img src="@/assets/img/dlr.png" />
+          <span>张三</span>
+        </div>
         <img src="@/assets/img/zxdl.png" @click="logout" />
         <!-- <i class="el-icon-caret-bottom" /> -->
       </div>
@@ -54,7 +54,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 import ErrorLog from "@/components/ErrorLog";
 import Screenfull from "@/components/Screenfull";
@@ -63,7 +62,6 @@ import Search from "@/components/HeaderSearch";
 
 export default {
   components: {
-    Breadcrumb,
     Hamburger,
     ErrorLog,
     Screenfull,
@@ -89,9 +87,9 @@ export default {
 .navbar {
   height: 50px;
   overflow: hidden;
-  position: relative;
-  background: #fff;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  float: right;
 
   .hamburger-container {
     line-height: 46px;
@@ -104,10 +102,6 @@ export default {
     &:hover {
       background: rgba(0, 0, 0, 0.025);
     }
-  }
-
-  .breadcrumb-container {
-    float: left;
   }
 
   .errLog-container {
@@ -142,27 +136,35 @@ export default {
       }
     }
 
-    .avatar-container {
-      margin-right: 30px;
+    .avatar-wrapper {
+      margin-top: 5px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 150px;
+      justify-content: space-between;
+      margin-right: 1rem;
 
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
+      .user {
+        display: flex;
+        align-items: center;
+        width: 58px;
+        justify-content: space-between;
+      }
 
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
+      .user-avatar {
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+      }
 
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
+      .el-icon-caret-bottom {
+        cursor: pointer;
+        position: absolute;
+        right: -20px;
+        top: 25px;
+        font-size: 12px;
       }
     }
   }

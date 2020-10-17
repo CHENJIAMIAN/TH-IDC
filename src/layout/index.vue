@@ -5,12 +5,30 @@
       class="drawer-bg"
       @click="handleClickOutside"
     />
-    <div class="head"></div>
-    <div class="side">房间列表</div>
-    <!-- <sidebar class="sidebar-container" /> -->
+    <div class="head">
+      <navbar />
+      <div class="btn-group">
+        <el-button>驾驶舱</el-button>
+        <el-button>设备监控</el-button>
+        <el-button>报表管理</el-button>
+        <el-button>系统管理</el-button>
+        <el-button>工程配置</el-button>
+        <el-button>资源管理</el-button>
+      </div>
+    </div>
+    <div class="side-breadcrumb" style="margin-left: 2rem;">
+      <img
+        src="@/assets/img/dw.png"
+        style="transform: translate(0px, -13px);"
+      />
+      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+    </div>
+    <div class="side">
+      <!-- 次级路由，从路由$route获取 -->
+      <sidebar/>
+    </div>
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
-        <navbar />
         <tags-view v-if="needTagsView" />
       </div>
       <app-main />
@@ -26,10 +44,12 @@ import RightPanel from "@/components/RightPanel";
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
 import ResizeMixin from "./mixin/ResizeHandler";
 import { mapState } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
 
 export default {
   name: "Layout",
   components: {
+    Breadcrumb,
     AppMain,
     Navbar,
     RightPanel,
@@ -80,26 +100,32 @@ export default {
     top: 0;
   }
 
+  $headhei: 12vh;
+
   .head {
-    height: 12vh;
-    // background: url(../assets/img/top2.png) 0 0 / 100% 100% no-repeat;
+    position: relative;
+    height: $headhei;
+    background: url(../assets/img/top2.png) 0 0 / 100% 100% no-repeat;
     //background: url(../assets/img/top.png) center no-repeat;
+    .btn-group {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+    }
   }
 
   .side {
     position: fixed;
-    top: calc(12vh + 1em);
-    width: 300px;
-    height: 60vh;
-
+    top: calc(#{$headhei} + 5em);
+    width: 200px;
+    bottom: 60px;
     border-style: solid;
     border-image-source: url(../assets/img/sideborder.png);
-
-    border-image-slice: 100px 137px 90px 123px;
-    border-image-width: 100px 137px 90px 123px;
-    border-image-outset: 100px 137px 90px 123px;
+    border-image-slice: 47 92 47 87;
+    border-image-width: 47px 92px 47px 90px;
+    border-image-outset: 35px 37px 37px 35px;
     border-image-repeat: stretch stretch;
-    // background: #11223b;
+    left: 60px;
   }
 }
 
