@@ -8,8 +8,30 @@
         size="medium"
         :model="filterForm"
       >
-        <el-form-item prop="protocolNum">
-          <el-input v-model="filterForm.protocolNum" placeholder="协议编号" />
+        <el-form-item prop="userName">
+          <el-input v-model="filterForm.userName" placeholder="用户账号" />
+        </el-form-item>
+        <el-form-item prop="realName">
+          <el-input v-model="filterForm.realName" placeholder="用户名称" />
+        </el-form-item>
+        <el-form-item prop="phone">
+          <el-input v-model="filterForm.phone" placeholder="电话" />
+        </el-form-item>
+        <el-form-item prop="departmentId">
+          <el-select v-model="filterForm.departmentId">
+            <el-option
+              v-for="item in depOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="status">
+          <el-radio-group v-model="filterForm.status" style="width: 100%">
+            <el-radio :label="1">启用</el-radio>
+            <el-radio :label="0">禁用</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -24,37 +46,51 @@
             @click="handleReset('filterForm')"
             >重置</el-button
           >
-          <el-button type="primary" size="medium" @click="handleDetail">
-            <i class="el-icon-plus el-icon--right" />
+          <el-button type="primary" size="medium" @click="handleDialog()">
+            <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
+            <i class="el-icon-plus" />
           </el-button>
         </el-form-item>
       </el-form>
     </div>
 
     <!-- 列表 -->
-    <el-table v-loading="!listLoading" border :data="listData">
-      <el-table-column prop="dealName" label="协议名称" />
-      <el-table-column prop="family.protocolNum" label="协议编号" />
-      <el-table-column prop="family.measureNum" label="测绘编号" />
-      <el-table-column prop="concludeTime" label="签订日期" />
-      <el-table-column prop="turnOverTime" label="预计移交日期" />
-      <el-table-column prop="returnMigrationTime" label="预计返迁日期" />
+    <el-table
+      style="overflow: auto;"
+      stripe
+      v-loading="listLoading"
+      border
+      :data="listData"
+    >
+      <el-table-column prop="userName" label="用户账号" />
+      <el-table-column prop="realName" label="用户名称" />
+      <el-table-column prop="phone" label="电话" />
+      <el-table-column prop="email" label="邮箱" />
+      <el-table-column prop="wechat" label="微信" />
+      <el-table-column prop="status" label="账号状态">
+        <template slot-scope="{ row }">
+          <el-switch
+            disabled
+            v-model="row.status"
+            :active-value="1"
+            :inactive-value="0"
+          ></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
-          <el-button type="text" size="mini" @click="handleDetail(row.id)"
-            >查看</el-button
-          >
           <el-button
-            type="text"
-            size="mini"
-            @click="
-              $router.push(`/contractManage/compensationDeal/edit/${row.id}`)
-            "
-            >编辑</el-button
-          >
-          <el-button type="text" size="mini" @click="handleDel(row.id)"
-            >删除</el-button
-          >
+            icon="el-icon-edit-outline"
+            type="primary"
+            plain
+            @click="handleDialog(row)"
+          ></el-button>
+          <el-button
+            icon="el-icon-delete"
+            type="primary"
+            plain
+            @click="handleDel(row.id)"
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -69,7 +105,9 @@
     <!-- 详情弹窗 -->
     <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
       <span slot="title">
-        <span style="font-size: 1.5rem;font-weight: bold;">新增</span>
+        <span style="font-size: 1.5rem;font-weight: bold;">{{
+          dialog.forms.id ? "编辑" : "新增"
+        }}</span>
         <img style="margin-left: 1rem;" src="@/assets/img/hl.png" />
       </span>
       <el-form
@@ -81,7 +119,7 @@
         <el-form-item label="用户账号" prop="userName">
           <el-input v-model="dialog.forms.userName"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="密码" prop="password" v-if="!dialog.forms.id">
           <el-input v-model="dialog.forms.password"></el-input>
         </el-form-item>
         <el-form-item label="用户名称" prop="realName">
@@ -133,7 +171,6 @@ import pagination from "@/components/Pagination";
 import {
   sysDepartmentListAll,
   sysUserAdd,
-  sysRoleListByPage,
   sysUserDelete,
   sysUserEdit,
   sysUserListByPage
@@ -148,8 +185,8 @@ export default {
         userName: "",
         realName: "",
         phone: "",
-        departmentId: "",
-        status: "",
+        departmentId: null,
+        status: null,
         pageNo: 1, // 当前页码
         pageSize: 10 // 每页限制数量
       },
@@ -158,6 +195,7 @@ export default {
       listTotal: 0, // 列表总条数
       // 收款信息弹窗
       dialog: {
+        id: "",
         visible: false,
         forms: {},
         rules: {
@@ -184,10 +222,19 @@ export default {
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
-          sysUserAdd(this.dialog.forms).then(res => {
+          let callAPI = null;
+          if (this.dialog.forms.id) {
+            // 没有编辑密码的
+            this.dialog.forms.password = null;
+            callAPI = sysUserEdit;
+          } else {
+            callAPI = sysUserAdd;
+          }
+          callAPI(this.dialog.forms).then(res => {
             this.$message.success("操作成功!");
             this.$refs["dialogForm"].resetFields();
             this.dialog.visible = false;
+            this.getList();
           });
         } else {
           return false;
@@ -206,36 +253,31 @@ export default {
       this.handleQuery();
     },
     // 查看
-    handleDetail(id) {
-      console.log("index.vue id", id);
-      this.dialog.id = id;
+    handleDialog(row) {
+      if (row) {
+        // 编辑
+        this.dialog.forms = JSON.parse(JSON.stringify(row));
+      } else {
+        this.dialog.forms = {};
+      }
       this.dialog.visible = true;
     },
     // 删除
     handleDel(id) {
-      this.$confirm("此操作将永久删除该拆赔协议, 是否继续?", "提示", {
+      this.$confirm("确认删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          this.deleteCompensationDeal(id);
+          sysUserDelete({
+            id: id
+          }).then(res => {
+            this.getList();
+            this.$message.success("删除成功!");
+          });
         })
         .catch(() => {});
-    },
-    // 启用/关闭
-    changeStatus(id, val) {
-      changeStatusCompensationPlan({
-        id: id,
-        startUsing: val
-      })
-        .then(res => {
-          this.$message.success("操作成功!");
-          this.getList();
-        })
-        .catch(() => {
-          this.getList();
-        });
     },
     // 获取列表
     getList() {
@@ -245,15 +287,6 @@ export default {
         this.listTotal = res.data.total;
         this.listLoading = false;
       });
-    },
-    // 拆赔协议删除
-    deleteCompensationDeal(id) {
-      deleteCompensationDeal({
-        id: id
-      }).then(res => {
-        this.getList();
-        this.$message.success("删除成功!");
-      });
     }
   }
 };
@@ -261,13 +294,8 @@ export default {
 
 <style lang="scss" scoped>
 .user-manage {
-  // border-style: solid;
-  // border-image-source: url(../../../assets/img/wk.png);
-  // border-image-slice: 47 92 47 87;
-  // border-image-width: 47px 92px 47px 90px;
-  // border-image-outset: 35px 37px 37px 35px;
-  // border-image-repeat: stretch stretch;
-  background: #0d305cbf;
+  display: grid;
+  grid-template-rows: 60px auto 70px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: 100%;
 }

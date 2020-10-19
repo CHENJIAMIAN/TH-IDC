@@ -1,17 +1,19 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
-.el-button {
-  color: #0c325e;
+.el-switch__core {
+  background: #506869;
 }
-.el-button:hover,
-.el-button:focus {
-  color: #0c325e;
+
+.v-modal {
+  background: #ffffff47;
 }
+.el-loading-mask {
+  background-color: rgb(255 255 255 / 15%);
+}
+
 .el-table,
 .el-table tr,
-.el-table th,
-.el-table th.is-leaf,
 .el-table td,
 .el-table::before,
 .el-table--group::after,
@@ -19,6 +21,14 @@
   background-color: transparent;
   color: #31c6f1;
   border: none;
+}
+.el-table th,
+.el-table th.is-leaf {
+  background: #0838698c;
+  border: none;
+}
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+  background: #0838698c;
 }
 
 .el-dialog {
@@ -36,6 +46,9 @@
 .el-dialog__headerbtn {
   border-radius: 50%;
   border: 2px solid #00f7ff;
+}
+.el-dialog__headerbtn .el-dialog__close {
+  color: #00f7ff;
 }
 .el-dialog__body {
   padding: 30px 20px 0;
