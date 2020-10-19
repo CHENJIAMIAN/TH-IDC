@@ -7,30 +7,20 @@
     />
     <div class="head">
       <navbar />
-      <div class="btn-group">
-        <el-button>驾驶舱</el-button>
-        <el-button>设备监控</el-button>
-        <el-button>报表管理</el-button>
-        <el-button>系统管理</el-button>
-        <el-button>工程配置</el-button>
-        <el-button>资源管理</el-button>
-      </div>
+      <tags-view v-if="needTagsView" />
     </div>
-    <div class="side-breadcrumb" style="margin-left: 2rem;">
+    <!-- <div class="side-breadcrumb" style="margin-left: 2rem;">
       <img
         src="@/assets/img/dw.png"
         style="transform: translate(0px, -13px);"
       />
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-    </div>
+    </div> -->
     <div class="side">
       <!-- 次级路由，从路由$route获取 -->
-      <sidebar/>
+      <sidebar />
     </div>
-    <div :class="{ hasTagsView: needTagsView }" class="main-container">
-      <div :class="{ 'fixed-header': fixedHeader }">
-        <tags-view v-if="needTagsView" />
-      </div>
+    <div class="main-container">
       <app-main />
       <!-- <right-panel v-if="showSettings">
         <settings />
@@ -100,7 +90,7 @@ export default {
     top: 0;
   }
 
-  $headhei: 12vh;
+  $headhei: 100px;
 
   .head {
     position: relative;

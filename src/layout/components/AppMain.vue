@@ -10,16 +10,16 @@
 
 <script>
 export default {
-  name: 'AppMain',
+  name: "AppMain",
   computed: {
     cachedViews() {
-      return this.$store.state.tagsView.cachedViews
+      return this.$store.state.tagsView.cachedViews;
     },
     key() {
-      return this.$route.path
+      return this.$route.path;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -29,9 +29,11 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
+  height: 100%;
+  padding: 3rem 1rem 2rem;
 }
 
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 
@@ -41,7 +43,7 @@ export default {
     // min-height: calc(100vh - 84px);
   }
 
-  .fixed-header+.app-main {
+  .fixed-header + .app-main {
     padding-top: 84px;
   }
 }

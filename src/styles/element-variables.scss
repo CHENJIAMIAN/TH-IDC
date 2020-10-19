@@ -2,10 +2,10 @@
 *被main.js引用
 *我认为element-ui的默认主题颜色太浅，无法长期使用。
 *因此，我修改了默认颜色，您可以根据自己的喜好对其进行修改。
-**/ 
+**/
 
 /* theme color */
-$--color-primary: #1890ff;
+$--color-primary: #32caf3;
 $--color-success: #13ce66;
 $--color-warning: #ffba00;
 $--color-danger: #ff4949;
@@ -19,6 +19,20 @@ $--border-color-light: #dfe4ed;
 $--border-color-lighter: #e6ebf5;
 
 $--table-border: 1px solid #dfe6ec;
+
+$--color-text-primary: #00f7ff;
+$--color-text-regular: #00f7ff;
+$--color-text-secondary: #00f7ff;
+$--color-text-placeholder: #00f7ff;
+
+$--border-color-base: #00f7ff;
+$--border-color-light: #00f7ff;
+$--border-color-lighter: #00f7ff;
+$--border-color-extra-light: #00f7ff;
+
+$--color-white: #0d305ccc;
+$--color-black: #dfe6ec;
+$--background-color-base: #0d708c;
 
 /* icon font path, required */
 $--font-path: "~element-ui/lib/theme-chalk/fonts";

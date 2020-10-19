@@ -2,18 +2,51 @@
 //涵盖一些element-ui样式
 
 .el-button {
-  background: red;
-  background: url(../assets/img/jx.png) 0 0 / 100% 100% no-repeat;
-  border: none;
-  color: white;
-  font-size: 1.1rem;
-  width: 150px;
+  color: #0c325e;
 }
 .el-button:hover,
 .el-button:focus {
-  color: #e39f40;
+  color: #0c325e;
+}
+.el-table,
+.el-table tr,
+.el-table th,
+.el-table th.is-leaf,
+.el-table td,
+.el-table::before,
+.el-table--group::after,
+.el-table--border::after {
+  background-color: transparent;
+  color: #31c6f1;
   border: none;
-  background: url(../assets/img/jx2.png) 0 0 / 100% 100% no-repeat;
+}
+
+.el-dialog {
+  background: url(../assets/img/wk.png) 0 0 / 100% 100% no-repeat;
+}
+.el-form-item__label,
+.el-dialog,
+.el-dialog__title,
+.el-dialog__body {
+  color: #31c6f1;
+}
+.el-dialog__header {
+  padding: 2rem;
+}
+.el-dialog__headerbtn {
+  border-radius: 50%;
+  border: 2px solid #00f7ff;
+}
+.el-dialog__body {
+  padding: 30px 20px 0;
+}
+
+.el-input--medium .el-input__inner {
+  background: transparent;
+}
+.el-input__inner {
+  border: 1px solid #38d2fe;
+  box-shadow: 0px 0px 3px #38d2fe inset;
 }
 
 .el-breadcrumb__inner.is-link,
