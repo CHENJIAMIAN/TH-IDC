@@ -215,9 +215,7 @@ export default {
     };
   },
   created() {
-    sysDepartmentListAll().then(r => {
-      this.depOpts = r.data;
-    });
+    sysDepartmentListAll().then(r => (this.depOpts = r.data));
     this.handleQuery();
   },
   mounted() {},

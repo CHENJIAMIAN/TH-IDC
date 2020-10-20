@@ -57,6 +57,7 @@ module.exports = {
       }
     ])
 
+
     //当页面很多时，它将导致太多无意义的请求 
     config.plugins.delete('prefetch')
 
@@ -76,6 +77,15 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
       .end()
+
+    config
+      // https://webpack.js.org/configuration/devtool/#development
+      .when(process.env.NODE_ENV === 'development',
+        // config => config.devtool('eval')//大量报警告
+        // config => config.devtool('cheap-eval-source-map')
+        config => config.devtool('cheap-source-map')
+        // config => config.devtool('cheap-module-source-map')
+      )
 
     config
       .when(process.env.NODE_ENV !== 'development',

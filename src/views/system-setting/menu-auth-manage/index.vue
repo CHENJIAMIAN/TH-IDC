@@ -112,10 +112,13 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
         </el-form-item>
         <el-form-item
           label="一级菜单"
-          prop="firstMenu"
-          v-if="dialog.forms.menuType != 1"
+          prop="firstMenuId"
+          v-if="dialog.forms.menuType == 2 || dialog.forms.menuType == 3"
         >
-          <el-select v-model="dialog.forms.firstMenu">
+          <el-select
+            v-model="dialog.forms.firstMenuId"
+            @change="dialog.forms.secondMenuId = ''"
+          >
             <el-option
               v-for="item in firstMenuOpts"
               :key="item.id"
@@ -126,10 +129,10 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
         </el-form-item>
         <el-form-item
           label="二级菜单"
-          prop="secondMenu"
+          prop="secondMenuId"
           v-if="dialog.forms.menuType == 3"
         >
-          <el-select v-model="dialog.forms.secondMenu">
+          <el-select v-model="dialog.forms.secondMenuId">
             <el-option
               v-for="item in secondMenuOpts"
               :key="item.id"
@@ -180,19 +183,21 @@ export default {
         visible: false,
         forms: {},
         rules: {
-          userName: [{ required: true, trigger: "blur", message: "请输入" }],
-          password: [{ required: true, trigger: "blur", message: "请输入" }],
-          realName: [{ required: true, trigger: "blur", message: "请输入" }],
-          phone: [{ required: true, trigger: "blur", message: "请输入" }],
-          departmentId: [
-            { required: true, trigger: "change", message: "请输入" }
-          ],
-          status: [{ required: true, trigger: "change", message: "请输入" }]
+          name: [{ required: true, trigger: "blur", message: "请输入" }],
+          menuType: [{ required: true, trigger: "change", message: "请输入" }]
         }
       }
     };
   },
-  watch: {},
+  watch: {
+    async "dialog.forms.firstMenuId"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.secondMenuOpts = [];
+      const r = await sysMenuListAll({ parentId: n, menuType: 2 });
+      this.secondMenuOpts = r.data;
+    }
+  },
   created() {
     this.handleQuery();
   },
@@ -208,14 +213,22 @@ export default {
               this.dialog.forms.parentId = null;
               break;
             case 2:
-              this.dialog.forms.parentId = this.dialog.forms.firstMenu;
+              this.dialog.forms.parentId = this.dialog.forms.firstMenuId;
+              if (!this.dialog.forms.firstMenuId) {
+                this.$message.error("请选择父级菜单");
+                return;
+              }
               break;
             case 3:
-              this.dialog.forms.parentId = this.dialog.forms.secondMenu;
+              this.dialog.forms.parentId = this.dialog.forms.secondMenuId;
+              if (!this.dialog.forms.secondMenuId) {
+                this.$message.error("请选择父级菜单");
+                return;
+              }
               break;
           }
-          delete this.dialog.forms.firstMenu;
-          delete this.dialog.forms.secondMenu;
+          delete this.dialog.forms.firstMenuId;
+          delete this.dialog.forms.secondMenuId;
           if (this.dialog.forms.id) {
             callAPI = sysMenuEdit;
           } else {
@@ -244,12 +257,42 @@ export default {
       this.handleQuery();
     },
     // 查看
-    handleDialog(row) {
-      sysMenuListAll({ menuType: 1 }).then(r => (this.firstMenuOpts = r.data));
-      sysMenuListAll({ menuType: 2 }).then(r => (this.secondMenuOpts = r.data));
+    async handleDialog(row) {
+      // dialog显示时获取一级菜单列表
+      const r1 = await sysMenuListAll({ menuType: 1 });
+      this.firstMenuOpts = r1.data;
       if (row) {
         // 编辑
-        this.dialog.forms = JSON.parse(JSON.stringify(row));
+        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)), {
+          firstMenuId: null, //!!!!!让这两个变量变响应式
+          secondMenuId: null //!!!!!让这两个变量变响应式
+        });
+        console.log(this.dialog.forms);
+        switch (row.menuType) {
+          case 1:
+            break;
+          case 2:
+            this.dialog.forms.firstMenuId = row.parentId;
+            break;
+          case 3:
+            // 二级菜单的id是row.parentId
+            // 此时二级菜单需要手动获取,而不是通过选一级触发
+            const r2 = await sysMenuListAll({ menuType: 2 });
+            this.secondMenuOpts = r2.data;
+            // 自动选上二级菜单
+            this.dialog.forms.secondMenuId = row.parentId;
+            // 找到二级菜单的该项
+            const secondMenu = this.secondMenuOpts.find(
+              i => i.id === row.parentId
+            );
+            // 超出与该二级菜单的父亲,也就是一级菜单的该项
+            const firstMenu = this.firstMenuOpts.find(
+              i => i.id === secondMenu.parentId
+            );
+            // 自动选上一级菜单
+            this.dialog.forms.firstMenuId = firstMenu.id; //得到一级菜单的id
+            break;
+        }
       } else {
         this.dialog.forms = {};
       }

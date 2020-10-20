@@ -1,4 +1,7 @@
 import request from '@/utils/request'
+
+// 获取登陆者用户信息接口
+export function sysUserQueryLoginUser(data) { return request({ url: '/admin/system/sysUser/queryLoginUser', method: 'post', data }) }
 // 登陆者修改自己用户账号信息接口
 export function sysUserEditSelf(data) { return request({ url: '/admin/system/sysUser/editSelf', method: 'post', data }) }
 //修改用户密码
