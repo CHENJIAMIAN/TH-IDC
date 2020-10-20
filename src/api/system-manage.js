@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+// 登陆者修改自己用户账号信息接口
+export function sysUserEditSelf(data) { return request({ url: '/admin/system/sysUser/editSelf', method: 'post', data }) }
 //修改用户密码
 export function sysUserUpdatePassword(data) { return request({ url: '/admin/system/sysUser/updatePassword', method: 'post', data }) }
 //获取用户信息接口
@@ -62,15 +64,15 @@ export function sysDepartmentListAll(data) { return request({ url: '/admin/syste
 // 2.3.1.3.角色管理
 // QURD 角色编号（id）、角色名称、 创建时间、修改时间、创建人、 修改人
 
-// 2.3.1.4.角色权限关联
-// 角色权限（一个或多个）
-
 // 2.3.1.5.用户管理
 // QURD 
 // 用户编号（id）、用户名、用户密码、姓名、电话、邮箱、微信、钉钉、备注、所属部门、启用状态、 创建时间、修改时间、创建人、 修改人
 
-// 2.3.1.6.用户角色关联
-// 用户角色（一个或多个）
+        // 2.3.1.6.用户角色关联
+        // 用户角色（一个或多个）
+        // 2.3.1.4.角色权限关联
+        // 角色权限（一个或多个）
+
 
 
 // 2.3.1.7.系统日志

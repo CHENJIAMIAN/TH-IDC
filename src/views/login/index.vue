@@ -1,5 +1,6 @@
 <template>
   <div class="login-container">
+    <div class="big-title">潼湖数据中心</div>
     <img style="width:100vw" src="@/assets/img/dlt.png" />
 
     <el-form
@@ -382,5 +383,21 @@ $light_gray: #eee;
       display: none;
     }
   }
+}
+.big-title {
+  font-size: 2.2rem;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0px);
+  line-height: 4rem;
+  font-weight: bold;
+  background: linear-gradient(
+    0deg,
+    rgba(29, 174, 254, 1) 18%,
+    rgba(18, 216, 244, 1) 44%,
+    rgba(18, 249, 237, 1) 73%
+  );
+  -webkit-background-clip: text;
+  color: transparent;
 }
 </style>

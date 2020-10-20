@@ -8,9 +8,9 @@
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <el-table :data="gridData">
-        <el-table-column property="date" label="Date" width="150" />
-        <el-table-column property="name" label="Name" width="200" />
-        <el-table-column property="address" label="Address" />
+        <el-table-column sortable property="date" label="Date" width="150" />
+        <el-table-column sortable property="name" label="Name" width="200" />
+        <el-table-column sortable property="address" label="Address" />
       </el-table>
     </el-dialog>
   </div>

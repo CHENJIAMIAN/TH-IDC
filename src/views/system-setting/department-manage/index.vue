@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container user-manage">
+  <div class="app-container department-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form
@@ -8,37 +8,12 @@
         size="medium"
         :model="filterForm"
       >
-        <el-form-item prop="userName">
-          <el-input v-model="filterForm.userName" placeholder="用户账号" />
-        </el-form-item>
-        <el-form-item prop="realName">
-          <el-input v-model="filterForm.realName" placeholder="用户名称" />
-        </el-form-item>
-        <el-form-item prop="phone">
-          <el-input v-model="filterForm.phone" placeholder="电话" />
-        </el-form-item>
-        <el-form-item prop="departmentId">
-          <el-select v-model="filterForm.departmentId">
-            <el-option
-              v-for="item in depOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="status">
-          <el-radio-group v-model="filterForm.status" style="width: 100%">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
         <el-form-item>
-          <el-button
+          <!-- <el-button
             type="primary"
             icon="el-icon-search"
             @click="handleQuery"
-          ></el-button>
+          ></el-button>-->
           <el-button
             type="primary"
             icon="el-icon-refresh"
@@ -53,7 +28,14 @@
         </el-form-item>
       </el-form>
     </div>
-
+    <!-- 
+id 复制[int]	是	部门编号（唯一）		
+name	[string]	是	部门名称  （最大长度64）		
+createTime	[datetime]	是	创建时间	 	
+updateTime	[datetime]		修改时间 （可为空）		
+createUserId	[int]	是	创建人ID		
+updateUserId	[int]		修改人ID （可为空）
+ -->
     <!-- 列表 -->
     <el-table
       style="overflow: auto;"
@@ -62,21 +44,9 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="userName" label="用户账号" />
-      <el-table-column sortable prop="realName" label="用户名称" />
-      <el-table-column sortable prop="phone" label="电话" />
-      <el-table-column sortable prop="email" label="邮箱" />
-      <el-table-column sortable prop="wechat" label="微信" />
-      <el-table-column sortable prop="status" label="账号状态">
-        <template slot-scope="{ row }">
-          <el-switch
-            disabled
-            v-model="row.status"
-            :active-value="1"
-            :inactive-value="0"
-          ></el-switch>
-        </template>
-      </el-table-column>
+      <el-table-column sortable prop="name" label="部门名称" />
+      <el-table-column sortable prop="createTime" label="创建时间" />
+      <el-table-column sortable prop="updateTime" label="修改时间" />
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -116,46 +86,24 @@
         ref="dialogForm"
         label-width="100px"
       >
-        <el-form-item label="用户账号" prop="userName">
-          <el-input v-model="dialog.forms.userName"></el-input>
+        <!-- name	[string]	是	部门名称 （最大长度64） -->
+        <el-form-item label="部门名称" prop="name">
+          <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password" v-if="!dialog.forms.id">
-          <el-input v-model="dialog.forms.password"></el-input>
-        </el-form-item>
-        <el-form-item label="用户名称" prop="realName">
-          <el-input v-model="dialog.forms.realName"></el-input>
-        </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="dialog.forms.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="dialog.forms.email"></el-input>
-        </el-form-item>
-        <el-form-item label="微信" prop="wechat">
-          <el-input v-model="dialog.forms.wechat"></el-input>
-        </el-form-item>
-        <el-form-item label="钉钉" prop="dingtalk">
-          <el-input v-model="dialog.forms.dingtalk"></el-input>
-        </el-form-item>
-        <el-form-item label="描述" prop="remarks">
-          <el-input v-model="dialog.forms.remarks"></el-input>
-        </el-form-item>
-        <el-form-item label="部门ID" prop="departmentId">
-          <el-select v-model="dialog.forms.departmentId">
-            <el-option
-              v-for="item in depOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="账号状态" prop="status">
-          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
+        <template v-if="dialog.forms.id">
+          <el-form-item label="创建时间" prop="createTime">
+            <el-input disabled v-model="dialog.forms.createTime"></el-input>
+          </el-form-item>
+          <el-form-item label="修改时间" prop="updateTime">
+            <el-input disabled v-model="dialog.forms.updateTime"></el-input>
+          </el-form-item>
+          <el-form-item label="创建人ID" prop="createUserId">
+            <el-input disabled v-model="dialog.forms.createUserId"></el-input>
+          </el-form-item>
+          <el-form-item label="修改人ID" prop="updateUserId">
+            <el-input disabled v-model="dialog.forms.updateUserId"></el-input>
+          </el-form-item>
+        </template>
       </el-form>
       <div slot="footer" style="text-align: center;">
         <el-button style="width: 200px;" type="primary" @click="dialogSubmit"
@@ -169,27 +117,20 @@
 <script>
 import pagination from "@/components/Pagination";
 import {
-  sysDepartmentListAll,
-  sysUserAdd,
-  sysUserDelete,
-  sysUserEdit,
-  sysUserListByPage,
+  sysDepartmentDelete,
+  sysDepartmentEdit,
+  sysDepartmentAdd,
+  sysDepartmentListByPage,
   // 未用到
-  sysUserUpdatePassword,
-  sysUserQueryById
+  sysDepartmentListAll,
+  sysDepartmentQueryById
 } from "@/api/system-manage.js";
 export default {
   components: { pagination },
   data() {
     return {
-      depOpts: [],
       filterForm: {
         // 筛选条件
-        userName: "",
-        realName: "",
-        phone: "",
-        departmentId: null,
-        status: null,
         pageNo: 1, // 当前页码
         pageSize: 10 // 每页限制数量
       },
@@ -202,22 +143,12 @@ export default {
         visible: false,
         forms: {},
         rules: {
-          userName: [{ required: true, trigger: "blur", message: "请输入" }],
-          password: [{ required: true, trigger: "blur", message: "请输入" }],
-          realName: [{ required: true, trigger: "blur", message: "请输入" }],
-          phone: [{ required: true, trigger: "blur", message: "请输入" }],
-          departmentId: [
-            { required: true, trigger: "change", message: "请输入" }
-          ],
-          status: [{ required: true, trigger: "change", message: "请输入" }]
+          name: [{ required: true, trigger: "blur", message: "请输入" }]
         }
       }
     };
   },
   created() {
-    sysDepartmentListAll().then(r => {
-      this.depOpts = r.data;
-    });
     this.handleQuery();
   },
   mounted() {},
@@ -227,11 +158,9 @@ export default {
         if (valid) {
           let callAPI = null;
           if (this.dialog.forms.id) {
-            // 没有编辑密码的
-            this.dialog.forms.password = null;
-            callAPI = sysUserEdit;
+            callAPI = sysDepartmentEdit;
           } else {
-            callAPI = sysUserAdd;
+            callAPI = sysDepartmentAdd;
           }
           callAPI(this.dialog.forms).then(res => {
             this.$message.success("操作成功!");
@@ -273,7 +202,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          sysUserDelete({
+          sysDepartmentDelete({
             id: id
           }).then(res => {
             this.getList();
@@ -285,7 +214,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      sysUserListByPage(this.filterForm).then(res => {
+      sysDepartmentListByPage(this.filterForm).then(res => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
@@ -296,7 +225,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user-manage {
+.department-manage {
   display: grid;
   grid-template-rows: 60px auto 70px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;

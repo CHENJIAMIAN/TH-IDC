@@ -282,10 +282,16 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'user-manage',
-        component: () => import('@/views/system-setting/user-manage/index'),
+        path: 'department--manage',
+        component: () => import('@/views/system-setting/department-manage/index'),
         name: 'Icons',
-        meta: { title: '用户管理', icon: 'icon' }
+        meta: { title: '部门管理', icon: 'icon' }
+      },
+      {
+        path: 'menu-auth-manage',
+        component: () => import('@/views/system-setting/menu-auth-manage/index'),
+        name: 'Icons',
+        meta: { title: '菜单权限管理', icon: 'icon' }
       },
       {
         path: 'role-manage',
@@ -294,23 +300,17 @@ export const asyncRoutes = [
         meta: { title: '角色管理', icon: 'icon' }
       },
       {
-        path: 'column-manage',
-        component: () => import('@/views/system-setting/column-manage/index'),
+        path: 'user-manage',
+        component: () => import('@/views/system-setting/user-manage/index'),
         name: 'Icons',
-        meta: { title: '栏目管理', icon: 'icon' }
+        meta: { title: '用户管理', icon: 'icon' }
       },
       {
-        path: 'module-manage',
-        component: () => import('@/views/system-setting/module-manage/index'),
+        path: 'system-log',
+        component: () => import('@/views/system-setting/system-log/index'),
         name: 'Icons',
-        meta: { title: '模块管理', icon: 'icon' }
+        meta: { title: '系统日志', icon: 'icon' }
       },
-      {
-        path: 'authority-manage',
-        component: () => import('@/views/system-setting/authority-manage/index'),
-        name: 'Icons',
-        meta: { title: '权限管理', icon: 'icon' }
-      }
     ]
   },
 
