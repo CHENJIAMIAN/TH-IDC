@@ -2,7 +2,7 @@
 
 import Layout from '@/layout'
 
-const nestedRouter = {
+export default {
   path: '/device-monitor',
   component: Layout,
   redirect: '/device-monitor/1F/menu1-1',
@@ -63,5 +63,3 @@ const nestedRouter = {
     }
   ]
 }
-
-export default nestedRouter
