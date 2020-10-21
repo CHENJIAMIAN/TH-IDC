@@ -6,7 +6,7 @@ export function deviceListByPage(data) { return request({ url: '/admin/device/de
 export function deviceQueryById(data) { return request({ url: '/admin/device/device/queryById', method: 'post', data }) }
 //删除设备接口
 export function deviceDelete(data) { return request({ url: '/admin/device/device/delete', method: 'post', data }) }
-//修改设备接口
+// 修改设备接口
 export function deviceEdit(data) { return request({ url: '/admin/device/device/edit', method: 'post', data }) }
 //新增设备接口
 export function deviceAdd(data) { return request({ url: '/admin/device/device/add', method: 'post', data }) }
@@ -47,5 +47,14 @@ export function spaceFloorAdd(data) { return request({ url: '/admin/space/spaceF
 
 
 
-
+// 获取测点列表接口（带分页功能）
+export function pointListByPage(data) { return request({ url: '/admin/device/point/listByPage', method: 'post', data }) }
+// 获取测点信息接口
+export function pointQueryById(data) { return request({ url: '/admin/device/point/queryById', method: 'post', data }) }
+// 删除测点接口
+export function pointDelete(data) { return request({ url: '/admin/device/point/delete', method: 'post', data }) }
+// 修改测点接口
+export function pointEdit(data) { return request({ url: '/admin/device/point/edit', method: 'post', data }) }
+// 新增测点接口 
+export function pointAdd(data) { return request({ url: '/admin/device/point/add', method: 'post', data }) }
 

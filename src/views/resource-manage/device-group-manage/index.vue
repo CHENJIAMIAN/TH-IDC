@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container role-manage">
+  <div class="app-container device-group-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form
@@ -8,18 +8,57 @@
         size="medium"
         :model="filterForm"
       >
+        <el-form-item prop="floorCode">
+          <el-select v-model="filterForm.floorCode" placeholder="楼层">
+            <el-option
+              v-for="item in floorOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.floorCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="roomCode">
+          <el-select v-model="filterForm.roomCode" placeholder="房间">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="deviceGroupCode">
+          <el-input
+            v-model="filterForm.deviceGroupCode"
+            placeholder="设备组编号"
+          />
+        </el-form-item>
+        <el-form-item prop="name">
+          <el-input v-model="filterForm.name" placeholder="设备组名称" />
+        </el-form-item>
+        <el-form-item prop="deviceType">
+          <el-select v-model="filterForm.deviceType" placeholder="设备组类型	">
+            <el-option
+              v-for="item in roomTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item>
-          <!-- <el-button
+          <el-button
             type="primary"
             icon="el-icon-search"
             @click="handleQuery"
-          ></el-button>-->
+          ></el-button>
           <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
-            >设备组管理重置</el-button
+            >重置</el-button
           >
           <el-button type="primary" size="medium" @click="handleDialog()">
             <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
@@ -28,14 +67,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- 
-id 复制[int]	是	角色编号（唯一）		
-name	[string]	是	角色名称  （最大长度64）		
-createTime	[datetime]	是	创建时间	 	
-updateTime	[datetime]		修改时间 （可为空）		
-createUserId	[int]	是	创建人ID		
-updateUserId	[int]		修改人ID （可为空）
- -->
+
     <!-- 列表 -->
     <el-table
       style="overflow: auto"
@@ -44,9 +76,15 @@ updateUserId	[int]		修改人ID （可为空）
       border
       :data="listData"
     >
-      <el-table-column sortable prop="name" label="角色名称" />
-      <el-table-column sortable prop="createTime" label="创建时间" />
-      <el-table-column sortable prop="updateTime" label="修改时间" />
+      <el-table-column sortable prop="name" label="设备组名称" />
+      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
+      <el-table-column sortable prop="deviceType" label="设备组类型" />
+      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <el-table-column sortable prop="imgUrl" label="房间预览图地址" />
+      <!-- <template slot-scope="{ row }">
+          <span>{{ row.roomType | capitalize }}</span>
+        </template>
+      </el-table-column> -->
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -84,26 +122,40 @@ updateUserId	[int]		修改人ID （可为空）
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="100px"
+        label-width="150px"
       >
-        <!-- name	[string]	是	角色名称 （最大长度64） -->
-        <el-form-item label="角色名称" prop="name">
+        <el-form-item label="设备组编号" prop="deviceGroupCode">
+          <el-input
+            :disabled="!!dialog.forms.id"
+            v-model="dialog.forms.deviceGroupCode"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="设备组名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <template v-if="dialog.forms.id">
-          <el-form-item label="创建时间" prop="createTime">
-            <el-input disabled v-model="dialog.forms.createTime"></el-input>
-          </el-form-item>
-          <el-form-item label="修改时间" prop="updateTime">
-            <el-input disabled v-model="dialog.forms.updateTime"></el-input>
-          </el-form-item>
-          <el-form-item label="创建人ID" prop="createUserId">
-            <el-input disabled v-model="dialog.forms.createUserId"></el-input>
-          </el-form-item>
-          <el-form-item label="修改人ID" prop="updateUserId">
-            <el-input disabled v-model="dialog.forms.updateUserId"></el-input>
-          </el-form-item>
-        </template>
+        <el-form-item label="设备组类型" prop="deviceType">
+          <el-select v-model="dialog.forms.deviceType">
+            <el-option
+              v-for="item in roomTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="房间编号" prop="roomCode">
+          <el-select v-model="dialog.forms.roomCode">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="房间预览图地址" prop="imgUrl">
+          <el-input v-model="dialog.forms.imgUrl"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"
@@ -115,22 +167,41 @@ updateUserId	[int]		修改人ID （可为空）
 </template>
 
 <script>
+import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
-  sysRoleDelete,
-  sysRoleEdit,
-  sysRoleAdd,
-  sysRoleListByPage,
-  // 未用到
-  sysRoleListAll,
-  sysRoleQueryById,
+  spaceFloorListAll,
+  spaceRoomListAll,
+  deviceGroupListByPage,
+  deviceGroupQueryById,
+  deviceGroupDelete,
+  deviceGroupEdit,
+  deviceGroupAdd,
 } from "@/api/resource-manage.js";
+
 export default {
   components: { pagination },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return "";
+      value = value.toString();
+      return roomTypeOpts.find((i) => i.id == value).name;
+    },
+  },
   data() {
     return {
+      floorOpts: [],
+      roomOpts: [],
+      roomTypeOpts: roomTypeOpts,
+      firstMenuOpts: [],
+      secondMenuOpts: [],
       filterForm: {
         // 筛选条件
+        floorCode: "",
+        roomCode: "",
+        deviceGroupCode: "",
+        name: "",
+        deviceType: null,
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
@@ -143,12 +214,21 @@ export default {
         visible: false,
         forms: {},
         rules: {
+          roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
+          deviceGroupCode: [
+            { required: true, trigger: "blur", message: "请输入" },
+          ],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
+          imgUrl: [{ required: true, trigger: "blur", message: "请上传图片" }],
+          deviceType: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };
   },
+  watch: {},
   created() {
+    spaceFloorListAll().then((r) => (this.floorOpts = r.data));
+    spaceRoomListAll().then((r) => (this.roomOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
@@ -158,9 +238,9 @@ export default {
         if (valid) {
           let callAPI = null;
           if (this.dialog.forms.id) {
-            callAPI = sysRoleEdit;
+            callAPI = deviceGroupEdit;
           } else {
-            callAPI = sysRoleAdd;
+            callAPI = deviceGroupAdd;
           }
           callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
@@ -185,10 +265,11 @@ export default {
       this.handleQuery();
     },
     // 查看
-    handleDialog(row) {
+    async handleDialog(row) {
+      // dialog显示时获取一级菜单列表
       if (row) {
         // 编辑
-        this.dialog.forms = JSON.parse(JSON.stringify(row));
+        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
         this.dialog.forms = {};
       }
@@ -202,7 +283,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          sysRoleDelete({
+          deviceGroupDelete({
             id: id,
           }).then((res) => {
             this.getList();
@@ -214,7 +295,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      sysRoleListByPage(this.filterForm).then((res) => {
+      deviceGroupListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
@@ -225,7 +306,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.role-manage {
+.device-group-manage {
   display: grid;
   grid-template-rows: 60px auto 70px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;

@@ -9,16 +9,37 @@
         :model="filterForm"
       >
         <el-form-item prop="floorCode">
-          <el-input v-model="filterForm.floorCode" placeholder="楼层编号" />
+          <el-select v-model="filterForm.floorCode" placeholder="楼层">
+            <el-option
+              v-for="item in floorOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.floorCode"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item prop="roomCode">
-          <el-input v-model="filterForm.roomCode" placeholder="房间编号" />
+          <el-select v-model="filterForm.roomCode" placeholder="房间">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item prop="name">
           <el-input v-model="filterForm.name" placeholder="房间名称" />
         </el-form-item>
         <el-form-item prop="roomType">
-          <el-input v-model="filterForm.roomType" placeholder="房间类型" />
+          <el-select v-model="filterForm.roomType" placeholder="房间类型">
+            <el-option
+              v-for="item in roomTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -41,35 +62,6 @@
       </el-form>
     </div>
 
-    <!-- 
-id               	[int]	是	房间ID		
-createTime   	   	   	   		 [datetime]	是	创建时间		
-createUserId   	   	   	   		[int]	是	创建人ID		
-updateTime   	   	   	   			[datetime]		修改时间		
-updateUserId   	   	   	   		 [string]		修改人ID		
-
-floorCode	      [string]	是	楼层编号 （最大长度128）		
-roomCode   	   	[string]	是	房间编号 （最大长度128）		
-name   	   	   	 [string]	是	房间名称 （最大长度64）		
-roomType   	   		   			[short]	是	房间类型		
-imgUrl	   	   	   	   		[string]	是	房间预览图地址		
-sort   	   	   	   			[short]	是	排序		
-floorName   	   	   	   			[string]	是	楼层名称
-
-房间ID
-创建时间
-创建人ID
-修改时间
-修改人ID
-
-楼层编号
-房间编号
-房间名称
-房间类型
-房间预览图地址
-排序
-楼层名称
--->
     <!-- 列表 -->
     <el-table
       style="overflow: auto"
@@ -78,14 +70,17 @@ floorName   	   	   	   			[string]	是	楼层名称
       border
       :data="listData"
     >
-      <el-table-column sortable prop="floorCode" label="楼层编号" />
-      <el-table-column sortable prop="floorName" label="楼层名称" />
-      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <el-table-column sortable prop="roomType" label="房间类型">
+        <template slot-scope="{ row }">
+          <span>{{ row.roomType | capitalize }}</span>
+        </template>
+      </el-table-column>
       <el-table-column sortable prop="name" label="房间名称" />
-      <el-table-column sortable prop="roomType" label="房间类型" />
+      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <el-table-column sortable prop="floorName" label="楼层名称" />
+      <el-table-column sortable prop="floorCode" label="楼层编号" />
       <el-table-column sortable prop="imgUrl" label="房间预览图地址" />
       <el-table-column sortable prop="sort" label="排序" />
-
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -123,8 +118,30 @@ floorName   	   	   	   			[string]	是	楼层名称
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="100px"
+        label-width="150px"
       >
+        <el-form-item label="房间编号" prop="roomCode">
+          <el-input
+            :disabled="!!dialog.forms.id"
+            v-model="dialog.forms.roomCode"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="房间名称" prop="name">
+          <el-input v-model="dialog.forms.name"></el-input>
+        </el-form-item>
+        <el-form-item label="房间类型" prop="roomType">
+          <el-select v-model="dialog.forms.roomType">
+            <el-option
+              v-for="item in roomTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="房间预览图地址" prop="imgUrl">
+          <el-input v-model="dialog.forms.imgUrl"></el-input>
+        </el-form-item>
         <el-form-item label="楼层编号" prop="floorCode">
           <el-select v-model="dialog.forms.floorCode">
             <el-option
@@ -134,18 +151,6 @@ floorName   	   	   	   			[string]	是	楼层名称
               :value="item.floorCode"
             />
           </el-select>
-        </el-form-item>
-        <el-form-item label="房间编号" prop="roomCode">
-          <el-input v-model="dialog.forms.roomCode"></el-input>
-        </el-form-item>
-        <el-form-item label="房间名称" prop="name">
-          <el-input v-model="dialog.forms.name"></el-input>
-        </el-form-item>
-        <el-form-item label="房间类型" prop="roomType">
-          <el-input v-model="dialog.forms.roomType"></el-input>
-        </el-form-item>
-        <el-form-item label="房间预览图地址" prop="imgUrl">
-          <el-input v-model="dialog.forms.imgUrl"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input v-model="dialog.forms.sort"></el-input>
@@ -161,6 +166,7 @@ floorName   	   	   	   			[string]	是	楼层名称
 </template>
 
 <script>
+import { roomTypeOpts, sortValidator } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   spaceFloorListAll,
@@ -172,11 +178,21 @@ import {
   // 没用到
   spaceRoomQueryById,
 } from "@/api/resource-manage.js";
+
 export default {
   components: { pagination },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return "";
+      value = value.toString();
+      return roomTypeOpts.find((i) => i.id == value).name;
+    },
+  },
   data() {
     return {
       floorOpts: [],
+      roomOpts: [],
+      roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
       secondMenuOpts: [],
       filterForm: {
@@ -201,8 +217,8 @@ export default {
           roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           roomType: [{ required: true, trigger: "blur", message: "请输入" }],
-          imgUrl: [{ required: true, trigger: "blur", message: "请输入" }],
-          sort: [{ required: true, trigger: "blur", message: "请输入" }],
+          imgUrl: [{ required: true, trigger: "blur", message: "请上传图片" }],
+          sort: [{ required: true, trigger: "blur", validator: sortValidator }],
         },
       },
     };
@@ -210,6 +226,7 @@ export default {
   watch: {},
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
+    spaceRoomListAll().then((r) => (this.roomOpts = r.data));
     this.handleQuery();
   },
   mounted() {},

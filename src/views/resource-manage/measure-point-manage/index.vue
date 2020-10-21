@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container user-manage">
+  <div class="app-container measure-point-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form
@@ -7,31 +7,52 @@
         :inline="true"
         size="medium"
         :model="filterForm"
+        style="display: grid; grid-auto-flow: column"
       >
-        <el-form-item prop="userName">
-          <el-input v-model="filterForm.userName" placeholder="用户账号" />
-        </el-form-item>
-        <el-form-item prop="realName">
-          <el-input v-model="filterForm.realName" placeholder="用户名称" />
-        </el-form-item>
-        <el-form-item prop="phone">
-          <el-input v-model="filterForm.phone" placeholder="电话" />
-        </el-form-item>
-        <el-form-item prop="departmentId">
-          <el-select v-model="filterForm.departmentId">
+        <el-form-item prop="floorCode">
+          <el-select v-model="filterForm.floorCode" placeholder="楼层">
             <el-option
-              v-for="item in depOpts"
+              v-for="item in floorOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.floorCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="roomCode">
+          <el-select v-model="filterForm.roomCode" placeholder="房间">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="deviceGroupCode">
+          <el-input
+            v-model="filterForm.deviceGroupCode"
+            placeholder="设备组编号"
+          />
+        </el-form-item>
+        <el-form-item prop="deviceCode">
+          <el-input v-model="filterForm.deviceCode" placeholder="设备编号" />
+        </el-form-item>
+        <el-form-item prop="name">
+          <el-input v-model="filterForm.name" placeholder="测点名称" />
+        </el-form-item>
+        <el-form-item prop="name">
+          <el-input v-model="filterForm.pointCode" placeholder="测点编号" />
+        </el-form-item>
+        <el-form-item prop="deviceType">
+          <el-select v-model="filterForm.pointType" placeholder="测点类型	">
+            <el-option
+              v-for="item in roomTypeOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
             />
           </el-select>
-        </el-form-item>
-        <el-form-item prop="status">
-          <el-radio-group v-model="filterForm.status" style="width: 100%">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
-          </el-radio-group>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -44,7 +65,7 @@
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
-            >测点管理重置</el-button
+            >重置</el-button
           >
           <el-button type="primary" size="medium" @click="handleDialog()">
             <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
@@ -62,21 +83,17 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="userName" label="用户账号" />
-      <el-table-column sortable prop="realName" label="用户名称" />
-      <el-table-column sortable prop="phone" label="电话" />
-      <el-table-column sortable prop="email" label="邮箱" />
-      <el-table-column sortable prop="wechat" label="微信" />
-      <el-table-column sortable prop="status" label="账号状态">
-        <template slot-scope="{ row }">
-          <el-switch
-            disabled
-            v-model="row.status"
-            :active-value="1"
-            :inactive-value="0"
-          ></el-switch>
-        </template>
-      </el-table-column>
+      <el-table-column sortable prop="name" label="测点名称" />
+      <el-table-column sortable prop="pointCode" label="测点编号" />
+      <el-table-column sortable prop="pointType" label="测点类型" />
+      <el-table-column sortable prop="name" label="设备名称" />
+      <el-table-column sortable prop="deviceCode" label="设备编号" />
+      <el-table-column sortable prop="deviceGroupName" label="设备组名称" />
+      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
+      <el-table-column sortable prop="roomName" label="房间名称" />
+      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <el-table-column sortable prop="floorName" label="楼层名称" />
+      <el-table-column sortable prop="floorCode" label="楼层编号" />
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -114,47 +131,46 @@
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="100px"
+        label-width="150px"
       >
-        <el-form-item label="用户账号" prop="userName">
-          <el-input v-model="dialog.forms.userName"></el-input>
+        <el-form-item label="测点编号" prop="pointCode">
+          <el-input
+            :disabled="!!dialog.forms.id"
+            v-model="dialog.forms.pointCode"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password" v-if="!dialog.forms.id">
-          <el-input v-model="dialog.forms.password"></el-input>
+        <el-form-item label="测点名称" prop="name">
+          <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <el-form-item label="用户名称" prop="realName">
-          <el-input v-model="dialog.forms.realName"></el-input>
-        </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="dialog.forms.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="dialog.forms.email"></el-input>
-        </el-form-item>
-        <el-form-item label="微信" prop="wechat">
-          <el-input v-model="dialog.forms.wechat"></el-input>
-        </el-form-item>
-        <el-form-item label="钉钉" prop="dingtalk">
-          <el-input v-model="dialog.forms.dingtalk"></el-input>
-        </el-form-item>
-        <el-form-item label="描述" prop="remarks">
-          <el-input v-model="dialog.forms.remarks"></el-input>
-        </el-form-item>
-        <el-form-item label="部门ID" prop="departmentId">
-          <el-select v-model="dialog.forms.departmentId">
+        <el-form-item label="测点类型" prop="pointType">
+          <el-select v-model="dialog.forms.pointType">
             <el-option
-              v-for="item in depOpts"
+              v-for="item in roomTypeOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="账号状态" prop="status">
-          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
-          </el-radio-group>
+        <el-form-item label="设备组编号" prop="deviceGroupCode">
+          <el-select v-model="dialog.forms.deviceGroupCode">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备编号" prop="deviceCode">
+          <el-select v-model="dialog.forms.deviceCode">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -167,29 +183,43 @@
 </template>
 
 <script>
+import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
-  sysDepartmentListAll,
-  sysUserAdd,
-  sysUserDelete,
-  sysUserEdit,
-  sysUserListByPage,
-  // 未用到
-  sysUserUpdatePassword,
-  sysUserQueryById,
+  spaceFloorListAll,
+  spaceRoomListAll,
+  pointListByPage,
+  pointDelete,
+  pointEdit,
+  pointAdd,
 } from "@/api/resource-manage.js";
+
 export default {
   components: { pagination },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return "";
+      value = value.toString();
+      return roomTypeOpts.find((i) => i.id == value).name;
+    },
+  },
   data() {
     return {
-      depOpts: [],
+      floorOpts: [],
+      deviceGroupOpts: [],
+      roomOpts: [],
+      roomTypeOpts: roomTypeOpts,
+      firstMenuOpts: [],
+      secondMenuOpts: [],
       filterForm: {
         // 筛选条件
-        userName: "",
-        realName: "",
-        phone: "",
-        departmentId: null,
-        status: null,
+        floorCode: "",
+        roomCode: "",
+        deviceGroupCode: "",
+        deviceCode: "",
+        name: "",
+        pointCode: "",
+        pointType: null,
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
@@ -202,20 +232,22 @@ export default {
         visible: false,
         forms: {},
         rules: {
-          userName: [{ required: true, trigger: "blur", message: "请输入" }],
-          password: [{ required: true, trigger: "blur", message: "请输入" }],
-          realName: [{ required: true, trigger: "blur", message: "请输入" }],
-          phone: [{ required: true, trigger: "blur", message: "请输入" }],
-          departmentId: [
-            { required: true, trigger: "change", message: "请输入" },
+          deviceGroupCode: [
+            { required: true, trigger: "blur", message: "请输入" },
           ],
-          status: [{ required: true, trigger: "change", message: "请输入" }],
+          pointCode: [{ required: true, trigger: "blur", message: "请输入" }],
+          name: [{ required: true, trigger: "blur", message: "请输入" }],
+          deviceCode: [{ required: true, trigger: "blur", message: "请输入" }],
+          pointType: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };
   },
+  watch: {},
   created() {
-    sysDepartmentListAll().then((r) => (this.depOpts = r.data));
+    spaceFloorListAll().then((r) => (this.floorOpts = r.data));
+    spaceRoomListAll().then((r) => (this.roomOpts = r.data));
+    // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
@@ -225,11 +257,9 @@ export default {
         if (valid) {
           let callAPI = null;
           if (this.dialog.forms.id) {
-            // 没有编辑密码的
-            this.dialog.forms.password = null;
-            callAPI = sysUserEdit;
+            callAPI = pointEdit;
           } else {
-            callAPI = sysUserAdd;
+            callAPI = pointAdd;
           }
           callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
@@ -254,10 +284,11 @@ export default {
       this.handleQuery();
     },
     // 查看
-    handleDialog(row) {
+    async handleDialog(row) {
+      // dialog显示时获取一级菜单列表
       if (row) {
         // 编辑
-        this.dialog.forms = JSON.parse(JSON.stringify(row));
+        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
         this.dialog.forms = {};
       }
@@ -271,7 +302,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          sysUserDelete({
+          pointDelete({
             id: id,
           }).then((res) => {
             this.getList();
@@ -283,7 +314,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      sysUserListByPage(this.filterForm).then((res) => {
+      pointListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
@@ -294,7 +325,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user-manage {
+.measure-point-manage {
   display: grid;
   grid-template-rows: 60px auto 70px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;

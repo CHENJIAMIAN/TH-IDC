@@ -28,17 +28,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- 
-id	[int]	是	楼层ID		
-floorCode	[string]	是	楼层编号 （最大长度128）		
-name	[string]	是	楼层名称 （最大长度64）		
-imgUrl	[string]	是	楼层预览图地址		
-sort	[short]	是	  排序		
-createTime复制 [datetime]	是	创建时间		
-createUserId	[int]	是	创建人ID		
-updateTime	[datetime]	是	修改时间		
-updateUserId [int]	是	修改人ID
- -->
+
     <!-- 列表 -->
     <el-table
       style="overflow: auto"
@@ -49,7 +39,13 @@ updateUserId [int]	是	修改人ID
     >
       <el-table-column sortable prop="floorCode" label="楼层编号" />
       <el-table-column sortable prop="name" label="楼层名称" />
-      <el-table-column sortable prop="imgUrl" label="楼层预览图地址" />
+      <el-table-column sortable prop="imgUrl" label="楼层预览图">
+        <template slot-scope="{ row }">
+          <a :href="row.imgUrl" target="_blank"
+            ><el-button type="text" size="mini">查看</el-button></a
+          >
+        </template>
+      </el-table-column>
       <el-table-column sortable prop="sort" label="排序" />
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
@@ -88,17 +84,11 @@ updateUserId [int]	是	修改人ID
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="100px"
+        label-width="150px"
       >
-        <!-- 
-floorCode	[string]	是	楼层编号 （最大长度128）		
-name    	[string]	是	楼层名称 （最大长度64）		
-imgUrl  	[string]	是	楼层预览图地址		
-sort    	[short]	是	排序
--->
         <el-form-item label="楼层编号" prop="floorCode">
           <el-input
-            :disabled="dialog.forms.id"
+            :disabled="!!dialog.forms.id"
             v-model="dialog.forms.floorCode"
           ></el-input>
         </el-form-item>
@@ -106,7 +96,24 @@ sort    	[short]	是	排序
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
         <el-form-item label="楼层预览图地址" prop="imgUrl">
-          <el-input v-model="dialog.forms.imgUrl"></el-input>
+          <el-input
+            v-model="dialog.forms.imgUrl"
+            style="display: none"
+          ></el-input>
+          <el-upload
+            ref="upload"
+            name="attach"
+            class="upload-container"
+            :headers="headers"
+            :action="uploadUrl"
+            :data="uploadData"
+            :on-success="uploadSuccess"
+            :on-remove="fileRemove"
+            drag
+          >
+            <i class="el-icon-upload" />
+            <div class="el-upload__text">点击 <em>上传文件</em> 或拖拽上传</div>
+          </el-upload>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input v-model="dialog.forms.sort"></el-input>
@@ -122,6 +129,7 @@ sort    	[short]	是	排序
 </template>
 
 <script>
+import { sortValidator } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   spaceFloorListByPage,
@@ -132,10 +140,25 @@ import {
   spaceFloorListAll,
   spaceFloorQueryById,
 } from "@/api/resource-manage.js";
+
+// 上传
+import { uploadUrl } from "@/api/common";
+import { getToken } from "@/utils/auth";
+
 export default {
   components: { pagination },
   data() {
     return {
+      // 上传
+      uploadedFileUrl: "", // 附件ID数组
+      headers: {
+        token: getToken(),
+      },
+      uploadData: {
+        type: 1 /*  type 1是楼层图片，2是房间图片，3是设备组图片 */,
+      },
+      uploadUrl,
+      /* --- */
       filterForm: {
         // 筛选条件
         pageNo: 1, // 当前页码
@@ -152,8 +175,8 @@ export default {
         rules: {
           floorCode: [{ required: true, trigger: "blur", message: "请输入" }],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
-          imgUrl: [{ required: true, trigger: "blur", message: "请输入" }],
-          sort: [{ required: true, trigger: "blur", message: "请输入" }],
+          imgUrl: [{ required: true, message: "请上传图片" }],
+          sort: [{ required: true, trigger: "blur", validator: sortValidator }],
         },
       },
     };
@@ -163,6 +186,21 @@ export default {
   },
   mounted() {},
   methods: {
+    // 附件上传成功
+    uploadSuccess(response, file, fileList) {
+      if (response.res === 0) {
+        this.dialog.forms.imgUrl = response.data.filePath;
+        this.$message.success("上传成功!");
+      } else {
+        this.$message.error(response.msg);
+      }
+      this.$refs["dialogForm"].validateField("imgUrl");
+    },
+    // 附件删除
+    fileRemove(file, fileList) {
+      this.dialog.forms.imgUrl = "";
+      this.$refs["dialogForm"].validateField("imgUrl");
+    },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
@@ -200,7 +238,7 @@ export default {
         // 编辑
         this.dialog.forms = JSON.parse(JSON.stringify(row));
       } else {
-        this.dialog.forms = {};
+        this.dialog.forms = { imgUrl: "" };
       }
       this.dialog.visible = true;
     },

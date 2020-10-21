@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container system-log">
+  <div class="app-container device-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form
@@ -8,30 +8,69 @@
         size="medium"
         :model="filterForm"
       >
+        <el-form-item prop="floorCode">
+          <el-select v-model="filterForm.floorCode" placeholder="楼层">
+            <el-option
+              v-for="item in floorOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.floorCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="roomCode">
+          <el-select v-model="filterForm.roomCode" placeholder="房间">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="deviceGroupCode">
+          <el-input
+            v-model="filterForm.deviceGroupCode"
+            placeholder="设备组编号"
+          />
+        </el-form-item>
+        <el-form-item prop="name">
+          <el-input v-model="filterForm.name" placeholder="设备名称" />
+        </el-form-item>
+        <el-form-item prop="name">
+          <el-input v-model="filterForm.deviceCode" placeholder="设备编号" />
+        </el-form-item>
+        <el-form-item prop="deviceType">
+          <el-select v-model="filterForm.deviceType" placeholder="设备类型	">
+            <el-option
+              v-for="item in roomTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            @click="handleQuery"
+          ></el-button>
           <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
-            >设备管理重置</el-button
+            >重置</el-button
           >
+          <el-button type="primary" size="medium" @click="handleDialog()">
+            <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
+            <i class="el-icon-plus" />
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
 
-    <!-- 
-id 复制[int]	是	日志ID		
-userId	[int]	是	操作人ID	 展开	
-userName	[string]	是	操作人账号		
-realName	[string]	是	操作人姓名		
-moduleName	[string]	是	模块名称		
-moduleMethod	[string]	是	模块方法		
-userIp	[string]		操作人IP		
-description	[string]		描述		
-logType	[short]	是	日志类型 。1是正常日志，2是异常日志		
-createTime	[string]	是	创建时间		
-takeTime	[long]	是	耗时时间（毫秒）  -->
     <!-- 列表 -->
     <el-table
       style="overflow: auto"
@@ -40,31 +79,16 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
       border
       :data="listData"
     >
-      <el-table-column sortable prop="userName" label="操作人账号" />
-      <el-table-column sortable prop="realName" label="操作人" />
-      <el-table-column sortable prop="moduleName" label="模块名称" />
-      <el-table-column
-        sortable
-        prop="moduleMethod"
-        label="模块方法"
-        width="250"
-      />
-      <el-table-column sortable prop="userIp" label="操作人IP" />
-      <el-table-column sortable prop="description" label="描述" />
-      <el-table-column sortable prop="logType" label="日志类型">
-        <template slot-scope="{ row }">
-          <span v-if="row.logType == 1">正常日志</span>
-          <span v-else-if="row.logType == 2">异常日志</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        sortable
-        prop="createTime"
-        label="创建时间"
-        width="180"
-      />
-      <el-table-column sortable prop="takeTime" label="耗时（毫秒）" />
-      <!-- <el-table-column label="操作" align="center" width="240">
+      <el-table-column sortable prop="name" label="设备名称" />
+      <el-table-column sortable prop="deviceCode" label="设备编号" />
+      <el-table-column sortable prop="deviceType" label="设备类型" />
+      <el-table-column sortable prop="deviceGroupName" label="设备组名称" />
+      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
+      <el-table-column sortable prop="roomName" label="房间名称" />
+      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <el-table-column sortable prop="floorName" label="楼层名称" />
+      <el-table-column sortable prop="floorCode" label="楼层编号" />
+      <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
             icon="el-icon-edit-outline"
@@ -79,7 +103,7 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
             @click="handleDel(row.id)"
           ></el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
     <pagination
       :hidden="listTotal > 0 ? false : true"
@@ -101,37 +125,46 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="100px"
+        label-width="150px"
       >
-        <el-form-item label="用户账号" prop="userName">
-          <el-input v-model="dialog.forms.userName"></el-input>
+        <el-form-item label="设备编号" prop="deviceCode">
+          <el-input
+            :disabled="!!dialog.forms.id"
+            v-model="dialog.forms.deviceCode"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password" v-if="!dialog.forms.id">
-          <el-input v-model="dialog.forms.password"></el-input>
+        <el-form-item label="设备名称" prop="name">
+          <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <el-form-item label="用户名称" prop="realName">
-          <el-input v-model="dialog.forms.realName"></el-input>
+        <el-form-item label="设备类型" prop="deviceType">
+          <el-select v-model="dialog.forms.deviceType">
+            <el-option
+              v-for="item in roomTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="dialog.forms.phone"></el-input>
+        <el-form-item label="房间编号" prop="roomCode">
+          <el-select v-model="dialog.forms.roomCode">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="dialog.forms.email"></el-input>
-        </el-form-item>
-        <el-form-item label="微信" prop="wechat">
-          <el-input v-model="dialog.forms.wechat"></el-input>
-        </el-form-item>
-        <el-form-item label="钉钉" prop="dingtalk">
-          <el-input v-model="dialog.forms.dingtalk"></el-input>
-        </el-form-item>
-        <el-form-item label="描述" prop="remarks">
-          <el-input v-model="dialog.forms.remarks"></el-input>
-        </el-form-item>
-        <el-form-item label="账号状态" prop="status">
-          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
-          </el-radio-group>
+        <el-form-item label="设备组编号" prop="deviceGroupCode">
+          <el-select v-model="dialog.forms.deviceGroupCode">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -144,15 +177,44 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
 </template>
 
 <script>
+import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
-import { sysLogQueryById, sysLogListByPage } from "@/api/resource-manage.js";
+import {
+  // deviceGroupListAll,
+  spaceFloorListAll,
+  spaceRoomListAll,
+  deviceListByPage,
+  deviceQueryById,
+  deviceDelete,
+  deviceEdit,
+  deviceAdd,
+} from "@/api/resource-manage.js";
 
 export default {
   components: { pagination },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return "";
+      value = value.toString();
+      return roomTypeOpts.find((i) => i.id == value).name;
+    },
+  },
   data() {
     return {
+      floorOpts: [],
+      deviceGroupOpts: [],
+      roomOpts: [],
+      roomTypeOpts: roomTypeOpts,
+      firstMenuOpts: [],
+      secondMenuOpts: [],
       filterForm: {
         // 筛选条件
+        floorCode: "",
+        roomCode: "",
+        deviceGroupCode: "",
+        name: "",
+        deviceCode: "",
+        deviceType: null,
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
@@ -164,11 +226,23 @@ export default {
         id: "",
         visible: false,
         forms: {},
-        rules: {},
+        rules: {
+          roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
+          deviceGroupCode: [
+            { required: true, trigger: "blur", message: "请输入" },
+          ],
+          name: [{ required: true, trigger: "blur", message: "请输入" }],
+          deviceCode: [{ required: true, trigger: "blur", message: "请输入" }],
+          deviceType: [{ required: true, trigger: "blur", message: "请输入" }],
+        },
       },
     };
   },
+  watch: {},
   created() {
+    spaceFloorListAll().then((r) => (this.floorOpts = r.data));
+    spaceRoomListAll().then((r) => (this.roomOpts = r.data));
+    // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
@@ -176,6 +250,18 @@ export default {
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
+          let callAPI = null;
+          if (this.dialog.forms.id) {
+            callAPI = deviceEdit;
+          } else {
+            callAPI = deviceAdd;
+          }
+          callAPI(this.dialog.forms).then((res) => {
+            this.$message.success("操作成功!");
+            this.$refs["dialogForm"].resetFields();
+            this.dialog.visible = false;
+            this.getList();
+          });
         } else {
           return false;
         }
@@ -193,10 +279,11 @@ export default {
       this.handleQuery();
     },
     // 查看
-    handleDialog(row) {
+    async handleDialog(row) {
+      // dialog显示时获取一级菜单列表
       if (row) {
         // 编辑
-        this.dialog.forms = JSON.parse(JSON.stringify(row));
+        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
         this.dialog.forms = {};
       }
@@ -210,7 +297,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          sysLogDelete({
+          deviceDelete({
             id: id,
           }).then((res) => {
             this.getList();
@@ -222,7 +309,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      sysLogListByPage(this.filterForm).then((res) => {
+      deviceListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
@@ -233,7 +320,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.system-log {
+.device-manage {
   display: grid;
   grid-template-rows: 60px auto 70px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
