@@ -39,7 +39,7 @@
     >
       <el-table-column sortable prop="floorCode" label="楼层编号" />
       <el-table-column sortable prop="name" label="楼层名称" />
-      <el-table-column sortable prop="imgUrl" label="楼层预览图">
+      <el-table-column sortable prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
           <a :href="row.imgUrl" target="_blank"
             ><el-button type="text" size="mini">查看</el-button></a
@@ -95,7 +95,7 @@
         <el-form-item label="楼层名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <el-form-item label="楼层预览图" prop="imgUrl">
+        <el-form-item label="预览图" prop="imgUrl">
           <el-upload
             ref="upload"
             name="attach"

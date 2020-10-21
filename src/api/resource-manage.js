@@ -65,3 +65,8 @@ export function sysRoleMenuListAll(data) { return request({ url: '/admin/system/
 // 获取所有设备类型接口
 export function deviceTypeListAll(data) { return request({ url: '/admin/device/deviceType/listAll', method: 'post', data }) }
 
+
+// 获取某个房间的所有设备组列表接口	
+export function deviceGroupListAll(data) { return request({ url: '/admin/device/deviceGroup/listAll', method: 'post', data }) }
+// 获取某一房间的所有设备列表接口
+export function deviceListAll(data) { return request({ url: '/admin/device/device/listAll', method: 'post', data }) }

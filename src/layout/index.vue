@@ -90,7 +90,6 @@ export default {
     top: 0;
   }
 
-  $headhei: 100px;
 
   .head {
     position: relative;

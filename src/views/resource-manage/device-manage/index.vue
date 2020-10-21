@@ -21,7 +21,7 @@
         <el-form-item prop="roomCode">
           <el-select v-model="filterForm.roomCode" placeholder="房间">
             <el-option
-              v-for="item in roomOpts"
+              v-for="item in roomAllOpts"
               :key="item.id"
               :label="item.name"
               :value="item.roomCode"
@@ -159,8 +159,29 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="楼层编号" prop="floorCode">
+          <el-select
+            v-model="dialog.forms.floorCode"
+            @change="
+              () => {
+                dialog.forms.roomCode = '';
+                dialog.forms.deviceGroupCode = '';
+              }
+            "
+          >
+            <el-option
+              v-for="item in floorOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.floorCode"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="房间编号" prop="roomCode">
-          <el-select v-model="dialog.forms.roomCode">
+          <el-select
+            v-model="dialog.forms.roomCode"
+            @change="dialog.forms.deviceGroupCode = ''"
+          >
             <el-option
               v-for="item in roomOpts"
               :key="item.id"
@@ -172,10 +193,10 @@
         <el-form-item label="设备组编号" prop="deviceGroupCode">
           <el-select v-model="dialog.forms.deviceGroupCode">
             <el-option
-              v-for="item in roomOpts"
+              v-for="item in deviceGroupOpts"
               :key="item.id"
               :label="item.name"
-              :value="item.roomCode"
+              :value="item.deviceGroupCode"
             />
           </el-select>
         </el-form-item>
@@ -193,6 +214,7 @@
 import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
+  deviceGroupListAll,
   deviceTypeListAll,
   spaceFloorListAll,
   spaceRoomListAll,
@@ -217,6 +239,7 @@ export default {
       floorOpts: [],
       deviceGroupOpts: [],
       roomOpts: [],
+      roomAllOpts:[],
       deviceTypeOpts: [],
       roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
@@ -241,6 +264,7 @@ export default {
         visible: false,
         forms: {},
         rules: {
+          floorCode: [{ required: true, trigger: "blur", message: "请输入" }],
           roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
           deviceGroupCode: [
             { required: true, trigger: "blur", message: "请输入" },
@@ -252,10 +276,26 @@ export default {
       },
     };
   },
-  watch: {},
+  watch: {
+    async "dialog.forms.floorCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.roomOpts = [];
+      this.deviceGroupOpts = [];
+      const r = await spaceRoomListAll({ floorCode: n });
+      this.roomOpts = r.data;
+    },
+    async "dialog.forms.roomCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.deviceGroupOpts = [];
+      const r = await deviceGroupListAll({ roomCode: n });
+      this.deviceGroupOpts = r.data;
+    },
+  },
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
-    spaceRoomListAll().then((r) => (this.roomOpts = r.data));
+    spaceRoomListAll().then((r) => (this.roomAllOpts = r.data));
     deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
     this.handleQuery();
   },
@@ -265,6 +305,14 @@ export default {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
           let callAPI = null;
+          switch (dialog.forms.actionType) {
+            case 1: //设备组
+              delete this.dialog.forms.deviceCode;
+              break;
+            case 2: //设备
+              delete this.dialog.forms.deviceGroupCode;
+              break;
+          }
           if (this.dialog.forms.id) {
             callAPI = deviceEdit;
           } else {
@@ -299,7 +347,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = {};
+        this.dialog.forms = { roomCode: "", deviceGroupCode: "" };
       }
       this.dialog.visible = true;
     },

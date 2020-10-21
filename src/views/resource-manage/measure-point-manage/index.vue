@@ -86,7 +86,7 @@
       <el-table-column sortable prop="name" label="测点名称" />
       <el-table-column sortable prop="pointCode" label="测点编号" />
       <el-table-column sortable prop="pointType" label="测点类型" />
-      <el-table-column sortable prop="name" label="设备名称" />
+      <el-table-column sortable prop="deviceName" label="设备名称" />
       <el-table-column sortable prop="deviceCode" label="设备编号" />
       <el-table-column sortable prop="deviceGroupName" label="设备组名称" />
       <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
@@ -151,9 +151,31 @@
               :value="item.id"
             />
           </el-select>
+
         </el-form-item>
-        <el-form-item label="设备组编号" prop="deviceGroupCode">
-          <el-select v-model="dialog.forms.deviceGroupCode">
+          <el-form-item label="楼层编号" prop="floorCode">
+          <el-select
+            v-model="dialog.forms.floorCode"
+            @change="
+              () => {
+                dialog.forms.roomCode = '';
+                dialog.forms.deviceGroupCode = '';
+              }
+            "
+          >
+            <el-option
+              v-for="item in floorOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.floorCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="房间编号" prop="roomCode">
+          <el-select
+            v-model="dialog.forms.roomCode"
+            @change="dialog.forms.deviceGroupCode = ''"
+          >
             <el-option
               v-for="item in roomOpts"
               :key="item.id"
@@ -162,13 +184,30 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="设备编号" prop="deviceCode">
-          <el-select v-model="dialog.forms.deviceCode">
+
+        <el-form-item label="动作类型" prop="actionType">
+          <el-radio-group v-model="dialog.forms.actionType" style="width: 100%">
+            <el-radio :label="1">设备组</el-radio>
+            <el-radio :label="2">设备</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="设备组编号" prop="deviceGroupCode" v-if="dialog.forms.actionType == 1">
+          <el-select v-model="dialog.forms.deviceGroupCode">
             <el-option
-              v-for="item in roomOpts"
+              v-for="item in deviceGroupOpts"
               :key="item.id"
               :label="item.name"
-              :value="item.roomCode"
+              :value="item.deviceGroupCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备编号" prop="deviceCode" v-if="dialog.forms.actionType == 2">
+          <el-select v-model="dialog.forms.deviceCode">
+            <el-option
+              v-for="item in deviceOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.deviceCode"
             />
           </el-select>
         </el-form-item>
@@ -186,6 +225,8 @@
 import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
+  deviceListAll,
+  deviceGroupListAll,
   spaceFloorListAll,
   spaceRoomListAll,
   pointListByPage,
@@ -207,6 +248,7 @@ export default {
     return {
       floorOpts: [],
       deviceGroupOpts: [],
+      deviceOpts: [],
       roomOpts: [],
       roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
@@ -232,6 +274,8 @@ export default {
         visible: false,
         forms: {},
         rules: {
+                    floorCode: [{ required: true, trigger: "blur", message: "请输入" }],
+          roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
           deviceGroupCode: [
             { required: true, trigger: "blur", message: "请输入" },
           ],
@@ -239,11 +283,31 @@ export default {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           deviceCode: [{ required: true, trigger: "blur", message: "请输入" }],
           pointType: [{ required: true, trigger: "blur", message: "请输入" }],
+          actionType: [{ required: true, trigger: "change", message: "请输入" }],
         },
       },
     };
   },
-  watch: {},
+  watch: {
+       async "dialog.forms.floorCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.roomOpts = [];
+      this.deviceGroupOpts = [];
+      const r = await spaceRoomListAll({ floorCode: n });
+      this.roomOpts = r.data;
+    },
+    async "dialog.forms.roomCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.deviceOpts = [];
+      this.deviceGroupOpts = [];
+      const r1 = await deviceListAll({ roomCode: n });
+      const r2 = await deviceGroupListAll({ roomCode: n });
+      this.deviceOpts = r1.data;
+      this.deviceGroupOpts = r2.data;
+    },
+  },
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
     spaceRoomListAll().then((r) => (this.roomOpts = r.data));
@@ -290,7 +354,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = {};
+        this.dialog.forms ={ roomCode: "", deviceGroupCode: "" };
       }
       this.dialog.visible = true;
     },

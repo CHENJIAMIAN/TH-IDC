@@ -77,15 +77,15 @@
       </el-table-column>
       <el-table-column sortable prop="name" label="房间名称" />
       <el-table-column sortable prop="roomCode" label="房间编号" />
-      <el-table-column sortable prop="floorName" label="楼层名称" />
-      <el-table-column sortable prop="floorCode" label="楼层编号" />
-      <el-table-column sortable prop="imgUrl" label="房间预览图">
+      <el-table-column sortable prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
           <a :href="row.imgUrl" target="_blank"
             ><el-button type="text" size="mini">查看</el-button></a
           >
         </template>
       </el-table-column>
+      <el-table-column sortable prop="floorName" label="楼层名称" />
+      <el-table-column sortable prop="floorCode" label="楼层编号" />
       <el-table-column sortable prop="sort" label="排序" />
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
@@ -145,7 +145,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="房间预览图" prop="imgUrl">
+        <el-form-item label="预览图" prop="imgUrl">
           <el-upload
             ref="upload"
             name="attach"
@@ -161,7 +161,7 @@
             <div class="el-upload__text">点击 <em>上传文件</em> 或拖拽上传</div>
           </el-upload>
         </el-form-item>
-        <el-form-item label="楼层编号" prop="floorCode">
+        <el-form-item label="楼层" prop="floorCode">
           <el-select v-model="dialog.forms.floorCode">
             <el-option
               v-for="item in floorOpts"

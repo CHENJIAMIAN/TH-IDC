@@ -21,7 +21,7 @@
         <el-form-item prop="roomCode">
           <el-select v-model="filterForm.roomCode" placeholder="房间">
             <el-option
-              v-for="item in roomOpts"
+              v-for="item in roomAllOpts"
               :key="item.id"
               :label="item.name"
               :value="item.roomCode"
@@ -80,8 +80,6 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="name" label="设备组名称" />
-      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
       <el-table-column sortable prop="deviceType" label="设备组类型">
         <template slot-scope="{ row }">
           <span>{{
@@ -89,15 +87,17 @@
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="roomCode" label="房间编号" />
-      <el-table-column sortable prop="roomName" label="房间名称" />
-      <el-table-column sortable prop="imgUrl" label="设备组预览图">
+      <el-table-column sortable prop="name" label="设备组名称" />
+      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
+      <el-table-column sortable prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
           <a :href="row.imgUrl" target="_blank"
             ><el-button type="text" size="mini">查看</el-button></a
           >
         </template>
       </el-table-column>
+      <el-table-column sortable prop="roomName" label="房间名称" />
+      <el-table-column sortable prop="roomCode" label="房间编号" />
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -159,6 +159,19 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="楼层编号" prop="floorCode">
+          <el-select
+            v-model="dialog.forms.floorCode"
+            @change="dialog.forms.roomCode = ''"
+          >
+            <el-option
+              v-for="item in floorOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.floorCode"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="房间编号" prop="roomCode">
           <el-select v-model="dialog.forms.roomCode">
             <el-option
@@ -169,7 +182,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="设备组预览图" prop="imgUrl">
+        <el-form-item label="预览图" prop="imgUrl">
           <el-upload
             ref="upload"
             name="attach"
@@ -229,6 +242,7 @@ export default {
       /* --- */
       floorOpts: [],
       roomOpts: [],
+      roomAllOpts:[],
       deviceTypeOpts: [],
       roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
@@ -252,6 +266,7 @@ export default {
         visible: false,
         forms: {},
         rules: {
+          floorCode: [{ required: true, trigger: "blur", message: "请输入" }],
           roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
           deviceGroupCode: [
             { required: true, trigger: "blur", message: "请输入" },
@@ -263,10 +278,18 @@ export default {
       },
     };
   },
-  watch: {},
+  watch: {
+    async "dialog.forms.floorCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.roomOpts = [];
+      const r = await spaceRoomListAll({ floorCode: n });
+      this.roomOpts = r.data;
+    },
+  },
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
-    spaceRoomListAll().then((r) => (this.roomOpts = r.data));
+    spaceRoomListAll().then((r) => (this.roomAllOpts = r.data));
     deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
     this.handleQuery();
   },
@@ -325,7 +348,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = { imgUrl: "" }; //让imgUrl变响应式validateField才有效
+        this.dialog.forms = { imgUrl: "", roomCode: "" }; //让imgUrl变响应式validateField才有效
       }
       this.dialog.visible = true;
     },
