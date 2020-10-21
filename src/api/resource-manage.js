@@ -70,3 +70,5 @@ export function deviceTypeListAll(data) { return request({ url: '/admin/device/d
 export function deviceGroupListAll(data) { return request({ url: '/admin/device/deviceGroup/listAll', method: 'post', data }) }
 // 获取某一房间的所有设备列表接口
 export function deviceListAll(data) { return request({ url: '/admin/device/device/listAll', method: 'post', data }) }
+// 获取所有测点类型接口
+export function pointTypeListAll(data) { return request({ url: '/admin/device/pointType/listAll', method: 'post', data }) }

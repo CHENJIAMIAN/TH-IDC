@@ -305,14 +305,6 @@ export default {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
           let callAPI = null;
-          switch (dialog.forms.actionType) {
-            case 1: //设备组
-              delete this.dialog.forms.deviceCode;
-              break;
-            case 2: //设备
-              delete this.dialog.forms.deviceGroupCode;
-              break;
-          }
           if (this.dialog.forms.id) {
             callAPI = deviceEdit;
           } else {

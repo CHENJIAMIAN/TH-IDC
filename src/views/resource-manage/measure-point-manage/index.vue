@@ -47,7 +47,7 @@
         <el-form-item prop="deviceType">
           <el-select v-model="filterForm.pointType" placeholder="测点类型	">
             <el-option
-              v-for="item in roomTypeOpts"
+              v-for="item in pointTypeOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -85,7 +85,13 @@
     >
       <el-table-column sortable prop="name" label="测点名称" />
       <el-table-column sortable prop="pointCode" label="测点编号" />
-      <el-table-column sortable prop="pointType" label="测点类型" />
+      <el-table-column sortable prop="pointType" label="测点类型">
+        <template slot-scope="{ row }">
+          <span>{{
+            pointTypeOpts.find((i) => i.id === row.pointType).name
+          }}</span>
+        </template>
+      </el-table-column>
       <el-table-column sortable prop="deviceName" label="设备名称" />
       <el-table-column sortable prop="deviceCode" label="设备编号" />
       <el-table-column sortable prop="deviceGroupName" label="设备组名称" />
@@ -145,15 +151,14 @@
         <el-form-item label="测点类型" prop="pointType">
           <el-select v-model="dialog.forms.pointType">
             <el-option
-              v-for="item in roomTypeOpts"
+              v-for="item in pointTypeOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
             />
           </el-select>
-
         </el-form-item>
-          <el-form-item label="楼层编号" prop="floorCode">
+        <el-form-item label="楼层编号" prop="floorCode">
           <el-select
             v-model="dialog.forms.floorCode"
             @change="
@@ -191,7 +196,11 @@
             <el-radio :label="2">设备</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="设备组编号" prop="deviceGroupCode" v-if="dialog.forms.actionType == 1">
+        <el-form-item
+          label="设备组编号"
+          prop="deviceGroupCode"
+          v-if="dialog.forms.actionType == 1"
+        >
           <el-select v-model="dialog.forms.deviceGroupCode">
             <el-option
               v-for="item in deviceGroupOpts"
@@ -201,7 +210,11 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="设备编号" prop="deviceCode" v-if="dialog.forms.actionType == 2">
+        <el-form-item
+          label="设备编号"
+          prop="deviceCode"
+          v-if="dialog.forms.actionType == 2"
+        >
           <el-select v-model="dialog.forms.deviceCode">
             <el-option
               v-for="item in deviceOpts"
@@ -225,6 +238,7 @@
 import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
+  pointTypeListAll,
   deviceListAll,
   deviceGroupListAll,
   spaceFloorListAll,
@@ -249,6 +263,7 @@ export default {
       floorOpts: [],
       deviceGroupOpts: [],
       deviceOpts: [],
+      pointTypeOpts: [],
       roomOpts: [],
       roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
@@ -274,7 +289,7 @@ export default {
         visible: false,
         forms: {},
         rules: {
-                    floorCode: [{ required: true, trigger: "blur", message: "请输入" }],
+          floorCode: [{ required: true, trigger: "blur", message: "请输入" }],
           roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
           deviceGroupCode: [
             { required: true, trigger: "blur", message: "请输入" },
@@ -283,13 +298,15 @@ export default {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           deviceCode: [{ required: true, trigger: "blur", message: "请输入" }],
           pointType: [{ required: true, trigger: "blur", message: "请输入" }],
-          actionType: [{ required: true, trigger: "change", message: "请输入" }],
+          actionType: [
+            { required: true, trigger: "change", message: "请输入" },
+          ],
         },
       },
     };
   },
   watch: {
-       async "dialog.forms.floorCode"(n, o) {
+    async "dialog.forms.floorCode"(n, o) {
       if (!n) return;
       // 一级变,二级也变
       this.roomOpts = [];
@@ -311,6 +328,7 @@ export default {
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
     spaceRoomListAll().then((r) => (this.roomOpts = r.data));
+    pointTypeListAll().then((r) => (this.pointTypeOpts = r.data));
     // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
     this.handleQuery();
   },
@@ -319,6 +337,14 @@ export default {
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
+          switch (this.dialog.forms.actionType) {
+            case 1: //设备组
+              delete this.dialog.forms.deviceCode;
+              break;
+            case 2: //设备
+              delete this.dialog.forms.deviceGroupCode;
+              break;
+          }
           let callAPI = null;
           if (this.dialog.forms.id) {
             callAPI = pointEdit;
@@ -354,7 +380,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms ={ roomCode: "", deviceGroupCode: "" };
+        this.dialog.forms = { roomCode: "", deviceGroupCode: "" };
       }
       this.dialog.visible = true;
     },
