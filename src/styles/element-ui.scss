@@ -1,6 +1,11 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
-
+.deviceType {
+  .el-select-dropdown__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
 .el-upload-dragger {
   background-color: #11345d;
 }

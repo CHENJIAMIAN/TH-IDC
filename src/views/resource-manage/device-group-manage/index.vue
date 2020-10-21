@@ -38,9 +38,13 @@
           <el-input v-model="filterForm.name" placeholder="设备组名称" />
         </el-form-item>
         <el-form-item prop="deviceType">
-          <el-select v-model="filterForm.deviceType" placeholder="设备组类型	">
+          <el-select
+            v-model="filterForm.deviceType"
+            placeholder="设备组类型"
+            popper-class="deviceType"
+          >
             <el-option
-              v-for="item in roomTypeOpts"
+              v-for="item in deviceTypeOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -78,13 +82,22 @@
     >
       <el-table-column sortable prop="name" label="设备组名称" />
       <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
-      <el-table-column sortable prop="deviceType" label="设备组类型" />
-      <el-table-column sortable prop="roomCode" label="房间编号" />
-      <el-table-column sortable prop="imgUrl" label="房间预览图地址" />
-      <!-- <template slot-scope="{ row }">
-          <span>{{ row.roomType | capitalize }}</span>
+      <el-table-column sortable prop="deviceType" label="设备组类型">
+        <template slot-scope="{ row }">
+          <span>{{
+            deviceTypeOpts.find((i) => i.id === row.deviceType).name
+          }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
+      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <el-table-column sortable prop="roomName" label="房间名称" />
+      <el-table-column sortable prop="imgUrl" label="设备组预览图">
+        <template slot-scope="{ row }">
+          <a :href="row.imgUrl" target="_blank"
+            ><el-button type="text" size="mini">查看</el-button></a
+          >
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -134,9 +147,12 @@
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
         <el-form-item label="设备组类型" prop="deviceType">
-          <el-select v-model="dialog.forms.deviceType">
+          <el-select
+            v-model="dialog.forms.deviceType"
+            popper-class="deviceType"
+          >
             <el-option
-              v-for="item in roomTypeOpts"
+              v-for="item in deviceTypeOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -153,8 +169,21 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="房间预览图地址" prop="imgUrl">
-          <el-input v-model="dialog.forms.imgUrl"></el-input>
+        <el-form-item label="设备组预览图" prop="imgUrl">
+          <el-upload
+            ref="upload"
+            name="attach"
+            class="upload-container"
+            :headers="headers"
+            :action="uploadUrl"
+            :data="uploadData"
+            :on-success="uploadSuccess"
+            :on-remove="fileRemove"
+            drag
+          >
+            <i class="el-icon-upload" />
+            <div class="el-upload__text">点击 <em>上传文件</em> 或拖拽上传</div>
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -171,6 +200,7 @@ import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   spaceFloorListAll,
+  deviceTypeListAll,
   spaceRoomListAll,
   deviceGroupListByPage,
   deviceGroupQueryById,
@@ -179,19 +209,27 @@ import {
   deviceGroupAdd,
 } from "@/api/resource-manage.js";
 
+// 上传
+import { uploadUrl } from "@/api/common";
+import { getToken } from "@/utils/auth";
+
 export default {
   components: { pagination },
-  filters: {
-    capitalize: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return roomTypeOpts.find((i) => i.id == value).name;
-    },
-  },
   data() {
     return {
+      // 上传
+      uploadedFileUrl: "", // 附件ID数组
+      headers: {
+        token: getToken(),
+      },
+      uploadData: {
+        type: 3 /*  type 1是楼层图片，2是房间图片，3是设备组图片 */,
+      },
+      uploadUrl,
+      /* --- */
       floorOpts: [],
       roomOpts: [],
+      deviceTypeOpts: [],
       roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
       secondMenuOpts: [],
@@ -219,7 +257,7 @@ export default {
             { required: true, trigger: "blur", message: "请输入" },
           ],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
-          imgUrl: [{ required: true, trigger: "blur", message: "请上传图片" }],
+          imgUrl: [{ required: true, message: "请上传图片" }],
           deviceType: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
@@ -229,10 +267,26 @@ export default {
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
     spaceRoomListAll().then((r) => (this.roomOpts = r.data));
+    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
   methods: {
+    // 附件上传成功
+    uploadSuccess(response, file, fileList) {
+      if (response.res === 0) {
+        this.dialog.forms.imgUrl = response.data.filePath;
+        this.$message.success("上传成功!");
+      } else {
+        this.$message.error(response.msg);
+      }
+      this.$refs["dialogForm"].validateField("imgUrl");
+    },
+    // 附件删除
+    fileRemove(file, fileList) {
+      this.dialog.forms.imgUrl = "";
+      this.$refs["dialogForm"].validateField("imgUrl");
+    },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
@@ -271,7 +325,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = {};
+        this.dialog.forms = { imgUrl: "" }; //让imgUrl变响应式validateField才有效
       }
       this.dialog.visible = true;
     },

@@ -79,7 +79,13 @@
       <el-table-column sortable prop="roomCode" label="房间编号" />
       <el-table-column sortable prop="floorName" label="楼层名称" />
       <el-table-column sortable prop="floorCode" label="楼层编号" />
-      <el-table-column sortable prop="imgUrl" label="房间预览图地址" />
+      <el-table-column sortable prop="imgUrl" label="房间预览图">
+        <template slot-scope="{ row }">
+          <a :href="row.imgUrl" target="_blank"
+            ><el-button type="text" size="mini">查看</el-button></a
+          >
+        </template>
+      </el-table-column>
       <el-table-column sortable prop="sort" label="排序" />
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
@@ -139,8 +145,21 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="房间预览图地址" prop="imgUrl">
-          <el-input v-model="dialog.forms.imgUrl"></el-input>
+        <el-form-item label="房间预览图" prop="imgUrl">
+          <el-upload
+            ref="upload"
+            name="attach"
+            class="upload-container"
+            :headers="headers"
+            :action="uploadUrl"
+            :data="uploadData"
+            :on-success="uploadSuccess"
+            :on-remove="fileRemove"
+            drag
+          >
+            <i class="el-icon-upload" />
+            <div class="el-upload__text">点击 <em>上传文件</em> 或拖拽上传</div>
+          </el-upload>
         </el-form-item>
         <el-form-item label="楼层编号" prop="floorCode">
           <el-select v-model="dialog.forms.floorCode">
@@ -179,6 +198,10 @@ import {
   spaceRoomQueryById,
 } from "@/api/resource-manage.js";
 
+// 上传
+import { uploadUrl } from "@/api/common";
+import { getToken } from "@/utils/auth";
+
 export default {
   components: { pagination },
   filters: {
@@ -190,6 +213,16 @@ export default {
   },
   data() {
     return {
+      // 上传
+      uploadedFileUrl: "", // 附件ID数组
+      headers: {
+        token: getToken(),
+      },
+      uploadData: {
+        type: 2 /*  type 1是楼层图片，2是房间图片，3是设备组图片 */,
+      },
+      uploadUrl,
+      /* --- */
       floorOpts: [],
       roomOpts: [],
       roomTypeOpts: roomTypeOpts,
@@ -217,7 +250,7 @@ export default {
           roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           roomType: [{ required: true, trigger: "blur", message: "请输入" }],
-          imgUrl: [{ required: true, trigger: "blur", message: "请上传图片" }],
+          imgUrl: [{ required: true, message: "请上传图片" }],
           sort: [{ required: true, trigger: "blur", validator: sortValidator }],
         },
       },
@@ -231,6 +264,21 @@ export default {
   },
   mounted() {},
   methods: {
+    // 附件上传成功
+    uploadSuccess(response, file, fileList) {
+      if (response.res === 0) {
+        this.dialog.forms.imgUrl = response.data.filePath;
+        this.$message.success("上传成功!");
+      } else {
+        this.$message.error(response.msg);
+      }
+      this.$refs["dialogForm"].validateField("imgUrl");
+    },
+    // 附件删除
+    fileRemove(file, fileList) {
+      this.dialog.forms.imgUrl = "";
+      this.$refs["dialogForm"].validateField("imgUrl");
+    },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
@@ -269,7 +317,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = {};
+        this.dialog.forms = { imgUrl: "" }; //让imgUrl变响应式validateField才有效
       }
       this.dialog.visible = true;
     },

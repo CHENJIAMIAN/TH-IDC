@@ -41,9 +41,13 @@
           <el-input v-model="filterForm.deviceCode" placeholder="设备编号" />
         </el-form-item>
         <el-form-item prop="deviceType">
-          <el-select v-model="filterForm.deviceType" placeholder="设备类型	">
+          <el-select
+            v-model="filterForm.deviceType"
+            placeholder="设备类型"
+            popper-class="deviceType"
+          >
             <el-option
-              v-for="item in roomTypeOpts"
+              v-for="item in deviceTypeOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -81,7 +85,13 @@
     >
       <el-table-column sortable prop="name" label="设备名称" />
       <el-table-column sortable prop="deviceCode" label="设备编号" />
-      <el-table-column sortable prop="deviceType" label="设备类型" />
+      <el-table-column sortable prop="deviceType" label="设备类型">
+        <template slot-scope="{ row }">
+          <span>{{
+            deviceTypeOpts.find((i) => i.id === row.deviceType).name
+          }}</span>
+        </template>
+      </el-table-column>
       <el-table-column sortable prop="deviceGroupName" label="设备组名称" />
       <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
       <el-table-column sortable prop="roomName" label="房间名称" />
@@ -137,9 +147,12 @@
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
         <el-form-item label="设备类型" prop="deviceType">
-          <el-select v-model="dialog.forms.deviceType">
+          <el-select
+            v-model="dialog.forms.deviceType"
+            popper-class="deviceType"
+          >
             <el-option
-              v-for="item in roomTypeOpts"
+              v-for="item in deviceTypeOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -180,7 +193,7 @@
 import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
-  // deviceGroupListAll,
+  deviceTypeListAll,
   spaceFloorListAll,
   spaceRoomListAll,
   deviceListByPage,
@@ -204,6 +217,7 @@ export default {
       floorOpts: [],
       deviceGroupOpts: [],
       roomOpts: [],
+      deviceTypeOpts: [],
       roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
       secondMenuOpts: [],
@@ -242,7 +256,7 @@ export default {
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
     spaceRoomListAll().then((r) => (this.roomOpts = r.data));
-    // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
+    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
     this.handleQuery();
   },
   mounted() {},

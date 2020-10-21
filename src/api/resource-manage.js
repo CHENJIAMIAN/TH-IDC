@@ -44,9 +44,6 @@ export function spaceFloorDelete(data) { return request({ url: '/admin/space/spa
 export function spaceFloorEdit(data) { return request({ url: '/admin/space/spaceFloor/edit', method: 'post', data }) }
 //新增楼层接口
 export function spaceFloorAdd(data) { return request({ url: '/admin/space/spaceFloor/add', method: 'post', data }) }
-
-
-
 // 获取测点列表接口（带分页功能）
 export function pointListByPage(data) { return request({ url: '/admin/device/point/listByPage', method: 'post', data }) }
 // 获取测点信息接口
@@ -57,4 +54,14 @@ export function pointDelete(data) { return request({ url: '/admin/device/point/d
 export function pointEdit(data) { return request({ url: '/admin/device/point/edit', method: 'post', data }) }
 // 新增测点接口 
 export function pointAdd(data) { return request({ url: '/admin/device/point/add', method: 'post', data }) }
+
+
+
+
+// 给角色添加菜单权限接口
+export function sysRoleMenuAdd(data) { return request({ url: '/admin/system/sysRoleMenu/add', method: 'post', data }) }
+// 获取所有菜单和角色所拥有的菜单权限
+export function sysRoleMenuListAll(data) { return request({ url: '/admin/system/sysRoleMenu/listAll', method: 'post', data }) }
+// 获取所有设备类型接口
+export function deviceTypeListAll(data) { return request({ url: '/admin/device/deviceType/listAll', method: 'post', data }) }
 

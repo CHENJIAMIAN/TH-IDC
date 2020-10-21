@@ -95,11 +95,7 @@
         <el-form-item label="楼层名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <el-form-item label="楼层预览图地址" prop="imgUrl">
-          <el-input
-            v-model="dialog.forms.imgUrl"
-            style="display: none"
-          ></el-input>
+        <el-form-item label="楼层预览图" prop="imgUrl">
           <el-upload
             ref="upload"
             name="attach"
@@ -238,7 +234,7 @@ export default {
         // 编辑
         this.dialog.forms = JSON.parse(JSON.stringify(row));
       } else {
-        this.dialog.forms = { imgUrl: "" };
+        this.dialog.forms = { imgUrl: "" }; //让imgUrl变响应式validateField才有效
       }
       this.dialog.visible = true;
     },
