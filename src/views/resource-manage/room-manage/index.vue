@@ -7,6 +7,7 @@
         :inline="true"
         size="medium"
         :model="filterForm"
+        style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="floorCode">
           <el-select v-model="filterForm.floorCode" placeholder="楼层">
@@ -47,6 +48,8 @@
             icon="el-icon-search"
             @click="handleQuery"
           ></el-button>
+        </el-form-item>
+        <el-form-item>
           <el-button
             type="primary"
             icon="el-icon-refresh"
@@ -54,6 +57,8 @@
             @click="handleReset('filterForm')"
             >重置</el-button
           >
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" size="medium" @click="handleDialog()">
             <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
             <i class="el-icon-plus" />
