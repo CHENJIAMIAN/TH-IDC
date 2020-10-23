@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container menu-auth-manage">
+  <div class="app-container auth-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form
@@ -7,13 +7,37 @@
         :inline="true"
         size="medium"
         :model="filterForm"
+        style="display: grid; grid-auto-flow: column"
       >
+        <el-form-item prop="name">
+          <el-input v-model="filterForm.name" placeholder="权限名称" />
+        </el-form-item>
+        <el-form-item prop="level3Name">
+          <el-input
+            v-model="filterForm.level3Name"
+            placeholder="所属菜单名称"
+          />
+        </el-form-item>
+        <el-form-item prop="level2Name">
+          <el-input
+            v-model="filterForm.level2Name"
+            placeholder="所属子系统名称"
+          />
+        </el-form-item>
+        <el-form-item prop="level1Name">
+          <el-input
+            v-model="filterForm.level1Name"
+            placeholder="所属模块名称"
+          />
+        </el-form-item>
         <el-form-item>
-          <!-- <el-button
+          <el-button
             type="primary"
             icon="el-icon-search"
             @click="handleQuery"
-          ></el-button>-->
+          ></el-button>
+        </el-form-item>
+        <el-form-item>
           <el-button
             type="primary"
             icon="el-icon-refresh"
@@ -21,6 +45,8 @@
             @click="handleReset('filterForm')"
             >重置</el-button
           >
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" size="medium" @click="handleDialog()">
             <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
             <i class="el-icon-plus" />
@@ -29,15 +55,6 @@
       </el-form>
     </div>
 
-    <!-- 
-id 复制 [int]	是	菜单编号ID （唯一）		
-name	[string]	是	菜单名称 （最大长度64）		
-parentId	[int]	是	父级菜单编号ID 		
-menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单		
-createTime	[datetime]	是	创建时间		
-updateTime	[datetime]		修改时间		
-createUserId	[int]	是	创建人ID		
-updateUserId	[int]		修改人ID  -->
     <!-- 列表 -->
     <el-table
       style="overflow: auto"
@@ -46,17 +63,14 @@ updateUserId	[int]		修改人ID  -->
       border
       :data="listData"
     >
-      <el-table-column sortable prop="name" label="菜单名称" />
-      <el-table-column sortable prop="menuType" label="菜单类型">
-        <template slot-scope="{ row }">
-          <span v-if="row.menuType == 1">一级菜单</span>
-          <span v-else-if="row.menuType == 2">二级菜单</span>
-          <span v-else-if="row.menuType == 3">三级菜单</span>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="createTime" label="创建时间" />
-      <el-table-column sortable prop="updateTime" label="修改时间" />
-
+      <el-table-column sortable prop="name" label="权限名称" />
+      <el-table-column sortable prop="permission" label="标签" />
+      <el-table-column sortable prop="menuId" label="所属菜单id" />
+      <el-table-column sortable prop="level3Name" label="所属菜单名称" />
+      <el-table-column sortable prop="level2Id" label="所属子系统id" />
+      <el-table-column sortable prop="level2Name" label="所属子系统名称" />
+      <el-table-column sortable prop="level1Id" label="所属模块id" />
+      <el-table-column sortable prop="level1Name" label="所模块名称" />
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -100,24 +114,21 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
         ref="dialogForm"
         label-width="100px"
       >
-        <el-form-item label="菜单名称" prop="name">
+        <el-form-item label="权限名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <el-form-item label="菜单类型" prop="menuType">
-          <el-radio-group v-model="dialog.forms.menuType" style="width: 100%">
-            <el-radio :label="1">一级菜单</el-radio>
-            <el-radio :label="2">二级菜单</el-radio>
-            <el-radio :label="3">三级菜单</el-radio>
-          </el-radio-group>
+        <el-form-item label="权限标签" prop="permission">
+          <el-input v-model="dialog.forms.permission"></el-input>
         </el-form-item>
-        <el-form-item
-          label="一级菜单"
-          prop="firstMenuId"
-          v-if="dialog.forms.menuType == 2 || dialog.forms.menuType == 3"
-        >
+        <el-form-item label="一级菜单" prop="firstMenuId">
           <el-select
             v-model="dialog.forms.firstMenuId"
-            @change="dialog.forms.secondMenuId = ''"
+            @change="
+              () => {
+                $set(dialog.forms, 'secondMenuId', '');
+                $set(dialog.forms, 'thirdMenuId', '');
+              }
+            "
           >
             <el-option
               v-for="item in firstMenuOpts"
@@ -130,11 +141,28 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
         <el-form-item
           label="二级菜单"
           prop="secondMenuId"
-          v-if="dialog.forms.menuType == 3"
+          v-show="dialog.forms.firstMenuId"
         >
-          <el-select v-model="dialog.forms.secondMenuId">
+          <el-select
+            v-model="dialog.forms.secondMenuId"
+            @change="$set(dialog.forms, 'thirdMenuId', '')"
+          >
             <el-option
               v-for="item in secondMenuOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="三级菜单"
+          prop="thirdMenuId"
+          v-show="dialog.forms.secondMenuId"
+        >
+          <el-select v-model="dialog.forms.thirdMenuId">
+            <el-option
+              v-for="item in thirdMenuOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -154,13 +182,12 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
 <script>
 import pagination from "@/components/Pagination";
 import {
-  sysMenuDelete,
-  sysMenuEdit,
-  sysMenuAdd,
-  sysMenuListByPage,
+  sysPermissionListByPage,
+  sysPermissionQueryById,
+  sysPermissionDelete,
+  sysPermissionEdit,
+  sysPermissionAdd,
   sysMenuListAll,
-  // 没用到
-  sysMenuQueryById,
 } from "@/api/system-manage.js";
 export default {
   components: { pagination },
@@ -169,8 +196,13 @@ export default {
       depOpts: [],
       firstMenuOpts: [],
       secondMenuOpts: [],
+      thirdMenuOpts: [],
       filterForm: {
         // 筛选条件
+        name: "",
+        level3Name: "",
+        level2Name: "",
+        level1Name: "",
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
@@ -184,7 +216,13 @@ export default {
         forms: {},
         rules: {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
+          permission: [{ required: true, trigger: "blur", message: "请输入" }],
           menuType: [{ required: true, trigger: "change", message: "请输入" }],
+          firstMenuId: [{ required: true, trigger: "blur", message: "请输入" }],
+          secondMenuId: [
+            { required: true, trigger: "blur", message: "请输入" },
+          ],
+          thirdMenuId: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };
@@ -194,8 +232,16 @@ export default {
       if (!n) return;
       // 一级变,二级也变
       this.secondMenuOpts = [];
+      this.thirdMenuOpts = [];
       const r = await sysMenuListAll({ parentId: n, menuType: 2 });
       this.secondMenuOpts = r.data;
+    },
+    async "dialog.forms.secondMenuId"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.thirdMenuOpts = [];
+      const r = await sysMenuListAll({ parentId: n, menuType: 3 });
+      this.thirdMenuOpts = r.data;
     },
   },
   created() {
@@ -208,31 +254,15 @@ export default {
         if (valid) {
           let callAPI = null;
           // 根据 menuType 确定父级id编号 parentId
-          switch (this.dialog.forms.menuType) {
-            case 1:
-              this.dialog.forms.parentId = null;
-              break;
-            case 2:
-              this.dialog.forms.parentId = this.dialog.forms.firstMenuId;
-              if (!this.dialog.forms.firstMenuId) {
-                this.$message.error("请选择父级菜单");
-                return;
-              }
-              break;
-            case 3:
-              this.dialog.forms.parentId = this.dialog.forms.secondMenuId;
-              if (!this.dialog.forms.secondMenuId) {
-                this.$message.error("请选择父级菜单");
-                return;
-              }
-              break;
+          if (!this.dialog.forms.thirdMenuId) {
+            this.$message.error("请选择父级菜单");
+            return;
           }
-          delete this.dialog.forms.firstMenuId;
-          delete this.dialog.forms.secondMenuId;
+          this.dialog.forms.menuId = this.dialog.forms.thirdMenuId;
           if (this.dialog.forms.id) {
-            callAPI = sysMenuEdit;
+            callAPI = sysPermissionEdit;
           } else {
-            callAPI = sysMenuAdd;
+            callAPI = sysPermissionAdd;
           }
           callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
@@ -263,36 +293,34 @@ export default {
       this.firstMenuOpts = r1.data;
       if (row) {
         // 编辑
-        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)), {
-          firstMenuId: null, //!!!!!让这两个变量变响应式
-          secondMenuId: null, //!!!!!让这两个变量变响应式
-        });
+        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
         console.log(this.dialog.forms);
-        switch (row.menuType) {
-          case 1:
-            break;
-          case 2:
-            this.dialog.forms.firstMenuId = row.parentId;
-            break;
-          case 3:
-            // 二级菜单的id是row.parentId
-            // 此时二级菜单需要手动获取,而不是通过选一级触发
-            const r2 = await sysMenuListAll({ menuType: 2 });
-            this.secondMenuOpts = r2.data;
-            // 自动选上二级菜单
-            this.dialog.forms.secondMenuId = row.parentId;
-            // 找到二级菜单的该项
-            const secondMenu = this.secondMenuOpts.find(
-              (i) => i.id === row.parentId
-            );
-            // 超出与该二级菜单的父亲,也就是一级菜单的该项
-            const firstMenu = this.firstMenuOpts.find(
-              (i) => i.id === secondMenu.parentId
-            );
-            // 自动选上一级菜单
-            this.dialog.forms.firstMenuId = firstMenu.id; //得到一级菜单的id
-            break;
-        }
+        // 根据menuId复原三级菜单
+        // 二级菜单的id是row.menuId
+        // 此时二级菜单需要手动获取,而不是通过选一级触发
+        const r3 = await sysMenuListAll({ menuType: 3 });
+        const r2 = await sysMenuListAll({ menuType: 2 });
+        this.thirdMenuOpts = r3.data;
+        this.secondMenuOpts = r2.data;
+        // 找到三级菜单的该项
+        const thirdMenu = this.thirdMenuOpts.find((i) => i.id === row.menuId);
+        // 找到二级菜单的该项
+        const secondMenu = this.secondMenuOpts.find(
+          (i) => i.id === thirdMenu.parentId
+        );
+        // 找到一级菜单的该项
+        const firstMenu = this.firstMenuOpts.find(
+          (i) => i.id === secondMenu.parentId
+        );
+        // 自动选上三级菜单
+        this.$set(this.dialog.forms, "thirdMenuId", row.menuId);
+        // this.dialog.forms.thirdMenuId = row.menuId;
+        // 自动选上二级菜单
+        this.$set(this.dialog.forms, "secondMenuId", secondMenu.id);
+        // this.dialog.forms.secondMenuId = secondMenu.id;
+        // 自动选上一级菜单
+        this.$set(this.dialog.forms, "firstMenuId", firstMenu.id);
+        // this.dialog.forms.firstMenuId = firstMenu.id; //得到一级菜单的id
       } else {
         this.dialog.forms = {};
       }
@@ -306,7 +334,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          sysMenuDelete({
+          sysPermissionDelete({
             id: id,
           }).then((res) => {
             this.getList();
@@ -318,7 +346,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      sysMenuListByPage(this.filterForm).then((res) => {
+      sysPermissionListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
@@ -329,7 +357,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.menu-auth-manage {
+.auth-manage {
   display: grid;
   grid-template-rows: 60px auto 70px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;

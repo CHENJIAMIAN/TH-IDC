@@ -47,8 +47,22 @@ updateUserId	[int]		修改人ID （可为空）
       <el-table-column sortable prop="name" label="角色名称" />
       <el-table-column sortable prop="createTime" label="创建时间" />
       <el-table-column sortable prop="updateTime" label="修改时间" />
-      <el-table-column label="操作" align="center" width="240">
+      <el-table-column label="操作" align="center" width="280">
         <template slot-scope="{ row }">
+          <el-button
+          title="分配房间"
+            icon="el-icon-circle-plus-outline"
+            type="primary"
+            plain
+            @click="handleDialog(row)"
+          ></el-button>
+               <el-button
+          title="分配权限"
+            icon="el-icon-circle-plus"
+            type="primary"
+            plain
+            @click="handleDialog(row)"
+          ></el-button>
           <el-button
             icon="el-icon-edit-outline"
             type="primary"
@@ -121,9 +135,11 @@ import {
   sysRoleEdit,
   sysRoleAdd,
   sysRoleListByPage,
-  // 未用到
-  sysRoleListAll,
-  sysRoleQueryById,
+  // 
+sysRoleMenuAdd,
+sysRoleMenuListAll,
+sysRoleRoomListAll,
+sysRoleRoomAdd,
 } from "@/api/system-manage.js";
 export default {
   components: { pagination },

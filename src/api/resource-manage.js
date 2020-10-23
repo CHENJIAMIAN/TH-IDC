@@ -77,26 +77,6 @@ export function deviceAddPointToDevice(data){return request({url:'/admin/device/
 //设备组绑定测点接口
 export function deviceGroupAddPointToGroup(data){return request({url:'/admin/device/deviceGroup/addPointToGroup',method:'post',data})}
 
-// 给角色添加菜单权限接口
-export function sysRoleMenuAdd(data) { return request({ url: '/admin/system/sysRoleMenu/add', method: 'post', data }) }
-// 获取所有菜单和角色所拥有的菜单权限
-export function sysRoleMenuListAll(data) { return request({ url: '/admin/system/sysRoleMenu/listAll', method: 'post', data }) }
-//获取所有楼层房间和角色所拥有的房间权限
-export function sysRoleRoomListAll(data){return request({url:'/admin/system/sysRoleRoom/listAll',method:'post',data})}
-//给角色添加房间接口
-export function sysRoleRoomAdd(data){return request({url:'/admin/system/sysRoleRoom/add',method:'post',data})}
-//获取权限列表接口（带分页功能）
-export function sysPermissionListByPage(data){return request({url:'/admin/system/sysPermission/listByPage',method:'post',data})}
-//获取权限信息接口
-export function sysPermissionQueryById(data){return request({url:'/admin/system/sysPermission/queryById',method:'post',data})}
-//删除权限接口
-export function sysPermissionDelete(data){return request({url:'/admin/system/sysPermission/delete',method:'post',data})}
-//修改权限接口
-export function sysPermissionEdit(data){return request({url:'/admin/system/sysPermission/edit',method:'post',data})}
-//新增权限接口
-export function sysPermissionAdd(data){return request({url:'/admin/system/sysPermission/add',method:'post',data})}
-
-
 
 
 

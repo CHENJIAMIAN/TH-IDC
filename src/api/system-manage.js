@@ -57,29 +57,22 @@ export function sysDepartmentListByPage(data) { return request({ url: '/admin/sy
 //获取所有部门
 export function sysDepartmentListAll(data) { return request({ url: '/admin/system/sysDepartment/listAll', method: 'post', data }) }
 
-// 系统管理
-// 2.3.1.1.部门管理
-// QURD 部门编号（id）、部门名称、 创建时间、修改时间、创建人、 修改人
+// 给角色添加菜单权限接口
+export function sysRoleMenuAdd(data) { return request({ url: '/admin/system/sysRolePermission/add', method: 'post', data }) }
+// 获取所有菜单和角色所拥有的菜单权限
+export function sysRoleMenuListAll(data) { return request({ url: '/admin/system/sysRolePermission/listAll', method: 'post', data }) }
+//获取所有楼层房间和角色所拥有的房间权限
+export function sysRoleRoomListAll(data){return request({url:'/admin/system/sysRoleRoom/listAll',method:'post',data})}
+//给角色添加房间接口
+export function sysRoleRoomAdd(data){return request({url:'/admin/system/sysRoleRoom/add',method:'post',data})}
 
-// 2.3.1.2.菜单权限管理
-// QURD 菜单编号（id）、菜单名称、 上级菜单编号、菜单类型、创建时间、修改时间、创建人、 修改人
-
-// 2.3.1.3.角色管理
-// QURD 角色编号（id）、角色名称、 创建时间、修改时间、创建人、 修改人
-
-// 2.3.1.5.用户管理
-// QURD 
-// 用户编号（id）、用户名、用户密码、姓名、电话、邮箱、微信、钉钉、备注、所属部门、启用状态、 创建时间、修改时间、创建人、 修改人
-
-        // 2.3.1.6.用户角色关联
-        // 用户角色（一个或多个）
-        // 2.3.1.4.角色权限关联
-        // 角色权限（一个或多个）
-
-
-
-// 2.3.1.7.系统日志
-// 查询
-// 添加
-
-// 用户编号（id）、用户名、模块名、模块方法、用户IP、描述、日志类型（普通日志、异常日志）操作时间
+//获取权限列表接口（带分页功能）
+export function sysPermissionListByPage(data){return request({url:'/admin/system/sysPermission/listByPage',method:'post',data})}
+//获取权限信息接口
+export function sysPermissionQueryById(data){return request({url:'/admin/system/sysPermission/queryById',method:'post',data})}
+//删除权限接口
+export function sysPermissionDelete(data){return request({url:'/admin/system/sysPermission/delete',method:'post',data})}
+//修改权限接口
+export function sysPermissionEdit(data){return request({url:'/admin/system/sysPermission/edit',method:'post',data})}
+//新增权限接口
+export function sysPermissionAdd(data){return request({url:'/admin/system/sysPermission/add',method:'post',data})}

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container menu-auth-manage">
+  <div class="app-container room-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form
@@ -368,7 +368,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.menu-auth-manage {
+.room-manage {
   display: grid;
   grid-template-rows: 60px auto 70px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;

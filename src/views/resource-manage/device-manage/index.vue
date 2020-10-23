@@ -192,7 +192,7 @@
         <el-form-item label="房间编号" prop="roomCode">
           <el-select
             v-model="dialog.forms.roomCode"
-            @change="dialog.forms.deviceGroupCode = ''"
+            @change="$set(dialog.forms,'deviceGroupCode','')"
           >
             <el-option
               v-for="item in roomOpts"

@@ -20,10 +20,16 @@ export default {
       meta: { title: '部门管理', icon: 'icon' }
     },
     {
-      path: 'menu-auth-manage',
-      component: () => import('@/views/system-setting/menu-auth-manage/index'),
+      path: 'menu-manage',
+      component: () => import('@/views/system-setting/menu-manage/index'),
       name: 'Icons',
-      meta: { title: '菜单权限管理', icon: 'icon' }
+      meta: { title: '菜单管理', icon: 'icon' }
+    },
+    {
+      path: 'auth-manage',
+      component: () => import('@/views/system-setting/auth-manage/index'),
+      name: 'Icons',
+      meta: { title: '权限管理', icon: 'icon' }
     },
     {
       path: 'role-manage',

@@ -174,7 +174,7 @@
         <el-form-item label="楼层编号" prop="floorCode">
           <el-select
             v-model="dialog.forms.floorCode"
-            @change="dialog.forms.roomCode = ''"
+            @change="$set(dialog.forms,'roomCode','')"
           >
             <el-option
               v-for="item in floorOpts"
