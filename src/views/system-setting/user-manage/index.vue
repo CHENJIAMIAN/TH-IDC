@@ -61,7 +61,7 @@
 
     <!-- 列表 -->
     <el-table
-      style="overflow: auto;"
+      style="overflow: auto"
       stripe
       v-loading="listLoading"
       border
@@ -69,6 +69,7 @@
     >
       <el-table-column sortable prop="userName" label="用户账号" />
       <el-table-column sortable prop="realName" label="用户名称" />
+      <el-table-column sortable prop="roleNameList" label="角色" />
       <el-table-column sortable prop="phone" label="电话" />
       <el-table-column sortable prop="email" label="邮箱" />
       <el-table-column sortable prop="wechat" label="微信" />
@@ -110,10 +111,10 @@
     <!-- 详情弹窗 -->
     <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
       <span slot="title">
-        <span style="font-size: 1.5rem;font-weight: bold;">{{
+        <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem;" src="@/assets/img/hl.png" />
+        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
       </span>
       <el-form
         :model="dialog.forms"
@@ -155,6 +156,17 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="角色" prop="roles">
+          <!-- 传参 roleIdStr ,隔开 -->
+          <el-select multiple v-model="dialog.forms.roles">
+            <el-option
+              v-for="item in roleOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="账号状态" prop="status">
           <el-radio-group v-model="dialog.forms.status" style="width: 100%">
             <el-radio :label="1">启用</el-radio>
@@ -162,8 +174,8 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <div slot="footer" style="text-align: center;">
-        <el-button style="width: 200px;" type="primary" @click="dialogSubmit"
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
           >保 存</el-button
         >
       </div>
@@ -174,6 +186,7 @@
 <script>
 import pagination from "@/components/Pagination";
 import {
+  sysRoleListAll,
   sysDepartmentListAll,
   sysUserAdd,
   sysUserDelete,
@@ -181,13 +194,14 @@ import {
   sysUserListByPage,
   // 未用到
   sysUserUpdatePassword,
-  sysUserQueryById
+  sysUserQueryById,
 } from "@/api/system-manage.js";
 export default {
   components: { pagination },
   data() {
     return {
       depOpts: [],
+      roleOpts: [],
       filterForm: {
         // 筛选条件
         userName: "",
@@ -196,12 +210,12 @@ export default {
         departmentId: null,
         status: null,
         pageNo: 1, // 当前页码
-        pageSize: 10 // 每页限制数量
+        pageSize: 10, // 每页限制数量
       },
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-      // 收款信息弹窗
+
       dialog: {
         id: "",
         visible: false,
@@ -212,15 +226,17 @@ export default {
           realName: [{ required: true, trigger: "blur", message: "请输入" }],
           phone: [{ required: true, trigger: "blur", message: "请输入" }],
           departmentId: [
-            { required: true, trigger: "change", message: "请输入" }
+            { required: true, trigger: "change", message: "请输入" },
           ],
-          status: [{ required: true, trigger: "change", message: "请输入" }]
-        }
-      }
+          roles: [{ required: true, trigger: "blur", message: "请输入" }],
+          status: [{ required: true, trigger: "change", message: "请输入" }],
+        },
+      },
     };
   },
   created() {
-    sysDepartmentListAll().then(r => (this.depOpts = r.data));
+    sysDepartmentListAll().then((r) => (this.depOpts = r.data));
+    sysRoleListAll().then((r) => (this.roleOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
@@ -229,6 +245,7 @@ export default {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
           let callAPI = null;
+          this.dialog.forms.roleIdStr = this.dialog.forms.roles.join(",");
           if (this.dialog.forms.id) {
             // 没有编辑密码的
             this.dialog.forms.password = null;
@@ -236,7 +253,23 @@ export default {
           } else {
             callAPI = sysUserAdd;
           }
-          callAPI(this.dialog.forms).then(res => {
+          // const templateObj = {
+          //   id: 0,
+          //   realName: "",
+          //   phone: "",
+          //   email: "",
+          //   wechat: "",
+          //   dingtalk: "",
+          //   remarks: "",
+          //   departmentId: 0,
+          //   status: "",
+          //   roleIdStr: "",
+          // };
+          // Object.keys(templateObj).forEach((key) => {
+          //   templateObj[key] = this.dialog.forms[key] || "";
+          // });
+          // delete templateObj.id;
+          callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogForm"].resetFields();
             this.dialog.visible = false;
@@ -262,6 +295,7 @@ export default {
     handleDialog(row) {
       if (row) {
         // 编辑
+        row.roles = row.roleNameList ? row.roleNameList.split(",") : [];
         this.dialog.forms = JSON.parse(JSON.stringify(row));
       } else {
         this.dialog.forms = {};
@@ -273,12 +307,12 @@ export default {
       this.$confirm("确认删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           sysUserDelete({
-            id: id
-          }).then(res => {
+            id: id,
+          }).then((res) => {
             this.getList();
             this.$message.success("删除成功!");
           });
@@ -288,13 +322,13 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      sysUserListByPage(this.filterForm).then(res => {
+      sysUserListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

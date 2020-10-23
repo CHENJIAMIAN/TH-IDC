@@ -287,7 +287,7 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-      // 收款信息弹窗
+
       dialog: {
         id: "",
         visible: false,
@@ -384,7 +384,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = { roomCode: "", deviceGroupCode: "" }; 
+        this.dialog.forms = { roomCode: "", deviceGroupCode: "" };
         /* 
           this.dialog.forms ={ roomCode: ""}; 下拉选择才有反应???
           下拉选择时会触发  this.$emit('input', value); 进而触发ast生成的代码: callback: function($$v) { _vm.$set(_vm.dialog.forms, "roomCode", $$v)},

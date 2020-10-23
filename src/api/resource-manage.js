@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+// temp1.map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
+
 
 //获取设备列表接口（带分页功能）
 export function deviceListByPage(data) { return request({ url: '/admin/device/device/listByPage', method: 'post', data }) }
@@ -54,21 +56,59 @@ export function pointDelete(data) { return request({ url: '/admin/device/point/d
 export function pointEdit(data) { return request({ url: '/admin/device/point/edit', method: 'post', data }) }
 // 新增测点接口 
 export function pointAdd(data) { return request({ url: '/admin/device/point/add', method: 'post', data }) }
-
-
-
-
-// 给角色添加菜单权限接口
-export function sysRoleMenuAdd(data) { return request({ url: '/admin/system/sysRoleMenu/add', method: 'post', data }) }
-// 获取所有菜单和角色所拥有的菜单权限
-export function sysRoleMenuListAll(data) { return request({ url: '/admin/system/sysRoleMenu/listAll', method: 'post', data }) }
 // 获取所有设备类型接口
 export function deviceTypeListAll(data) { return request({ url: '/admin/device/deviceType/listAll', method: 'post', data }) }
-
-
 // 获取某个房间的所有设备组列表接口	
 export function deviceGroupListAll(data) { return request({ url: '/admin/device/deviceGroup/listAll', method: 'post', data }) }
 // 获取某一房间的所有设备列表接口
 export function deviceListAll(data) { return request({ url: '/admin/device/device/listAll', method: 'post', data }) }
 // 获取所有测点类型接口
 export function pointTypeListAll(data) { return request({ url: '/admin/device/pointType/listAll', method: 'post', data }) }
+//查询设备所有未绑定测点列表
+export function deviceQueryAllNotBindForDevice(data){return request({url:'/admin/device/device/queryAllNotBindForDevice',method:'post',data})}
+//查询设备所有已经绑定测点列表
+export function deviceQueryAllBindForDevice(data){return request({url:'/admin/device/device/queryAllBindForDevice',method:'post',data})}
+//查询设备组所有已经绑定测点列表
+export function deviceGroupListAllBindDeviceGroup(data){return request({url:'/admin/device/deviceGroup/listAllBindDeviceGroup',method:'post',data})}
+//查询设备组所有未绑定测点列表
+export function deviceGroupListAllNotBindDeviceGroup(data){return request({url:'/admin/device/deviceGroup/listAllNotBindDeviceGroup',method:'post',data})}
+//设备绑定测点接口
+export function deviceAddPointToDevice(data){return request({url:'/admin/device/device/addPointToDevice',method:'post',data})}
+//设备组绑定测点接口
+export function deviceGroupAddPointToGroup(data){return request({url:'/admin/device/deviceGroup/addPointToGroup',method:'post',data})}
+
+// 给角色添加菜单权限接口
+export function sysRoleMenuAdd(data) { return request({ url: '/admin/system/sysRoleMenu/add', method: 'post', data }) }
+// 获取所有菜单和角色所拥有的菜单权限
+export function sysRoleMenuListAll(data) { return request({ url: '/admin/system/sysRoleMenu/listAll', method: 'post', data }) }
+//获取所有楼层房间和角色所拥有的房间权限
+export function sysRoleRoomListAll(data){return request({url:'/admin/system/sysRoleRoom/listAll',method:'post',data})}
+//给角色添加房间接口
+export function sysRoleRoomAdd(data){return request({url:'/admin/system/sysRoleRoom/add',method:'post',data})}
+//获取权限列表接口（带分页功能）
+export function sysPermissionListByPage(data){return request({url:'/admin/system/sysPermission/listByPage',method:'post',data})}
+//获取权限信息接口
+export function sysPermissionQueryById(data){return request({url:'/admin/system/sysPermission/queryById',method:'post',data})}
+//删除权限接口
+export function sysPermissionDelete(data){return request({url:'/admin/system/sysPermission/delete',method:'post',data})}
+//修改权限接口
+export function sysPermissionEdit(data){return request({url:'/admin/system/sysPermission/edit',method:'post',data})}
+//新增权限接口
+export function sysPermissionAdd(data){return request({url:'/admin/system/sysPermission/add',method:'post',data})}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

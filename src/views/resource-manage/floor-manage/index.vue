@@ -96,20 +96,31 @@
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
         <el-form-item label="预览图" prop="imgUrl">
-          <el-upload
-            ref="upload"
-            name="attach"
-            class="upload-container"
-            :headers="headers"
-            :action="uploadUrl"
-            :data="uploadData"
-            :on-success="uploadSuccess"
-            :on-remove="fileRemove"
-            drag
-          >
-            <i class="el-icon-upload" />
-            <div class="el-upload__text">点击 <em>上传文件</em> 或拖拽上传</div>
-          </el-upload>
+          <div class="preview-grid">
+            <el-upload
+              ref="upload"
+              name="attach"
+              class="upload-container"
+              :headers="headers"
+              :action="uploadUrl"
+              :data="uploadData"
+              :on-success="uploadSuccess"
+              :on-remove="fileRemove"
+              :limit="1"
+              drag
+            >
+              <i class="el-icon-upload" />
+              <div class="el-upload__text">
+                点击 <em>上传文件</em> 或拖拽上传
+              </div>
+            </el-upload>
+            <img
+              class="preview-img"
+              v-if="dialog.forms.imgUrl"
+              :src="dialog.forms.imgUrl"
+              alt="图片加载失败"
+            />
+          </div>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input v-model="dialog.forms.sort"></el-input>
@@ -163,7 +174,7 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-      // 收款信息弹窗
+
       dialog: {
         id: "",
         visible: false,
@@ -278,5 +289,20 @@ export default {
 .head {
   display: grid;
   justify-content: end;
+}
+.preview-grid {
+  display: grid;
+  grid-template-columns: 50% auto;
+  gap: 1rem;
+  grid-template-rows: 200px;
+}
+
+.preview-img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  justify-self: center;
+  align-self: center;
 }
 </style>

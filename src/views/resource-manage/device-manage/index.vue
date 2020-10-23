@@ -106,6 +106,13 @@
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
+            title="绑定测点"
+            icon="el-icon-circle-plus-outline"
+            type="primary"
+            plain
+            @click="handleCDDialog(row)"
+          ></el-button>
+          <el-button
             icon="el-icon-edit-outline"
             type="primary"
             plain
@@ -212,6 +219,45 @@
         >
       </div>
     </el-dialog>
+
+    <!-- 绑定测点弹窗 -->
+    <el-dialog v-if="dialogCD.visible" :visible.sync="dialogCD.visible">
+      <span slot="title">
+        <span style="font-size: 1.5rem; font-weight: bold">绑定测点</span>
+        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
+      </span>
+      <el-form
+        :model="dialogCD.forms"
+        :rules="dialogCD.rules"
+        ref="dialogCDForm"
+        label-width="150px"
+      >
+        <el-form-item label="" prop="">
+          <el-transfer
+            filterable
+            :filter-method="
+              (query, item) => {
+                return item.name.indexOf(query) > -1;
+              }
+            "
+            :titles="['未绑定', '已绑定']"
+            :props="{
+              key: 'id',
+              label: 'name',
+            }"
+            filter-placeholder="请输入"
+            v-model="dialogCD.forms.pointIds"
+            :data="allPointOpts"
+          >
+          </el-transfer>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogCDSubmit"
+          >保 存</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -219,6 +265,9 @@
 import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
+  deviceQueryAllNotBindForDevice,
+  deviceQueryAllBindForDevice,
+  deviceAddPointToDevice,
   deviceGroupListAll,
   deviceTypeListAll,
   spaceFloorListAll,
@@ -244,8 +293,11 @@ export default {
       floorOpts: [],
       deviceGroupOpts: [],
       roomOpts: [],
-      roomAllOpts:[],
+      roomAllOpts: [],
       deviceTypeOpts: [],
+      pointBindDeviceGroupOpts: [],
+      pointNotBindDeviceGroupOpts: [],
+      allPointOpts: [],
       roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
       secondMenuOpts: [],
@@ -263,7 +315,7 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-      // 收款信息弹窗
+
       dialog: {
         id: "",
         visible: false,
@@ -278,6 +330,12 @@ export default {
           deviceCode: [{ required: true, trigger: "blur", message: "请输入" }],
           deviceType: [{ required: true, trigger: "blur", message: "请输入" }],
         },
+      },
+
+      dialogCD: {
+        visible: false,
+        forms: {},
+        rules: {},
       },
     };
   },
@@ -306,6 +364,23 @@ export default {
   },
   mounted() {},
   methods: {
+    dialogCDSubmit() {
+      this.$refs["dialogCDForm"].validate((valid, obj) => {
+        if (valid) {
+          this.dialogCD.forms.pointIdStr = this.dialogCD.forms.pointIds.join(
+            ","
+          );
+          deviceAddPointToDevice(this.dialogCD.forms).then((res) => {
+            this.$message.success("操作成功!");
+            this.$refs["dialogCDForm"].resetFields();
+            this.dialogCD.visible = false;
+            this.getList();
+          });
+        } else {
+          return false;
+        }
+      });
+    },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
@@ -347,6 +422,27 @@ export default {
         this.dialog.forms = { roomCode: "", deviceGroupCode: "" };
       }
       this.dialog.visible = true;
+    },
+    async handleCDDialog(row) {
+      // dialog显示时获取一级菜单列表
+      if (row) {
+        // 编辑
+        this.dialogCD.forms = { id: row.id };
+        const r1 = await deviceQueryAllNotBindForDevice({ id: row.id });
+        this.pointNotBindDeviceGroupOpts = r1.data;
+        const r2 = await deviceQueryAllBindForDevice({ id: row.id });
+        this.pointBindDeviceGroupOpts = r2.data;
+        // this.dialogCD.forms.pointIds = r2.data.map((i) => i.id);
+        this.$set(
+          this.dialogCD.forms,
+          "pointIds",
+          r2.data.map((i) => i.id)
+        );
+        this.allPointOpts = this.pointNotBindDeviceGroupOpts.concat(
+          this.pointBindDeviceGroupOpts
+        );
+      }
+      this.dialogCD.visible = true;
     },
     // 删除
     handleDel(id) {

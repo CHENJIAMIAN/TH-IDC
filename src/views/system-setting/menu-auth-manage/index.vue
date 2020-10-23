@@ -40,7 +40,7 @@ createUserId	[int]	是	创建人ID
 updateUserId	[int]		修改人ID  -->
     <!-- 列表 -->
     <el-table
-      style="overflow: auto;"
+      style="overflow: auto"
       stripe
       v-loading="listLoading"
       border
@@ -89,10 +89,10 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
     <!-- 详情弹窗 -->
     <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
       <span slot="title">
-        <span style="font-size: 1.5rem;font-weight: bold;">{{
+        <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem;" src="@/assets/img/hl.png" />
+        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
       </span>
       <el-form
         :model="dialog.forms"
@@ -142,8 +142,8 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" style="text-align: center;">
-        <el-button style="width: 200px;" type="primary" @click="dialogSubmit"
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
           >保 存</el-button
         >
       </div>
@@ -160,7 +160,7 @@ import {
   sysMenuListByPage,
   sysMenuListAll,
   // 没用到
-  sysMenuQueryById
+  sysMenuQueryById,
 } from "@/api/system-manage.js";
 export default {
   components: { pagination },
@@ -172,21 +172,21 @@ export default {
       filterForm: {
         // 筛选条件
         pageNo: 1, // 当前页码
-        pageSize: 10 // 每页限制数量
+        pageSize: 10, // 每页限制数量
       },
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-      // 收款信息弹窗
+
       dialog: {
         id: "",
         visible: false,
         forms: {},
         rules: {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
-          menuType: [{ required: true, trigger: "change", message: "请输入" }]
-        }
-      }
+          menuType: [{ required: true, trigger: "change", message: "请输入" }],
+        },
+      },
     };
   },
   watch: {
@@ -196,7 +196,7 @@ export default {
       this.secondMenuOpts = [];
       const r = await sysMenuListAll({ parentId: n, menuType: 2 });
       this.secondMenuOpts = r.data;
-    }
+    },
   },
   created() {
     this.handleQuery();
@@ -234,7 +234,7 @@ export default {
           } else {
             callAPI = sysMenuAdd;
           }
-          callAPI(this.dialog.forms).then(res => {
+          callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogForm"].resetFields();
             this.dialog.visible = false;
@@ -265,7 +265,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)), {
           firstMenuId: null, //!!!!!让这两个变量变响应式
-          secondMenuId: null //!!!!!让这两个变量变响应式
+          secondMenuId: null, //!!!!!让这两个变量变响应式
         });
         console.log(this.dialog.forms);
         switch (row.menuType) {
@@ -283,11 +283,11 @@ export default {
             this.dialog.forms.secondMenuId = row.parentId;
             // 找到二级菜单的该项
             const secondMenu = this.secondMenuOpts.find(
-              i => i.id === row.parentId
+              (i) => i.id === row.parentId
             );
             // 超出与该二级菜单的父亲,也就是一级菜单的该项
             const firstMenu = this.firstMenuOpts.find(
-              i => i.id === secondMenu.parentId
+              (i) => i.id === secondMenu.parentId
             );
             // 自动选上一级菜单
             this.dialog.forms.firstMenuId = firstMenu.id; //得到一级菜单的id
@@ -303,12 +303,12 @@ export default {
       this.$confirm("确认删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           sysMenuDelete({
-            id: id
-          }).then(res => {
+            id: id,
+          }).then((res) => {
             this.getList();
             this.$message.success("删除成功!");
           });
@@ -318,13 +318,13 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      sysMenuListByPage(this.filterForm).then(res => {
+      sysMenuListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

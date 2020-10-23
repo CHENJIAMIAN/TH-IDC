@@ -34,7 +34,7 @@ createTime	[string]	是	创建时间
 takeTime	[long]	是	耗时时间（毫秒）  -->
     <!-- 列表 -->
     <el-table
-      style="overflow: auto;"
+      style="overflow: auto"
       stripe
       v-loading="listLoading"
       border
@@ -92,10 +92,10 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
     <!-- 详情弹窗 -->
     <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
       <span slot="title">
-        <span style="font-size: 1.5rem;font-weight: bold;">{{
+        <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem;" src="@/assets/img/hl.png" />
+        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
       </span>
       <el-form
         :model="dialog.forms"
@@ -134,8 +134,8 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <div slot="footer" style="text-align: center;">
-        <el-button style="width: 200px;" type="primary" @click="dialogSubmit"
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
           >保 存</el-button
         >
       </div>
@@ -154,18 +154,18 @@ export default {
       filterForm: {
         // 筛选条件
         pageNo: 1, // 当前页码
-        pageSize: 10 // 每页限制数量
+        pageSize: 10, // 每页限制数量
       },
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-      // 收款信息弹窗
+
       dialog: {
         id: "",
         visible: false,
         forms: {},
-        rules: {}
-      }
+        rules: {},
+      },
     };
   },
   created() {
@@ -207,12 +207,12 @@ export default {
       this.$confirm("确认删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           sysLogDelete({
-            id: id
-          }).then(res => {
+            id: id,
+          }).then((res) => {
             this.getList();
             this.$message.success("删除成功!");
           });
@@ -222,13 +222,13 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      sysLogListByPage(this.filterForm).then(res => {
+      sysLogListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
