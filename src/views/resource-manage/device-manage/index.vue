@@ -24,7 +24,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="roomCode">
+        <el-form-item prop="roomCode"  v-show="filterForm.floorCode">
           <el-select clearable v-model="filterForm.roomCode" 
             @change="$set(filterForm, 'deviceGroupCode', '')"
           placeholder="房间">
@@ -36,8 +36,8 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="deviceGroupCode">
-          <el-select v-model="filterForm.deviceGroupCode" placeholder="设备组">
+        <el-form-item prop="deviceGroupCode"  v-show="filterForm.roomCode">
+          <el-select clearable v-model="filterForm.deviceGroupCode" placeholder="设备组">
             <el-option
               v-for="item in deviceGroupOpts"
               :key="item.id"
@@ -183,7 +183,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="楼层编号" prop="floorCode">
+        <el-form-item label="楼层" prop="floorCode">
           <el-select
             v-model="dialog.forms.floorCode"
             @change="$set(dialog.forms,'roomCode','');$set(dialog.forms,'deviceGroupCode','');"
@@ -196,7 +196,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="房间编号" prop="roomCode">
+        <el-form-item label="房间" prop="roomCode" v-show="dialog.forms.floorCode">
           <el-select
             v-model="dialog.forms.roomCode"
             @change="$set(dialog.forms, 'deviceGroupCode', '')"
@@ -209,7 +209,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="设备组编号" prop="deviceGroupCode">
+        <el-form-item label="设备组" prop="deviceGroupCode"  v-show="dialog.forms.roomCode">
           <el-select v-model="dialog.forms.deviceGroupCode">
             <el-option
               v-for="item in deviceGroupOpts"

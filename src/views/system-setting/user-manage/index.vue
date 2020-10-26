@@ -22,7 +22,7 @@
           <el-select
             clearable
             v-model="filterForm.departmentId"
-            placeholder="请选择部门"
+            placeholder="部门"
           >
             <el-option
               v-for="item in depOpts"
@@ -40,7 +40,7 @@
           <el-select
             clearable
             v-model="filterForm.status"
-            placeholder="请选择状态"
+            placeholder="状态"
           >
             <el-option      label="启用"       :value="1"            />
             <el-option      label="禁用"       :value="0"            />

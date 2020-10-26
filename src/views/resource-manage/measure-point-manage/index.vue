@@ -24,7 +24,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="roomCode">
+        <el-form-item prop="roomCode"  v-show="filterForm.floorCode">
           <el-select clearable v-model="filterForm.roomCode" 
             @change="$set(filterForm,'deviceGroupCode','');$set(filterForm,'deviceCode','');"
           placeholder="房间">
@@ -36,8 +36,8 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="deviceGroupCode">
-          <el-select v-model="filterForm.deviceGroupCode" placeholder="设备组"
+        <el-form-item prop="deviceGroupCode"  v-show="filterForm.roomCode">
+          <el-select clearable v-model="filterForm.deviceGroupCode" placeholder="设备组"
             @change="$set(filterForm,'deviceCode','');"
           >
             <el-option
@@ -48,8 +48,8 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item  prop="deviceCode">
-          <el-select v-model="filterForm.deviceCode" placeholder="设备">
+        <el-form-item  prop="deviceCode"  v-show="filterForm.deviceGroupCode">
+          <el-select clearable v-model="filterForm.deviceCode" placeholder="设备">
             <el-option
               v-for="item in deviceOpts"
               :key="item.id"
@@ -204,7 +204,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="房间" prop="roomCode">
+        <el-form-item label="房间" prop="roomCode" v-show="dialog.forms.floorCode">
           <el-select
             v-model="dialog.forms.roomCode"
             @change="$set(dialog.forms, 'deviceGroupCode', '')"
@@ -218,7 +218,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="动作类型" prop="actionType">
+        <el-form-item label="动作类型" prop="actionType" v-show="dialog.forms.roomCode">
           <el-radio-group v-model="dialog.forms.actionType" style="width: 100%">
             <el-radio border :label="1">设备组</el-radio>
             <el-radio border :label="2">设备</el-radio>
@@ -228,6 +228,7 @@
           label="设备组"
           prop="deviceGroupCode"
           v-if="dialog.forms.actionType == 1"
+           v-show="dialog.forms.roomCode"
         >
           <el-select v-model="dialog.forms.deviceGroupCode">
             <el-option
@@ -242,6 +243,7 @@
           label="设备"
           prop="deviceCode"
           v-if="dialog.forms.actionType == 2"
+           v-show="dialog.forms.roomCode"
         >
           <el-select v-model="dialog.forms.deviceCode">
             <el-option

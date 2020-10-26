@@ -19,7 +19,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="roomCode">
+        <el-form-item prop="roomCode" v-show="filterForm.floorCode">
           <el-select clearable  v-model="filterForm.roomCode" placeholder="房间">
             <el-option
               v-for="item in roomOpts"

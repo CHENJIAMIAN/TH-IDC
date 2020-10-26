@@ -13,7 +13,7 @@
           <el-input v-model="filterForm.name" placeholder="权限名称" />
         </el-form-item>
         <el-form-item prop="level1Id">
-          <el-select clearable placeholder="所属模块名称"
+          <el-select clearable placeholder="模块名称"
             v-model="filterForm.level1Id"
             @change="
               () => {
@@ -30,8 +30,8 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="level2Id">
-           <el-select clearable placeholder="所属子系统名称"
+        <el-form-item prop="level2Id" v-show="filterForm.level1Id">
+           <el-select clearable placeholder="子系统名称"
               v-model="filterForm.level2Id"
               @change="$set(filterForm, 'level3Id', null)"
            >
@@ -43,8 +43,8 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="level3Id">
-          <el-select clearable placeholder="所属菜单名称" v-model="filterForm.level3Id">
+        <el-form-item prop="level3Id" v-show="filterForm.level2Id">
+          <el-select clearable placeholder="菜单名称" v-model="filterForm.level3Id">
             <el-option
               v-for="item in thirdMenuOpts"
               :key="item.id"
