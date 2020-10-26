@@ -95,6 +95,9 @@
         <el-form-item label="楼层名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input v-model="dialog.forms.sort"></el-input>
+        </el-form-item>
         <el-form-item label="预览图" prop="imgUrl">
           <div class="preview-grid">
             <el-upload
@@ -121,9 +124,6 @@
               alt="图片加载失败"
             />
           </div>
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model="dialog.forms.sort"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">

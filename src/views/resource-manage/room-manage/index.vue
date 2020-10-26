@@ -10,7 +10,7 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="floorCode">
-          <el-select v-model="filterForm.floorCode" placeholder="楼层">
+          <el-select clearable  v-model="filterForm.floorCode" placeholder="楼层">
             <el-option
               v-for="item in floorOpts"
               :key="item.id"
@@ -19,7 +19,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="roomCode">
+        <!-- <el-form-item prop="roomCode">
           <el-select v-model="filterForm.roomCode" placeholder="房间">
             <el-option
               v-for="item in roomOpts"
@@ -28,12 +28,12 @@
               :value="item.roomCode"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item prop="name">
           <el-input v-model="filterForm.name" placeholder="房间名称" />
         </el-form-item>
         <el-form-item prop="roomType">
-          <el-select v-model="filterForm.roomType" placeholder="房间类型">
+          <el-select clearable  v-model="filterForm.roomType" placeholder="房间类型">
             <el-option
               v-for="item in roomTypeOpts"
               :key="item.id"
@@ -75,13 +75,13 @@
       border
       :data="listData"
     >
+      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <el-table-column sortable prop="name" label="房间名称" />
       <el-table-column sortable prop="roomType" label="房间类型">
         <template slot-scope="{ row }">
           <span>{{ row.roomType | capitalize }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="name" label="房间名称" />
-      <el-table-column sortable prop="roomCode" label="房间编号" />
       <el-table-column sortable prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
           <a :href="row.imgUrl" target="_blank"
@@ -89,9 +89,9 @@
           >
         </template>
       </el-table-column>
-      <el-table-column sortable prop="floorName" label="楼层名称" />
-      <el-table-column sortable prop="floorCode" label="楼层编号" />
       <el-table-column sortable prop="sort" label="排序" />
+      <el-table-column sortable prop="floorName" label="楼层名称" />
+      <!-- <el-table-column sortable prop="floorCode" label="楼层编号" /> -->
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -140,15 +140,30 @@
         <el-form-item label="房间名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <el-form-item label="房间类型" prop="roomType">
-          <el-select v-model="dialog.forms.roomType">
-            <el-option
-              v-for="item in roomTypeOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+        <div style="display: flex">
+          <el-form-item label="楼层" prop="floorCode">
+            <el-select v-model="dialog.forms.floorCode">
+              <el-option
+                v-for="item in floorOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.floorCode"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="房间类型" prop="roomType">
+            <el-select v-model="dialog.forms.roomType">
+              <el-option
+                v-for="item in roomTypeOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </div>
+        <el-form-item label="排序" prop="sort">
+          <el-input v-model="dialog.forms.sort"></el-input>
         </el-form-item>
         <el-form-item label="预览图" prop="imgUrl">
           <div class="preview-grid">
@@ -176,19 +191,6 @@
               alt="图片加载失败"
             />
           </div>
-        </el-form-item>
-        <el-form-item label="楼层" prop="floorCode">
-          <el-select v-model="dialog.forms.floorCode">
-            <el-option
-              v-for="item in floorOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.floorCode"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model="dialog.forms.sort"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -247,7 +249,7 @@ export default {
       filterForm: {
         // 筛选条件
         floorCode: "",
-        roomCode: "",
+        // roomCode: "",
         name: "",
         roomType: null,
         pageNo: 1, // 当前页码

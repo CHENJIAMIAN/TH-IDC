@@ -1,5 +1,6 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
+
 .deviceType {
   .el-select-dropdown__list {
     display: grid;
@@ -45,7 +46,8 @@
 .el-form-item__label,
 .el-dialog,
 .el-dialog__title,
-.el-dialog__body {
+.el-dialog__body,
+.el-dialog__headerbtn .el-dialog__close {
   color: #31c6f1;
 }
 .el-dialog__header {
@@ -54,9 +56,6 @@
 .el-dialog__headerbtn {
   border-radius: 50%;
   border: 2px solid #00f7ff;
-}
-.el-dialog__headerbtn .el-dialog__close {
-  color: #00f7ff;
 }
 .el-dialog__body {
   padding: 30px 20px 0;

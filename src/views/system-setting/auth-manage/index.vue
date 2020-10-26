@@ -65,12 +65,12 @@
     >
       <el-table-column sortable prop="name" label="权限名称" />
       <el-table-column sortable prop="permission" label="标签" />
-      <el-table-column sortable prop="menuId" label="所属菜单id" />
-      <el-table-column sortable prop="level3Name" label="所属菜单名称" />
-      <el-table-column sortable prop="level2Id" label="所属子系统id" />
+      <!-- <el-table-column sortable prop="menuId" label="所属菜单id" /> -->
+      <el-table-column sortable prop="level1Name" label="所属模块名称" />
       <el-table-column sortable prop="level2Name" label="所属子系统名称" />
-      <el-table-column sortable prop="level1Id" label="所属模块id" />
-      <el-table-column sortable prop="level1Name" label="所模块名称" />
+      <el-table-column sortable prop="level3Name" label="所属菜单名称" />
+      <!-- <el-table-column sortable prop="level2Id" label="所属子系统id" /> -->
+      <!-- <el-table-column sortable prop="level1Id" label="所属模块id" /> -->
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -101,7 +101,7 @@ name	[string]	是	菜单名称 （最大长度64）
 parentId	[int]	是	父级菜单编号ID		
 menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
+    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="20vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"

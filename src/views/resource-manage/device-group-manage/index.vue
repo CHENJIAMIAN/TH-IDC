@@ -10,7 +10,7 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="floorCode">
-          <el-select v-model="filterForm.floorCode" placeholder="楼层">
+          <el-select  clearable  v-model="filterForm.floorCode" placeholder="楼层">
             <el-option
               v-for="item in floorOpts"
               :key="item.id"
@@ -20,7 +20,7 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="roomCode">
-          <el-select v-model="filterForm.roomCode" placeholder="房间">
+          <el-select clearable  v-model="filterForm.roomCode" placeholder="房间">
             <el-option
               v-for="item in roomAllOpts"
               :key="item.id"
@@ -40,6 +40,7 @@
         </el-form-item>
         <el-form-item prop="deviceType">
           <el-select
+           clearable 
             v-model="filterForm.deviceType"
             placeholder="设备组类型"
             popper-class="deviceType"
@@ -85,6 +86,8 @@
       border
       :data="listData"
     >
+      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
+      <el-table-column sortable prop="name" label="设备组名称" />
       <el-table-column sortable prop="deviceType" label="设备组类型">
         <template slot-scope="{ row }">
           <span>{{
@@ -92,8 +95,6 @@
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="name" label="设备组名称" />
-      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
       <el-table-column sortable prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
           <a :href="row.imgUrl" target="_blank"
@@ -102,7 +103,7 @@
         </template>
       </el-table-column>
       <el-table-column sortable prop="roomName" label="房间名称" />
-      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <!-- <el-table-column sortable prop="roomCode" label="房间编号" /> -->
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -136,7 +137,7 @@
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
+    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="10vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -158,6 +159,8 @@
         <el-form-item label="设备组名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
+        <div>
+
         <el-form-item label="设备组类型" prop="deviceType">
           <el-select
             v-model="dialog.forms.deviceType"
@@ -171,7 +174,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="楼层编号" prop="floorCode">
+        <el-form-item label="楼层" prop="floorCode">
           <el-select
             v-model="dialog.forms.floorCode"
             @change="$set(dialog.forms,'roomCode','')"
@@ -184,7 +187,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="房间编号" prop="roomCode">
+        <el-form-item label="房间" prop="roomCode">
           <el-select v-model="dialog.forms.roomCode">
             <el-option
               v-for="item in roomOpts"
@@ -194,6 +197,8 @@
             />
           </el-select>
         </el-form-item>
+        </div>
+
         <el-form-item label="预览图" prop="imgUrl">
           <el-upload
             ref="upload"

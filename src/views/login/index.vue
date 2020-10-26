@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="big-title">潼湖数据中心</div>
-    <img style="width:100vw" src="@/assets/img/dlt.png" />
+    <img style="width: 100vw" src="@/assets/img/dlt.png" />
 
     <el-form
       ref="loginForm"
@@ -129,35 +129,35 @@ export default {
     return {
       loginForm: {
         username: "",
-        password: ""
+        password: "",
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", validator: validateUsername }
+          { required: true, trigger: "blur", validator: validateUsername },
         ],
         password: [
-          { required: true, trigger: "blur", validator: validatePassword }
-        ]
+          { required: true, trigger: "blur", validator: validatePassword },
+        ],
       },
       passwordType: "password",
       capsTooltip: false,
       loading: false,
       showDialog: false,
       redirect: undefined,
-      otherQuery: {}
+      otherQuery: {},
     };
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         const query = route.query;
         if (query) {
           this.redirect = query.redirect;
           this.otherQuery = this.getOtherQuery(query);
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   created() {
     // window.addEventListener('storage', this.afterQRScan)
@@ -188,16 +188,17 @@ export default {
       });
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              this.$router.push({
-                path: this.redirect || "/",
-                query: this.otherQuery
-              });
+              // this.$router.push({
+              //   path: this.redirect || "/",
+              //   query: this.otherQuery
+              // });
+              location.href = "/home.html";
               this.loading = false;
             })
             .catch(() => {
@@ -216,7 +217,7 @@ export default {
         }
         return acc;
       }, {});
-    }
+    },
     // afterQRScan() {
     //   if (e.key === 'x-admin-oauth-code') {
     //     const code = getQueryObject(e.newValue)
@@ -235,7 +236,7 @@ export default {
     //     }
     //   }
     // }
-  }
+  },
 };
 </script>
 
@@ -257,11 +258,14 @@ $cursor: #fff;
 .login-container {
   background: url("../../assets/img/lgbg.png") no-repeat fixed;
   background-size: cover;
+  .el-form-item__content{
+    display: grid;
+    grid-template-columns: 0 40px auto;
+  }
+
   .el-input {
     display: inline-block;
     height: 47px;
-    width: 85%;
-
     input {
       background: transparent;
       border: 0px;

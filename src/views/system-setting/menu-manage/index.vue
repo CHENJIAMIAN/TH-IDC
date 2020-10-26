@@ -55,7 +55,8 @@ updateUserId	[int]		修改人ID  -->
         </template>
       </el-table-column>
       <el-table-column sortable prop="createTime" label="创建时间" />
-      <el-table-column sortable prop="updateTime" label="修改时间" />
+      <el-table-column sortable prop="createUser" label="创建人" />
+      <!-- <el-table-column sortable prop="updateTime" label="修改时间" /> -->
 
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
@@ -87,7 +88,7 @@ name	[string]	是	菜单名称 （最大长度64）
 parentId	[int]	是	父级菜单编号ID		
 menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
+    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="25vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"

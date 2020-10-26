@@ -94,20 +94,17 @@ export const constantRoutes = [
 export const asyncRoutes = [
   /**当您的路由映射表太长时，您可以将其拆分为小模块**/
   {
-    path: 'external-link',
-    component: Layout,
+    path: '/Cockpit',
     name: "驾驶舱",
+    component: Layout,
+    beforeEnter: (to, from, next) => {
+      debugger
+    },
     meta: {
       title: '驾驶舱',
       icon: 'nested',
       affix: true
-    },
-    children: [
-      {
-        path: 'https://baidu.com',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
+    }
   },
   deviceManageRouter,
   reportManageRouter,
@@ -144,7 +141,7 @@ export const asyncRoutes = [
   // },
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

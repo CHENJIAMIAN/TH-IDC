@@ -1,0 +1,44 @@
+{
+  "res": 0,
+  "msg": "操作成功",
+  "data": [
+    {
+      "name": "第一层电压房",
+      "id": 1,
+      "floorCode": "a103",
+      "roomList": [
+        {
+          "name": "高压电房间01",
+          "id": 5,
+          "roomCode": "r101",
+          "has": "1"
+        },
+        {
+          "name": "高压电房间003",
+          "id": 3,
+          "roomCode": "r102",
+          "has": "0"
+        }
+      ]
+    },
+    {
+      "name": "第二层空调房层",
+      "id": 2,
+      "floorCode": "a102",
+      "roomList": [
+        {
+          "name": "空调房间01",
+          "id": 1,
+          "roomCode": "r201",
+          "has": "0"
+        },
+        {
+          "name": "高压电房间02,所有级联",
+          "id": 2,
+          "roomCode": "r202",
+          "has": "1"
+        }
+      ]
+    }
+  ]
+}

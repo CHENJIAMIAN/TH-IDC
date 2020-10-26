@@ -10,7 +10,7 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="floorCode">
-          <el-select v-model="filterForm.floorCode" placeholder="楼层">
+          <el-select clearable  v-model="filterForm.floorCode" placeholder="楼层">
             <el-option
               v-for="item in floorOpts"
               :key="item.id"
@@ -20,7 +20,7 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="roomCode">
-          <el-select v-model="filterForm.roomCode" placeholder="房间">
+          <el-select clearable  v-model="filterForm.roomCode" placeholder="房间">
             <el-option
               v-for="item in roomAllOpts"
               :key="item.id"
@@ -43,6 +43,7 @@
         </el-form-item>
         <el-form-item prop="deviceType">
           <el-select
+           clearable 
             v-model="filterForm.deviceType"
             placeholder="设备类型"
             popper-class="deviceType"
@@ -88,8 +89,8 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="name" label="设备名称" />
       <el-table-column sortable prop="deviceCode" label="设备编号" />
+      <el-table-column sortable prop="name" label="设备名称" />
       <el-table-column sortable prop="deviceType" label="设备类型">
         <template slot-scope="{ row }">
           <span>{{
@@ -98,11 +99,11 @@
         </template>
       </el-table-column>
       <el-table-column sortable prop="deviceGroupName" label="设备组名称" />
-      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
+      <!-- <el-table-column sortable prop="deviceGroupCode" label="设备组编号" /> -->
       <el-table-column sortable prop="roomName" label="房间名称" />
-      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <!-- <el-table-column sortable prop="roomCode" label="房间编号" /> -->
       <el-table-column sortable prop="floorName" label="楼层名称" />
-      <el-table-column sortable prop="floorCode" label="楼层编号" />
+      <!-- <el-table-column sortable prop="floorCode" label="楼层编号" /> -->
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button

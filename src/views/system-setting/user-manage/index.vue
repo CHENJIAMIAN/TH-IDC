@@ -19,7 +19,7 @@
           <el-input v-model="filterForm.phone" placeholder="电话" />
         </el-form-item>
         <el-form-item prop="departmentId">
-          <el-select v-model="filterForm.departmentId">
+          <el-select clearable v-model="filterForm.departmentId" placeholder="请选择部门">
             <el-option
               v-for="item in depOpts"
               :key="item.id"
@@ -75,12 +75,14 @@
       <el-table-column sortable prop="wechat" label="微信" />
       <el-table-column sortable prop="status" label="账号状态">
         <template slot-scope="{ row }">
-          <el-switch
+          <span style="color: #55fb55" v-if="row.status == 1">启用</span>
+          <span style="color: red" v-else>禁用</span>
+          <!-- <el-switch
             disabled
             v-model="row.status"
             :active-value="1"
             :inactive-value="0"
-          ></el-switch>
+          ></el-switch> -->
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="240">
@@ -109,7 +111,7 @@
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
+    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="5vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"

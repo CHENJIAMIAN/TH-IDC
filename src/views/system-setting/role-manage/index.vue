@@ -46,7 +46,8 @@ updateUserId	[int]		修改人ID （可为空）
     >
       <el-table-column sortable prop="name" label="角色名称" />
       <el-table-column sortable prop="createTime" label="创建时间" />
-      <el-table-column sortable prop="updateTime" label="修改时间" />
+      <el-table-column sortable prop="createUser" label="创建人" />
+      <!-- <el-table-column sortable prop="updateTime" label="修改时间" /> -->
       <el-table-column label="操作" align="center" width="280">
         <template slot-scope="{ row }">
           <el-button
@@ -87,7 +88,7 @@ updateUserId	[int]		修改人ID （可为空）
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
+    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="25vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -104,7 +105,7 @@ updateUserId	[int]		修改人ID （可为空）
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <template v-if="dialog.forms.id">
+        <!-- <template v-if="dialog.forms.id">
           <el-form-item label="创建时间" prop="createTime">
             <el-input disabled v-model="dialog.forms.createTime"></el-input>
           </el-form-item>
@@ -117,7 +118,7 @@ updateUserId	[int]		修改人ID （可为空）
           <el-form-item label="修改人ID" prop="updateUserId">
             <el-input disabled v-model="dialog.forms.updateUserId"></el-input>
           </el-form-item>
-        </template>
+        </template> -->
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"
