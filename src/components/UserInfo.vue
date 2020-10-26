@@ -1,16 +1,12 @@
 <template>
   <div>
-    <span style="display:block;" @click="dialog.visible = true">用户信息</span>
+    <span style="display: block" @click="dialog.visible = true">用户信息</span>
 
     <!-- 详情弹窗 -->
-    <el-dialog
-      append-to-body
-      v-if="dialog.visible"
-      :visible.sync="dialog.visible"
-    >
+    <el-dialog append-to-body :visible.sync="dialog.visible">
       <span slot="title">
-        <span style="font-size: 1.5rem;font-weight: bold;">用户信息</span>
-        <img style="margin-left: 1rem;" src="@/assets/img/hl.png" />
+        <span style="font-size: 1.5rem; font-weight: bold">用户信息</span>
+        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
       </span>
       <el-form
         :model="dialog.forms"
@@ -54,13 +50,13 @@
         </el-form-item>
         <el-form-item label="账号状态" prop="status">
           <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
+            <el-radio border :label="1">启用</el-radio>
+            <el-radio border :label="0">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <div slot="footer" style="text-align: center;">
-        <el-button style="width: 200px;" type="primary" @click="dialogSubmit"
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
           >保 存</el-button
         >
       </div>
@@ -72,7 +68,7 @@
 import {
   sysDepartmentListAll,
   sysUserQueryLoginUser,
-  sysUserEditSelf
+  sysUserEditSelf,
 } from "@/api/system-manage.js";
 /* 
 oldPassword	[string]	是	旧密码		
@@ -92,26 +88,26 @@ export default {
           realName: [{ required: true, trigger: "blur", message: "请输入" }],
           phone: [{ required: true, trigger: "blur", message: "请输入" }],
           departmentId: [
-            { required: true, trigger: "change", message: "请输入" }
+            { required: true, trigger: "change", message: "请输入" },
           ],
-          status: [{ required: true, trigger: "change", message: "请输入" }]
-        }
-      }
+          status: [{ required: true, trigger: "change", message: "请输入" }],
+        },
+      },
     };
   },
   watch: {
     "dialog.visible"(n, o) {
       if (!n) return;
-      sysDepartmentListAll().then(r => (this.depOpts = r.data));
-      sysUserQueryLoginUser().then(r => (this.dialog.forms = r.data));
-    }
+      sysDepartmentListAll().then((r) => (this.depOpts = r.data));
+      sysUserQueryLoginUser().then((r) => (this.dialog.forms = r.data));
+    },
   },
   created() {},
   methods: {
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
-          sysUserEditSelf(this.dialog.forms).then(res => {
+          sysUserEditSelf(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogForm"].resetFields();
             this.dialog.visible = false;
@@ -120,7 +116,7 @@ export default {
           return false;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>

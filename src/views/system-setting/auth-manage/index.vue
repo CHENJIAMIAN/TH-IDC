@@ -12,23 +12,46 @@
         <el-form-item prop="name">
           <el-input v-model="filterForm.name" placeholder="权限名称" />
         </el-form-item>
-        <el-form-item prop="level3Name">
-          <el-input
-            v-model="filterForm.level3Name"
-            placeholder="所属菜单名称"
-          />
+        <el-form-item prop="level1Id">
+          <el-select clearable placeholder="所属模块名称"
+            v-model="filterForm.level1Id"
+            @change="
+              () => {
+                $set(filterForm, 'level2Id', null);
+                $set(filterForm, 'level3Id', null);
+              }
+            "
+          >
+            <el-option
+              v-for="item in firstMenuOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item prop="level2Name">
-          <el-input
-            v-model="filterForm.level2Name"
-            placeholder="所属子系统名称"
-          />
+        <el-form-item prop="level2Id">
+           <el-select clearable placeholder="所属子系统名称"
+              v-model="filterForm.level2Id"
+              @change="$set(filterForm, 'level3Id', null)"
+           >
+            <el-option
+              v-for="item in secondMenuOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item prop="level1Name">
-          <el-input
-            v-model="filterForm.level1Name"
-            placeholder="所属模块名称"
-          />
+        <el-form-item prop="level3Id">
+          <el-select clearable placeholder="所属菜单名称" v-model="filterForm.level3Id">
+            <el-option
+              v-for="item in thirdMenuOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -66,9 +89,9 @@
       <el-table-column sortable prop="name" label="权限名称" />
       <el-table-column sortable prop="permission" label="标签" />
       <!-- <el-table-column sortable prop="menuId" label="所属菜单id" /> -->
-      <el-table-column sortable prop="level1Name" label="所属模块名称" />
-      <el-table-column sortable prop="level2Name" label="所属子系统名称" />
-      <el-table-column sortable prop="level3Name" label="所属菜单名称" />
+      <el-table-column sortable prop="level1Id" label="所属模块名称" />
+      <el-table-column sortable prop="level2Id" label="所属子系统名称" />
+      <el-table-column sortable prop="level3Id" label="所属菜单名称" />
       <!-- <el-table-column sortable prop="level2Id" label="所属子系统id" /> -->
       <!-- <el-table-column sortable prop="level1Id" label="所属模块id" /> -->
       <el-table-column label="操作" align="center" width="240">
@@ -101,7 +124,7 @@ name	[string]	是	菜单名称 （最大长度64）
 parentId	[int]	是	父级菜单编号ID		
 menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="20vh">
+    <el-dialog :visible.sync="dialog.visible" top="20vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -200,9 +223,9 @@ export default {
       filterForm: {
         // 筛选条件
         name: "",
-        level3Name: "",
-        level2Name: "",
-        level1Name: "",
+        level3Id: null,
+        level2Id: null,
+        level1Id: null,
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
@@ -228,6 +251,21 @@ export default {
     };
   },
   watch: {
+    async "filterForm.level1Id"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.secondMenuOpts = [];
+      this.thirdMenuOpts = [];
+      const r = await sysMenuListAll({ parentId: n, menuType: 2 });
+      this.secondMenuOpts = r.data;
+    },
+    async "filterForm.level2Idd"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.thirdMenuOpts = [];
+      const r = await sysMenuListAll({ parentId: n, menuType: 3 });
+      this.thirdMenuOpts = r.data;
+    },
     async "dialog.forms.firstMenuId"(n, o) {
       if (!n) return;
       // 一级变,二级也变
@@ -244,7 +282,9 @@ export default {
       this.thirdMenuOpts = r.data;
     },
   },
-  created() {
+  async created() {
+       const r1 = await sysMenuListAll({ menuType: 1 });
+      this.firstMenuOpts = r1.data;
     this.handleQuery();
   },
   mounted() {},
@@ -324,7 +364,7 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

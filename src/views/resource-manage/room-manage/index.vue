@@ -10,7 +10,11 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="floorCode">
-          <el-select clearable  v-model="filterForm.floorCode" placeholder="楼层">
+          <el-select
+            clearable
+            v-model="filterForm.floorCode"
+            placeholder="楼层"
+          >
             <el-option
               v-for="item in floorOpts"
               :key="item.id"
@@ -33,7 +37,11 @@
           <el-input v-model="filterForm.name" placeholder="房间名称" />
         </el-form-item>
         <el-form-item prop="roomType">
-          <el-select clearable  v-model="filterForm.roomType" placeholder="房间类型">
+          <el-select
+            clearable
+            v-model="filterForm.roomType"
+            placeholder="房间类型"
+          >
             <el-option
               v-for="item in roomTypeOpts"
               :key="item.id"
@@ -84,9 +92,7 @@
       </el-table-column>
       <el-table-column sortable prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
-          <a :href="row.imgUrl" target="_blank"
-            ><el-button type="text" size="mini">查看</el-button></a
-          >
+               <el-button type="text" size="mini" @click="dialogImgVisible=true;dialogImgUrl=row.imgUrl">查看</el-button>
         </template>
       </el-table-column>
       <el-table-column sortable prop="sort" label="排序" />
@@ -116,9 +122,13 @@
       :limit.sync="filterForm.pageSize"
       @pagination="getList"
     />
+    <!-- 图片弹窗 -->
+    <el-dialog custom-class="dialog-img"   :visible.sync="dialogImgVisible" :show-close="false">
+          <img class="preview-img" :src="dialogImgUrl" alt="加载失败">
+    </el-dialog>
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
+    <el-dialog :visible.sync="dialog.visible">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -258,7 +268,8 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-
+      dialogImgVisible:false,
+      dialogImgUrl:"",
       dialog: {
         id: "",
         visible: false,
@@ -337,7 +348,7 @@ export default {
       } else {
         this.dialog.forms = { imgUrl: "" }; //让imgUrl变响应式validateField才有效
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {
@@ -395,5 +406,18 @@ export default {
   max-height: 100%;
   justify-self: center;
   align-self: center;
+}
+
+  ::v-deep{
+.dialog-img{
+  background: #0b2a52;
+  .el-dialog__body{
+    display: grid;
+    padding: 30px 20px 30px;
+  }
+  .el-dialog__header{
+    display: none;
+  }
+  }
 }
 </style>

@@ -74,7 +74,7 @@ updateUserId	[int]		修改人ID （可为空）
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible"  top="25vh">
+    <el-dialog :visible.sync="dialog.visible" top="25vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -193,7 +193,7 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

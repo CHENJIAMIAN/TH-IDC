@@ -9,13 +9,13 @@
       <navbar />
       <tags-view v-if="needTagsView" />
     </div>
-    <!-- <div class="side-breadcrumb" style="margin-left: 2rem;">
+    <div class="side-breadcrumb" style="margin-left: 2rem;position: absolute;transform: translate(0px, -10px);">
       <img
         src="@/assets/img/dw.png"
         style="transform: translate(0px, -13px);"
       />
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-    </div> -->
+    </div>
     <div class="side">
       <!-- 次级路由，从路由$route获取 -->
       <sidebar />

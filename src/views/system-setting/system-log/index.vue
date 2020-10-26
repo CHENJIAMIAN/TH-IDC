@@ -90,7 +90,7 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
+    <el-dialog :visible.sync="dialog.visible">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -129,8 +129,8 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
         </el-form-item>
         <el-form-item label="账号状态" prop="status">
           <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
+            <el-radio border :label="1">启用</el-radio>
+            <el-radio border :label="0">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -200,7 +200,7 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

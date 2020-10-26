@@ -10,7 +10,7 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="floorCode">
-          <el-select  clearable  v-model="filterForm.floorCode" placeholder="楼层">
+          <el-select  clearable  v-model="filterForm.floorCode"   @change="$set(dialog.forms,'roomCode','')" placeholder="楼层">
             <el-option
               v-for="item in floorOpts"
               :key="item.id"
@@ -22,7 +22,7 @@
         <el-form-item prop="roomCode">
           <el-select clearable  v-model="filterForm.roomCode" placeholder="房间">
             <el-option
-              v-for="item in roomAllOpts"
+              v-for="item in roomOpts"
               :key="item.id"
               :label="item.name"
               :value="item.roomCode"
@@ -97,15 +97,20 @@
       </el-table-column>
       <el-table-column sortable prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
-          <a :href="row.imgUrl" target="_blank"
-            ><el-button type="text" size="mini">查看</el-button></a
-          >
+            <el-button type="text" size="mini" @click="dialogImgVisible=true;dialogImgUrl=row.imgUrl">查看</el-button>
         </template>
       </el-table-column>
       <el-table-column sortable prop="roomName" label="房间名称" />
       <!-- <el-table-column sortable prop="roomCode" label="房间编号" /> -->
-      <el-table-column label="操作" align="center" width="240">
+      <el-table-column label="操作" align="center" width="280">
         <template slot-scope="{ row }">
+          <el-button
+            title="绑定设备"
+            icon="el-icon-circle-plus"
+            type="primary"
+            plain
+            @click="handleCDDialog(row)"
+          ></el-button>
           <el-button
             title="绑定测点"
             icon="el-icon-circle-plus-outline"
@@ -135,9 +140,13 @@
       :limit.sync="filterForm.pageSize"
       @pagination="getList"
     />
+    <!-- 图片弹窗 -->
+    <el-dialog custom-class="dialog-img"   :visible.sync="dialogImgVisible" :show-close="false">
+          <img class="preview-img" :src="dialogImgUrl" alt="加载失败">
+    </el-dialog>
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="10vh">
+    <el-dialog  :visible.sync="dialog.visible" top="10vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -159,7 +168,7 @@
         <el-form-item label="设备组名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <div>
+        <div style="display: grid;grid-template-columns: 1fr 1fr 1fr;">
 
         <el-form-item label="设备组类型" prop="deviceType">
           <el-select
@@ -174,7 +183,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="楼层" prop="floorCode">
+        <el-form-item style="transform: translate(-50px, 0px);" label="楼层" prop="floorCode">
           <el-select
             v-model="dialog.forms.floorCode"
             @change="$set(dialog.forms,'roomCode','')"
@@ -187,7 +196,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="房间" prop="roomCode">
+        <el-form-item style="transform: translate(-100px, 0px);"  label="房间" prop="roomCode">
           <el-select v-model="dialog.forms.roomCode">
             <el-option
               v-for="item in roomOpts"
@@ -200,6 +209,7 @@
         </div>
 
         <el-form-item label="预览图" prop="imgUrl">
+          <div class="preview-grid">
           <el-upload
             ref="upload"
             name="attach"
@@ -214,6 +224,13 @@
             <i class="el-icon-upload" />
             <div class="el-upload__text">点击 <em>上传文件</em> 或拖拽上传</div>
           </el-upload>
+                 <img
+              class="preview-img"
+              v-if="dialog.forms.imgUrl"
+              :src="dialog.forms.imgUrl"
+              alt="图片加载失败"
+            />
+          </div>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -224,7 +241,7 @@
     </el-dialog>
 
     <!-- 绑定测点弹窗 -->
-    <el-dialog v-if="dialogCD.visible" :visible.sync="dialogCD.visible">
+    <el-dialog  :visible.sync="dialogCD.visible">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">绑定测点</span>
         <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
@@ -249,7 +266,7 @@
               label: 'name',
             }"
             filter-placeholder="请输入"
-            v-model="dialogCD.forms.pointIds"
+            v-model="dialogCD.forms.pointIdArray"
             :data="allPointOpts"
           >
           </el-transfer>
@@ -338,7 +355,8 @@ export default {
           deviceType: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
-
+      dialogImgVisible:false,
+      dialogImgUrl:"",
       dialogCD: {
         visible: false,
         forms: {},
@@ -347,6 +365,13 @@ export default {
     };
   },
   watch: {
+    async "filterForm.floorCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.roomOpts = [];
+      const r = await spaceRoomListAll({ floorCode: n });
+      this.roomOpts = r.data;
+    },
     async "dialog.forms.floorCode"(n, o) {
       if (!n) return;
       // 一级变,二级也变
@@ -380,10 +405,7 @@ export default {
     },
     dialogCDSubmit() {
       this.$refs["dialogCDForm"].validate((valid, obj) => {
-        if (valid) {
-          this.dialogCD.forms.pointIdStr = this.dialogCD.forms.pointIds.join(
-            ","
-          );
+        if (valid) {        
           deviceGroupAddPointToGroup(this.dialogCD.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogCDForm"].resetFields();
@@ -435,7 +457,7 @@ export default {
       } else {
         this.dialog.forms = { imgUrl: "", roomCode: "" }; //让imgUrl变响应式validateField才有效
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     async handleCDDialog(row) {
       // dialog显示时获取一级菜单列表
@@ -446,10 +468,10 @@ export default {
         this.pointNotBindDeviceGroupOpts = r1.data;
         const r2 = await deviceGroupListAllBindDeviceGroup({ id: row.id });
         this.pointBindDeviceGroupOpts = r2.data;
-        // this.dialogCD.forms.pointIds = r2.data.map((i) => i.id);
+        // this.dialogCD.forms.pointIdArray = r2.data.map((i) => i.id);
         this.$set(
           this.dialogCD.forms,
-          "pointIds",
+          "pointIdArray",
           r2.data.map((i) => i.id)
         );
         this.allPointOpts = this.pointNotBindDeviceGroupOpts.concat(
@@ -457,6 +479,7 @@ export default {
         );
       }
       this.dialogCD.visible = true;
+this.$nextTick(_=>this.$refs["dialogCDForm"].clearValidate());
     },
     // 删除
     handleDel(id) {
@@ -498,5 +521,34 @@ export default {
 .head {
   display: grid;
   justify-content: end;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: 50% auto;
+  gap: 1rem;
+  grid-template-rows: 200px;
+}
+
+.preview-img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  justify-self: center;
+  align-self: center;
+}
+
+  ::v-deep{
+.dialog-img{
+  background: #0b2a52;
+  .el-dialog__body{
+    display: grid;
+    padding: 30px 20px 30px;
+  }
+  .el-dialog__header{
+    display: none;
+  }
+  }
 }
 </style>

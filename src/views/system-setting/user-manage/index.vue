@@ -19,7 +19,11 @@
           <el-input v-model="filterForm.phone" placeholder="电话" />
         </el-form-item>
         <el-form-item prop="departmentId">
-          <el-select clearable v-model="filterForm.departmentId" placeholder="请选择部门">
+          <el-select
+            clearable
+            v-model="filterForm.departmentId"
+            placeholder="请选择部门"
+          >
             <el-option
               v-for="item in depOpts"
               :key="item.id"
@@ -29,10 +33,18 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="status">
-          <el-radio-group v-model="filterForm.status" style="width: 100%">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
-          </el-radio-group>
+          <!-- <el-radio-group  v-model="filterForm.status" style="width: 100%">
+            <el-radio border :label="1">启用</el-radio>
+            <el-radio border :label="0">禁用</el-radio>
+          </el-radio-group> -->
+          <el-select
+            clearable
+            v-model="filterForm.status"
+            placeholder="请选择状态"
+          >
+            <el-option      label="启用"       :value="1"            />
+            <el-option      label="禁用"       :value="0"            />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -111,7 +123,7 @@
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="5vh">
+    <el-dialog :visible.sync="dialog.visible" top="5vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -157,22 +169,33 @@
               :value="item.id"
             />
           </el-select>
+  
         </el-form-item>
         <el-form-item label="角色" prop="roles">
           <!-- 传参 roleIdStr ,隔开 -->
-          <el-select multiple v-model="dialog.forms.roles">
+          <!-- <el-select multiple v-model="dialog.forms.roles">
             <el-option
               v-for="item in roleOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
             />
-          </el-select>
+                :value="item.id"
+          </el-select> -->
+          <el-checkbox-group v-model="dialog.forms.roles">
+              <el-checkbox 
+                v-for="item in roleOpts"
+                :key="item.id"
+                :label="item.name"
+                 border
+              ></el-checkbox>
+        </el-checkbox-group>
+
         </el-form-item>
         <el-form-item label="账号状态" prop="status">
           <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
+            <el-radio border :label="1">启用</el-radio>
+            <el-radio border :label="0">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -302,7 +325,7 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

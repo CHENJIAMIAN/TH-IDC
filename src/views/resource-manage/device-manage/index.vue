@@ -10,7 +10,12 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="floorCode">
-          <el-select clearable  v-model="filterForm.floorCode" placeholder="楼层">
+          <el-select
+            clearable
+            v-model="filterForm.floorCode"
+            @change="$set(filterForm,'roomCode','');$set(filterForm,'deviceGroupCode','');"
+            placeholder="楼层"
+          >
             <el-option
               v-for="item in floorOpts"
               :key="item.id"
@@ -20,9 +25,11 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="roomCode">
-          <el-select clearable  v-model="filterForm.roomCode" placeholder="房间">
+          <el-select clearable v-model="filterForm.roomCode" 
+            @change="$set(filterForm, 'deviceGroupCode', '')"
+          placeholder="房间">
             <el-option
-              v-for="item in roomAllOpts"
+              v-for="item in roomOpts"
               :key="item.id"
               :label="item.name"
               :value="item.roomCode"
@@ -30,10 +37,14 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="deviceGroupCode">
-          <el-input
-            v-model="filterForm.deviceGroupCode"
-            placeholder="设备组编号"
-          />
+          <el-select v-model="filterForm.deviceGroupCode" placeholder="设备组">
+            <el-option
+              v-for="item in deviceGroupOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.deviceGroupCode"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item prop="name">
           <el-input v-model="filterForm.name" placeholder="设备名称" />
@@ -43,7 +54,7 @@
         </el-form-item>
         <el-form-item prop="deviceType">
           <el-select
-           clearable 
+            clearable
             v-model="filterForm.deviceType"
             placeholder="设备类型"
             popper-class="deviceType"
@@ -137,7 +148,7 @@
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
+    <el-dialog :visible.sync="dialog.visible">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -175,12 +186,7 @@
         <el-form-item label="楼层编号" prop="floorCode">
           <el-select
             v-model="dialog.forms.floorCode"
-            @change="
-              () => {
-                dialog.forms.roomCode = '';
-                dialog.forms.deviceGroupCode = '';
-              }
-            "
+            @change="$set(dialog.forms,'roomCode','');$set(dialog.forms,'deviceGroupCode','');"
           >
             <el-option
               v-for="item in floorOpts"
@@ -193,7 +199,7 @@
         <el-form-item label="房间编号" prop="roomCode">
           <el-select
             v-model="dialog.forms.roomCode"
-            @change="$set(dialog.forms,'deviceGroupCode','')"
+            @change="$set(dialog.forms, 'deviceGroupCode', '')"
           >
             <el-option
               v-for="item in roomOpts"
@@ -222,7 +228,7 @@
     </el-dialog>
 
     <!-- 绑定测点弹窗 -->
-    <el-dialog v-if="dialogCD.visible" :visible.sync="dialogCD.visible">
+    <el-dialog  :visible.sync="dialogCD.visible">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">绑定测点</span>
         <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
@@ -247,7 +253,7 @@
               label: 'name',
             }"
             filter-placeholder="请输入"
-            v-model="dialogCD.forms.pointIds"
+            v-model="dialogCD.forms.pointIdArray"
             :data="allPointOpts"
           >
           </el-transfer>
@@ -341,6 +347,21 @@ export default {
     };
   },
   watch: {
+      async "filterForm.floorCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.roomOpts = [];
+      this.deviceGroupOpts = [];
+      const r = await spaceRoomListAll({ floorCode: n });
+      this.roomOpts = r.data;
+    },
+      async "filterForm.roomCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.deviceGroupOpts = [];
+      const r = await deviceGroupListAll({ roomCode: n });
+      this.deviceGroupOpts = r.data;
+    },
     async "dialog.forms.floorCode"(n, o) {
       if (!n) return;
       // 一级变,二级也变
@@ -368,9 +389,6 @@ export default {
     dialogCDSubmit() {
       this.$refs["dialogCDForm"].validate((valid, obj) => {
         if (valid) {
-          this.dialogCD.forms.pointIdStr = this.dialogCD.forms.pointIds.join(
-            ","
-          );
           deviceAddPointToDevice(this.dialogCD.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogCDForm"].resetFields();
@@ -422,7 +440,7 @@ export default {
       } else {
         this.dialog.forms = { roomCode: "", deviceGroupCode: "" };
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     async handleCDDialog(row) {
       // dialog显示时获取一级菜单列表
@@ -433,10 +451,10 @@ export default {
         this.pointNotBindDeviceGroupOpts = r1.data;
         const r2 = await deviceQueryAllBindForDevice({ id: row.id });
         this.pointBindDeviceGroupOpts = r2.data;
-        // this.dialogCD.forms.pointIds = r2.data.map((i) => i.id);
+        // this.dialogCD.forms.pointIdArray = r2.data.map((i) => i.id);
         this.$set(
           this.dialogCD.forms,
-          "pointIds",
+          "pointIdArray",
           r2.data.map((i) => i.id)
         );
         this.allPointOpts = this.pointNotBindDeviceGroupOpts.concat(
@@ -444,6 +462,7 @@ export default {
         );
       }
       this.dialogCD.visible = true;
+this.$nextTick(_=>this.$refs["dialogCDForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

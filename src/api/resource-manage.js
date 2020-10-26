@@ -79,10 +79,20 @@ export function deviceGroupAddPointToGroup(data){return request({url:'/admin/dev
 
 
 
-
-
-
-
+//获取设备组已绑定位置的测点
+export function deviceGroupPointLocationListAllByBindForDeviceGroup(data){return request({url:'/admin/device/deviceGroupPointLocation/listAllByBindForDeviceGroup',method:'post',data})}
+//获取设备组未绑定位置的测点
+export function deviceGroupPointLocationListAllByNotBindForDeviceGroup(data){return request({url:'/admin/device/deviceGroupPointLocation/listAllByNotBindForDeviceGroup',method:'post',data})}
+//删除设备组测点位置接口
+export function deviceGroupPointLocationDelete(data){return request({url:'/admin/device/deviceGroupPointLocation/delete',method:'post',data})}
+//采集测点位置接口
+export function deviceGroupPointLocationAdd(data){return request({url:'/admin/device/deviceGroupPointLocation/add',method:'post',data})}
+//查询设备组所有已经绑定设备列表
+export function deviceGroupListAllBindDeviceForDeviceGroup(data){return request({url:'/admin/device/deviceGroup/listAllBindDeviceForDeviceGroup',method:'post',data})}
+//查询设备组所有未绑定设备列表
+export function deviceGroupListAllNotBindDeviceForDeviceGroup(data){return request({url:'/admin/device/deviceGroup/listAllNotBindDeviceForDeviceGroup',method:'post',data})}
+//设备组绑定设备接口
+export function deviceGroupAddDeviceToGroup(data){return request({url:'/admin/device/deviceGroup/addDeviceToGroup',method:'post',data})}
 
 
 

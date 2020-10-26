@@ -51,14 +51,14 @@ updateUserId	[int]		修改人ID （可为空）
       <el-table-column label="操作" align="center" width="280">
         <template slot-scope="{ row }">
           <el-button
-          title="分配房间"
+            title="分配房间"
             icon="el-icon-circle-plus-outline"
             type="primary"
             plain
             @click="handleDialog(row)"
           ></el-button>
-               <el-button
-          title="分配权限"
+          <el-button
+            title="分配权限"
             icon="el-icon-circle-plus"
             type="primary"
             plain
@@ -88,7 +88,7 @@ updateUserId	[int]		修改人ID （可为空）
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="25vh">
+    <el-dialog :visible.sync="dialog.visible" top="25vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -136,11 +136,11 @@ import {
   sysRoleEdit,
   sysRoleAdd,
   sysRoleListByPage,
-  // 
-sysRoleMenuAdd,
-sysRoleMenuListAll,
-sysRoleRoomListAll,
-sysRoleRoomAdd,
+  //
+  sysRoleMenuAdd,
+  sysRoleMenuListAll,
+  sysRoleRoomListAll,
+  sysRoleRoomAdd,
 } from "@/api/system-manage.js";
 export default {
   components: { pagination },
@@ -209,7 +209,7 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

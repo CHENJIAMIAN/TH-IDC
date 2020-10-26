@@ -88,7 +88,7 @@ name	[string]	是	菜单名称 （最大长度64）
 parentId	[int]	是	父级菜单编号ID		
 menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible" top="25vh">
+    <el-dialog :visible.sync="dialog.visible" top="25vh">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -106,9 +106,9 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
         </el-form-item>
         <el-form-item label="菜单类型" prop="menuType">
           <el-radio-group v-model="dialog.forms.menuType" style="width: 100%">
-            <el-radio :label="1">一级菜单</el-radio>
-            <el-radio :label="2">二级菜单</el-radio>
-            <el-radio :label="3">三级菜单</el-radio>
+            <el-radio border :label="1">一级菜单</el-radio>
+            <el-radio border :label="2">二级菜单</el-radio>
+            <el-radio border :label="3">三级菜单</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item
@@ -118,7 +118,7 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
         >
           <el-select
             v-model="dialog.forms.firstMenuId"
-            @change="$set(dialog.forms,'secondMenuId','')"
+            @change="$set(dialog.forms, 'secondMenuId', '')"
           >
             <el-option
               v-for="item in firstMenuOpts"
@@ -186,6 +186,11 @@ export default {
         rules: {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           menuType: [{ required: true, trigger: "change", message: "请输入" }],
+                    firstMenuId: [{ required: true, trigger: "change", message: "请输入" }],
+          secondMenuId: [
+            { required: true, trigger: "change", message: "请输入" },
+          ],
+          thirdMenuId: [{ required: true, trigger: "change", message: "请输入" }],
         },
       },
     };
@@ -297,7 +302,7 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

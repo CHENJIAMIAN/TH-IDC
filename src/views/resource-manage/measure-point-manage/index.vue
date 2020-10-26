@@ -10,7 +10,12 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="floorCode">
-          <el-select clearable  v-model="filterForm.floorCode" placeholder="楼层">
+          <el-select
+            clearable
+            v-model="filterForm.floorCode"
+            @change="$set(filterForm,'roomCode','');$set(filterForm,'deviceGroupCode','');$set(filterForm,'deviceCode','');"
+            placeholder="楼层"
+          >
             <el-option
               v-for="item in floorOpts"
               :key="item.id"
@@ -20,7 +25,9 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="roomCode">
-          <el-select clearable  v-model="filterForm.roomCode" placeholder="房间">
+          <el-select clearable v-model="filterForm.roomCode" 
+            @change="$set(filterForm,'deviceGroupCode','');$set(filterForm,'deviceCode','');"
+          placeholder="房间">
             <el-option
               v-for="item in roomOpts"
               :key="item.id"
@@ -30,13 +37,26 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="deviceGroupCode">
-          <el-input
-            v-model="filterForm.deviceGroupCode"
-            placeholder="设备组编号"
-          />
+          <el-select v-model="filterForm.deviceGroupCode" placeholder="设备组"
+            @change="$set(filterForm,'deviceCode','');"
+          >
+            <el-option
+              v-for="item in deviceGroupOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.deviceGroupCode"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item prop="deviceCode">
-          <el-input v-model="filterForm.deviceCode" placeholder="设备编号" />
+        <el-form-item  prop="deviceCode">
+          <el-select v-model="filterForm.deviceCode" placeholder="设备">
+            <el-option
+              v-for="item in deviceOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.deviceCode"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item prop="name">
           <el-input v-model="filterForm.name" placeholder="测点名称" />
@@ -45,7 +65,11 @@
           <el-input v-model="filterForm.pointCode" placeholder="测点编号" />
         </el-form-item>
         <el-form-item prop="pointType">
-          <el-select clearable  v-model="filterForm.pointType" placeholder="测点类型	">
+          <el-select
+            clearable
+            v-model="filterForm.pointType"
+            placeholder="测点类型	"
+          >
             <el-option
               v-for="item in pointTypeOpts"
               :key="item.id"
@@ -130,7 +154,7 @@
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog v-if="dialog.visible" :visible.sync="dialog.visible">
+    <el-dialog :visible.sync="dialog.visible">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">{{
           dialog.forms.id ? "编辑" : "新增"
@@ -162,13 +186,13 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="楼层编号" prop="floorCode">
+        <el-form-item label="楼层" prop="floorCode">
           <el-select
             v-model="dialog.forms.floorCode"
             @change="
               () => {
-                dialog.forms.roomCode = '';
-                dialog.forms.deviceGroupCode = '';
+                $set(dialog.forms, 'roomCode', '');
+                $set(dialog.forms, 'deviceGroupCode', '');
               }
             "
           >
@@ -180,10 +204,10 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="房间编号" prop="roomCode">
+        <el-form-item label="房间" prop="roomCode">
           <el-select
             v-model="dialog.forms.roomCode"
-            @change="$set(dialog.forms,'deviceGroupCode','')"
+            @change="$set(dialog.forms, 'deviceGroupCode', '')"
           >
             <el-option
               v-for="item in roomOpts"
@@ -196,12 +220,12 @@
 
         <el-form-item label="动作类型" prop="actionType">
           <el-radio-group v-model="dialog.forms.actionType" style="width: 100%">
-            <el-radio :label="1">设备组</el-radio>
-            <el-radio :label="2">设备</el-radio>
+            <el-radio border :label="1">设备组</el-radio>
+            <el-radio border :label="2">设备</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item
-          label="设备组编号"
+          label="设备组"
           prop="deviceGroupCode"
           v-if="dialog.forms.actionType == 1"
         >
@@ -215,7 +239,7 @@
           </el-select>
         </el-form-item>
         <el-form-item
-          label="设备编号"
+          label="设备"
           prop="deviceCode"
           v-if="dialog.forms.actionType == 2"
         >
@@ -310,6 +334,28 @@ export default {
     };
   },
   watch: {
+    async "filterForm.floorCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.roomOpts = [];
+      this.deviceGroupOpts = [];
+      this.deviceOpts = [];
+      const r = await spaceRoomListAll({ floorCode: n });
+      this.roomOpts = r.data;
+    },
+    async "filterForm.roomCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.deviceGroupOpts = [];
+      this.deviceOpts = [];
+      const r1 = await deviceListAll({ roomCode: n });
+      const r2 = await deviceGroupListAll({ roomCode: n });
+      this.deviceOpts = r1.data;
+      this.deviceGroupOpts = r2.data;
+    },
+    async "filterForm.deviceGroupCode"(n, o) {
+      if (!n) return;
+    },
     async "dialog.forms.floorCode"(n, o) {
       if (!n) return;
       // 一级变,二级也变
@@ -331,7 +377,7 @@ export default {
   },
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
-    spaceRoomListAll().then((r) => (this.roomOpts = r.data));
+    // spaceRoomListAll().then((r) => (this.roomOpts = r.data));
     pointTypeListAll().then((r) => (this.pointTypeOpts = r.data));
     // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
     this.handleQuery();
@@ -394,7 +440,7 @@ export default {
           所以dialog.forms.roomCode虽然确实被改变了,但是不过它不是响应式的,所以视图没有更新   
         */
       }
-      this.dialog.visible = true;
+      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {
