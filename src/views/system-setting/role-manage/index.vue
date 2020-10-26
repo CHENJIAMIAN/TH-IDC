@@ -55,14 +55,14 @@ updateUserId	[int]		修改人ID （可为空）
             icon="el-icon-circle-plus-outline"
             type="primary"
             plain
-            @click="handleDialog(row)"
+            @click="handleFJDialog(row)"
           ></el-button>
           <el-button
             title="分配权限"
             icon="el-icon-circle-plus"
             type="primary"
             plain
-            @click="handleDialog(row)"
+            @click="handleQXDialog(row)"
           ></el-button>
           <el-button
             icon="el-icon-edit-outline"
@@ -126,6 +126,70 @@ updateUserId	[int]		修改人ID （可为空）
         >
       </div>
     </el-dialog>
+
+    <!-- 绑定房间弹窗 -->
+    <el-dialog :visible.sync="dialogFJ.visible">
+      <span slot="title">
+        <span style="font-size: 1.5rem; font-weight: bold">绑定房间</span>
+        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
+      </span>
+      <el-form
+        :model="dialogFJ.forms"
+        :rules="dialogFJ.rules"
+        ref="dialogFJForm"
+        label-width="150px"
+      >
+          <el-tree
+            default-expand-all
+             node-key="id"
+            :default-checked-keys="defaultCheckedIdsFJ"
+            ref="treeFJ"
+            :data="treeDataFJ"
+            :props="{
+              children: 'roomList',
+              label: 'name',
+            }"
+            show-checkbox
+          />
+      </el-form>
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogFJSubmit"
+          >保 存</el-button
+        >
+      </div>
+    </el-dialog>
+
+    <!-- 绑定权限弹窗 -->
+    <el-dialog :visible.sync="dialogQX.visible">
+      <span slot="title">
+        <span style="font-size: 1.5rem; font-weight: bold">绑定权限</span>
+        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
+      </span>
+      <el-form
+        :model="dialogQX.forms"
+        :rules="dialogQX.rules"
+        ref="dialogQXForm"
+        label-width="150px"
+      >
+          <el-tree
+            default-expand-all
+             node-key="id"
+            :default-checked-keys="defaultCheckedIdsQX"
+            ref="treeQX"
+            :data="treeDataQX"
+            :props="{
+              children: 'child',
+              label: 'name',
+            }"
+            show-checkbox
+          />
+      </el-form>
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogQXSubmit"
+          >保 存</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -154,7 +218,10 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-
+      treeDataQX: [],
+      treeDataFJ: [],
+      defaultCheckedIdsQX: [],
+      defaultCheckedIdsFJ: [],
       dialog: {
         id: "",
         visible: false,
@@ -163,6 +230,17 @@ export default {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
+
+      dialogFJ: {
+        visible: false,
+        forms: {},
+        rules: {},
+      },
+      dialogQX: {
+        visible: false,
+        forms: {},
+        rules: {},
+      },
     };
   },
   created() {
@@ -170,6 +248,45 @@ export default {
   },
   mounted() {},
   methods: {
+    findRoot(items,childname) {
+      let result = [];
+      function find(items) {
+        for (let i of items) {
+          if (!i[childname]) i.has=='1' && result.push(i);
+          else find(i[childname]);
+        }
+      }
+      find(items);
+      return result;
+    },
+    dialogFJSubmit() {
+      this.$refs["dialogFJForm"].validate((valid, obj) => {
+        if (valid) {
+          this.dialogFJ.forms.roomIdArray=this.$refs['treeFJ'].getCheckedNodes(true).map(i=>i.id)
+          sysRoleRoomAdd(this.dialogFJ.forms).then((res) => {
+            this.$message.success("操作成功!");
+            this.$refs["dialogFJForm"].resetFields();
+            this.dialogFJ.visible = false;
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+    dialogQXSubmit() {
+      this.$refs["dialogQXForm"].validate((valid, obj) => {
+        if (valid) {
+          this.dialogQX.forms.permissionIdArray=this.$refs['treeQX'].getCheckedNodes().filter(i=>i.has).map(i=>i.id)
+          sysRoleMenuAdd(this.dialogQX.forms).then((res) => {
+            this.$message.success("操作成功!");
+            this.$refs["dialogQXForm"].resetFields();
+            this.dialogQX.visible = false;
+          });
+        } else {
+          return false;
+        }
+      });
+    },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
@@ -209,7 +326,40 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
+    },
+    handleFJDialog(row) {      
+      sysRoleRoomListAll({ roleId: row.id }).then((r) => {
+        this.treeDataFJ = r.data;
+        this.defaultCheckedIdsFJ = this.findRoot(this.treeDataFJ,"roomList").map(
+          (i) => i.id
+        );
+      });
+      if (row) {
+        // 编辑
+        this.dialogFJ.forms = JSON.parse(JSON.stringify({roleId:row.id}));
+      } else {
+        this.dialogFJ.forms = {};
+      }
+      this.dialogFJ.visible = true;
+      this.$nextTick((_) => window.treeFJ=this.$refs['treeFJ']);
+    },
+    handleQXDialog(row) {
+      sysRoleMenuListAll({ roleId: row.id }).then((r) => {
+        this.treeDataQX = r.data;
+        this.defaultCheckedIdsQX = this.findRoot(this.treeDataQX,"child").map(
+          (i) => i.id
+        );
+      });
+      if (row) {
+        // 编辑
+        this.dialogQX.forms = JSON.parse(JSON.stringify({roleId:row.id}));
+      } else {
+        this.dialogQX.forms = {};
+      }
+      this.dialogQX.visible = true;
+      this.$nextTick((_) => window.treeQX=this.$refs['treeQX']);
     },
     // 删除
     handleDel(id) {
