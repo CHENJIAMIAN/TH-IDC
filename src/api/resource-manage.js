@@ -82,21 +82,24 @@ export function deviceGroupListAllBindDeviceForDeviceGroup(data){return request(
 export function deviceGroupListAllNotBindDeviceForDeviceGroup(data){return request({url:'/admin/device/deviceGroup/listAllNotBindDeviceForDeviceGroup',method:'post',data})}
 //设备组绑定设备接口
 export function deviceGroupAddDeviceToGroup(data){return request({url:'/admin/device/deviceGroup/addDeviceToGroup',method:'post',data})}
-
-
-
 //获取设备组已绑定位置的测点
 export function deviceGroupPointLocationListAllByBindForDeviceGroup(data){return request({url:'/admin/device/deviceGroupPointLocation/listAllByBindForDeviceGroup',method:'post',data})}
 //获取设备组未绑定位置的测点
 export function deviceGroupPointLocationListAllByNotBindForDeviceGroup(data){return request({url:'/admin/device/deviceGroupPointLocation/listAllByNotBindForDeviceGroup',method:'post',data})}
-
-//删除设备组测点位置接口
-export function deviceGroupPointLocationDelete(data){return request({url:'/admin/device/deviceGroupPointLocation/delete',method:'post',data})}
 //采集测点位置接口
 export function deviceGroupPointLocationAdd(data){return request({url:'/admin/device/deviceGroupPointLocation/add',method:'post',data})}
 
 
+// 已完成 获取建筑物图片接口
+export function configGetBuilding_bg(data){return request({url:'/admin/space/config/getBuilding_bg',method:'post',data})}
+// 已完成 建筑特图片上传或修改接口
+export function configAddOrEdit_building_bg(data){return request({url:'/admin/space/config/addOrEdit_building_bg',method:'post',data})}
 
+
+// 已完成 获取楼层图片与楼层的房间接口	
+export function roomListAll(data){return request({url:'/admin/devicemonitor/room/listAll',method:'post',data})}
+// 已完成 获取建筑物图片与楼层数据接口	
+export function floorListAll(data){return request({url:'/admin/devicemonitor/floor/listAll',method:'post',data})}
 
 
 

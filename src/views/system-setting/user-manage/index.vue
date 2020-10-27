@@ -171,24 +171,14 @@
           </el-select>
   
         </el-form-item>
-        <el-form-item label="角色" prop="roles">
-          <!-- 传参 roleIdStr ,隔开 -->
-          <!-- <el-select multiple v-model="dialog.forms.roles">
-            <el-option
-              v-for="item in roleOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-                :value="item.id"
-          </el-select> -->
-          <el-checkbox-group v-model="dialog.forms.roles">
+        <el-form-item label="角色" prop="roleIdArray">
+          <el-checkbox-group v-model="dialog.forms.roleIdArray">
               <el-checkbox 
                 v-for="item in roleOpts"
                 :key="item.id"
-                :label="item.name"
+                :label="item.id"
                  border
-              ></el-checkbox>
+              >{{item.name}}</el-checkbox>
         </el-checkbox-group>
 
         </el-form-item>
@@ -253,7 +243,7 @@ export default {
           departmentId: [
             { required: true, trigger: "change", message: "请输入" },
           ],
-          roles: [{ required: true, trigger: "blur", message: "请输入" }],
+          roleIdArray: [{ required: true, trigger: "blur", message: "请输入" }],
           status: [{ required: true, trigger: "change", message: "请输入" }],
         },
       },
@@ -269,8 +259,7 @@ export default {
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
-          let callAPI = null;
-          this.dialog.forms.roleIdStr = this.dialog.forms.roles.join(",");
+          let callAPI = null;          
           if (this.dialog.forms.id) {
             // 没有编辑密码的
             this.dialog.forms.password = null;
@@ -278,22 +267,6 @@ export default {
           } else {
             callAPI = sysUserAdd;
           }
-          // const templateObj = {
-          //   id: 0,
-          //   realName: "",
-          //   phone: "",
-          //   email: "",
-          //   wechat: "",
-          //   dingtalk: "",
-          //   remarks: "",
-          //   departmentId: 0,
-          //   status: "",
-          //   roleIdStr: "",
-          // };
-          // Object.keys(templateObj).forEach((key) => {
-          //   templateObj[key] = this.dialog.forms[key] || "";
-          // });
-          // delete templateObj.id;
           callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogForm"].resetFields();
@@ -317,11 +290,13 @@ export default {
       this.handleQuery();
     },
     // 查看
-    handleDialog(row) {
+    async handleDialog(row) {
       if (row) {
         // 编辑
-        row.roles = row.roleNameList ? row.roleNameList.split(",") : [];
-        this.dialog.forms = JSON.parse(JSON.stringify(row));
+        const r=await sysUserQueryById({id:row.id})
+        this.dialog.forms=r.data;
+        this.$set(this.dialog.forms,"roleIdArray",r.data.roleList.filter(i=>i.has=='1').map(i=>i.id))
+        // this.dialog.forms = JSON.parse(JSON.stringify(row));
       } else {
         this.dialog.forms = {};
       }

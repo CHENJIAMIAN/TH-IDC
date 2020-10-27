@@ -96,20 +96,15 @@
       <el-table-column sortable prop="deviceType" label="设备组类型">
         <template slot-scope="{ row }">
           <span>{{
+            deviceTypeOpts.find((i) => i.id === row.deviceType) &&
             deviceTypeOpts.find((i) => i.id === row.deviceType).name
           }}</span>
         </template>
       </el-table-column>
       <el-table-column sortable prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
-          <el-button
-            type="text"
-            size="mini"
-            @click="
-              dialogImgVisible = true;
-              dialogImgUrl = row.imgUrl;
-            "
-            >查看</el-button
+          <el-button type="text" size="mini" @click="handleImgDialog(row)"
+            >编辑</el-button
           >
         </template>
       </el-table-column>
@@ -154,12 +149,58 @@
       @pagination="getList"
     />
     <!-- 图片弹窗 -->
-    <el-dialog
-      custom-class="dialog-img"
-      :visible.sync="dialogImgVisible"
-      :show-close="false"
-    >
-      <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
+    <el-dialog :visible.sync="dialogImg.visible" class="dialog-img">
+      <span slot="title">
+        <span style="font-size: 1.5rem; font-weight: bold">编辑测点</span>
+        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
+      </span>
+      <div class="content">
+        <div class="grid">
+          <div class="left">
+            <img
+              class="preview-img"
+              :src="dialogImg.forms.imgUrl"
+              alt="加载失败"
+              @click="addToBindPointLocation"
+            />
+          </div>
+          <div class="right">
+            <div class="radios">
+              <!-- listDataCDNotBind.id是测点id -->
+              <el-radio
+                v-for="i in listDataCDNotBind"
+                :key="i.id"
+                v-model="dialogImg.forms.selectedNotBind"
+                :label="i"
+                border
+                >{{ i.name }}</el-radio
+              >
+            </div>
+          </div>
+        </div>
+        <div>
+          <el-table style="overflow: auto" stripe border :data="listDataCDBind">
+            <!-- listDataCDBind.id是位置id   pointId 是测点id -->
+            <el-table-column sortable prop="pointCode" label="测点编号" />
+            <el-table-column sortable prop="name" label="测点名称" />
+            <el-table-column label="操作" align="center">
+              <template slot-scope="{ row }">
+                <el-button
+                  icon="el-icon-delete"
+                  type="primary"
+                  plain
+                  @click="removeToNotBindPointLocation(row)"
+                ></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogImgSubmit"
+          >保 存</el-button
+        >
+      </div>
     </el-dialog>
 
     <!-- 详情弹窗 -->
@@ -305,7 +346,7 @@
       </div>
     </el-dialog>
 
-     <!-- 绑定设备弹窗 -->
+    <!-- 绑定设备弹窗 -->
     <el-dialog :visible.sync="dialogSB.visible">
       <span slot="title">
         <span style="font-size: 1.5rem; font-weight: bold">绑定设备</span>
@@ -362,8 +403,11 @@ import {
   deviceGroupEdit,
   deviceGroupAdd,
   deviceGroupListAllBindDeviceForDeviceGroup,
-deviceGroupListAllNotBindDeviceForDeviceGroup,
-deviceGroupAddDeviceToGroup,
+  deviceGroupListAllNotBindDeviceForDeviceGroup,
+  deviceGroupAddDeviceToGroup,
+  deviceGroupPointLocationListAllByBindForDeviceGroup,
+  deviceGroupPointLocationListAllByNotBindForDeviceGroup,
+  deviceGroupPointLocationAdd,
 } from "@/api/resource-manage.js";
 
 // 上传
@@ -426,18 +470,23 @@ export default {
           deviceType: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
-      dialogImgVisible: false,
-      dialogImgUrl: "",
+      dialogImg: {
+        visible: false,
+        forms: {},
+        rules: {},
+      },
       dialogCD: {
         visible: false,
         forms: {},
         rules: {},
       },
-        dialogSB: {
+      dialogSB: {
         visible: false,
         forms: {},
         rules: {},
       },
+      listDataCDBind: [],
+      listDataCDNotBind: [],
     };
   },
   watch: {
@@ -464,6 +513,32 @@ export default {
   },
   mounted() {},
   methods: {
+    addToBindPointLocation() {
+      // 两个接口的id字段代表的是不同的东西,不能直接互推
+      let currentValue = JSON.parse(JSON.stringify(this.dialogImg.forms.selectedNotBind));
+      this.dialogImg.forms.selectedNotBind = "";
+      if (!currentValue) return;
+      // 获取测点在照片上的相对位置
+      currentValue.location = "xxxxx";
+      // 添加到表
+      currentValue.pointId = currentValue.id;
+      currentValue.id = "";
+      this.listDataCDBind.push(currentValue);
+      // 从radio列表移除
+      const index = this.listDataCDNotBind.indexOf(
+        currentValue
+      );
+      if (index > -1) this.listDataCDNotBind.splice(index, 1);
+    },
+
+    removeToNotBindPointLocation(row) {
+      // 从表删除
+      const index = this.listDataCDBind.indexOf(row);
+      if (index > -1) this.listDataCDBind.splice(index, 1);
+      // 添加到radio列表
+      this.listDataCDNotBind = this.listDataCDNotBind.concat(row);
+    },
+
     // 附件上传成功
     uploadSuccess(response, file, fileList) {
       if (response.res === 0) {
@@ -479,7 +554,21 @@ export default {
       this.dialog.forms.imgUrl = "";
       this.$refs["dialogForm"].validateField("imgUrl");
     },
-        dialogSBSubmit() {
+    dialogImgSubmit() {
+          /* pointList	[array]	是	采集的测点位置数据		
+                pointId	[int]	是	测点id		
+               location [string]	是	位置信息
+        */
+        this.dialogImg.forms.pointList = this.listDataCDBind;
+        const {deviceGroupId,pointList} = this.dialogImg.forms;
+        deviceGroupPointLocationAdd({deviceGroupId,pointList}).then((res) => {
+          this.$message.success("操作成功!");
+          this.$refs["dialogImgForm"].resetFields();
+          this.dialogImg.visible = false;
+          this.getList();
+        });
+    },
+    dialogSBSubmit() {
       this.$refs["dialogSBForm"].validate((valid, obj) => {
         if (valid) {
           deviceGroupAddDeviceToGroup(this.dialogSB.forms).then((res) => {
@@ -550,14 +639,31 @@ export default {
       this.dialog.visible = true;
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
-     async handleSBDialog(row) {
+    async handleImgDialog(row) {
+      const r1 = await deviceGroupPointLocationListAllByBindForDeviceGroup({
+        deviceGroupId: row.id,
+      });
+      const r2 = await deviceGroupPointLocationListAllByNotBindForDeviceGroup({
+        deviceGroupId: row.id,
+      });
+      this.listDataCDBind = r1.data;
+      this.listDataCDNotBind = r2.data;
+      this.dialogImg.visible = true;
+      this.dialogImg.forms.deviceGroupId = row.id;
+      this.dialogImg.forms.imgUrl = row.imgUrl;
+    },
+    async handleSBDialog(row) {
       // dialog显示时获取一级菜单列表
       if (row) {
         // 编辑
         this.dialogSB.forms = { id: row.id };
-        const r1 = await deviceGroupListAllNotBindDeviceForDeviceGroup({ id: row.id });
+        const r1 = await deviceGroupListAllNotBindDeviceForDeviceGroup({
+          id: row.id,
+        });
         this.deviceNotBindDeviceGroupOpts = r1.data;
-        const r2 = await deviceGroupListAllBindDeviceForDeviceGroup({ id: row.id });
+        const r2 = await deviceGroupListAllBindDeviceForDeviceGroup({
+          id: row.id,
+        });
         this.deviceBindDeviceGroupOpts = r2.data;
         this.$set(
           this.dialogSB.forms,
@@ -653,14 +759,41 @@ export default {
 
 ::v-deep {
   .dialog-img {
-    background: #0b2a52;
-    .el-dialog__body {
-      display: grid;
-      padding: 30px 20px 30px;
+    .el-dialog {
+      padding-bottom: 3rem;
     }
-    .el-dialog__header {
-      display: none;
+    .content {
+      .grid {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+        .left {
+          height: 400px;
+          display: grid;
+          justify-content: center;
+          align-items: center;
+        }
+        .right {
+          .radios {
+            display: grid;
+            gap: 10px;
+            .el-radio.is-bordered + .el-radio.is-bordered {
+              margin-left: 0;
+            }
+          }
+        }
+      }
     }
+    // background: #0b2a52;
+    // .el-dialog__body {
+    //   display: grid;
+    //   padding: 30px 20px 30px;
+    // }
+    // .el-dialog__header {
+    //   display: none;
+    // }
   }
 }
 </style>

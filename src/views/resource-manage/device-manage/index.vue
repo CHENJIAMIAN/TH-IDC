@@ -105,7 +105,7 @@
       <el-table-column sortable prop="deviceType" label="设备类型">
         <template slot-scope="{ row }">
           <span>{{
-            deviceTypeOpts.find((i) => i.id === row.deviceType).name
+           deviceTypeOpts.find((i) => i.id === row.deviceType) && deviceTypeOpts.find((i) => i.id === row.deviceType).name
           }}</span>
         </template>
       </el-table-column>
