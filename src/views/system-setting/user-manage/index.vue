@@ -160,7 +160,7 @@
         <el-form-item label="描述" prop="remarks">
           <el-input v-model="dialog.forms.remarks"></el-input>
         </el-form-item>
-        <el-form-item label="部门ID" prop="departmentId">
+        <el-form-item label="部门" prop="departmentId">
           <el-select v-model="dialog.forms.departmentId">
             <el-option
               v-for="item in depOpts"
