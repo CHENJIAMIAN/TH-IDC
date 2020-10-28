@@ -299,6 +299,7 @@ export default {
         // this.dialog.forms = JSON.parse(JSON.stringify(row));
       } else {
         this.dialog.forms = {};
+        this.$set(this.dialog.forms,"roleIdArray",[])
       }
       this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
