@@ -160,7 +160,7 @@
             <div
               v-if="dialogImg.visible"
               ref="preiviewImgContainer"
-              style="position: relative"
+              style="position: relative;"
             >
               <img
                 :style="{
@@ -856,6 +856,7 @@ export default {
           display: grid;
           justify-content: center;
           align-items: center;
+          overflow: auto;
           .marker {
             position: absolute;
             width: 10px;
