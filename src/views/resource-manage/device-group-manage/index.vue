@@ -286,7 +286,7 @@
           </el-form-item>
         </div>
 
-        <el-form-item label="预览图" prop="imgUrl">
+        <el-form-item label="预览图" prop="imgUrl"  v-if="dialog.visible">
           <div class="preview-grid">
             <el-upload
               ref="upload"

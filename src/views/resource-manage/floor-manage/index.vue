@@ -100,7 +100,8 @@
         <el-form-item label="排序" prop="sort">
           <el-input v-model="dialog.forms.sort"></el-input>
         </el-form-item>
-        <el-form-item label="预览图" prop="imgUrl">
+        <el-form-item label="预览图" prop="imgUrl" v-if="dialog.visible">
+          <!-- v-if="dialog.visible" 文件上传独立于表单,需手动销毁重生 -->
           <div class="preview-grid">
             <el-upload
               ref="upload"

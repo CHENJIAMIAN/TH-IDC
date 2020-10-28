@@ -137,9 +137,10 @@ updateUserId	[int]		修改人ID （可为空）
         :model="dialogFJ.forms"
         :rules="dialogFJ.rules"
         ref="dialogFJForm"
-        label-width="150px"
+        label-position="top"
+        style="padding: 0 1rem"
       >
-          <el-tree
+        <!-- <el-tree
             default-expand-all
              node-key="id"
             :default-checked-keys="defaultCheckedIdsFJ"
@@ -150,7 +151,27 @@ updateUserId	[int]		修改人ID （可为空）
               label: 'name',
             }"
             show-checkbox
-          />
+          /> -->
+        <el-form-item
+          class="rooms-form-item"
+          v-for="item in treeDataFJ"
+          :key="item.id"
+          :label="item.name"
+          prop="name"
+        >
+          <el-checkbox-group
+            class="rooms-el-checkbox-group"
+            v-model="dialogFJ.forms.roomIdArray"
+          >
+            <el-checkbox
+              v-for="i in item.roomList"
+              :key="i.id"
+              :label="i.id"
+              border
+              >{{ i.name }}</el-checkbox
+            >
+          </el-checkbox-group>
+        </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogFJSubmit"
@@ -171,18 +192,18 @@ updateUserId	[int]		修改人ID （可为空）
         ref="dialogQXForm"
         label-width="150px"
       >
-          <el-tree
-            default-expand-all
-             node-key="id"
-            :default-checked-keys="defaultCheckedIdsQX"
-            ref="treeQX"
-            :data="treeDataQX"
-            :props="{
-              children: 'child',
-              label: 'name',
-            }"
-            show-checkbox
-          />
+        <el-tree
+          default-expand-all
+          node-key="id"
+          :default-checked-keys="defaultCheckedIdsQX"
+          ref="treeQX"
+          :data="treeDataQX"
+          :props="{
+            children: 'child',
+            label: 'name',
+          }"
+          show-checkbox
+        />
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogQXSubmit"
@@ -221,7 +242,7 @@ export default {
       treeDataQX: [],
       treeDataFJ: [],
       defaultCheckedIdsQX: [],
-      defaultCheckedIdsFJ: [],
+      // defaultCheckedIdsFJ: [],
       dialog: {
         id: "",
         visible: false,
@@ -248,11 +269,11 @@ export default {
   },
   mounted() {},
   methods: {
-    findRoot(items,childname) {
+    findRoot(items, childname) {
       let result = [];
       function find(items) {
         for (let i of items) {
-          if (!i[childname]) i.has=='1' && result.push(i);
+          if (!i[childname]) i.has == "1" && result.push(i);
           else find(i[childname]);
         }
       }
@@ -262,11 +283,12 @@ export default {
     dialogFJSubmit() {
       this.$refs["dialogFJForm"].validate((valid, obj) => {
         if (valid) {
-          this.dialogFJ.forms.roomIdArray=this.$refs['treeFJ'].getCheckedNodes(true).map(i=>i.id)
+          // this.dialogFJ.forms.roomIdArray=this.$refs['treeFJ'].getCheckedNodes(true).map(i=>i.id)
           sysRoleRoomAdd(this.dialogFJ.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogFJForm"].resetFields();
             this.dialogFJ.visible = false;
+            this.getList();
           });
         } else {
           return false;
@@ -276,11 +298,15 @@ export default {
     dialogQXSubmit() {
       this.$refs["dialogQXForm"].validate((valid, obj) => {
         if (valid) {
-          this.dialogQX.forms.permissionIdArray=this.$refs['treeQX'].getCheckedNodes().filter(i=>i.has).map(i=>i.id)
+          this.dialogQX.forms.permissionIdArray = this.$refs["treeQX"]
+            .getCheckedNodes()
+            .filter((i) => i.has)
+            .map((i) => i.id);
           sysRoleMenuAdd(this.dialogQX.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogQXForm"].resetFields();
             this.dialogQX.visible = false;
+            this.getList();
           });
         } else {
           return false;
@@ -329,37 +355,42 @@ export default {
       this.dialog.visible = true;
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
-    handleFJDialog(row) {      
+    handleFJDialog(row) {
       sysRoleRoomListAll({ roleId: row.id }).then((r) => {
         this.treeDataFJ = r.data;
-        this.defaultCheckedIdsFJ = this.findRoot(this.treeDataFJ,"roomList").map(
+        const checkedIds = this.findRoot(this.treeDataFJ, "roomList").map(
           (i) => i.id
         );
+        this.$set(this.dialogFJ.forms, "roomIdArray", checkedIds);
       });
       if (row) {
         // 编辑
-        this.dialogFJ.forms = JSON.parse(JSON.stringify({roleId:row.id}));
+        this.dialogFJ.forms = JSON.parse(JSON.stringify({ roleId: row.id }));
+        this.$set(this.dialogFJ.forms, "roomIdArray", []);
+        // el-checkbox-group v-model源码过程中为什么没有触发自动$set,反而el-checkbox会报错?
+        // 因为自动$set只在$emit input时, el-checkbox作为儿子先渲染,渲染时用到他爸,发现他爸的:value(即v-model)是undefined
+        // 自然报错
       } else {
         this.dialogFJ.forms = {};
       }
       this.dialogFJ.visible = true;
-      this.$nextTick((_) => window.treeFJ=this.$refs['treeFJ']);
+      // this.$nextTick((_) => window.treeFJ=this.$refs['treeFJ']);
     },
     handleQXDialog(row) {
       sysRoleMenuListAll({ roleId: row.id }).then((r) => {
         this.treeDataQX = r.data;
-        this.defaultCheckedIdsQX = this.findRoot(this.treeDataQX,"child").map(
+        this.defaultCheckedIdsQX = this.findRoot(this.treeDataQX, "child").map(
           (i) => i.id
         );
       });
       if (row) {
         // 编辑
-        this.dialogQX.forms = JSON.parse(JSON.stringify({roleId:row.id}));
+        this.dialogQX.forms = JSON.parse(JSON.stringify({ roleId: row.id }));
       } else {
         this.dialogQX.forms = {};
       }
       this.dialogQX.visible = true;
-      this.$nextTick((_) => window.treeQX=this.$refs['treeQX']);
+      // this.$nextTick((_) => window.treeQX=this.$refs['treeQX']);
     },
     // 删除
     handleDel(id) {
@@ -401,5 +432,24 @@ export default {
 .head {
   display: grid;
   justify-content: end;
+}
+
+::v-deep {
+  .rooms-form-item {
+    .el-form-item__label {
+      font-size: 1.4rem;
+    }
+    .rooms-el-checkbox-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      .el-checkbox.is-bordered + .el-checkbox.is-bordered {
+        margin-left: 0;
+      }
+      .el-checkbox:last-of-type {
+        margin-right: 30px;
+      }
+    }
+  }
 }
 </style>
