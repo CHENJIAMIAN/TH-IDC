@@ -7,7 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import deviceManageRouter from './modules/device-manage'
+import deviceMonitorRouter from './modules/device-monitor'
 import systemSettingRouter from './modules/system-setting'
 import resourceManageRouter from './modules/resource-manage'
 import reportManageRouter from './modules/report-manage'
@@ -106,7 +106,7 @@ export const asyncRoutes = [
       affix: true
     }
   },
-  deviceManageRouter,
+  deviceMonitorRouter,
   reportManageRouter,
   systemSettingRouter,
   {
