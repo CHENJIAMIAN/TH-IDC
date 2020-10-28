@@ -82,6 +82,7 @@
       <el-table-column sortable prop="userName" label="用户账号" />
       <el-table-column sortable prop="realName" label="用户名称" />
       <el-table-column sortable prop="roleNameList" label="角色" />
+      <el-table-column sortable prop="departmentName" label="部门" />
       <el-table-column sortable prop="phone" label="电话" />
       <el-table-column sortable prop="email" label="邮箱" />
       <el-table-column sortable prop="wechat" label="微信" />
