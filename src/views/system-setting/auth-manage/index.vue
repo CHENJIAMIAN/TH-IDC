@@ -89,9 +89,9 @@
       <el-table-column sortable prop="name" label="权限名称" />
       <el-table-column sortable prop="permission" label="标签" />
       <!-- <el-table-column sortable prop="menuId" label="所属菜单id" /> -->
-      <el-table-column sortable prop="level1Id" label="所属模块名称" />
-      <el-table-column sortable prop="level2Id" label="所属子系统名称" />
-      <el-table-column sortable prop="level3Id" label="所属菜单名称" />
+      <el-table-column sortable prop="level1Name" label="所属模块名称" />
+      <el-table-column sortable prop="level2Name" label="所属子系统名称" />
+      <el-table-column sortable prop="level3Name" label="所属菜单名称" />
       <!-- <el-table-column sortable prop="level2Id" label="所属子系统id" /> -->
       <!-- <el-table-column sortable prop="level1Id" label="所属模块id" /> -->
       <el-table-column label="操作" align="center" width="240">

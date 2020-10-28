@@ -157,16 +157,28 @@
       <div class="content">
         <div class="grid">
           <div class="left">
-            <img
-              class="preview-img"
-              :src="dialogImg.forms.imgUrl"
-              alt="加载失败"
-              @click="addToBindPointLocation"
-            />
+            <div
+              v-if="dialogImg.visible"
+              ref="preiviewImgContainer"
+              style="position: relative"
+            >
+              <img
+                :style="{
+                  cursor: dialogImg.forms.selectedNotBind
+                    ? 'crosshair'
+                    : 'unset',
+                }"
+                ref="preiviewImg"
+                class="preview-img"
+                :src="dialogImg.forms.imgUrl"
+                alt="加载失败"
+                @click="addToBindPointLocation"
+              />
+            </div>
           </div>
           <div class="right">
+            <h2 style="text-align: center">未绑测点</h2>
             <div class="radios">
-              <!-- listDataCDNotBind.id是测点id -->
               <el-radio
                 v-for="i in listDataCDNotBind"
                 :key="i.id"
@@ -179,10 +191,11 @@
           </div>
         </div>
         <div>
+          <h2 style="text-align: center">已绑测点</h2>
           <el-table style="overflow: auto" stripe border :data="listDataCDBind">
-            <!-- listDataCDBind.id是位置id   pointId 是测点id -->
             <el-table-column sortable prop="pointCode" label="测点编号" />
             <el-table-column sortable prop="name" label="测点名称" />
+            <el-table-column sortable prop="location" label="位置" />
             <el-table-column label="操作" align="center">
               <template slot-scope="{ row }">
                 <el-button
@@ -487,6 +500,7 @@ export default {
       },
       listDataCDBind: [],
       listDataCDNotBind: [],
+      imgMarkerIdDivMaps: [],
     };
   },
   watch: {
@@ -513,21 +527,44 @@ export default {
   },
   mounted() {},
   methods: {
-    addToBindPointLocation() {
-      // 两个接口的id字段代表的是不同的东西,不能直接互推
-      let currentValue = JSON.parse(JSON.stringify(this.dialogImg.forms.selectedNotBind));
-      this.dialogImg.forms.selectedNotBind = "";
+    addToBindPointLocation(e) {
+      let currentValue = this.dialogImg.forms.selectedNotBind; //JSON.parse(JSON.stringify(this.dialogImg.forms.selectedNotBind));
+      this.$set(this.dialogImg.forms, "selectedNotBind", "");
       if (!currentValue) return;
       // 获取测点在照片上的相对位置
-      currentValue.location = "xxxxx";
+      e = e || window.event;
+      const x = e.offsetX || e.layerX,
+        y = e.offsetY || e.layerY;
+
+      const div = document.createElement("div");
+      div.title = currentValue.name;
+      div.className = "marker";
+      div.onclick = () => {
+        // 点击标记时移除标记,取消绑定
+        this.$refs["preiviewImgContainer"].removeChild(div);
+        //  移除时也从映射表删除
+        const index2 = this.imgMarkerIdDivMaps.findIndex((i) => i.div == div);
+        if (index2 > -1) this.imgMarkerIdDivMaps.splice(index2, 1);
+        const row = this.listDataCDBind.find((i) => i.id == currentValue.id);
+        this.removeToNotBindPointLocation(row);
+      };
+      div.style.left = x + "px";
+      div.style.top = y + "px";
+      this.$refs["preiviewImgContainer"].appendChild(div);
+      this.imgMarkerIdDivMaps.push({ id: currentValue.id, div: div });
+
+      //获取图片的高度和宽度
+      const myImg = this.$refs["preiviewImg"];
+      const currWidth = myImg.clientWidth;
+      const currHeight = myImg.clientHeight;
+      const ProportionHeightInImg = x / currWidth; //鼠标所选位置相对于所选图片高度的比例
+      const ProportionWidthInImg = y / currHeight; //鼠标所选位置相对于所选图片宽度的比例
+      currentValue.location =
+        ProportionWidthInImg + "," + ProportionHeightInImg;
       // 添加到表
-      currentValue.pointId = currentValue.id;
-      currentValue.id = "";
       this.listDataCDBind.push(currentValue);
       // 从radio列表移除
-      const index = this.listDataCDNotBind.indexOf(
-        currentValue
-      );
+      const index = this.listDataCDNotBind.indexOf(currentValue);
       if (index > -1) this.listDataCDNotBind.splice(index, 1);
     },
 
@@ -537,6 +574,13 @@ export default {
       if (index > -1) this.listDataCDBind.splice(index, 1);
       // 添加到radio列表
       this.listDataCDNotBind = this.listDataCDNotBind.concat(row);
+      // 移除图片上对应的marker
+      const o = this.imgMarkerIdDivMaps.find((i) => i.id == row.id);
+      if (!o) return;
+      this.$refs["preiviewImgContainer"].removeChild(o.div);
+      //  移除时也从映射表删除
+      const index2 = this.imgMarkerIdDivMaps.indexOf(o);
+      if (index2 > -1) this.imgMarkerIdDivMaps.splice(index2, 1);
     },
 
     // 附件上传成功
@@ -555,18 +599,21 @@ export default {
       this.$refs["dialogForm"].validateField("imgUrl");
     },
     dialogImgSubmit() {
-          /* pointList	[array]	是	采集的测点位置数据		
+      /* pointList	[array]	是	采集的测点位置数据		
                 pointId	[int]	是	测点id		
                location [string]	是	位置信息
         */
-        this.dialogImg.forms.pointList = this.listDataCDBind;
-        const {deviceGroupId,pointList} = this.dialogImg.forms;
-        deviceGroupPointLocationAdd({deviceGroupId,pointList}).then((res) => {
-          this.$message.success("操作成功!");
-          this.$refs["dialogImgForm"].resetFields();
-          this.dialogImg.visible = false;
-          this.getList();
-        });
+      this.dialogImg.forms.pointList = this.listDataCDBind.map((i) => {
+        i.pointId = i.id;
+        delete i.id;
+        return i;
+      });
+      const { deviceGroupId, pointList } = this.dialogImg.forms;
+      deviceGroupPointLocationAdd({ deviceGroupId, pointList }).then((res) => {
+        this.$message.success("操作成功!");
+        this.dialogImg.visible = false;
+        this.getList();
+      });
     },
     dialogSBSubmit() {
       this.$refs["dialogSBForm"].validate((valid, obj) => {
@@ -651,6 +698,41 @@ export default {
       this.dialogImg.visible = true;
       this.dialogImg.forms.deviceGroupId = row.id;
       this.dialogImg.forms.imgUrl = row.imgUrl;
+      // 加载marker
+      this.$nextTick((_) => {
+        // 在此才能取到图片要素
+        this.listDataCDBind.forEach((i) => {
+          const location = i.location.split(",");
+          if (!location || location.length < 2) return;
+          //获取图片的高度和宽度
+          const myImg = this.$refs["preiviewImg"];
+          const currWidth = myImg.clientWidth;
+          const currHeight = myImg.clientHeight;
+          const ProportionHeightInImg = location[0]; //鼠标所选位置相对于所选图片高度的比例
+          const ProportionWidthInImg = location[1]; //鼠标所选位置相对于所选图片宽度的比例
+          // 还原marker位置
+          const div = document.createElement("div");
+          div.title = i.name;
+          div.className = "marker";
+          div.onclick = () => {
+            // 点击标记时移除标记,取消绑定
+            this.$refs["preiviewImgContainer"].removeChild(div);
+            //  移除时也从映射表删除
+            const index2 = this.imgMarkerIdDivMaps.findIndex(
+              (i) => i.div == div
+            );
+            if (index2 > -1) this.imgMarkerIdDivMaps.splice(index2, 1);
+            const row = this.listDataCDBind.find((ii) => ii.id == i.id);
+            this.removeToNotBindPointLocation(row);
+          };
+          let x = currWidth * ProportionWidthInImg;
+          let y = currHeight * ProportionHeightInImg;
+          div.style.left = x + "px";
+          div.style.top = y + "px";
+          this.$refs["preiviewImgContainer"].appendChild(div);
+          this.imgMarkerIdDivMaps.push({ id: i.id, div: div });
+        });
+      });
     },
     async handleSBDialog(row) {
       // dialog显示时获取一级菜单列表
@@ -774,6 +856,13 @@ export default {
           display: grid;
           justify-content: center;
           align-items: center;
+          .marker {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #00f7ff;
+            transform: translate(-50%, -50%);
+          }
         }
         .right {
           .radios {
