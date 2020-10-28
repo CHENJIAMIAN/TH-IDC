@@ -55,7 +55,7 @@ updateUserId	[int]		修改人ID  -->
         </template>
       </el-table-column>
       <el-table-column sortable prop="createTime" label="创建时间" />
-      <el-table-column sortable prop="createUser" label="创建人" />
+      <el-table-column sortable prop="createUserName" label="创建人" />
       <!-- <el-table-column sortable prop="updateTime" label="修改时间" /> -->
 
       <el-table-column label="操作" align="center" width="240">
