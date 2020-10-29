@@ -21,6 +21,7 @@ router.beforeEach(async (to, from, next) => {
   const hasToken = getToken()
 
   if (hasToken) {
+    // 跳到驾驶舱单页
     if (to.path === '/Cockpit') {
       location.href = '/home.html'
     }
@@ -29,6 +30,14 @@ router.beforeEach(async (to, from, next) => {
       next({ path: '/' })
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
+      // 控制开不开sidebar
+      if(to.path.includes("/device-monitor")){
+        store.dispatch("app/closeSideBar", { withoutAnimation: false });
+        next();
+      }else{
+        store.dispatch("app/openSideBar", { withoutAnimation: false });
+        next();
+      }
       //确定用户是否已通过getInfo获得其权限角色 
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {

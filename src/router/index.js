@@ -123,7 +123,7 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/engineer-config/index/index'),
-        name: 'Icons',
+        name: 'index',
         meta: { title: '工程配置', icon: 'icon' }
       }
     ]

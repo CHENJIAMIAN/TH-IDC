@@ -1,11 +1,12 @@
 /** When your routing table is too long, you can split it into small modules **/
 
 import Layout from '@/layout'
+import store from '@/store'
 
 export default {
   path: '/device-monitor',
   component: Layout,
-  redirect: '/device-monitor/1F/menu1-1',
+  redirect: '/device-monitor/index',
   name: '设备监控',
   meta: {
     title: '设备监控',
@@ -14,52 +15,32 @@ export default {
   },
   children: [
     {
-      path: '1F',
-      component: () => import('@/views/device-monitor/1F/index'), // Parent router-view
-      name: '1F',
-      meta: { title: '1F' },
-      redirect: '/device-monitor/1F/menu1-1',
-      children: [
-        {
-          path: 'menu1-1',
-          component: () => import('@/views/device-monitor/1F/menu1-1'),
-          name: '高压配电室A',
-          meta: { title: '高压配电室A' }
-        },
-        {
-          path: 'menu1-2',
-          component: () => import('@/views/device-monitor/1F/menu1-2'),
-          name: '高压配电室2',
-          redirect: '/device-monitor/1F/menu1-2/menu1-2-1',
-          meta: { title: '高压配电室2' },
-          children: [
-            {
-              path: 'menu1-2-1',
-              component: () => import('@/views/device-monitor/1F/menu1-2/menu1-2-1'),
-              name: 'Menu1-2-1',
-              meta: { title: 'Menu 1-2-1' }
-            },
-            {
-              path: 'menu1-2-2',
-              component: () => import('@/views/device-monitor/1F/menu1-2/menu1-2-2'),
-              name: 'Menu1-2-2',
-              meta: { title: 'Menu 1-2-2' }
-            }
-          ]
-        },
-        {
-          path: 'menu1-3',
-          component: () => import('@/views/device-monitor/1F/menu1-3'),
-          name: 'Menu1-3',
-          meta: { title: 'Menu 1-3' }
-        }
-      ]
+      path: 'index',
+      name: 'index',
+      component: () => import('@/views/device-monitor/index'),
+      meta: { title: '楼层' }
     },
     {
-      path: 'menu2',
-      name: 'Menu2',
-      component: () => import('@/views/device-monitor/2F/index'),
-      meta: { title: 'Menu 2' }
+      path: 'floor/:floorId/:floorName',
+      component: () => import('@/views/device-monitor/floor/index'),
+      name: 'floor',
+      meta: { title: '层数' },
+      children: [
+        {
+          path: 'room/:roomId/:roomName',
+          component: () => import('@/views/device-monitor/floor/room/index.vue'),
+          name: 'room',
+          meta: { title: '房间' },
+          children: [
+            {
+              path: 'device-group/:deviceGroupId/:deviceGroupName',
+              component: () => import('@/views/device-monitor/floor/room/device-group/index.vue'),
+              name: 'device-group',
+              meta: { title: '设备组' }
+            },
+          ]
+        },
+      ]
     }
   ]
 }

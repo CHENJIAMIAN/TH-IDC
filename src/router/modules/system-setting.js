@@ -16,37 +16,37 @@ export default {
     {
       path: 'department--manage',
       component: () => import('@/views/system-setting/department-manage/index'),
-      name: 'Icons',
+      name: 'department--manage',
       meta: { title: '部门管理', icon: 'icon' }
     },
     {
       path: 'menu-manage',
       component: () => import('@/views/system-setting/menu-manage/index'),
-      name: 'Icons',
+      name: 'menu-manage',
       meta: { title: '菜单管理', icon: 'icon' }
     },
     {
       path: 'auth-manage',
       component: () => import('@/views/system-setting/auth-manage/index'),
-      name: 'Icons',
+      name: 'auth-manage',
       meta: { title: '权限管理', icon: 'icon' }
     },
     {
       path: 'role-manage',
       component: () => import('@/views/system-setting/role-manage/index'),
-      name: 'Icons',
+      name: 'role-manage',
       meta: { title: '角色管理', icon: 'icon' }
     },
     {
       path: 'user-manage',
       component: () => import('@/views/system-setting/user-manage/index'),
-      name: 'Icons',
+      name: 'user-manage',
       meta: { title: '用户管理', icon: 'icon' }
     },
     {
       path: 'system-log',
       component: () => import('@/views/system-setting/system-log/index'),
-      name: 'Icons',
+      name: 'system-log',
       meta: { title: '系统日志', icon: 'icon' }
     },
   ]

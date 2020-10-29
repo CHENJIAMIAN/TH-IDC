@@ -16,37 +16,37 @@ export default {
     {
       path: 'building-manage',
       component: () => import('@/views/resource-manage/building-manage/index'),
-      name: 'Icons',
+      name: 'building-manage',
       meta: { title: '楼幢管理', icon: 'icon' }
     },
     {
       path: 'floor-manage',
       component: () => import('@/views/resource-manage/floor-manage/index'),
-      name: 'Icons',
+      name: 'floor-manage',
       meta: { title: '楼层管理', icon: 'icon' }
     },
     {
       path: 'room-manage',
       component: () => import('@/views/resource-manage/room-manage/index'),
-      name: 'Icons',
+      name: 'room-manage',
       meta: { title: '房间管理', icon: 'icon' }
     },
     {
       path: 'device-group-manage',
       component: () => import('@/views/resource-manage/device-group-manage/index'),
-      name: 'Icons',
+      name: 'device-group-manage',
       meta: { title: '设备组管理', icon: 'icon' }
     },
     {
       path: 'device-manage',
       component: () => import('@/views/resource-manage/device-manage/index'),
-      name: 'Icons',
+      name: 'device-manage',
       meta: { title: '设备管理', icon: 'icon' }
     },
     {
       path: 'measure-point-manage',
       component: () => import('@/views/resource-manage/measure-point-manage/index'),
-      name: 'Icons',
+      name: 'measure-point-manage',
       meta: { title: '测点管理', icon: 'icon' }
     },
 

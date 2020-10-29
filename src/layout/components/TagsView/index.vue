@@ -12,7 +12,7 @@
         :class="isActive(tag) ? 'active' : ''"
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
         tag="span"
-        class="el-button el-button--default el-button--medium"
+        class="el-button el-button--default el-button--medium el-button-custom"
       >
         <!-- @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''" -->
         <!-- @contextmenu.prevent.native="openMenu(tag,$event)" -->
@@ -212,21 +212,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep {
-  .el-button {
-    background: url(../../../assets/img/jx.png) 0 0 / 100% 100% no-repeat;
-    border: none;
-    color: white;
-    font-size: 1.1rem;
-    width: 150px;
-  }
-  .el-button:hover,
-  .el-button:focus {
-    color: #e39f40;
-    border: none;
-    background: url(../../../assets/img/jx2.png) 0 0 / 100% 100% no-repeat;
-  }
-}
 
 .tags-view-container {
   width: 960px;

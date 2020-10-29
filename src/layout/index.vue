@@ -16,10 +16,8 @@
       />
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     </div>
-    <div class="side">
-      <!-- 次级路由，从路由$route获取 -->
-      <sidebar />
-    </div>
+    <!-- 次级路由，从路由$route获取 -->
+    <sidebar class="side"/>
     <div class="main-container">
       <app-main />
       <!-- <right-panel v-if="showSettings">

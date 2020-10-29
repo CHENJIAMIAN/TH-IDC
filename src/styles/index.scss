@@ -233,3 +233,17 @@ aside {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+.el-button-custom {
+  background: url(../assets/img/jx.png) 0 0 / 100% 100% no-repeat;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  width: 150px;
+}
+.el-button-custom:hover,
+.el-button-custom:focus {
+  color: #e39f40;
+  border: none;
+  background: url(../assets/img/jx2.png) 0 0 / 100% 100% no-repeat;
+}

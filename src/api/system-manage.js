@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+// temp1.map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
 
 // 获取登陆者用户信息接口
 export function sysUserQueryLoginUser(data) { return request({ url: '/admin/system/sysUser/queryLoginUser', method: 'post', data }) }
@@ -56,7 +57,6 @@ export function sysDepartmentQueryById(data) { return request({ url: '/admin/sys
 export function sysDepartmentListByPage(data) { return request({ url: '/admin/system/sysDepartment/listByPage', method: 'post', data }) }
 //获取所有部门
 export function sysDepartmentListAll(data) { return request({ url: '/admin/system/sysDepartment/listAll', method: 'post', data }) }
-
 // 给角色添加菜单权限接口
 export function sysRoleMenuAdd(data) { return request({ url: '/admin/system/sysRolePermission/add', method: 'post', data }) }
 // 获取所有菜单和角色所拥有的菜单权限
@@ -65,7 +65,6 @@ export function sysRoleMenuListAll(data) { return request({ url: '/admin/system/
 export function sysRoleRoomListAll(data){return request({url:'/admin/system/sysRoleRoom/listAll',method:'post',data})}
 //给角色添加房间接口
 export function sysRoleRoomAdd(data){return request({url:'/admin/system/sysRoleRoom/add',method:'post',data})}
-
 //获取权限列表接口（带分页功能）
 export function sysPermissionListByPage(data){return request({url:'/admin/system/sysPermission/listByPage',method:'post',data})}
 //获取权限信息接口
