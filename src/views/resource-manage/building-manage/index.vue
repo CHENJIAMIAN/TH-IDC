@@ -8,8 +8,8 @@
         size="medium"
       >
         <el-form-item>
-          <el-button icon="el-icon-upload" type="primary" @click="handleDialog()"
-            >上传/修改</el-button
+          <el-button icon="el-icon-upload2" type="primary" @click="handleDialog()" title="上传/修改建筑物图片"
+            ></el-button
           >
         </el-form-item>
       </el-form>
