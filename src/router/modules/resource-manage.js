@@ -14,6 +14,12 @@ export default {
   },
   children: [
     {
+      path: 'building-manage',
+      component: () => import('@/views/resource-manage/building-manage/index'),
+      name: 'Icons',
+      meta: { title: '楼幢管理', icon: 'icon' }
+    },
+    {
       path: 'floor-manage',
       component: () => import('@/views/resource-manage/floor-manage/index'),
       name: 'Icons',

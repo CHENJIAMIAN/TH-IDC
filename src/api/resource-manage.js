@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 // temp1.map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
 
-
 //获取设备列表接口（带分页功能）
 export function deviceListByPage(data) { return request({ url: '/admin/device/device/listByPage', method: 'post', data }) }
 //获取设备信息接口
@@ -88,8 +87,6 @@ export function deviceGroupPointLocationListAllByBindForDeviceGroup(data){return
 export function deviceGroupPointLocationListAllByNotBindForDeviceGroup(data){return request({url:'/admin/device/deviceGroupPointLocation/listAllByNotBindForDeviceGroup',method:'post',data})}
 //采集测点位置接口
 export function deviceGroupPointLocationAdd(data){return request({url:'/admin/device/deviceGroupPointLocation/add',method:'post',data})}
-
-
 // 已完成 获取建筑物图片接口
 export function configGetBuilding_bg(data){return request({url:'/admin/space/config/getBuilding_bg',method:'post',data})}
 // 已完成 建筑图片上传或修改接口
