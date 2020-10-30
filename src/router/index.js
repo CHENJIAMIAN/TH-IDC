@@ -11,6 +11,7 @@ import deviceMonitorRouter from './modules/device-monitor'
 import systemSettingRouter from './modules/system-setting'
 import resourceManageRouter from './modules/resource-manage'
 import reportManageRouter from './modules/report-manage'
+import engineerConfigRouter from './modules/engineer-config'
 
 /**
  *注意：子菜单仅在路由children.length> = 1时出现
@@ -109,25 +110,7 @@ export const asyncRoutes = [
   deviceMonitorRouter,
   reportManageRouter,
   systemSettingRouter,
-  {
-    path: '/engineer-config',
-    component: Layout,
-    redirect: '/engineer-config/index',
-    name: '工程配置',
-    meta: {
-      title: '工程配置',
-      icon: 'nested',
-      affix: true
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/engineer-config/index/index'),
-        name: 'index',
-        meta: { title: '工程配置', icon: 'icon' }
-      }
-    ]
-  },
+  engineerConfigRouter,
   resourceManageRouter,
   // {
   //   path: 'external-link',
