@@ -9,41 +9,18 @@
         :model="filterForm"
         style="display: grid; grid-auto-flow: column"
       >
-        <el-form-item prop="floorCode">
-          <el-select
-            clearable
-            v-model="filterForm.floorCode"
-            placeholder="楼层"
-          >
-            <el-option
-              v-for="item in floorOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.floorCode"
-            />
-          </el-select>
-        </el-form-item>
-        <!-- <el-form-item prop="roomCode">
-          <el-select v-model="filterForm.roomCode" placeholder="房间">
-            <el-option
-              v-for="item in roomOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.roomCode"
-            />
-          </el-select>
-        </el-form-item> -->
         <el-form-item prop="name">
-          <el-input v-model="filterForm.name" placeholder="房间名称" />
+          <el-input v-model="filterForm.name" placeholder="测点类型名称" />
         </el-form-item>
-        <el-form-item prop="roomType">
+        <el-form-item prop="deviceTypeId">
           <el-select
             clearable
-            v-model="filterForm.roomType"
-            placeholder="房间类型"
+            v-model="filterForm.deviceTypeId"
+            placeholder="设备类型"
+            popper-class="three-column"
           >
             <el-option
-              v-for="item in roomTypeOpts"
+              v-for="item in deviceTypeOpts"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -83,21 +60,18 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="roomCode" label="房间编号" />
-      <el-table-column sortable prop="name" label="房间名称" />
-      <el-table-column sortable prop="roomType" label="房间类型">
-        <template slot-scope="{ row }">
-          <span>{{ row.roomType | capitalize }}</span>
+      <el-table-column sortable prop="name" label="测点类型名称" />
+      <el-table-column sortable prop="deviceTypeName" label="设备类型名称" />
+      <el-table-column sortable prop="units" label="单位" />
+      <el-table-column sortable prop="valueType" label="值类型" >
+          <template slot-scope="{ row }">
+          <span>{{ row.valueType | capitalize }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="imgUrl" label="预览图">
-        <template slot-scope="{ row }">
-               <el-button type="text" size="mini" @click="dialogImgVisible=true;dialogImgUrl=row.imgUrl">查看</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="sort" label="排序" />
-      <el-table-column sortable prop="floorName" label="楼层名称" />
-      <!-- <el-table-column sortable prop="floorCode" label="楼层编号" /> -->
+      <el-table-column sortable prop="columnName" label="字段名" />
+
+
+      
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -141,66 +115,36 @@
         ref="dialogForm"
         label-width="150px"
       >
-        <el-form-item label="房间编号" prop="roomCode">
-          <el-input
-            :disabled="!!dialog.forms.id"
-            v-model="dialog.forms.roomCode"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="房间名称" prop="name">
+        <el-form-item label="测点类型名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <div style="display: flex">
-          <el-form-item label="楼层" prop="floorCode">
-            <el-select v-model="dialog.forms.floorCode">
-              <el-option
-                v-for="item in floorOpts"
-                :key="item.id"
-                :label="item.name"
-                :value="item.floorCode"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="房间类型" prop="roomType">
-            <el-select v-model="dialog.forms.roomType">
-              <el-option
-                v-for="item in roomTypeOpts"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              />
-            </el-select>
-          </el-form-item>
-        </div>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model="dialog.forms.sort"></el-input>
-        </el-form-item>
-        <el-form-item label="预览图" prop="imgUrl" v-if="dialog.visible">
-          <div class="preview-grid">
-            <el-upload
-              ref="upload"
-              name="attach"
-              class="upload-container"
-              :headers="headers"
-              :action="uploadUrl"
-              :data="uploadData"
-              :on-success="uploadSuccess"
-              :on-remove="fileRemove"
-              :limit="1"
-              drag
-            >
-              <i class="el-icon-upload" />
-              <div class="el-upload__text">
-                点击 <em>上传文件</em> 或拖拽上传
-              </div>
-            </el-upload>
-            <img
-              class="preview-img"
-              v-if="dialog.forms.imgUrl"
-              :src="dialog.forms.imgUrl"
-              alt="图片加载失败"
+        <el-form-item label="设备类型" prop="deviceTypeId">
+          <el-select v-model="dialog.forms.deviceTypeId"
+            popper-class="three-column"
+          >
+            <el-option
+              v-for="item in deviceTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             />
-          </div>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="单位" prop="units">
+          <el-input v-model="dialog.forms.units"></el-input>
+        </el-form-item>
+          <el-form-item label="值类型" prop="valueType">
+          <el-select v-model="dialog.forms.valueType">
+            <el-option
+              v-for="item in valueTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="字段名" prop="columnName">
+          <el-input @keyup.enter.native="dialogSubmit" v-model="dialog.forms.columnName"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -213,33 +157,29 @@
 </template>
 
 <script>
-import { sortValidator } from "@/views/resource-manage/common.js";
+import { valueTypeOpts, sortValidator } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
-  spaceFloorListAll,
-  spaceRoomDelete,
-  spaceRoomEdit,
-  spaceRoomAdd,
-  spaceRoomListByPage,
-  spaceRoomListAll,
-  spaceRoomQueryById,
+  deviceTypeListAll,
+  pointTypeDelete,
+  pointTypeEdit,
+  pointTypeAdd,
+  pointTypeListByPage,
+  pointTypeQueryById,
   spaceRoomTypeListAll,
 } from "@/api/resource-manage.js";
 
 // 上传
 import { uploadUrl } from "@/api/common";
 import { getToken } from "@/utils/auth";
-let roomTypeOpts2 = [];
 
 export default {
   components: { pagination },
   filters: {
-     capitalize: function (value) {
+    capitalize: function (value) {
       if (!value) return "";
       value = value.toString();
-      const o = roomTypeOpts2.find((i) => i.id == value);
-      if(!o) return '错误数据,找不到对应类型';
-      return o.name;
+      return valueTypeOpts.find(i=>i.id==value).name;
     },
   },
   data() {
@@ -250,21 +190,18 @@ export default {
         token: getToken(),
       },
       uploadData: {
-        type: 2 /*  type 1是楼层图片，2是房间图片，3是设备组图片 */,
+        type: 2 /*  type 1是楼层图片，2是测点类型图片，3是设备组图片 */,
       },
       uploadUrl,
       /* --- */
-      floorOpts: [],
-      roomOpts: [],
-      roomTypeOpts: [],
+      valueTypeOpts,
+      deviceTypeOpts: [],
       firstMenuOpts: [],
       secondMenuOpts: [],
       filterForm: {
         // 筛选条件
-        floorCode: "",
-        // roomCode: "",
         name: "",
-        roomType: null,
+        deviceTypeId: null,
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
@@ -278,22 +215,15 @@ export default {
         visible: false,
         forms: {},
         rules: {
-          floorCode: [{ required: true, trigger: "blur", message: "请输入" }],
-          roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
-          roomType: [{ required: true, trigger: "blur", message: "请输入" }],
-          imgUrl: [{ required: true, message: "请上传图片" }],
-          sort: [{ required: true, trigger: "blur", validator: sortValidator }],
+          deviceTypeId: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };
   },
   watch: {},
-  async created() {
-    spaceFloorListAll().then((r) => (this.floorOpts = r.data));
-    spaceRoomListAll().then((r) => (this.roomOpts = r.data));
-    const r = await spaceRoomTypeListAll();
-    roomTypeOpts2 = this.roomTypeOpts = r.data;
+  created() {
+    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
@@ -318,9 +248,9 @@ export default {
         if (valid) {
           let callAPI = null;
           if (this.dialog.forms.id) {
-            callAPI = spaceRoomEdit;
+            callAPI = pointTypeEdit;
           } else {
-            callAPI = spaceRoomAdd;
+            callAPI = pointTypeAdd;
           }
           callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
@@ -363,7 +293,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          spaceRoomDelete({
+          pointTypeDelete({
             id: id,
           }).then((res) => {
             this.getList();
@@ -375,7 +305,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      spaceRoomListByPage(this.filterForm).then((res) => {
+      pointTypeListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;

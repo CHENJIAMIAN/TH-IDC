@@ -48,7 +48,7 @@
             clearable
             v-model="filterForm.deviceType"
             placeholder="设备组类型"
-            popper-class="deviceType"
+            popper-class="three-column"
           >
             <el-option
               v-for="item in deviceTypeOpts"
@@ -119,13 +119,13 @@
             plain
             @click="handleSBDialog(row)"
           ></el-button>
-          <el-button
+          <!-- <el-button
             title="绑定测点"
             icon="el-icon-circle-plus-outline"
             type="primary"
             plain
             @click="handleCDDialog(row)"
-          ></el-button>
+          ></el-button> -->
           <el-button
             icon="el-icon-edit-outline"
             type="primary"
@@ -243,7 +243,7 @@
           <el-form-item label="设备组类型" prop="deviceType">
             <el-select
               v-model="dialog.forms.deviceType"
-              popper-class="deviceType"
+              popper-class="three-column"
             >
               <el-option
                 v-for="item in deviceTypeOpts"
@@ -401,7 +401,6 @@
 </template>
 
 <script>
-import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   deviceGroupListAllBindDeviceGroup,
@@ -451,7 +450,6 @@ export default {
       deviceBindDeviceGroupOpts: [],
       deviceNotBindDeviceGroupOpts: [],
       allDeviceOpts: [],
-      roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
       secondMenuOpts: [],
       filterForm: {

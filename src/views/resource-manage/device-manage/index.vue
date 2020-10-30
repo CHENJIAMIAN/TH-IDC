@@ -57,7 +57,7 @@
             clearable
             v-model="filterForm.deviceType"
             placeholder="设备类型"
-            popper-class="deviceType"
+            popper-class="three-column"
           >
             <el-option
               v-for="item in deviceTypeOpts"
@@ -173,7 +173,7 @@
         <el-form-item label="设备类型" prop="deviceType">
           <el-select
             v-model="dialog.forms.deviceType"
-            popper-class="deviceType"
+            popper-class="three-column"
           >
             <el-option
               v-for="item in deviceTypeOpts"
@@ -269,7 +269,6 @@
 </template>
 
 <script>
-import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   deviceQueryAllNotBindForDevice,
@@ -288,13 +287,6 @@ import {
 
 export default {
   components: { pagination },
-  filters: {
-    capitalize: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return roomTypeOpts.find((i) => i.id == value).name;
-    },
-  },
   data() {
     return {
       floorOpts: [],
@@ -305,7 +297,6 @@ export default {
       pointBindDeviceGroupOpts: [],
       pointNotBindDeviceGroupOpts: [],
       allPointOpts: [],
-      roomTypeOpts: roomTypeOpts,
       firstMenuOpts: [],
       secondMenuOpts: [],
       filterForm: {

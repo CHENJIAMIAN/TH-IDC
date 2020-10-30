@@ -1,30 +1,6 @@
 import request from '@/utils/request'
 // temp1.map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
 
-// 获取设备类型列表接口，带分页
-export function deviceTypeListByPage(data){return request({url:'/admin/spacetype/deviceType/listByPage',method:'post',data})}
-// 获取所有设备类型列表接口
-export function deviceTypeListAll(data){return request({url:'/admin/spacetype/deviceType/listAll',method:'post',data})}
-// 设备类型删除
-export function deviceTypeDelete(data){return request({url:'/admin/spacetype/deviceType/delete',method:'post',data})}
-// 获取设备类型接口
-export function deviceTypeQueryById(data){return request({url:'/admin/spacetype/deviceType/queryById',method:'post',data})}
-// 设备类型修改
-export function deviceTypeEdit(data){return request({url:'/admin/spacetype/deviceType/edit',method:'post',data})}
-// 设备类型新增
-export function deviceTypeAdd(data){return request({url:'/admin/spacetype/deviceType/add',method:'post',data})}
-// 获取房间类型接口
-export function spaceRoomTypeQueryById(data){return request({url:'/admin/spacetype/spaceRoomType/queryById',method:'post',data})}
-// 获取所有房间类型列表接口
-export function spaceRoomTypeListAll(data){return request({url:'/admin/spacetype/spaceRoomType/listAll',method:'post',data})}
-// 获取房间类型列表接口，带分页
-export function spaceRoomTypeListByPage(data){return request({url:'/admin/spacetype/spaceRoomType/listByPage',method:'post',data})}
-// 房间类型删除
-export function spaceRoomTypeDelete(data){return request({url:'/admin/spacetype/spaceRoomType/delete',method:'post',data})}
-// 房间类型修改
-export function spaceRoomTypeEdit(data){return request({url:'/admin/spacetype/spaceRoomType/edit',method:'post',data})}
-// 房间类型新增
-export function spaceRoomTypeAdd(data){return request({url:'/admin/spacetype/spaceRoomType/add',method:'post',data})}
 // 7. IDC机房设备组数据接口
 export function roomTypeDeviceGroupListAllRoomType7(data){return request({url:'/admin/devicemonitor/RoomTypeDeviceGroup/listAllRoomType7',method:'post',data})}
 // 6. 变压器房设备组数据接口

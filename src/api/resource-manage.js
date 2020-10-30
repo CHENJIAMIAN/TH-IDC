@@ -55,14 +55,10 @@ export function pointDelete(data) { return request({ url: '/admin/device/point/d
 export function pointEdit(data) { return request({ url: '/admin/device/point/edit', method: 'post', data }) }
 // 新增测点接口 
 export function pointAdd(data) { return request({ url: '/admin/device/point/add', method: 'post', data }) }
-// 获取所有设备类型接口
-export function deviceTypeListAll(data) { return request({ url: '/admin/device/deviceType/listAll', method: 'post', data }) }
 // 获取某个房间的所有设备组列表接口	
 export function deviceGroupListAll(data) { return request({ url: '/admin/device/deviceGroup/listAll', method: 'post', data }) }
 // 获取某一房间的所有设备列表接口
 export function deviceListAll(data) { return request({ url: '/admin/device/device/listAll', method: 'post', data }) }
-// 获取所有测点类型接口
-export function pointTypeListAll(data) { return request({ url: '/admin/device/pointType/listAll', method: 'post', data }) }
 //查询设备所有未绑定测点列表
 export function deviceQueryAllNotBindForDevice(data){return request({url:'/admin/device/device/queryAllNotBindForDevice',method:'post',data})}
 //查询设备所有已经绑定测点列表
@@ -91,8 +87,42 @@ export function deviceGroupPointLocationAdd(data){return request({url:'/admin/de
 export function configGetBuilding_bg(data){return request({url:'/admin/space/config/getBuilding_bg',method:'post',data})}
 // 已完成 建筑图片上传或修改接口
 export function configAddOrEdit_building_bg(data){return request({url:'/admin/space/config/addOrEdit_building_bg',method:'post',data})}
-
-
+// 获取设备类型列表接口，带分页
+export function deviceTypeListByPage(data){return request({url:'/admin/spacetype/deviceType/listByPage',method:'post',data})}
+// 获取所有设备类型列表接口
+export function deviceTypeListAll(data){return request({url:'/admin/spacetype/deviceType/listAll',method:'post',data})}
+// 设备类型删除
+export function deviceTypeDelete(data){return request({url:'/admin/spacetype/deviceType/delete',method:'post',data})}
+// 获取设备类型接口
+export function deviceTypeQueryById(data){return request({url:'/admin/spacetype/deviceType/queryById',method:'post',data})}
+// 设备类型修改
+export function deviceTypeEdit(data){return request({url:'/admin/spacetype/deviceType/edit',method:'post',data})}
+// 设备类型新增
+export function deviceTypeAdd(data){return request({url:'/admin/spacetype/deviceType/add',method:'post',data})}
+// 获取房间类型接口
+export function spaceRoomTypeQueryById(data){return request({url:'/admin/spacetype/spaceRoomType/queryById',method:'post',data})}
+// 获取所有房间类型列表接口
+export function spaceRoomTypeListAll(data){return request({url:'/admin/spacetype/spaceRoomType/listAll',method:'post',data})}
+// 获取房间类型列表接口，带分页
+export function spaceRoomTypeListByPage(data){return request({url:'/admin/spacetype/spaceRoomType/listByPage',method:'post',data})}
+// 房间类型删除
+export function spaceRoomTypeDelete(data){return request({url:'/admin/spacetype/spaceRoomType/delete',method:'post',data})}
+// 房间类型修改
+export function spaceRoomTypeEdit(data){return request({url:'/admin/spacetype/spaceRoomType/edit',method:'post',data})}
+// 房间类型新增
+export function spaceRoomTypeAdd(data){return request({url:'/admin/spacetype/spaceRoomType/add',method:'post',data})}
+//获取测点类型列表接口，带分页
+export function pointTypeListByPage(data){return request({url:'/admin/spacetype/pointType/listByPage',method:'post',data})}
+//获取所有测点类型列表接口
+export function pointTypeListAll(data){return request({url:'/admin/spacetype/pointType/listAll',method:'post',data})}
+//测点类型删除
+export function pointTypeDelete(data){return request({url:'/admin/spacetype/pointType/delete',method:'post',data})}
+//获取测点类型接口
+export function pointTypeQueryById(data){return request({url:'/admin/spacetype/pointType/queryById',method:'post',data})}
+//测点类型修改
+export function pointTypeEdit(data){return request({url:'/admin/spacetype/pointType/edit',method:'post',data})}
+//测点类型新增
+export function pointTypeAdd(data){return request({url:'/admin/spacetype/pointType/add',method:'post',data})}
 
 
 

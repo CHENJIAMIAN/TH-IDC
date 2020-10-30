@@ -68,7 +68,8 @@
           <el-select
             clearable
             v-model="filterForm.pointType"
-            placeholder="测点类型	"
+            placeholder="测点类型"
+            popper-class="three-column"
           >
             <el-option
               v-for="item in pointTypeOpts"
@@ -116,7 +117,7 @@
       <el-table-column sortable prop="pointType" label="测点类型">
         <template slot-scope="{ row }">
           <span>{{
-            pointTypeOpts.find((i) => i.id === row.pointType).name
+            pointAllTypeOpts.find((i) => i.id === row.pointType) && pointAllTypeOpts.find((i) => i.id === row.pointType).name
           }}</span>
         </template>
       </el-table-column>
@@ -175,7 +176,20 @@
         </el-form-item>
         <el-form-item label="测点名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
-        </el-form-item>
+        </el-form-item>      
+        <el-form-item label="设备类型" prop="deviceTypeId">
+          <el-select
+            v-model="dialog.forms.deviceTypeId"
+            popper-class="three-column"
+          >
+            <el-option
+              v-for="item in deviceTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>     
         <el-form-item label="测点类型" prop="pointType">
           <el-select v-model="dialog.forms.pointType">
             <el-option
@@ -218,13 +232,13 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="动作类型" prop="actionType" v-show="dialog.forms.roomCode">
+        <!-- <el-form-item label="动作类型" prop="actionType" v-show="dialog.forms.roomCode">
           <el-radio-group v-model="dialog.forms.actionType" style="width: 100%">
             <el-radio border :label="1">设备组</el-radio>
             <el-radio border :label="2">设备</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item
+        </el-form-item> -->
+        <!-- <el-form-item
           label="设备组"
           prop="deviceGroupCode"
           v-if="dialog.forms.actionType == 1"
@@ -238,11 +252,11 @@
               :value="item.deviceGroupCode"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item
           label="设备"
           prop="deviceCode"
-          v-if="dialog.forms.actionType == 2"
+          v-if="true || dialog.forms.actionType == 2"
            v-show="dialog.forms.roomCode"
         >
           <el-select v-model="dialog.forms.deviceCode">
@@ -265,9 +279,9 @@
 </template>
 
 <script>
-import { roomTypeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
+  deviceTypeListAll,
   pointTypeListAll,
   deviceListAll,
   deviceGroupListAll,
@@ -281,21 +295,15 @@ import {
 
 export default {
   components: { pagination },
-  filters: {
-    capitalize: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return roomTypeOpts.find((i) => i.id == value).name;
-    },
-  },
   data() {
     return {
       floorOpts: [],
       deviceGroupOpts: [],
       deviceOpts: [],
       pointTypeOpts: [],
+      pointAllTypeOpts: [],
       roomOpts: [],
-      roomTypeOpts: roomTypeOpts,
+      deviceTypeOpts: [],
       firstMenuOpts: [],
       secondMenuOpts: [],
       filterForm: {
@@ -324,6 +332,7 @@ export default {
           deviceGroupCode: [
             { required: true, trigger: "blur", message: "请输入" },
           ],
+          deviceTypeId: [{ required: true, trigger: "blur", message: "请输入" }],
           pointCode: [{ required: true, trigger: "blur", message: "请输入" }],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           deviceCode: [{ required: true, trigger: "blur", message: "请输入" }],
@@ -336,6 +345,13 @@ export default {
     };
   },
   watch: {
+     async "dialog.forms.deviceTypeId"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.pointTypeOpts = [];
+      const r = await pointTypeListAll({ deviceTypeId: n });
+      this.pointTypeOpts = r.data;
+    },
     async "filterForm.floorCode"(n, o) {
       if (!n) return;
       // 一级变,二级也变
@@ -380,8 +396,10 @@ export default {
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
     // spaceRoomListAll().then((r) => (this.roomOpts = r.data));
-    pointTypeListAll().then((r) => (this.pointTypeOpts = r.data));
     // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
+    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
+    pointTypeListAll().then((r) => (this.pointAllTypeOpts = r.data));
+
     this.handleQuery();
   },
   mounted() {},
@@ -430,6 +448,7 @@ export default {
       // dialog显示时获取一级菜单列表
       if (row) {
         // 编辑
+        row.deviceTypeId = row.deviceType;
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
         this.dialog.forms = { roomCode: "", deviceGroupCode: "" };
