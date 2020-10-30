@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-// temp1.map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
+// .map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
 
 //获取设备列表接口（带分页功能）
 export function deviceListByPage(data) { return request({ url: '/admin/device/device/listByPage', method: 'post', data }) }

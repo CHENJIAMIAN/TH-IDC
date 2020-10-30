@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-// temp1.map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
+// .map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
 
 // 获取登陆者用户信息接口
 export function sysUserQueryLoginUser(data) { return request({ url: '/admin/system/sysUser/queryLoginUser', method: 'post', data }) }

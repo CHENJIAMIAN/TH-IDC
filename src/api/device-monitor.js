@@ -1,5 +1,13 @@
 import request from '@/utils/request'
-// temp1.map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
+// .map(i=> i.split('/')[0]  + i.split('/')[1][0].toUpperCase()+ i.split('/')[1].slice(1,)).join('\n')
+
+// 获取房间与设备组接口(根据房间id)
+export function deviceGroupListAll(data){return request({url:'/admin/devicemonitor/deviceGroup/listAll',method:'post',data})}
+// 获取楼层图片与楼层的房间接口	(根据楼层id)
+export function roomListAll(data){return request({url:'/admin/devicemonitor/room/listAll',method:'post',data})}
+// 获取建筑物图片与楼层数据接口	(不传)
+export function floorListAll(data){return request({url:'/admin/devicemonitor/floor/listAll',method:'post',data})}
+
 
 // 7. IDC机房设备组数据接口
 export function roomTypeDeviceGroupListAllRoomType7(data){return request({url:'/admin/devicemonitor/RoomTypeDeviceGroup/listAllRoomType7',method:'post',data})}
@@ -16,13 +24,21 @@ export function roomTypeDeviceGroupListAllRoomType2(data){return request({url:'/
 // 1. 精密空调房设备组数据接口
 export function roomTypeDeviceGroupListAllRoomType1(data){return request({url:'/admin/devicemonitor/RoomTypeDeviceGroup/listAllRoomType1',method:'post',data})}
 
-// 获取房间与设备组接口(根据房间id)
-export function deviceGroupListAll(data){return request({url:'/admin/devicemonitor/deviceGroup/listAll',method:'post',data})}
-// 获取楼层图片与楼层的房间接口	(根据楼层id)
-export function roomListAll(data){return request({url:'/admin/devicemonitor/room/listAll',method:'post',data})}
-// 获取建筑物图片与楼层数据接口	(不传)
-export function floorListAll(data){return request({url:'/admin/devicemonitor/floor/listAll',method:'post',data})}
 
+// 获取排班星期几未绑定的用户接口
+export function arrangeWorkListAllUserNotBind(data){return request({url:'/admin/alert/arrangeWork/listAllUserNotBind',method:'post',data})}
+// 获取排班星期几绑定的用户接口
+export function arrangeWorkListAllUserBind(data){return request({url:'/admin/alert/arrangeWork/listAllUserBind',method:'post',data})}
+// 修改排班状态接口
+export function arrangeWorkUpdateStatus(data){return request({url:'/admin/alert/arrangeWork/updateStatus',method:'post',data})}
+// 删除排班接口
+export function arrangeWorkDelete(data){return request({url:'/admin/alert/arrangeWork/delete',method:'post',data})}
+// 修改排班接口
+export function arrangeWorkEdit(data){return request({url:'/admin/alert/arrangeWork/edit',method:'post',data})}
+// 新增排班接口
+export function arrangeWorkAdd(data){return request({url:'/admin/alert/arrangeWork/add',method:'post',data})}
+// 获取所有排班列表接口
+export function arrangeWorkListAll(data){return request({url:'/admin/alert/arrangeWork/listAll',method:'post',data})}
 // 查看所有告警规则
 export function alertRuleListAll(data){return request({url:'/admin/alert/alertRule/listAll',method:'post',data})}
 // 分页查看告警规则
