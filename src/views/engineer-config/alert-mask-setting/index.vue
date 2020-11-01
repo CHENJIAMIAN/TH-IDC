@@ -65,12 +65,12 @@
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="25vh">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">{{
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"

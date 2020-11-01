@@ -150,17 +150,18 @@
     />
     <!-- 图片弹窗 -->
     <el-dialog :visible.sync="dialogImg.visible" class="dialog-img">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">编辑测点</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">图片采点</span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <div class="content">
+      <div style="margin-top: 12px;margin-bottom: 3px;text-align: right;">未绑测点</div>
         <div class="grid">
           <div class="left">
             <div
               v-if="dialogImg.visible"
               ref="preiviewImgContainer"
-              style="position: relative;"
+              style="position: relative"
             >
               <img
                 :style="{
@@ -177,9 +178,9 @@
             </div>
           </div>
           <div class="right">
-            <h2 style="text-align: center">未绑测点</h2>
             <div class="radios">
               <el-radio
+                style="width:190px;"
                 v-for="i in listDataCDNotBind"
                 :key="i.id"
                 v-model="dialogImg.forms.selectedNotBind"
@@ -190,9 +191,9 @@
             </div>
           </div>
         </div>
-        <div>
-          <h2 style="text-align: center">已绑测点</h2>
-          <el-table style="overflow: auto" stripe border :data="listDataCDBind">
+        <div style="margin-top: 12px;margin-bottom: 3px;">已绑测点</div>
+        <div class="table">
+          <el-table class="btm-table" style="overflow: auto" stripe border :data="listDataCDBind">
             <el-table-column sortable prop="pointCode" label="测点编号" />
             <el-table-column sortable prop="name" label="测点名称" />
             <el-table-column sortable prop="location" label="位置" />
@@ -218,12 +219,12 @@
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="10vh">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">{{
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
@@ -286,7 +287,7 @@
           </el-form-item>
         </div>
 
-        <el-form-item label="预览图" prop="imgUrl"  v-if="dialog.visible">
+        <el-form-item label="预览图" prop="imgUrl" v-if="dialog.visible">
           <div class="preview-grid">
             <el-upload
               ref="upload"
@@ -322,10 +323,10 @@
 
     <!-- 绑定测点弹窗 -->
     <el-dialog :visible.sync="dialogCD.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">绑定测点</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">绑定测点</span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialogCD.forms"
         :rules="dialogCD.rules"
@@ -361,10 +362,10 @@
 
     <!-- 绑定设备弹窗 -->
     <el-dialog :visible.sync="dialogSB.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">绑定设备</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">绑定设备</span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialogSB.forms"
         :rules="dialogSB.rules"
@@ -847,9 +848,12 @@ export default {
         display: grid;
         grid-template-columns: 3fr 1fr;
         justify-content: center;
-        align-items: center;
+        align-items: start;
         justify-items: center;
+        border: 1px solid;
+        border-radius: 3px;
         .left {
+          border-right: 2px solid;
           height: 400px;
           display: grid;
           justify-content: center;
@@ -864,14 +868,22 @@ export default {
           }
         }
         .right {
+          margin-top: 1rem;
           .radios {
             display: grid;
             gap: 10px;
+            max-height: 360px;
+            padding-right: 10px;
+            overflow: auto;
             .el-radio.is-bordered + .el-radio.is-bordered {
               margin-left: 0;
             }
           }
         }
+      }
+      .table {
+        border: 1px solid;
+        border-radius: 5px;
       }
     }
     // background: #0b2a52;
@@ -882,6 +894,15 @@ export default {
     // .el-dialog__header {
     //   display: none;
     // }
+  }
+}
+
+::v-deep{
+  .btm-table{
+      .el-table__body-wrapper{
+        height: 170px;
+        overflow: auto;
+      }
   }
 }
 </style>

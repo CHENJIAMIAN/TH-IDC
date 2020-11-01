@@ -4,10 +4,10 @@
 
     <!-- 详情弹窗 -->
     <el-dialog append-to-body :visible.sync="dialog.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">用户信息</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">用户信息</span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"

@@ -85,12 +85,12 @@ parentId	[int]	是	父级菜单编号ID
 menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="25vh">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">{{
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
@@ -102,13 +102,13 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
         </el-form-item>
         <el-form-item label="菜单类型" prop="menuType">
           <el-radio-group v-model="dialog.forms.menuType" style="width: 100%">
-            <el-radio border :label="1">一级菜单</el-radio>
-            <el-radio border :label="2">二级菜单</el-radio>
-            <el-radio border :label="3">三级菜单</el-radio>
+            <el-radio border :label="1">子系统</el-radio>
+            <el-radio border :label="2">模块</el-radio>
+            <el-radio border :label="3">菜单</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item
-          label="一级菜单"
+          label="子系统"
           prop="firstMenuId"
           v-if="dialog.forms.menuType == 2 || dialog.forms.menuType == 3"
         >
@@ -125,7 +125,7 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
           </el-select>
         </el-form-item>
         <el-form-item
-          label="二级菜单"
+          label="模块"
           prop="secondMenuId"
           v-if="dialog.forms.menuType == 3"
         >

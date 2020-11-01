@@ -6,9 +6,9 @@ export default {
   path: '/resource-manage',
   component: Layout,
   redirect: '/resource-manage/floor-manage',
-  name: '资源管理',
+  name: '资产管理',
   meta: {
-    title: '资源管理',
+    title: '资产管理',
     icon: 'nested',
     affix: true
   },
@@ -32,12 +32,6 @@ export default {
       meta: { title: '房间管理', icon: 'icon' }
     },
     {
-      path: 'room-type-manage',
-      component: () => import('@/views/resource-manage/room-type-manage/index'),
-      name: 'room-type-manage',
-      meta: { title: '房间类型管理', icon: 'icon' }
-    },
-    {
       path: 'device-group-manage',
       component: () => import('@/views/resource-manage/device-group-manage/index'),
       name: 'device-group-manage',
@@ -50,22 +44,28 @@ export default {
       meta: { title: '设备管理', icon: 'icon' }
     },
     {
-      path: 'device-type-manage',
-      component: () => import('@/views/resource-manage/device-type-manage/index'),
-      name: 'device-type-manage',
-      meta: { title: '设备类型管理', icon: 'icon' }
-    },
-    {
       path: 'measure-point-manage',
       component: () => import('@/views/resource-manage/measure-point-manage/index'),
       name: 'measure-point-manage',
       meta: { title: '测点管理', icon: 'icon' }
     },
     {
+      path: 'room-type-manage',
+      component: () => import('@/views/resource-manage/room-type-manage/index'),
+      name: 'room-type-manage',
+      meta: { title: '房间类型', icon: 'icon' }
+    },
+    {
+      path: 'device-type-manage',
+      component: () => import('@/views/resource-manage/device-type-manage/index'),
+      name: 'device-type-manage',
+      meta: { title: '设备类型', icon: 'icon' }
+    },
+    {
       path: 'measure-point-type-manage',
       component: () => import('@/views/resource-manage/measure-point-type-manage/index'),
       name: 'measure-point-type-manage',
-      meta: { title: '测点类型管理', icon: 'icon' }
+      meta: { title: '测点类型', icon: 'icon' }
     },
 
   ]

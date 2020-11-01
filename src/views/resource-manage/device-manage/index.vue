@@ -13,7 +13,10 @@
           <el-select
             clearable
             v-model="filterForm.floorCode"
-            @change="$set(filterForm,'roomCode','');$set(filterForm,'deviceGroupCode','');"
+            @change="
+              $set(filterForm, 'roomCode', '');
+              $set(filterForm, 'deviceGroupCode', '');
+            "
             placeholder="楼层"
           >
             <el-option
@@ -24,10 +27,13 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="roomCode"  v-show="filterForm.floorCode">
-          <el-select clearable v-model="filterForm.roomCode" 
+        <el-form-item prop="roomCode" >
+          <el-select
+            clearable
+            v-model="filterForm.roomCode"
             @change="$set(filterForm, 'deviceGroupCode', '')"
-          placeholder="房间">
+            placeholder="房间"
+          >
             <el-option
               v-for="item in roomOpts"
               :key="item.id"
@@ -36,8 +42,12 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="deviceGroupCode"  v-show="filterForm.roomCode">
-          <el-select clearable v-model="filterForm.deviceGroupCode" placeholder="设备组">
+        <el-form-item prop="deviceGroupCode" >
+          <el-select
+            clearable
+            v-model="filterForm.deviceGroupCode"
+            placeholder="设备组"
+          >
             <el-option
               v-for="item in deviceGroupOpts"
               :key="item.id"
@@ -105,7 +115,8 @@
       <el-table-column sortable prop="deviceType" label="设备类型">
         <template slot-scope="{ row }">
           <span>{{
-           deviceTypeOpts.find((i) => i.id === row.deviceType) && deviceTypeOpts.find((i) => i.id === row.deviceType).name
+            deviceTypeOpts.find((i) => i.id === row.deviceType) &&
+            deviceTypeOpts.find((i) => i.id === row.deviceType).name
           }}</span>
         </template>
       </el-table-column>
@@ -149,12 +160,12 @@
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">{{
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
@@ -170,23 +181,17 @@
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <el-form-item label="设备类型" prop="deviceType">
-          <el-select
-            v-model="dialog.forms.deviceType"
-            popper-class="three-column"
-          >
-            <el-option
-              v-for="item in deviceTypeOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
+
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
         <el-form-item label="楼层" prop="floorCode">
           <el-select
+            style="width:160px;"
             v-model="dialog.forms.floorCode"
-            @change="$set(dialog.forms,'roomCode','');$set(dialog.forms,'deviceGroupCode','');"
+            @change="
+              $set(dialog.forms, 'roomCode', '');
+              $set(dialog.forms, 'deviceGroupCode', '');
+            "
           >
             <el-option
               v-for="item in floorOpts"
@@ -196,7 +201,11 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="房间" prop="roomCode" v-show="dialog.forms.floorCode">
+        <el-form-item
+            style="transform: translate(-50px, 0px)"
+          label="房间"
+          prop="roomCode"
+        >
           <el-select
             v-model="dialog.forms.roomCode"
             @change="$set(dialog.forms, 'deviceGroupCode', '')"
@@ -209,13 +218,34 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="设备组" prop="deviceGroupCode"  v-show="dialog.forms.roomCode">
+        <el-form-item
+            style="transform: translate(-100px, 0px)"
+          label="设备组"
+          prop="deviceGroupCode"
+        >
           <el-select v-model="dialog.forms.deviceGroupCode">
             <el-option
               v-for="item in deviceGroupOpts"
               :key="item.id"
               :label="item.name"
               :value="item.deviceGroupCode"
+            />
+          </el-select>
+        </el-form-item>
+        </div>
+
+
+        <el-form-item label="设备类型" prop="deviceType">
+          <el-select
+            style="width:160px;"
+            v-model="dialog.forms.deviceType"
+            popper-class="three-column"
+          >
+            <el-option
+              v-for="item in deviceTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             />
           </el-select>
         </el-form-item>
@@ -228,11 +258,11 @@
     </el-dialog>
 
     <!-- 绑定测点弹窗 -->
-    <el-dialog  :visible.sync="dialogCD.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">绑定测点</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+    <el-dialog :visible.sync="dialogCD.visible">
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">绑定测点</span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialogCD.forms"
         :rules="dialogCD.rules"
@@ -338,7 +368,7 @@ export default {
     };
   },
   watch: {
-      async "filterForm.floorCode"(n, o) {
+    async "filterForm.floorCode"(n, o) {
       if (!n) return;
       // 一级变,二级也变
       this.roomOpts = [];
@@ -346,7 +376,7 @@ export default {
       const r = await spaceRoomListAll({ floorCode: n });
       this.roomOpts = r.data;
     },
-      async "filterForm.roomCode"(n, o) {
+    async "filterForm.roomCode"(n, o) {
       if (!n) return;
       // 一级变,二级也变
       this.deviceGroupOpts = [];
@@ -431,7 +461,8 @@ export default {
       } else {
         this.dialog.forms = { roomCode: "", deviceGroupCode: "" };
       }
-      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     async handleCDDialog(row) {
       // dialog显示时获取一级菜单列表
@@ -453,7 +484,7 @@ export default {
         );
       }
       this.dialogCD.visible = true;
-this.$nextTick(_=>this.$refs["dialogCDForm"].clearValidate());
+      this.$nextTick((_) => this.$refs["dialogCDForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

@@ -103,12 +103,12 @@
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">{{
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
@@ -118,6 +118,8 @@
         <el-form-item label="测点类型名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
         <el-form-item label="设备类型" prop="deviceTypeId">
           <el-select v-model="dialog.forms.deviceTypeId"
             popper-class="three-column"
@@ -130,9 +132,6 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="单位" prop="units">
-          <el-input v-model="dialog.forms.units"></el-input>
-        </el-form-item>
           <el-form-item label="值类型" prop="valueType">
           <el-select v-model="dialog.forms.valueType">
             <el-option
@@ -143,9 +142,17 @@
             />
           </el-select>
         </el-form-item>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+        <el-form-item label="单位" prop="units">
+          <el-input v-model="dialog.forms.units"></el-input>
+        </el-form-item>
         <el-form-item label="字段名" prop="columnName">
           <el-input @keyup.enter.native="dialogSubmit" v-model="dialog.forms.columnName"></el-input>
         </el-form-item>
+        </div>
+
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"

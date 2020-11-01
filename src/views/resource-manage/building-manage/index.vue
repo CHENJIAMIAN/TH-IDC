@@ -20,10 +20,10 @@
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">建筑物图片</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">建筑物图片</span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"

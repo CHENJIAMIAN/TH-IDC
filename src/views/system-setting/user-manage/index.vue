@@ -10,10 +10,10 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="userName">
-          <el-input v-model="filterForm.userName" placeholder="用户账号" />
+          <el-input v-model="filterForm.userName" placeholder="账号" />
         </el-form-item>
         <el-form-item prop="realName">
-          <el-input v-model="filterForm.realName" placeholder="用户名称" />
+          <el-input v-model="filterForm.realName" placeholder="姓名" />
         </el-form-item>
         <el-form-item prop="phone">
           <el-input v-model="filterForm.phone" placeholder="电话" />
@@ -78,18 +78,19 @@
       v-loading="listLoading"
       border
       :data="listData"
+      size="medium"
     >
-      <el-table-column sortable prop="userName" label="用户账号" />
-      <el-table-column sortable prop="realName" label="用户名称" />
+      <el-table-column sortable prop="userName" label="账号" />
+      <el-table-column sortable prop="realName" label="姓名" />
       <el-table-column sortable prop="roleNameList" label="角色" />
       <el-table-column sortable prop="departmentName" label="部门" />
       <el-table-column sortable prop="phone" label="电话" />
       <el-table-column sortable prop="email" label="邮箱" />
       <el-table-column sortable prop="wechat" label="微信" />
-      <el-table-column sortable prop="status" label="账号状态">
+      <el-table-column sortable prop="status" label="状态">
         <template slot-scope="{ row }">
           <span style="color: #55fb55" v-if="row.status == 1">启用</span>
-          <span style="color: red" v-else>禁用</span>
+          <span style="color: gray"    v-else>禁用</span>
           <!-- <el-switch
             disabled
             v-model="row.status"
@@ -125,30 +126,35 @@
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="5vh">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">{{
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
         label-width="100px"
       >
-        <el-form-item label="用户账号" prop="userName">
+        <el-form-item label="账号" prop="userName">
           <el-input v-model="dialog.forms.userName"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password" v-if="!dialog.forms.id">
           <el-input v-model="dialog.forms.password"></el-input>
         </el-form-item>
-        <el-form-item label="用户名称" prop="realName">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+        <el-form-item label="姓名" prop="realName">
           <el-input v-model="dialog.forms.realName"></el-input>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
           <el-input v-model="dialog.forms.phone"></el-input>
         </el-form-item>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="dialog.forms.email"></el-input>
         </el-form-item>
@@ -158,9 +164,26 @@
         <el-form-item label="钉钉" prop="dingtalk">
           <el-input v-model="dialog.forms.dingtalk"></el-input>
         </el-form-item>
+        </div>
+
         <el-form-item label="描述" prop="remarks">
-          <el-input v-model="dialog.forms.remarks"></el-input>
+          <el-input  type="textarea" v-model="dialog.forms.remarks"></el-input>
         </el-form-item>
+        <el-form-item class="rooms-form-item" label="角色" prop="roleIdArray">
+          <el-checkbox-group
+            class="rooms-el-checkbox-group"
+           v-model="dialog.forms.roleIdArray">
+              <el-checkbox 
+                v-for="item in roleOpts"
+                :key="item.id"
+                :label="item.id"
+                 border
+              >{{item.name}}</el-checkbox>
+        </el-checkbox-group>
+        </el-form-item>
+
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
         <el-form-item label="部门" prop="departmentId">
           <el-select v-model="dialog.forms.departmentId">
             <el-option
@@ -170,25 +193,16 @@
               :value="item.id"
             />
           </el-select>
-  
         </el-form-item>
-        <el-form-item label="角色" prop="roleIdArray">
-          <el-checkbox-group v-model="dialog.forms.roleIdArray">
-              <el-checkbox 
-                v-for="item in roleOpts"
-                :key="item.id"
-                :label="item.id"
-                 border
-              >{{item.name}}</el-checkbox>
-        </el-checkbox-group>
-
-        </el-form-item>
-        <el-form-item label="账号状态" prop="status">
+        <el-form-item label="状态" prop="status">
           <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-            <el-radio border :label="1">启用</el-radio>
-            <el-radio border :label="0">禁用</el-radio>
+            <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
+            <el-radio border :label="0" style="color: gray"    >禁用</el-radio>
           </el-radio-group>
         </el-form-item>
+        </div>
+
+
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"
@@ -344,5 +358,21 @@ export default {
 .head {
   display: grid;
   justify-content: end;
+}
+
+::v-deep {
+  .rooms-form-item {
+    .rooms-el-checkbox-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      .el-checkbox.is-bordered + .el-checkbox.is-bordered {
+        margin-left: 0;
+      }
+      .el-checkbox:last-of-type {
+        margin-right: 30px;
+      }
+    }
+  }
 }
 </style>

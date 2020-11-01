@@ -15,9 +15,9 @@
             @click="handleReset()"
             >重置</el-button
           >
-            <el-button type="primary" size="medium" @click="handleAdd">
-              <i class="el-icon-plus" />
-            </el-button>
+          <el-button type="primary" size="medium" @click="handleAdd">
+            <i class="el-icon-plus" />
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -29,131 +29,56 @@
       v-loading="listLoading"
       border
       :data="listData"
-      :cell-class-name="tableCellClassName" 
+      :cell-class-name="tableCellClassName"
       @cell-click="cellClick"
     >
-        <!-- <el-table-column      type="index"     label="编号">    </el-table-column> -->
       <el-table-column sortable prop="id" label="编号" />
-      <el-table-column sortable prop="week1List" label="星期一" >
+      <el-table-column sortable prop="week1List" label="星期一">
         <template slot-scope="{ row, column, $index }">
-          <el-select
-           v-model="row.week1IdList"
-           multiple
-           @visible-change="handleASDF($event,{ row, column, $index })"
-@change="handlePersonChange($event,{ row, column, $index })"
-          >
-            <el-option
-              v-for="item in row.week1ListAll"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+          <div v-for="i in row.week1List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week2List" label="星期二" >
-              <template slot-scope="{ row, column, $index }">
-          <el-select
-           v-model="row.week2IdList"
-           multiple
-           @visible-change="handleASDF($event,{ row, column, $index })"
-@change="handlePersonChange($event,{ row, column, $index })"
-          >
-            <el-option
-              v-for="item in row.week2ListAll"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+      <el-table-column sortable prop="week2List" label="星期二">
+        <template slot-scope="{ row, column, $index }">
+          <div v-for="i in row.week2List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week3List" label="星期三" >
-              <template slot-scope="{ row, column, $index }">
-          <el-select
-           v-model="row.week3IdList"
-           multiple
-           @visible-change="handleASDF($event,{ row, column, $index })"
-@change="handlePersonChange($event,{ row, column, $index })"
-          >
-            <el-option
-              v-for="item in row.week3ListAll"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+      <el-table-column sortable prop="week3List" label="星期三">
+        <template slot-scope="{ row, column, $index }">
+          <div v-for="i in row.week3List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week4List" label="星期四" >
-              <template slot-scope="{ row, column, $index }">
-          <el-select
-           v-model="row.week4IdList"
-           multiple
-           @visible-change="handleASDF($event,{ row, column, $index })"
-@change="handlePersonChange($event,{ row, column, $index })"
-          >
-            <el-option
-              v-for="item in row.week4ListAll"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+      <el-table-column sortable prop="week4List" label="星期四">
+        <template slot-scope="{ row, column, $index }">
+          <div v-for="i in row.week4List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week5List" label="星期五" >
-              <template slot-scope="{ row, column, $index }">
-          <el-select
-           v-model="row.week5IdList"
-           multiple
-           @visible-change="handleASDF($event,{ row, column, $index })"
-@change="handlePersonChange($event,{ row, column, $index })"
-          >
-            <el-option
-              v-for="item in row.week5ListAll"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+      <el-table-column sortable prop="week5List" label="星期五">
+        <template slot-scope="{ row, column, $index }">
+          <div v-for="i in row.week5List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week6List" label="星期六" >
-              <template slot-scope="{ row, column, $index }">
-          <el-select
-           v-model="row.week6IdList"
-           multiple
-           @visible-change="handleASDF($event,{ row, column, $index })"
-@change="handlePersonChange($event,{ row, column, $index })"
-          >
-            <el-option
-              v-for="item in row.week6ListAll"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+      <el-table-column sortable prop="week6List" label="星期六">
+        <template slot-scope="{ row, column, $index }">
+          <div v-for="i in row.week6List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week7List" label="星期日" >
-              <template slot-scope="{ row, column, $index }">
-          <el-select
-           v-model="row.week7IdList"
-           multiple
-           @visible-change="handleASDF($event,{ row, column, $index })"
-@change="handlePersonChange($event,{ row, column, $index })"
-          >
-            <el-option
-              v-for="item in row.week7ListAll"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+      <el-table-column sortable prop="week7List" label="星期日">
+        <template slot-scope="{ row, column, $index }">
+          <div v-for="i in row.week7List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
 
+      <el-table-column label="状态" align="center" width="240">
+        <template slot-scope="{ row }">
+          <el-switch
+            @change="handleStatusChange($event, row)"
+            v-model="row.status"
+            :active-value="1"
+            :inactive-value="2"
+          ></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -164,17 +89,46 @@
           ></el-button>
         </template>
       </el-table-column>
-        <el-table-column label="状态" align="center" width="240">
-        <template slot-scope="{ row }">
-          <el-switch
-            @change="handleStatusChange($event,row)"
-            v-model="row.status"
-            :active-value="1"
-            :inactive-value="2"
-          ></el-switch>
-        </template>
-      </el-table-column>
     </el-table>
+
+    <!-- 绑定排班人员弹窗 -->
+    <el-dialog :visible.sync="dialogRY.visible">
+      <div slot="title" class="el-dialog-title-custom">
+        <div class="title-txt">绑定排班人员</div>
+        <img  src="@/assets/img/hl.png" />
+      </div>
+      <el-form
+        :model="dialogRY.forms"
+        :rules="dialogRY.rules"
+        ref="dialogRYForm"
+        label-width="150px"
+      >
+        <el-form-item label="" prop="">
+          <el-transfer
+            filterable
+            :filter-method="
+              (query, item) => {
+                return item.name.indexOf(query) > -1;
+              }
+            "
+            :titles="['未绑定', '已绑定']"
+            :props="{
+              key: 'id',
+              label: 'name',
+            }"
+            filter-placeholder="请输入"
+            v-model="dialogRY.forms.personIdArray"
+            :data="allRYOpts"
+          >
+          </el-transfer>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogRYSubmit"
+          >保 存</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -200,62 +154,94 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
 
-      dialog: {
-        id: "",
+      allRYOpts: [],
+      dialogRY: {
         visible: false,
         forms: {},
-        rules: {
-          userName: [{ required: true, trigger: "blur", message: "请输入" }],
-          password: [{ required: true, trigger: "blur", message: "请输入" }],
-          realName: [{ required: true, trigger: "blur", message: "请输入" }],
-          phone: [{ required: true, trigger: "blur", message: "请输入" }],
-          departmentId: [
-            { required: true, trigger: "change", message: "请输入" },
-          ],
-          roleIdArray: [{ required: true, trigger: "blur", message: "请输入" }],
-          status: [{ required: true, trigger: "change", message: "请输入" }],
-        },
+        rules: {},
       },
     };
   },
   created() {
-    arrangeWorkListAllUserNotBind().then((r) => (this.userNotBindOpts = r.data));
-    arrangeWorkListAllUserBind().then((r) => (this.userBindOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
   methods: {
-    handlePersonChange(v,{ row, column, $index }){
-       arrangeWorkEdit({id:row.id,week:column.index,userIdArray:row[`week${column.index}IdList`]}).then(r=>{
-          this.$set(row,`week${column.index}ListAll`,r.data)
-        })
-    },
-    handleStatusChange(v,row){
-      arrangeWorkUpdateStatus({id:row.id,status:v});
-    },
-     tableCellClassName({row, column, rowIndex, columnIndex}){//注意这里是解构
-      //利用单元格的 className 的回调方法，给行列索引赋值
-      row.index=rowIndex;
-      column.index=columnIndex;
-    },
-    cellClick(row, column, cell, event){
-        console.log(row.index);
-        console.log(column.index);      
-    },
-    handleASDF(v,{ row, column, $index }){
-        if(v && column.index >0 && column.index <8){
-            arrangeWorkListAllUserNotBind({id:row.id,week:column.index}).then(r=>{
-                this.$set(row,`week${column.index}ListAll`,r.data)
-            })
+    dialogRYSubmit() {
+      this.$refs["dialogRYForm"].validate((valid, obj) => {
+        if (valid) {
+          this.dialogRY.forms;
+          arrangeWorkEdit({
+            id: row.id,
+            week: column.index,
+            userIdArray: row[`week${column.index}IdList`],
+          }).then((r) => {
+            this.$set(row, `week${column.index}ListAll`, r.data);
+
+            this.$message.success("操作成功!");
+            this.$refs["dialogRYForm"].resetFields();
+            this.dialogRY.visible = false;
+            this.getList();
+          });
+        } else {
+          return false;
         }
+      });
+    },
+    async handleRYDialog({ row, column, cell, event }) {
+      // dialog显示时获取一级菜单列表
+        // 编辑
+      this.dialogRY.forms = { id: row.id };
+      const r1 = await arrangeWorkListAllUserNotBind({
+        id: row.id,
+        week: column.index,
+      });
+      this.userNotBindOpts = r1.data;
+      const r2 = await arrangeWorkListAllUserBind({
+        id: row.id,
+        week: column.index,
+      });
+      this.userBindOpts = r2.data;
+
+      this.$set(
+        this.dialogRY.forms,
+        "personIdArray",
+        r2.data.map((i) => i.id)
+      );
+      this.allRYOpts = this.userNotBindOpts.concat(this.userBindOpts);
+      this.dialogRY.visible = true;
+      this.$nextTick((_) => this.$refs["dialogRYForm"].clearValidate());
+    },
+    handleStatusChange(v, row) {
+      arrangeWorkUpdateStatus({ id: row.id, status: v });
+      this.getList();
+    },
+    tableCellClassName({ row, column, rowIndex, columnIndex }) {
+      //注意这里是解构
+      //利用单元格的 className 的回调方法，给行列索引赋值
+      row.index = rowIndex;
+      column.index = columnIndex;
+    },
+    cellClick(row, column, cell, event) {
+      column.index>0 && column.index<8 &&  this.handleRYDialog({ row, column, cell, event });
+    },
+    handlePersonSelectVisibleChange(v, { row, column, $index }) {
+      if (v && column.index > 0 && column.index < 8) {
+        arrangeWorkListAllUserNotBind({ id: row.id, week: column.index }).then(
+          (r) => {
+            this.$set(row, `week${column.index}ListAll`, r.data);
+          }
+        );
+      }
     },
     // 查询
     handleQuery() {
       this.getList();
     },
-    handleAdd(){
+    handleAdd() {
       arrangeWorkAdd();
-      this.getList();
+      // 慢一点，给服务器执行sql的时间
+      setTimeout(_=>this.getList(),200)
     },
     // 重置
     handleReset(form) {
@@ -283,15 +269,15 @@ export default {
       this.listLoading = true;
       arrangeWorkListAll().then((res) => {
         this.listData = res.data;
-        this.listData.map((i,index)=>{
-            i.week1IdList = i.week1List.map(i=>i.name);
-            i.week2IdList = i.week2List.map(i=>i.name);
-            i.week3IdList = i.week3List.map(i=>i.name);
-            i.week4IdList = i.week4List.map(i=>i.name);
-            i.week5IdList = i.week5List.map(i=>i.name);
-            i.week6IdList = i.week6List.map(i=>i.name);
-            i.week7IdList = i.week7List.map(i=>i.name);
-        })
+        this.listData.map((i, index) => {
+          i.week1IdList = i.week1List.map((i) => i.name);
+          i.week2IdList = i.week2List.map((i) => i.name);
+          i.week3IdList = i.week3List.map((i) => i.name);
+          i.week4IdList = i.week4List.map((i) => i.name);
+          i.week5IdList = i.week5List.map((i) => i.name);
+          i.week6IdList = i.week6List.map((i) => i.name);
+          i.week7IdList = i.week7List.map((i) => i.name);
+        });
         console.log(this.listData);
         this.listLoading = false;
       });

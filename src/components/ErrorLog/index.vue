@@ -7,7 +7,7 @@
     </el-badge>
 
     <el-dialog :visible.sync="dialogTableVisible" width="80%" append-to-body>
-      <div slot="title">
+      <div slot="title" class="el-dialog-title-custom">
         <span style="padding-right: 10px;">Error Log</span>
         <el-button size="mini" type="primary" icon="el-icon-delete" @click="clearAll">Clear All</el-button>
       </div>

@@ -202,8 +202,8 @@ aside {
 
 // 滚动条
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-button {
   width: 0px;
@@ -246,4 +246,21 @@ aside {
   color: #e39f40;
   border: none;
   background: url(../assets/img/jx2.png) 0 0 / 100% 100% no-repeat;
+}
+
+.el-dialog-title-custom{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  padding-right: 10px;
+  gap: 10px;
+  align-items: center;
+  padding-left: 10px;
+  .title-txt{
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 20px;
+  }
+  img{
+    width: 100%
+  }
 }

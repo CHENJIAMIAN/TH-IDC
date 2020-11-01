@@ -3,10 +3,10 @@
     <span style="display:block;" @click="dialogVisble = true">修改密码</span>
 
     <el-dialog append-to-body v-if="dialogVisble" :visible.sync="dialogVisble">
-      <span slot="title">
-        <span style="font-size: 1.5rem;font-weight: bold;">修改密码</span>
-        <img style="margin-left: 1rem;" src="@/assets/img/hl.png" />
-      </span>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">修改密码</span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form :rules="rules" :model="forms" ref="dialogForm">
         <el-form-item prop="oldPassword" label="原密码" label-width="100px">
           <el-input

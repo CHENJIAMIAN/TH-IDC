@@ -129,12 +129,12 @@
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">{{
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
@@ -150,7 +150,8 @@
         <el-form-item label="房间名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <div style="display: flex">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
           <el-form-item label="楼层" prop="floorCode">
             <el-select v-model="dialog.forms.floorCode">
               <el-option
@@ -161,7 +162,9 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="房间类型" prop="roomType">
+          <el-form-item
+            style="transform: translate(-50px, 0px)"
+           label="房间类型" prop="roomType">
             <el-select v-model="dialog.forms.roomType">
               <el-option
                 v-for="item in roomTypeOpts"
@@ -171,10 +174,14 @@
               />
             </el-select>
           </el-form-item>
-        </div>
-        <el-form-item label="排序" prop="sort">
+        <el-form-item
+          style="transform: translate(-130px, 0px)"
+         label="排序" prop="sort">
           <el-input v-model="dialog.forms.sort"></el-input>
         </el-form-item>
+        </div>
+
+
         <el-form-item label="预览图" prop="imgUrl" v-if="dialog.visible">
           <div class="preview-grid">
             <el-upload

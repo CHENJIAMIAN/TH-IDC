@@ -77,7 +77,7 @@ export default {
   }
   .el-submenu__title,
   .el-menu-item {
-    font-size: 1.2rem;
+    font-size: 20px;
   }
 }
 </style>

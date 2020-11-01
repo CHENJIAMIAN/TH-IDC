@@ -89,12 +89,10 @@ updateUserId	[int]		修改人ID （可为空）
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="25vh">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
@@ -129,10 +127,10 @@ updateUserId	[int]		修改人ID （可为空）
 
     <!-- 绑定房间弹窗 -->
     <el-dialog :visible.sync="dialogFJ.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">绑定房间</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">绑定房间</span>
+        <img src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialogFJ.forms"
         :rules="dialogFJ.rules"
@@ -182,10 +180,10 @@ updateUserId	[int]		修改人ID （可为空）
 
     <!-- 绑定权限弹窗 -->
     <el-dialog :visible.sync="dialogQX.visible">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">绑定权限</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">绑定权限</span>
+        <img src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialogQX.forms"
         :rules="dialogQX.rules"
@@ -437,7 +435,13 @@ export default {
 ::v-deep {
   .rooms-form-item {
     .el-form-item__label {
-      font-size: 1.4rem;
+      font-size: 1rem;
+      line-height: 16px;
+    }
+    .el-form-item__content {
+      border: 1px solid;
+      padding: 1rem;
+      border-radius: 5px;
     }
     .rooms-el-checkbox-group {
       display: grid;

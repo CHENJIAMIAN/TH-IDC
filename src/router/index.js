@@ -75,8 +75,8 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    // redirect: '/device-monitor',
-    redirect: '/system-setting',
+    redirect: '/device-monitor',//系统默认
+    // redirect: '/system-setting',
     // children: [
     //   {
     //     path: 'nested',
@@ -109,9 +109,9 @@ export const asyncRoutes = [
   },
   deviceMonitorRouter,
   reportManageRouter,
-  systemSettingRouter,
   engineerConfigRouter,
   resourceManageRouter,
+  systemSettingRouter,
   // {
   //   path: 'external-link',
   //   component: Layout,

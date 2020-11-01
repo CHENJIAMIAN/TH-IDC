@@ -1,24 +1,34 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
-.el-radio{
+
+
+
+.el-table {
+  font-size: 16px;
+}
+.el-dialog__headerbtn {
+  transform: translate(0px, -10px) scale(.8);
+  width: 22px;
+}
+.el-radio {
   margin-right: 0;
 }
 // dialog居中
-.el-dialog{
+.el-dialog {
   display: flex;
   flex-direction: column;
-  margin:0 !important;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
+  margin: 0 !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   /*height:600px;*/
-  max-height:calc(100% - 30px);
-  max-width:calc(100% - 30px);
+  max-height: calc(100% - 30px);
+  max-width: calc(100% - 30px);
 }
-.el-dialog .el-dialog__body{
-  flex:1;
+.el-dialog .el-dialog__body {
+  flex: 1;
   overflow: auto;
 }
 
@@ -72,14 +82,14 @@
   color: #31c6f1;
 }
 .el-dialog__header {
-  padding: 2rem;
+  padding: 2rem 0;
 }
 .el-dialog__headerbtn {
   border-radius: 50%;
   border: 2px solid #00f7ff;
 }
 .el-dialog__body {
-  padding: 30px 20px 0;
+  padding: 0 20px 0;
 }
 
 .el-input--medium .el-input__inner {

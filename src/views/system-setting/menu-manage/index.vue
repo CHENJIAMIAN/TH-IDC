@@ -33,7 +33,7 @@
 id 复制 [int]	是	菜单编号ID （唯一）		
 name	[string]	是	菜单名称 （最大长度64）		
 parentId	[int]	是	父级菜单编号ID 		
-menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单		
+menuType	[short]	是	菜单类型  1 子系统 2 模块 3 菜单		
 createTime	[datetime]	是	创建时间		
 updateTime	[datetime]		修改时间		
 createUserId	[int]	是	创建人ID		
@@ -49,9 +49,9 @@ updateUserId	[int]		修改人ID  -->
       <el-table-column sortable prop="name" label="菜单名称" />
       <el-table-column sortable prop="menuType" label="菜单类型">
         <template slot-scope="{ row }">
-          <span v-if="row.menuType == 1">一级菜单</span>
-          <span v-else-if="row.menuType == 2">二级菜单</span>
-          <span v-else-if="row.menuType == 3">三级菜单</span>
+          <span v-if="row.menuType == 1">子系统</span>
+          <span v-else-if="row.menuType == 2">模块</span>
+          <span v-else-if="row.menuType == 3">菜单</span>
         </template>
       </el-table-column>
       <el-table-column sortable prop="createTime" label="创建时间" />
@@ -86,15 +86,15 @@ updateUserId	[int]		修改人ID  -->
     <!-- 
 name	[string]	是	菜单名称 （最大长度64）		
 parentId	[int]	是	父级菜单编号ID		
-menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
+menuType	[short]	是	菜单类型  1 子系统 2 模块 3 菜单 -->
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="25vh">
-      <span slot="title">
-        <span style="font-size: 1.5rem; font-weight: bold">{{
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{
           dialog.forms.id ? "编辑" : "新增"
         }}</span>
-        <img style="margin-left: 1rem" src="@/assets/img/hl.png" />
-      </span>
+        <img  src="@/assets/img/hl.png" />
+      </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
@@ -106,13 +106,13 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
         </el-form-item>
         <el-form-item label="菜单类型" prop="menuType">
           <el-radio-group v-model="dialog.forms.menuType" style="width: 100%">
-            <el-radio border :label="1">一级菜单</el-radio>
-            <el-radio border :label="2">二级菜单</el-radio>
-            <el-radio border :label="3">三级菜单</el-radio>
+            <el-radio border :label="1">子系统</el-radio>
+            <el-radio border :label="2">模块</el-radio>
+            <el-radio border :label="3">菜单</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item
-          label="一级菜单"
+          label="子系统"
           prop="firstMenuId"
           v-if="dialog.forms.menuType == 2 || dialog.forms.menuType == 3"
         >
@@ -129,7 +129,7 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
           </el-select>
         </el-form-item>
         <el-form-item
-          label="二级菜单"
+          label="模块"
           prop="secondMenuId"
           v-if="dialog.forms.menuType == 3"
         >
@@ -264,7 +264,7 @@ export default {
     },
     // 查看
     async handleDialog(row) {
-      // dialog显示时获取一级菜单列表
+      // dialog显示时获取子系统列表
       const r1 = await sysMenuListAll({ menuType: 1 });
       this.firstMenuOpts = r1.data;
       if (row) {
@@ -281,22 +281,22 @@ export default {
             this.dialog.forms.firstMenuId = row.parentId;
             break;
           case 3:
-            // 二级菜单的id是row.parentId
-            // 此时二级菜单需要手动获取,而不是通过选一级触发
+            // 模块的id是row.parentId
+            // 此时模块需要手动获取,而不是通过选一级触发
             const r2 = await sysMenuListAll({ menuType: 2 });
             this.secondMenuOpts = r2.data;
-            // 自动选上二级菜单
+            // 自动选上模块
             this.dialog.forms.secondMenuId = row.parentId;
-            // 找到二级菜单的该项
+            // 找到模块的该项
             const secondMenu = this.secondMenuOpts.find(
               (i) => i.id === row.parentId
             );
-            // 超出与该二级菜单的父亲,也就是一级菜单的该项
+            // 超出与该模块的父亲,也就是子系统的该项
             const firstMenu = this.firstMenuOpts.find(
               (i) => i.id === secondMenu.parentId
             );
-            // 自动选上一级菜单
-            this.dialog.forms.firstMenuId = firstMenu.id; //得到一级菜单的id
+            // 自动选上子系统
+            this.dialog.forms.firstMenuId = firstMenu.id; //得到子系统的id
             break;
         }
       } else {
