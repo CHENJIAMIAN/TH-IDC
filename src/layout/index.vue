@@ -9,7 +9,7 @@
       <navbar />
       <tags-view v-if="needTagsView" />
     </div>
-    <div class="side-breadcrumb" style="margin-left: 2rem;position: absolute;transform: translate(0px, -10px);">
+    <div class="side-breadcrumb" style="margin-left: 2rem;position: absolute;transform: translate(0px, -10px);z-index: 1;">
       <img
         src="@/assets/img/dw.png"
         style="transform: translate(0px, -13px);"
@@ -17,7 +17,7 @@
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     </div>
     <!-- 次级路由，从路由$route获取 -->
-    <div class="side" >
+    <div class="side" v-show="this.sidebar.showSide">
       <sidebar v-show="!isCollapse"/>
     </div >
     <div class="main-container">
@@ -30,8 +30,7 @@
 </template>
 
 <script>
-import RightPanel from "@/components/RightPanel";
-import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
+import { AppMain, Navbar, Sidebar, TagsView } from "./components";
 import ResizeMixin from "./mixin/ResizeHandler";
 import { mapState,mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -42,8 +41,6 @@ export default {
     Breadcrumb,
     AppMain,
     Navbar,
-    RightPanel,
-    Settings,
     Sidebar,
     TagsView
   },
@@ -61,7 +58,8 @@ export default {
     },
     classObj() {
       return {
-        hideSidebar: !this.sidebar.opened,
+        hideSide: !this.sidebar.showSide,
+        hideNavMenuInSide: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === "mobile"
@@ -140,7 +138,7 @@ export default {
   transition: width 0.28s;
 }
 
-.hideSidebar .fixed-header {
+.hideNavMenuInSide .fixed-header {
   width: calc(100% - 54px);
 }
 

@@ -93,13 +93,18 @@
     }
   }
 
-  .hideSidebar {
+  .hideSide {
+    .main-container {
+      margin: 0;
+    }
+  }
+
+  .hideNavMenuInSide {
     .sidebar-container {
       width: 54px !important;
     }
 
     .main-container {
-      margin-left: 0;
     }
 
     .submenu-title-noDropdown {
@@ -169,7 +174,7 @@
       width: $sideBarWidth !important;
     }
 
-    &.hideSidebar {
+    &.hideNavMenuInSide {
       .sidebar-container {
         pointer-events: none;
         transition-duration: 0.3s;

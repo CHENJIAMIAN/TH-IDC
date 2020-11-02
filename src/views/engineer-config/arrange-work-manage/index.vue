@@ -24,10 +24,10 @@
 
     <!-- 列表 -->
     <el-table
+      class="arrange-work-table"
       style="overflow: auto"
       stripe
       v-loading="listLoading"
-      border
       :data="listData"
       :cell-class-name="tableCellClassName"
       @cell-click="cellClick"
@@ -155,6 +155,8 @@ export default {
       listData: [], // 列表数据
 
       allRYOpts: [],
+      clickedRow:{},
+      clickedColumn:{},
       dialogRY: {
         visible: false,
         forms: {},
@@ -168,13 +170,17 @@ export default {
   mounted() {},
   methods: {
     dialogRYSubmit() {
+      const row = this.clickedRow;
+      const column = this.clickedColumn;
+      console.log(row,column)
+      console.log(this.dialogRY.forms)
       this.$refs["dialogRYForm"].validate((valid, obj) => {
         if (valid) {
           this.dialogRY.forms;
           arrangeWorkEdit({
             id: row.id,
             week: column.index,
-            userIdArray: row[`week${column.index}IdList`],
+            userIdArray: this.dialogRY.forms.personIdArray,
           }).then((r) => {
             this.$set(row, `week${column.index}ListAll`, r.data);
 
@@ -221,8 +227,11 @@ export default {
       //利用单元格的 className 的回调方法，给行列索引赋值
       row.index = rowIndex;
       column.index = columnIndex;
+      if(column.index>0 && column.index<8) return 'week-day'
     },
     cellClick(row, column, cell, event) {
+      this.clickedRow=row;
+      this.clickedColumn=column;
       column.index>0 && column.index<8 &&  this.handleRYDialog({ row, column, cell, event });
     },
     handlePersonSelectVisibleChange(v, { row, column, $index }) {
@@ -297,4 +306,17 @@ export default {
   display: grid;
   justify-content: end;
 }
+
+::v-deep{
+  .arrange-work-table th.is-leaf,
+  .arrange-work-table tr, .arrange-work-table td
+  {
+    border: 1px solid;
+  }
+  
+.week-day{
+  cursor:pointer;
+}
+}
+
 </style>

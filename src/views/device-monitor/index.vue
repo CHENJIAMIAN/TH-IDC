@@ -10,7 +10,7 @@
     </div>
     <div class="col2">
       <img
-        style="height: calc(100vh - 110px - 6rem);"
+        style="height: calc(100vh - 110px - 6rem)"
         class="preview-img"
         :src="buidingImage"
         alt="加载失败"
@@ -40,22 +40,28 @@ export default {
 <style lang="scss" scoped>
 .building-index {
   display: grid;
-  grid-template-columns: 230px 1fr;
-  margin-left: 30px;
-  .col1 {
-    display: grid;
-    align-items: center;
-    align-content: center;
-    gap: 2rem;
-    ::v-deep{
-      .el-button + .el-button {
-          margin-left: 0;
-      }
+  height: 100%;
+}
+.col1 {
+  position: fixed;
+  top: calc(110px + 5em);
+  width: 200px;
+  bottom: 60px;
+  left: 60px;
+
+  display: grid;
+  align-items: center;
+  align-content: center;
+  gap: 2rem;
+  ::v-deep {
+    .el-button + .el-button {
+      margin-left: 0;
     }
   }
-  .col2 {
-    display: grid;
-  }
+}
+.col2 {
+  display: grid;
+  background: url(../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
 }
 
 .preview-img {

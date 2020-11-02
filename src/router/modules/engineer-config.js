@@ -5,7 +5,7 @@ import Layout from '@/layout'
 export default {
   path: '/engineer-config',
   component: Layout,
-  redirect: '/engineer-config/alert-config/alert-level',
+  redirect: '/engineer-config/alert-config/arrange-work-manage',
   name: '工程配置',
   meta: {
     title: '工程配置',
@@ -19,6 +19,12 @@ export default {
       name: 'alert-config',
       meta: { title: '告警配置', icon: 'icon' },
       children: [
+        {
+          path: 'arrange-work-manage',
+          component: () => import('@/views/engineer-config/arrange-work-manage/index'),
+          name: 'arrange-work-manage',
+          meta: { title: '排班管理', icon: 'icon' }
+        },
         {
           path: 'alert-level',
           component: () => import('@/views/engineer-config/alert-level/index'),

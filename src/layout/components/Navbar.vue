@@ -49,21 +49,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Hamburger from "@/components/Hamburger";
-import ErrorLog from "@/components/ErrorLog";
-import Screenfull from "@/components/Screenfull";
-import SizeSelect from "@/components/SizeSelect";
-import Search from "@/components/HeaderSearch";
 import ChangePassword from "@/components/ChangePassword.vue";
 import UserInfo from "@/components/UserInfo.vue";
 import Cookies from 'js-cookie'
 export default {
   components: {
-    Hamburger,
-    ErrorLog,
-    Screenfull,
-    SizeSelect,
-    Search,
     ChangePassword,
     UserInfo
   },

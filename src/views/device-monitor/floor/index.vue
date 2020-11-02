@@ -41,8 +41,8 @@ export default {
     };
   },
   created() {
-    const {floorId,floorName}=this.$route.params;
-    Object.assign(this, { floorId,floorName });
+    const { floorId, floorName } = this.$route.params;
+    Object.assign(this, { floorId, floorName });
     this.$route.meta.title = floorName;
 
     roomListAll({ id: this.floorId }).then((r) => {
@@ -53,14 +53,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.floor-index{
-  height:100%;
+.floor-index {
+  display: grid;
+  height: 100%;
 }
 .floor-index-self {
+  height: 100%;
   display: grid;
-  grid-template-columns: 230px 1fr;
-  margin-left: 30px;
+
   .col1 {
+    position: fixed;
+    top: calc(110px + 5em);
+    width: 200px;
+    bottom: 60px;
+    left: 60px;
+
     display: grid;
     align-items: center;
     align-content: center;
@@ -73,6 +80,7 @@ export default {
   }
   .col2 {
     display: grid;
+    background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   }
 }
 

@@ -2,6 +2,7 @@ import Cookies from 'js-cookie'
 
 const state = {
   sidebar: {
+    showSide:false,
     opened: true,//Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
@@ -28,6 +29,12 @@ const mutations = {
     Cookies.set('sidebarStatus', 1)
     state.sidebar.opened = true;
     state.sidebar.withoutAnimation = withoutAnimation
+  },
+  CLOSE_SIDE: (state) => {
+    state.sidebar.showSide = false
+  },
+  OPEN_SIDE: (state) => {
+    state.sidebar.showSide = true;
   },
   TOGGLE_DEVICE: (state, device) => {
     state.device = device

@@ -31,10 +31,14 @@ router.beforeEach(async (to, from, next) => {
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
       // 控制开不开sidebar
-      if(to.path.includes("/device-monitor")){
+      store.commit("app/OPEN_SIDE");
+      if (to.path.includes("/device-monitor")) {
+        if (to.path.includes("/room")) {
+          store.commit("app/CLOSE_SIDE");
+        }
         store.dispatch("app/closeSideBar", { withoutAnimation: false });
         next();
-      }else{
+      } else {
         store.dispatch("app/openSideBar", { withoutAnimation: false });
         next();
       }

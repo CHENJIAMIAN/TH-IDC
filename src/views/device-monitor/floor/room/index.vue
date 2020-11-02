@@ -9,7 +9,7 @@
               :key="deviceGroup.id"
               @click="
                 $router.push(
-                  `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?imgUrl=${deviceGroup.imgUrl}`
+                  `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
                 )
               "
               >{{ deviceGroup.name }}</el-button
@@ -30,6 +30,7 @@
 import { deviceGroupListAll } from "@/api/device-monitor.js";
 
 export default {
+  name:'room',
   data() {
     return {
       floorId: "",
@@ -62,7 +63,7 @@ export default {
 
       const deviceGroup = deviceGroupList[0];
       this.$router.push(
-              `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?imgUrl=${deviceGroup.imgUrl}`
+              `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
             )
     });
   },
@@ -71,6 +72,7 @@ export default {
 <style lang="scss" scoped>
 .room-index{
   height:100%;
+  overflow: auto;
 }
 .room-index-self {
   display: grid;

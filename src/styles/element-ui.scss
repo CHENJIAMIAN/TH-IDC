@@ -4,9 +4,7 @@
 
 
 
-.el-table {
-  font-size: 16px;
-}
+
 .el-dialog__headerbtn {
   transform: translate(0px, -10px) scale(.8);
   width: 22px;
@@ -52,6 +50,10 @@
   background-color: rgb(255 255 255 / 15%);
 }
 
+
+.el-table {
+  font-size: 16px;
+}
 .el-table,
 .el-table tr,
 .el-table td,

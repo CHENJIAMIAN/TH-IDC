@@ -2,10 +2,10 @@
   <div class="device-group-index">
     <div class="row1">
       <div>
-        <img class="preview-img" :src="imgUrl" alt="加载失败" />
+        <img class="preview-img" :src="deviceGroupImg" alt="加载失败" />
       </div>
       <div>
-        <img class="preview-img" :src="imgUrl" alt="加载失败" />
+        <img class="preview-img" :src="$parent.roomImage" alt="加载失败" />
       </div>
     </div>
     <div>
@@ -25,7 +25,7 @@
           <el-table-column sortable prop="voltageB" label="B相电压" />
           <el-table-column sortable prop="voltageC" label="C相电压" />
           <el-table-column sortable prop="voltageAB" label="AB相电压" />
-          <el-table-column sortable prop="voltageAC复制" label="AC相电压" />
+          <el-table-column sortable prop="voltageAC" label="AC相电压" />
           <el-table-column sortable prop="voltageBC" label="BC相电压" />
           <el-table-column sortable prop="currentA" label="A相电流" />
           <el-table-column sortable prop="currentB" label="B相电流" />
@@ -48,9 +48,13 @@
 
 
 <script>
-import { deviceGroupListAll } from "@/api/device-monitor.js";
+import {
+  deviceGroupListAll,
+  roomTypeDeviceGroupListAllRoomType4,
+} from "@/api/device-monitor.js";
 
 export default {
+  name: "device-group",
   data() {
     return {
       floorId: "",
@@ -64,7 +68,7 @@ export default {
       alarmCount: "",
       deviceGroupList: [],
       //
-      imgUrl: "",
+      deviceGroupImg: "",
       //
       listLoading: false,
       listData: [],
@@ -87,9 +91,20 @@ export default {
       deviceGroupId,
       deviceGroupName,
     });
-    this.imgUrl = this.$route.query.imgUrl;
+    this.deviceGroupImg = this.$route.query.deviceGroupImg;
 
     this.$route.meta.title = deviceGroupName;
+
+    this.getList();
+  },
+  methods: {
+    getList() {
+      this.listLoading = true;
+      roomTypeDeviceGroupListAllRoomType4({ id: this.roomId }).then((res) => {
+        this.listData = res.data;
+        this.listLoading = false;
+      });
+    },
   },
 };
 </script>
@@ -97,9 +112,13 @@ export default {
 .device-group-index {
   display: grid;
   grid-template-rows: 1fr 220px;
+  align-items: center;
+
   .row1 {
     display: grid;
-    grid-template-columns: 10fr 8fr;
+    grid-template-columns: 40fr 10fr;
+    justify-items: center;
+    align-items: center;
   }
   .row2 {
     display: grid;
