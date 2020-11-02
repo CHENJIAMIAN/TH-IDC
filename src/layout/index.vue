@@ -17,7 +17,9 @@
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     </div>
     <!-- 次级路由，从路由$route获取 -->
-    <sidebar class="side"/>
+    <div class="side" >
+      <sidebar v-show="!isCollapse"/>
+    </div >
     <div class="main-container">
       <app-main />
       <!-- <right-panel v-if="showSettings">
@@ -31,7 +33,7 @@
 import RightPanel from "@/components/RightPanel";
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
 import ResizeMixin from "./mixin/ResizeHandler";
-import { mapState } from "vuex";
+import { mapState,mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 
 export default {
@@ -54,6 +56,9 @@ export default {
       needTagsView: state => state.settings.tagsView,
       fixedHeader: state => state.settings.fixedHeader
     }),
+    isCollapse() {
+      return !this.sidebar.opened;
+    },
     classObj() {
       return {
         hideSidebar: !this.sidebar.opened,

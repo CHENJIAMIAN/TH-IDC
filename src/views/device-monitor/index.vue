@@ -40,7 +40,8 @@ export default {
 <style lang="scss" scoped>
 .building-index {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 230px 1fr;
+  margin-left: 30px;
   .col1 {
     display: grid;
     align-items: center;

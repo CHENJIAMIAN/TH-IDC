@@ -1,10 +1,10 @@
 <template>
-  <div :class="{ 'has-logo': showLogo }" v-show="!isCollapse">
-    <logo v-if="showLogo" :collapse="isCollapse" />
+  <div :class="{ 'has-logo': showLogo }">
+    <logo v-if="showLogo" :collapse="false" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
-        :collapse="isCollapse"
+        :collapse="false"
         :text-color="variables.menuText"
         :unique-opened="false"
         :active-text-color="variables.menuActiveText"
@@ -67,9 +67,7 @@ export default {
     variables() {
       return variables;
     },
-    isCollapse() {
-      return !this.sidebar.opened;
-    }
+
   }
 };
 </script>

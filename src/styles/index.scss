@@ -264,3 +264,17 @@ aside {
     width: 100%
   }
 }
+
+.device-monitor-side {
+  // position: fixed;
+  // top: calc(#{$headhei} + 5em);
+  // left: 60px;
+  // bottom: 60px;
+  width: 200px;
+  border-style: solid;
+  border-image-source: url(../assets/img/sideborder.png);
+  border-image-slice: 47 92 47 87;
+  border-image-width: 47px 92px 47px 90px;
+  border-image-outset: 35px 37px 37px 35px;
+  border-image-repeat: stretch stretch;
+}
