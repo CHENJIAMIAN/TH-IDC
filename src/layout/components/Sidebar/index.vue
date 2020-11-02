@@ -10,6 +10,18 @@
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="vertical"
+        :default-openeds="[
+          '/system-setting/organization/organization',
+          '/system-setting/system-operation/system-operation',
+          '/system-setting',
+          '/resource-manage/space-device/space-device',
+          '/resource-manage/basic-type/basic-type',
+          '/resource-manage',
+          '/engineer-config/alert-config/alert-config',
+          '/engineer-config/rule-manage/rule-manage',
+          '/engineer-config/host-config/host-config',
+          '/engineer-config',
+        ]"
       >
         <sidebar-item
           v-for="route in filtered_permission_routes"
@@ -34,9 +46,11 @@ export default {
     ...mapGetters(["permission_routes", "sidebar"]),
     filtered_permission_routes() {
       // 仅显示当前页面的路由
-      return this.permission_routes.filter(i =>
-        this.$route.path.includes(i.path)
+      const arr = this.permission_routes.filter(i =>
+        i.path!=='/' && this.$route.path.includes(i.path)
       );
+      // .map(i=>i.children).flat();//过滤出仅二级菜单
+      return arr;
     },
     activeMenu() {
       const route = this.$route;

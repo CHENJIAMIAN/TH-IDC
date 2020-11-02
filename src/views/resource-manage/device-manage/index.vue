@@ -186,7 +186,6 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
         <el-form-item label="楼层" prop="floorCode">
           <el-select
-            style="width:160px;"
             v-model="dialog.forms.floorCode"
             @change="
               $set(dialog.forms, 'roomCode', '');
@@ -235,9 +234,9 @@
         </div>
 
 
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
         <el-form-item label="设备类型" prop="deviceType">
           <el-select
-            style="width:160px;"
             v-model="dialog.forms.deviceType"
             popper-class="three-column"
           >
@@ -249,6 +248,7 @@
             />
           </el-select>
         </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"

@@ -183,7 +183,7 @@
         </el-form-item>
 
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+        <div style="display: grid; grid-template-columns: 1fr 1fr">
         <el-form-item label="部门" prop="departmentId">
           <el-select v-model="dialog.forms.departmentId">
             <el-option

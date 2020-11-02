@@ -178,7 +178,7 @@
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>      
 
-        <div style="display: grid; grid-template-columns: 310px 280px 300px;">
+        <div style="display: grid; grid-template-columns: 310fr 280fr 300fr;">
         <el-form-item label="楼层" prop="floorCode">
           <el-select
             v-model="dialog.forms.floorCode"
@@ -227,7 +227,7 @@
         </el-form-item>
         </div>
 
-        <div style="display: grid; grid-template-columns: 310px 280px 300px;">
+        <div style="display: grid; grid-template-columns: 310fr 280fr 300fr;">
           <el-form-item label="设备类型" prop="deviceTypeId">
             <el-select
               v-model="dialog.forms.deviceTypeId"

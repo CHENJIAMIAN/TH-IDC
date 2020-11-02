@@ -1,14 +1,16 @@
 <template>
   <div v-if="!item.hidden">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
-      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
+      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)"  @hook:mounted="()=>{console.log('路径',resolvePath(onlyOneChild.path))}" >
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
-
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+       
+    <!-- @hook:mounted="()=>{console.log(resolvePath(item.path))}" 打印index,才知道default-openeds应该取什么值 -->
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" @hook:mounted="()=>{console.log('父',item.name)}"   popper-append-to-body>
+      <!-- v-if="!item.meta.onlyShowChild" -->
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
@@ -53,8 +55,10 @@ export default {
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
-    this.onlyOneChild = null
-    return {}
+    this.onlyOneChild = null    
+    return {
+      console:window.console
+    }
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
@@ -69,9 +73,9 @@ export default {
       })
 
       // When there is only one child router, the child router is displayed by default
-      if (showingChildren.length === 1) {
-        return true
-      }
+      // if (showingChildren.length === 1) {
+      //   return true
+      // }
 
       // Show parent if there are no child router to display
       if (showingChildren.length === 0) {

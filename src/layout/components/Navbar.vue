@@ -26,8 +26,9 @@
           class="avatar-container right-menu-item hover-effect"
           trigger="click"
         >
-          <div>
+          <div class="mine">
             <img title="我的" src="@/assets/img/dlr.png" />
+            <div class="name">{{ this.realName }}</div>
           </div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
@@ -55,6 +56,7 @@ import SizeSelect from "@/components/SizeSelect";
 import Search from "@/components/HeaderSearch";
 import ChangePassword from "@/components/ChangePassword.vue";
 import UserInfo from "@/components/UserInfo.vue";
+import Cookies from 'js-cookie'
 export default {
   components: {
     Hamburger,
@@ -66,10 +68,16 @@ export default {
     UserInfo
   },
   data() {
-    return {};
+    return {
+realName:"",
+    };
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"])
+  },
+  created(){
+            this.realName = Cookies.get('realName')
+
   },
   methods: {
     toggleSideBar() {
@@ -137,13 +145,11 @@ export default {
     }
 
     .avatar-wrapper {
-      margin-top: 5px;
-      position: relative;
-      display: flex;
-      align-items: baseline;
-      width: 150px;
-      justify-content: space-between;
-      margin-right: 1rem;
+    margin-top: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
 
       .user {
         display: flex;
@@ -168,5 +174,16 @@ export default {
       }
     }
   }
+}
+
+.mine{
+    display: grid;
+    grid-auto-flow: column;
+    align-items: baseline;
+    gap: 5px;
+    color: #37d3ff;
+    .name{
+      transform: translate(0px, -5px);
+    }
 }
 </style>

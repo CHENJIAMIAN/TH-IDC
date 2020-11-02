@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import Cookies from 'js-cookie'
 
 const state = {
   token: getToken(),
@@ -35,6 +36,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { res, msg, data } = response
+        const {realName} = data;
+        // 登录后会location.href = "/home.html"; 跳转到bim页面,store会丢失,信息要放cookie里
+        Cookies.set('realName', realName)
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
