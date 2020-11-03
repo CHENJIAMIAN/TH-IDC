@@ -121,7 +121,7 @@
 <script>
 import pagination from "@/components/Pagination";
 import {
-  alertRuleDelete,
+  // alertRuleDelete,
   alertRuleEdit,
   alertRuleAdd,
   alertRuleListByPage,

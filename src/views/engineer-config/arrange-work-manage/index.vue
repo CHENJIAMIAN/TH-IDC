@@ -32,44 +32,51 @@
       :cell-class-name="tableCellClassName"
       @cell-click="cellClick"
     >
-      <el-table-column sortable prop="id" label="编号" />
-      <el-table-column sortable prop="week1List" label="星期一">
+      <el-table-column prop="id" label="编号" align="center" />
+      <el-table-column prop="week1List" label="星期一" align="center">
         <template slot-scope="{ row, column, $index }">
+          <div v-if="row.week1List.length < 1" style="color: #a7a7a7">待排班</div>
           <div v-for="i in row.week1List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week2List" label="星期二">
+      <el-table-column prop="week2List" label="星期二" align="center">
         <template slot-scope="{ row, column, $index }">
+          <div v-if="row.week2List.length < 1" style="color: #a7a7a7">待排班</div>
           <div v-for="i in row.week2List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week3List" label="星期三">
+      <el-table-column prop="week3List" label="星期三" align="center">
         <template slot-scope="{ row, column, $index }">
+          <div v-if="row.week3List.length < 1" style="color: #a7a7a7">待排班</div>
           <div v-for="i in row.week3List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week4List" label="星期四">
+      <el-table-column prop="week4List" label="星期四" align="center">
         <template slot-scope="{ row, column, $index }">
+          <div v-if="row.week4List.length < 1" style="color: #a7a7a7">待排班</div>
           <div v-for="i in row.week4List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week5List" label="星期五">
+      <el-table-column prop="week5List" label="星期五" align="center">
         <template slot-scope="{ row, column, $index }">
+          <div v-if="row.week5List.length < 1" style="color: #a7a7a7">待排班</div>
           <div v-for="i in row.week5List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week6List" label="星期六">
+      <el-table-column prop="week6List" label="星期六" align="center">
         <template slot-scope="{ row, column, $index }">
+          <div v-if="row.week6List.length < 1" style="color: #a7a7a7">待排班</div>
           <div v-for="i in row.week6List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="week7List" label="星期日">
+      <el-table-column prop="week7List" label="星期日" align="center">
         <template slot-scope="{ row, column, $index }">
+          <div v-if="row.week7List.length < 1" style="color: #a7a7a7">待排班</div>
           <div v-for="i in row.week7List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
 
-      <el-table-column label="状态" align="center" width="240">
+      <el-table-column label="状态" width="240" align="center">
         <template slot-scope="{ row }">
           <el-switch
             @change="handleStatusChange($event, row)"
@@ -95,7 +102,7 @@
     <el-dialog :visible.sync="dialogRY.visible">
       <div slot="title" class="el-dialog-title-custom">
         <div class="title-txt">绑定排班人员</div>
-        <img  src="@/assets/img/hl.png" />
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialogRY.forms"
@@ -155,8 +162,8 @@ export default {
       listData: [], // 列表数据
 
       allRYOpts: [],
-      clickedRow:{},
-      clickedColumn:{},
+      clickedRow: {},
+      clickedColumn: {},
       dialogRY: {
         visible: false,
         forms: {},
@@ -172,8 +179,8 @@ export default {
     dialogRYSubmit() {
       const row = this.clickedRow;
       const column = this.clickedColumn;
-      console.log(row,column)
-      console.log(this.dialogRY.forms)
+      console.log(row, column);
+      console.log(this.dialogRY.forms);
       this.$refs["dialogRYForm"].validate((valid, obj) => {
         if (valid) {
           this.dialogRY.forms;
@@ -196,7 +203,7 @@ export default {
     },
     async handleRYDialog({ row, column, cell, event }) {
       // dialog显示时获取一级菜单列表
-        // 编辑
+      // 编辑
       this.dialogRY.forms = { id: row.id };
       const r1 = await arrangeWorkListAllUserNotBind({
         id: row.id,
@@ -219,20 +226,23 @@ export default {
       this.$nextTick((_) => this.$refs["dialogRYForm"].clearValidate());
     },
     handleStatusChange(v, row) {
-      arrangeWorkUpdateStatus({ id: row.id, status: v });
-      this.getList();
+      arrangeWorkUpdateStatus({ id: row.id, status: v }).then((r) => {
+        this.getList();
+      });
     },
     tableCellClassName({ row, column, rowIndex, columnIndex }) {
       //注意这里是解构
       //利用单元格的 className 的回调方法，给行列索引赋值
       row.index = rowIndex;
       column.index = columnIndex;
-      if(column.index>0 && column.index<8) return 'week-day'
+      if (column.index > 0 && column.index < 8) return "week-day";
     },
     cellClick(row, column, cell, event) {
-      this.clickedRow=row;
-      this.clickedColumn=column;
-      column.index>0 && column.index<8 &&  this.handleRYDialog({ row, column, cell, event });
+      this.clickedRow = row;
+      this.clickedColumn = column;
+      column.index > 0 &&
+        column.index < 8 &&
+        this.handleRYDialog({ row, column, cell, event });
     },
     handlePersonSelectVisibleChange(v, { row, column, $index }) {
       if (v && column.index > 0 && column.index < 8) {
@@ -248,9 +258,9 @@ export default {
       this.getList();
     },
     handleAdd() {
-      arrangeWorkAdd();
-      // 慢一点，给服务器执行sql的时间
-      setTimeout(_=>this.getList(),200)
+      arrangeWorkAdd().then((r) => {
+        this.getList();
+      });
     },
     // 重置
     handleReset(form) {
@@ -307,16 +317,15 @@ export default {
   justify-content: end;
 }
 
-::v-deep{
+::v-deep {
   .arrange-work-table th.is-leaf,
-  .arrange-work-table tr, .arrange-work-table td
-  {
+  .arrange-work-table tr,
+  .arrange-work-table td {
     border: 1px solid;
   }
-  
-.week-day{
-  cursor:pointer;
-}
-}
 
+  .week-day {
+    cursor: pointer;
+  }
+}
 </style>

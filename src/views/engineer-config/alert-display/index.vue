@@ -15,7 +15,7 @@
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
-            >重置</el-button
+            >恢复默认值</el-button
           >
         </el-form-item>
         <el-form-item>
@@ -26,7 +26,15 @@
       </el-form>
     </div>
 
-    <el-form class="form-vertical" ref="forms" :model="forms" :rules="rules">
+    <el-form
+      class="form-vertical"
+      ref="forms"
+      :model="forms"
+      :rules="rules"
+      v-loading="listLoading"
+      inline
+      style="align-self: center; justify-self: center"
+    >
       <el-row :gutter="80">
         <el-col :span="8">
           <el-form-item label="实时告警显示条数" prop="realtimeCount">
@@ -35,13 +43,14 @@
         </el-col>
         <el-col :span="8">
           <el-form-item
-            label="实时告警确认后是否还显示11，1是显示，2是不显示"
+            label="实时告警确认后是否还显示"
             prop="realtimeIsConfirmShow"
           >
-            <el-input
+            <el-checkbox
               v-model="forms.realtimeIsConfirmShow"
-              placeholder="请输入"
-            />
+              :true-label="1"
+              :false-label="2"
+            ></el-checkbox>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -59,10 +68,14 @@
         </el-col>
         <el-col :span="8">
           <el-form-item
-            label="空间告警确认后是否还显示，1是显示，2是不显示"
+            label="空间告警确认后是否还显示"
             prop="spaceIsConfirmShow"
           >
-            <el-input v-model="forms.spaceIsConfirmShow" placeholder="请输入" />
+            <el-checkbox
+              v-model="forms.spaceIsConfirmShow"
+              :true-label="1"
+              :false-label="2"
+            ></el-checkbox>
           </el-form-item>
         </el-col>
 
@@ -141,8 +154,9 @@ export default {
     handleSubmit() {
       this.$refs["forms"].validate((valid, obj) => {
         if (valid) {
-          alertconfigAddOrEdit_alert_params();
-          this.handleQuery();
+          alertconfigAddOrEdit_alert_params(this.forms).then((r) => {
+            this.handleQuery();
+          });
         } else {
           return false;
         }
@@ -156,8 +170,18 @@ export default {
     },
     // 重置
     handleReset(form) {
-      this.$refs[form].resetFields();
-      this.handleQuery();
+      this.$confirm("是否恢复默认设置 ? ", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$refs[form].resetFields();
+          alertconfigAlertparam_reset().then((r) => {
+            this.handleQuery();
+          });
+        })
+        .catch(() => {});
     },
     // 查看
     async handleDialog(row) {

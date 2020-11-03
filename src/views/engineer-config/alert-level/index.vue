@@ -152,10 +152,10 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
 <script>
 import pagination from "@/components/Pagination";
 import {
-  alertLevelListByPage,
   alertLevelQueryById,
-  alertLevelDelete,
-  alertLevelEdit,
+  // alertLevelListByPage,
+  // alertLevelDelete,
+  // alertLevelEdit,
   alertLevelAdd,
 } from "@/api/engineer-config.js";
 export default {
