@@ -1,11 +1,11 @@
-level
-name
-noteType
-noteContent
-status
+realtimeCount
+realtimeIsConfirmShow
+realtimeLowlevelShow
+spaceLowlevelShow
+spaceIsConfirmShow
 
-ID
-自定义名称
-通知方式1.语音2.文字
-通知内容1时间2位置3内容4告警值
-状态1启用2停用
+实时告警显示条数
+实时告警确认后是否还显示，1是显示，2是不显示
+实时告警最低级别
+空间告警最低级别
+空间告警确认后是否还显示，1是显示，2是不显示

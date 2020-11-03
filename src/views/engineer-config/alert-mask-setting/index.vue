@@ -93,10 +93,10 @@
 <script>
 import pagination from "@/components/Pagination";
 import {
-  alertMaskDelete,
-  alertMaskEdit,
+  // alertMaskDelete,
+  // alertMaskEdit,
+  // alertMaskListByPage,
   alertMaskAdd,
-  alertMaskListByPage,
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination },

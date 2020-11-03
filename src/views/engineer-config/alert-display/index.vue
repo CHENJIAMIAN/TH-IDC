@@ -19,144 +19,76 @@
           >
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" size="medium" @click="handleDialog()">
-            <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
-            <i class="el-icon-plus" />
+          <el-button type="primary" size="medium" @click="handleSubmit">
+            保存
           </el-button>
         </el-form-item>
       </el-form>
     </div>
 
-    <!-- 列表 -->
-    <el-table
-      style="overflow: auto"
-      stripe
-      v-loading="listLoading"
-      border
-      :data="listData"
-    >
-      <el-table-column sortable prop="level" label="级别" />
-      <el-table-column sortable prop="name" label="自定义名称" />
-      <el-table-column sortable prop="noteType" label="通知方式1.语音2." />
-      <el-table-column sortable prop="noteContent" label="通知内容1时间2位置3内容4告警值" />
-      <el-table-column sortable prop="status" label="状态1启用2停用" />
-
-      <el-table-column label="操作" align="center" width="240">
-        <template slot-scope="{ row }">
-          <el-button
-            icon="el-icon-edit-outline"
-            type="primary"
-            plain
-            @click="handleDialog(row)"
-          ></el-button>
-          <el-button
-            icon="el-icon-delete"
-            type="primary"
-            plain
-            @click="handleDel(row.id)"
-          ></el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination
-      :hidden="listTotal > 0 ? false : true"
-      :total="listTotal"
-      :page.sync="filterForm.pageNo"
-      :limit.sync="filterForm.pageSize"
-      @pagination="getList"
-    />
-
-    <!-- 
-name	[string]	是	菜单名称 （最大长度64）		
-parentId	[int]	是	父级菜单编号ID		
-menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
-    <!-- 详情弹窗 -->
-    <el-dialog :visible.sync="dialog.visible" top="20vh">
-      <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
-      </div>
-      <el-form
-        :model="dialog.forms"
-        :rules="dialog.rules"
-        ref="dialogForm"
-        label-width="100px"
-      >
-        <el-form-item label="权限名称" prop="name">
-          <el-input v-model="dialog.forms.name"></el-input>
-        </el-form-item>
-        <el-form-item label="权限标签" prop="permission">
-          <el-input v-model="dialog.forms.permission"></el-input>
-        </el-form-item>
-        <el-form-item label="子系统" prop="firstMenuId">
-          <el-select
-            v-model="dialog.forms.firstMenuId"
-            @change="
-              () => {
-                $set(dialog.forms, 'secondMenuId', '');
-                $set(dialog.forms, 'thirdMenuId', '');
-              }
-            "
+    <el-form class="form-vertical" ref="forms" :model="forms" :rules="rules">
+      <el-row :gutter="80">
+        <el-col :span="8">
+          <el-form-item label="实时告警显示条数" prop="realtimeCount">
+            <el-input v-model="forms.realtimeCount" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item
+            label="实时告警确认后是否还显示11，1是显示，2是不显示"
+            prop="realtimeIsConfirmShow"
           >
-            <el-option
-              v-for="item in firstMenuOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
+            <el-input
+              v-model="forms.realtimeIsConfirmShow"
+              placeholder="请输入"
             />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="模块"
-          prop="secondMenuId"
-          v-show="dialog.forms.firstMenuId"
-        >
-          <el-select
-            v-model="dialog.forms.secondMenuId"
-            @change="$set(dialog.forms, 'thirdMenuId', '')"
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="实时告警最低级别" prop="realtimeLowlevelShow">
+            <el-input
+              v-model="forms.realtimeLowlevelShow"
+              placeholder="请输入"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="空间告警最低级别" prop="spaceLowlevelShow">
+            <el-input v-model="forms.spaceLowlevelShow" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item
+            label="空间告警确认后是否还显示，1是显示，2是不显示"
+            prop="spaceIsConfirmShow"
           >
-            <el-option
-              v-for="item in secondMenuOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="菜单"
-          prop="thirdMenuId"
-          v-show="dialog.forms.secondMenuId"
-        >
-          <el-select v-model="dialog.forms.thirdMenuId">
-            <el-option
-              v-for="item in thirdMenuOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" style="text-align: center">
-        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
-          >保 存</el-button
-        >
-      </div>
-    </el-dialog>
+            <el-input v-model="forms.spaceIsConfirmShow" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+
+        <!-- <el-col :span="8">
+            <el-form-item label="改造意愿">
+              <el-select v-model="forms.remouldAspiration">
+                <el-option
+                  v-for="item in remouldAspirationOption"
+                  :key="item.id"
+                  :label="item.paramValue"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col> -->
+      </el-row>
+    </el-form>
   </div>
 </template>
 
 <script>
 import pagination from "@/components/Pagination";
 import {
-  alertLevelListByPage,
-  alertLevelQueryById,
-  alertLevelDelete,
-  alertLevelEdit,
-  alertLevelAdd,
+  alertconfigGetAlertConfigParams,
+  alertconfigAlertparam_reset,
+  alertconfigAddOrEdit_alert_params,
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination },
@@ -175,6 +107,14 @@ export default {
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
 
+      remouldAspirationOption: [],
+      forms: {},
+      rules: {
+        // 表单验证
+        clanGroundNum: [{ required: true, tiggter: "blur", message: "请输入" }],
+        clanCode: [{ required: true, tiggter: "blur", message: "请输入" }],
+      },
+
       dialog: {
         id: "",
         visible: false,
@@ -192,34 +132,17 @@ export default {
       },
     };
   },
-  watch: {
-  },
+  watch: {},
   async created() {
     this.handleQuery();
   },
   mounted() {},
   methods: {
-    dialogSubmit() {
-      this.$refs["dialogForm"].validate((valid, obj) => {
+    handleSubmit() {
+      this.$refs["forms"].validate((valid, obj) => {
         if (valid) {
-          let callAPI = null;
-          // 根据 menuType 确定父级id编号 parentId
-          if (!this.dialog.forms.thirdMenuId) {
-            this.$message.error("请选择父级菜单");
-            return;
-          }
-          this.dialog.forms.menuId = this.dialog.forms.thirdMenuId;
-          if (this.dialog.forms.id) {
-            callAPI = alertLevelEdit;
-          } else {
-            callAPI = alertLevelAdd;
-          }
-          callAPI(this.dialog.forms).then((res) => {
-            this.$message.success("操作成功!");
-            this.$refs["dialogForm"].resetFields();
-            this.dialog.visible = false;
-            this.getList();
-          });
+          alertconfigAddOrEdit_alert_params();
+          this.handleQuery();
         } else {
           return false;
         }
@@ -245,8 +168,8 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;      
-      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {
@@ -268,9 +191,8 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      alertLevelListByPage(this.filterForm).then((res) => {
-        this.listData = res.data.list;
-        this.listTotal = res.data.total;
+      alertconfigGetAlertConfigParams().then((res) => {
+        this.forms = res.data;
         this.listLoading = false;
       });
     },

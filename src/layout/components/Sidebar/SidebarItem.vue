@@ -1,7 +1,7 @@
 <template>
   <div v-if="!item.hidden">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
-      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)"  @hook:mounted="()=>{console.log('路径',resolvePath(onlyOneChild.path))}" >
+      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)" >
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
@@ -9,7 +9,7 @@
     </template>
        
     <!-- @hook:mounted="()=>{console.log(resolvePath(item.path))}" 打印index,才知道default-openeds应该取什么值 -->
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" @hook:mounted="()=>{console.log('父',item.name)}"   popper-append-to-body>
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)"  popper-append-to-body>
       <!-- v-if="!item.meta.onlyShowChild" -->
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
