@@ -20,6 +20,12 @@ export default {
       meta: { title: '告警配置', icon: 'icon' },
       children: [
         {
+          path: 'alert-notify',
+          component: () => import('@/views/engineer-config/alert-notify/index'),
+          name: 'alert-notify',
+          meta: { title: '告警通知', icon: 'icon' }
+        },
+        {
           path: 'arrange-work-manage',
           component: () => import('@/views/engineer-config/arrange-work-manage/index'),
           name: 'arrange-work-manage',

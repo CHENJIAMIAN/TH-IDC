@@ -36,8 +36,91 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="name" label="角色名称" />
-      
+      <el-table-column sortable prop="floorCode" label="楼层编号" />
+      <el-table-column sortable prop="roomCode" label="房间编号" />
+      <el-table-column sortable prop="maskType" label="屏蔽方式">
+        <template slot-scope="{ row }">
+          <div>
+            {{
+              maskTypeOpts.find((i) => i.id == row.maskType) &&
+              maskTypeOpts.find((i) => i.id == row.maskType).name
+            }}
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column sortable prop="deviceTypes" label="设备类型[1,2,3]">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.deviceTypes" :key="item">
+            {{
+              deviceTypesOpts.find((i) => i.id == item) &&
+              deviceTypesOpts.find((i) => i.id == item).name
+            }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column sortable prop="pointTypes" label="测点类型[1,2,3]">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.pointTypes" :key="item">
+            {{
+              pointTypesOpts.find((i) => i.id == item) &&
+              pointTypesOpts.find((i) => i.id == item).name
+            }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column sortable prop="deviceGroups" label="指定设备组[1,2,3]">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.deviceGroups" :key="item">
+            {{
+              deviceGroupsOpts.find((i) => i.id == item) &&
+              deviceGroupsOpts.find((i) => i.id == item).name
+            }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column sortable prop="devices" label="指定设备[1,2,3]">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.devices" :key="item">
+            {{
+              devicesOpts.find((i) => i.id == item) &&
+              devicesOpts.find((i) => i.id == item).name
+            }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column sortable prop="points" label="指定测点[1,2,3]">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.points" :key="item">
+            {{
+              pointsOpts.find((i) => i.id == item) &&
+              pointsOpts.find((i) => i.id == item).name
+            }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        sortable
+        prop="maskPeriod"
+        label='屏蔽时段'
+      >
+        <template slot-scope="{ row }">
+          <div v-for="item in row.maskPeriod" :key="item">
+            {{
+              maskPeriodOpts.find((i) => i.id == item) &&
+              maskPeriodOpts.find((i) => i.id == item).name
+            }}
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column sortable prop="status" label="状态">
+        <template slot-scope="{ row }">
+          <span style="color: #55fb55" v-if="row.status == 1">启用</span>
+          <span style="color: gray" v-else>禁用</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" align="center" width="280">
         <template slot-scope="{ row }">
           <el-button
@@ -66,10 +149,8 @@
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="25vh">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
@@ -93,9 +174,10 @@
 <script>
 import pagination from "@/components/Pagination";
 import {
-  // alertMaskDelete,
-  // alertMaskEdit,
-  // alertMaskListByPage,
+  alertMaskDelete,
+  alertMaskEdit,
+  alertMaskQueryById,
+  alertMaskListByPage,
   alertMaskAdd,
 } from "@/api/engineer-config.js";
 export default {
@@ -107,6 +189,21 @@ export default {
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
+      maskTypeOpts: [
+        { id: 1, name: "所有" },
+        { id: 2, name: "指定设备类型" },
+        { id: 3, name: "指定测点类型" },
+        { id: 4, name: "指定设备组" },
+        { id: 5, name: "指定设备" },
+        { id: 6, name: "指定测点" },
+      ],
+      deviceTypesOpts: [],
+      pointTypesOpts: [],
+      deviceGroupsOpts: [],
+      devicesOpts: [],
+      pointsOpts: [],
+      maskPeriodOpts: ["2020-11-03 12:30 - 2020-11-04 13:30","2020-11-04 12:30 - 2020-11-05 13:30"],
+
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数

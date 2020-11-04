@@ -96,7 +96,6 @@ export default {
     position: relative;
     height: $headhei;
     background: url(../assets/img/top2.png) 0 0 / 100% 100% no-repeat;
-    //background: url(../assets/img/top.png) center no-repeat;
     .btn-group {
       position: absolute;
       bottom: 1rem;

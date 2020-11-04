@@ -35,11 +35,41 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="level" label="级别" />
+      <el-table-column sortable prop="level" label="级别">
+        <template slot-scope="{ row }">
+          <div>
+            {{
+              levelOpts.find((i) => i.id == row.level) &&
+              levelOpts.find((i) => i.id == row.level).name
+            }}
+          </div>
+        </template>
+      </el-table-column>
+
       <el-table-column sortable prop="name" label="自定义名称" />
-      <el-table-column sortable prop="noteType" label="通知方式1.语音2." />
-      <el-table-column sortable prop="noteContent" label="通知内容1时间2位置3内容4告警值" />
-      <el-table-column sortable prop="status" label="状态1启用2停用" />
+      <el-table-column sortable prop="noteType" label="通知方式">
+        <template slot-scope="{ row }">
+          <span v-if="row.noteType == 1">语音</span>
+          <span v-else>文字</span>
+        </template>
+      </el-table-column>
+      <el-table-column sortable prop="noteContent" label="通知内容">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.noteContent" :key="item">
+            {{
+              noteContentOpts.find((i) => i.id == item) &&
+              noteContentOpts.find((i) => i.id == item).name
+            }}
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column sortable prop="status" label="状态">
+        <template slot-scope="{ row }">
+          <span style="color: #55fb55" v-if="row.status == 1">启用</span>
+          <span style="color: gray" v-else>禁用</span>
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
@@ -66,17 +96,10 @@
       @pagination="getList"
     />
 
-    <!-- 
-name	[string]	是	菜单名称 （最大长度64）		
-parentId	[int]	是	父级菜单编号ID		
-menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
-    <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="20vh">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
@@ -84,60 +107,53 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
         ref="dialogForm"
         label-width="100px"
       >
-        <el-form-item label="权限名称" prop="name">
+        <el-form-item label="级别" prop="level">
+          <el-select
+            filterable
+            allow-create
+            default-first-option
+            v-model="dialog.forms.level"
+          >
+            <el-option
+              v-for="item in levelOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <el-form-item label="权限标签" prop="permission">
-          <el-input v-model="dialog.forms.permission"></el-input>
+
+        <el-form-item label="通知方式" prop="noteType">
+          <el-radio-group v-model="dialog.forms.noteType" style="width: 100%">
+            <el-radio border :label="1">语音</el-radio>
+            <el-radio border :label="2">文字</el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item label="子系统" prop="firstMenuId">
-          <el-select
-            v-model="dialog.forms.firstMenuId"
-            @change="
-              () => {
-                $set(dialog.forms, 'secondMenuId', '');
-                $set(dialog.forms, 'thirdMenuId', '');
-              }
-            "
+
+        <el-form-item label="通知内容" prop="noteContent">
+          <el-checkbox-group
+            class="rooms-el-checkbox-group"
+            v-model="dialog.forms.noteContent"
           >
-            <el-option
-              v-for="item in firstMenuOpts"
+            <el-checkbox
+              v-for="item in noteContentOpts"
               :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+              :label="item.id"
+              border
+              >{{ item.name }}</el-checkbox
+            >
+          </el-checkbox-group>
         </el-form-item>
-        <el-form-item
-          label="模块"
-          prop="secondMenuId"
-          v-show="dialog.forms.firstMenuId"
-        >
-          <el-select
-            v-model="dialog.forms.secondMenuId"
-            @change="$set(dialog.forms, 'thirdMenuId', '')"
-          >
-            <el-option
-              v-for="item in secondMenuOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="菜单"
-          prop="thirdMenuId"
-          v-show="dialog.forms.secondMenuId"
-        >
-          <el-select v-model="dialog.forms.thirdMenuId">
-            <el-option
-              v-for="item in thirdMenuOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
+            <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
+            <el-radio border :label="0" style="color: gray">禁用</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -153,9 +169,9 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
 import pagination from "@/components/Pagination";
 import {
   alertLevelQueryById,
-  // alertLevelListByPage,
-  // alertLevelDelete,
-  // alertLevelEdit,
+  alertLevelListByPage,
+  alertLevelDelete,
+  alertLevelEdit,
   alertLevelAdd,
 } from "@/api/engineer-config.js";
 export default {
@@ -163,7 +179,19 @@ export default {
   data() {
     return {
       depOpts: [],
-      firstMenuOpts: [],
+      levelOpts: [
+        { id: 1, name: "紧急" },
+        { id: 2, name: "严重" },
+        { id: 3, name: "重要" },
+        { id: 4, name: "次要" },
+        { id: 5, name: "预警" },
+      ],
+      noteContentOpts: [
+        { id: '1', name: "时间" },
+        { id: '2', name: "位置" },
+        { id: '3', name: "内容" },
+        { id: '4', name: "告警值" },//后台返回的id是用string的
+      ],
       secondMenuOpts: [],
       thirdMenuOpts: [],
       filterForm: {
@@ -180,20 +208,16 @@ export default {
         visible: false,
         forms: {},
         rules: {
+          level: [{ required: true, trigger: "blur", message: "请输入" }],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
-          permission: [{ required: true, trigger: "blur", message: "请输入" }],
-          menuType: [{ required: true, trigger: "change", message: "请输入" }],
-          firstMenuId: [{ required: true, trigger: "blur", message: "请输入" }],
-          secondMenuId: [
-            { required: true, trigger: "blur", message: "请输入" },
-          ],
-          thirdMenuId: [{ required: true, trigger: "blur", message: "请输入" }],
+          noteType: [{ required: true, trigger: "blur", message: "请输入" }],
+          noteContent: [{ required: true, trigger: "blur", message: "请输入" }],
+          status: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };
   },
-  watch: {
-  },
+  watch: {},
   async created() {
     this.handleQuery();
   },
@@ -203,12 +227,6 @@ export default {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
           let callAPI = null;
-          // 根据 menuType 确定父级id编号 parentId
-          if (!this.dialog.forms.thirdMenuId) {
-            this.$message.error("请选择父级菜单");
-            return;
-          }
-          this.dialog.forms.menuId = this.dialog.forms.thirdMenuId;
           if (this.dialog.forms.id) {
             callAPI = alertLevelEdit;
           } else {
@@ -244,9 +262,10 @@ export default {
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
         this.dialog.forms = {};
+        this.$set(this.dialog.forms, "noteContent", []);
       }
-      this.dialog.visible = true;      
-      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {
