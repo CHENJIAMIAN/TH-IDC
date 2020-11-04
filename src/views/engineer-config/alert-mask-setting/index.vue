@@ -99,11 +99,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        sortable
-        prop="maskPeriod"
-        label='屏蔽时段'
-      >
+      <el-table-column sortable prop="maskPeriod" label="屏蔽时段">
         <template slot-scope="{ row }">
           <div v-for="item in row.maskPeriod" :key="item">
             {{
@@ -161,6 +157,24 @@
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
+
+        <el-form-item label="屏蔽方式" prop="maskType">
+          <el-select v-model="dialog.forms.maskType">
+            <el-option
+              v-for="item in maskTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
+            <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
+            <el-radio border :label="0" style="color: gray">禁用</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"
@@ -202,7 +216,10 @@ export default {
       deviceGroupsOpts: [],
       devicesOpts: [],
       pointsOpts: [],
-      maskPeriodOpts: ["2020-11-03 12:30 - 2020-11-04 13:30","2020-11-04 12:30 - 2020-11-05 13:30"],
+      maskPeriodOpts: [
+        "2020-11-03 12:30 - 2020-11-04 13:30",
+        "2020-11-04 12:30 - 2020-11-05 13:30",
+      ],
 
       listLoading: true,
       listData: [], // 列表数据

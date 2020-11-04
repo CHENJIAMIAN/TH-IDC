@@ -229,7 +229,7 @@
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="150px"
+        label-width="100px"
       >
         <el-form-item label="设备组编号" prop="deviceGroupCode">
           <el-input
@@ -254,8 +254,8 @@
               />
             </el-select>
           </el-form-item>
+            <!-- style="transform: translate(-50px, 0px)" -->
           <el-form-item
-            style="transform: translate(-50px, 0px)"
             label="楼层"
             prop="floorCode"
           >
@@ -271,8 +271,8 @@
               />
             </el-select>
           </el-form-item>
+            <!-- style="transform: translate(-100px, 0px)" -->
           <el-form-item
-            style="transform: translate(-100px, 0px)"
             label="房间"
             prop="roomCode"
           >

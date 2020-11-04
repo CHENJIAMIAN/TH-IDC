@@ -5,7 +5,7 @@ import Layout from '@/layout'
 export default {
   path: '/engineer-config',
   component: Layout,
-  redirect: '/engineer-config/alert-config/arrange-work-manage',
+  redirect: '/engineer-config/alert-config',
   name: '工程配置',
   meta: {
     title: '工程配置',
@@ -15,9 +15,35 @@ export default {
   children: [
     {
       path: 'alert-config',
-      component: () => import('@/views/engineer-config/index'),
+      component: () => import('@/views/engineer-config/alert-config'),
       name: 'alert-config',
       meta: { title: '告警配置', icon: 'icon' },
+      // children: [
+      //   {
+      //     path: 'alert-level',
+      //     component: () => import('@/views/engineer-config/alert-level/index'),
+      //     name: 'alert-level',
+      //     meta: { title: '告警等级', icon: 'icon' }
+      //   },
+      //   {
+      //     path: 'alert-display',
+      //     component: () => import('@/views/engineer-config/alert-display/index'),
+      //     name: 'alert-display',
+      //     meta: { title: '告警显示', icon: 'icon' }
+      //   },
+      //   {
+      //     path: 'alert-mask-setting',
+      //     component: () => import('@/views/engineer-config/alert-mask-setting/index'),
+      //     name: 'alert-mask-setting',
+      //     meta: { title: '屏蔽设置', icon: 'icon' }
+      //   },
+      // ]
+    },
+    {
+      path: 'rule-manage',
+      component: () => import('@/views/engineer-config/index'),
+      name: 'rule-manage',
+      meta: { title: '规则管理', icon: 'icon' },
       children: [
         {
           path: 'alert-notify',
@@ -31,32 +57,6 @@ export default {
           name: 'arrange-work-manage',
           meta: { title: '排班管理', icon: 'icon' }
         },
-        {
-          path: 'alert-level',
-          component: () => import('@/views/engineer-config/alert-level/index'),
-          name: 'alert-level',
-          meta: { title: '告警等级', icon: 'icon' }
-        },
-        {
-          path: 'alert-display',
-          component: () => import('@/views/engineer-config/alert-display/index'),
-          name: 'alert-display',
-          meta: { title: '告警显示', icon: 'icon' }
-        },
-        {
-          path: 'alert-mask-setting',
-          component: () => import('@/views/engineer-config/alert-mask-setting/index'),
-          name: 'alert-mask-setting',
-          meta: { title: '屏蔽设置', icon: 'icon' }
-        },
-      ]
-    },
-    {
-      path: 'rule-manage',
-      component: () => import('@/views/engineer-config/index'),
-      name: 'rule-manage',
-      meta: { title: '规则管理', icon: 'icon' },
-      children: [
         {
           path: 'rule-template',
           component: () => import('@/views/engineer-config/rule-template/index'),

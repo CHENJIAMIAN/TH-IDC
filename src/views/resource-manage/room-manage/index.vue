@@ -139,7 +139,7 @@
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="150px"
+        label-width="100px"
       >
         <el-form-item label="房间编号" prop="roomCode">
           <el-input
@@ -162,8 +162,8 @@
               />
             </el-select>
           </el-form-item>
+            <!-- style="transform: translate(-50px, 0px)" -->
           <el-form-item
-            style="transform: translate(-50px, 0px)"
            label="房间类型" prop="roomType">
             <el-select v-model="dialog.forms.roomType">
               <el-option
@@ -174,8 +174,8 @@
               />
             </el-select>
           </el-form-item>
+          <!-- style="transform: translate(-130px, 0px)" -->
         <el-form-item
-          style="transform: translate(-130px, 0px)"
          label="排序" prop="sort">
           <el-input v-model="dialog.forms.sort"></el-input>
         </el-form-item>

@@ -35,8 +35,8 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="level" label="级别">
-        <template slot-scope="{ row }">
+      <el-table-column sortable prop="level" label="级别"/>
+        <!-- <template slot-scope="{ row }">
           <div>
             {{
               levelOpts.find((i) => i.id == row.level) &&
@@ -44,7 +44,7 @@
             }}
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column sortable prop="name" label="自定义名称" />
       <el-table-column sortable prop="noteType" label="通知方式">
@@ -108,7 +108,8 @@
         label-width="100px"
       >
         <el-form-item label="级别" prop="level">
-          <el-select
+          <el-input v-model="dialog.forms.level"></el-input>
+          <!-- <el-select
             filterable
             allow-create
             default-first-option
@@ -120,7 +121,7 @@
               :label="item.name"
               :value="item.id"
             />
-          </el-select>
+          </el-select> -->
         </el-form-item>
 
         <el-form-item label="名称" prop="name">
