@@ -9,139 +9,230 @@
         :model="filterForm"
         style="display: grid; grid-auto-flow: column"
       >
-        <el-form-item>
+        <!-- <el-form-item>
           <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
-            >重置</el-button
+            >恢复默认值</el-button
           >
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
-          <el-button type="primary" size="medium" @click="handleDialog()">
-            <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
-            <i class="el-icon-plus" />
+          <el-button type="primary" size="medium" @click="handleSubmit">
+            保存
           </el-button>
         </el-form-item>
       </el-form>
     </div>
 
-    <!-- 列表 -->
-    <el-table
-      style="overflow: auto"
-      stripe
-      v-loading="listLoading"
-      border
-      :data="listData"
-    >
-      <el-table-column sortable prop="level" label="级别" />
-      <el-table-column sortable prop="name" label="自定义名称" />
-      <el-table-column sortable prop="noteType" label="通知方式1.语音2." />
-      <el-table-column sortable prop="noteContent" label="通知内容1时间2位置3内容4告警值" />
-      <el-table-column sortable prop="status" label="状态1启用2停用" />
+    <div class="content" style="overflow: auto;">
+      <el-form
+        ref="forms"
+        :model="forms"
+        :rules="rules"
+        v-loading="listLoading"
+        inline
+        style="display: grid; gap: 1rem"
+      >
+        <el-card>
+          <h3>实时数据存储方式</h3>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="实时存储方式" prop="realtime_store_type">
+                <el-radio-group
+                  v-model="forms.realtime_store_type"
+                  style="width: 100%"
+                >
+                  <el-radio border label="1">组合存储</el-radio>
+                  <el-radio border label="2">全量实时存储</el-radio>
+                  <el-radio border label="3">不存储</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-card v-show="forms.realtime_store_type == 1">
+            <el-col :span="8">
+              <el-form-item label="周期存储(分钟)" prop="cyclestore">
+                <el-select v-model="forms.cyclestore" style="width: 100%">
+                  <el-option border value="1"></el-option>
+                  <el-option border value="5"></el-option>
+                  <el-option border value="10"></el-option>
+                  <el-option border value="15"></el-option>
+                  <el-option border value="20"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="" prop="cyclestore_has">
+                <el-checkbox
+                  v-model="forms.cyclestore_has"
+                  true-label="1"
+                  false-label="0"
+                ></el-checkbox>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="变化率存储(%)" prop="changerate">
+                <el-input v-model="forms.changerate" placeholder="请输入" />
+              </el-form-item>
+              <el-form-item label="" prop="changerate_has">
+                <el-checkbox
+                  v-model="forms.changerate_has"
+                  true-label="1"
+                  false-label="0"
+                ></el-checkbox>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="变化大小存储" prop="changesize">
+                <el-input v-model="forms.changesize" placeholder="请输入" />
+              </el-form-item>
+              <el-form-item label="" prop="changesize_has">
+                <el-checkbox
+                  v-model="forms.changesize_has"
+                  true-label="1"
+                  false-label="0"
+                ></el-checkbox>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="测点实时存储" prop="points_has">
+                <el-checkbox
+                  v-model="forms.points_has"
+                  true-label="1"
+                  false-label="0"
+                ></el-checkbox>
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  title="测点选择"
+                  icon="el-icon-circle-plus-outline"
+                  type="primary"
+                  plain
+                  @click="handleCDDialog"
+                  >测点选择</el-button
+                >
+              </el-form-item>
+            </el-col>
+          </el-card>
+        </el-card>
 
-      <el-table-column label="操作" align="center" width="240">
-        <template slot-scope="{ row }">
-          <el-button
-            icon="el-icon-edit-outline"
-            type="primary"
-            plain
-            @click="handleDialog(row)"
-          ></el-button>
-          <el-button
-            icon="el-icon-delete"
-            type="primary"
-            plain
-            @click="handleDel(row.id)"
-          ></el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination
-      :hidden="listTotal > 0 ? false : true"
-      :total="listTotal"
-      :page.sync="filterForm.pageNo"
-      :limit.sync="filterForm.pageSize"
-      @pagination="getList"
-    />
+        <el-card>
+          <h3>存储时间</h3>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="全量实时数据(月)" prop="all_realtime_data">
+                <el-input
+                  v-model="forms.all_realtime_data"
+                  placeholder="请输入"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="组合实时数据(月)" prop="union_realtime_data">
+                <el-input
+                  v-model="forms.union_realtime_data"
+                  placeholder="请输入"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="规整数据(年)" prop="regular_data">
+                <el-input v-model="forms.regular_data" placeholder="请输入" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="告警事件(年)" prop="alert_data">
+                <el-input v-model="forms.alert_data" placeholder="请输入" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="操作日志(年)" prop="action_log">
+                <el-input v-model="forms.action_log" placeholder="请输入" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-card>
 
-    <!-- 
-name	[string]	是	菜单名称 （最大长度64）		
-parentId	[int]	是	父级菜单编号ID		
-menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
-    <!-- 详情弹窗 -->
-    <el-dialog :visible.sync="dialog.visible" top="20vh">
+        <el-card>
+          <h3>磁盘</h3>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="磁盘总容量(GB)" prop="store_all_size">
+                <el-input v-model="forms.store_all_size" placeholder="请输入" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="磁盘已使用容量(GB)" prop="store_use_size">
+                <el-input v-model="forms.store_use_size" placeholder="请输入" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="磁盘空间占用报警阀值" prop="store_use_alert">
+                <el-input
+                  v-model="forms.store_use_alert"
+                  placeholder="请输入"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="磁盘容量告警" prop="store_alert_switch">
+                <el-checkbox
+                  v-model="forms.store_alert_switch"
+                  true-label="1"
+                  false-label="0"
+                  >当磁盘空间占用达到设定阈值时报警</el-checkbox
+                >
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="数据删除" prop="delete_data_switch">
+                <el-checkbox
+                  v-model="forms.delete_data_switch"
+                  true-label="1"
+                  false-label="0"
+                  >基于存储时间要求自动删除</el-checkbox
+                >
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-card>
+      </el-form>
+    </div>
+
+    <!-- 绑定测点弹窗 -->
+    <el-dialog :visible.sync="dialogCD.visible">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
+        <span class="title-txt">绑定测点</span>
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
-        :model="dialog.forms"
-        :rules="dialog.rules"
-        ref="dialogForm"
-        label-width="100px"
+        :model="dialogCD.forms"
+        :rules="dialogCD.rules"
+        ref="dialogCDForm"
+        label-width="150px"
       >
-        <el-form-item label="权限名称" prop="name">
-          <el-input v-model="dialog.forms.name"></el-input>
-        </el-form-item>
-        <el-form-item label="权限标签" prop="permission">
-          <el-input v-model="dialog.forms.permission"></el-input>
-        </el-form-item>
-        <el-form-item label="子系统" prop="firstMenuId">
-          <el-select
-            v-model="dialog.forms.firstMenuId"
-            @change="
-              () => {
-                $set(dialog.forms, 'secondMenuId', '');
-                $set(dialog.forms, 'thirdMenuId', '');
+        <el-form-item label="" prop="">
+          <el-transfer
+            filterable
+            :filter-method="
+              (query, item) => {
+                return item.name.indexOf(query) > -1;
               }
             "
+            :titles="['未绑定', '已绑定']"
+            :props="{
+              key: 'id',
+              label: 'name',
+            }"
+            filter-placeholder="请输入"
+            v-model="dialogCD.forms.poindIdArray"
+            :data="allPointOpts"
           >
-            <el-option
-              v-for="item in firstMenuOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="模块"
-          prop="secondMenuId"
-          v-show="dialog.forms.firstMenuId"
-        >
-          <el-select
-            v-model="dialog.forms.secondMenuId"
-            @change="$set(dialog.forms, 'thirdMenuId', '')"
-          >
-            <el-option
-              v-for="item in secondMenuOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="菜单"
-          prop="thirdMenuId"
-          v-show="dialog.forms.secondMenuId"
-        >
-          <el-select v-model="dialog.forms.thirdMenuId">
-            <el-option
-              v-for="item in thirdMenuOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+          </el-transfer>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
-        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
+        <el-button style="width: 200px" type="primary" @click="dialogCDSubmit"
           >保 存</el-button
         >
       </div>
@@ -152,11 +243,11 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
 <script>
 import pagination from "@/components/Pagination";
 import {
-  alertLevelQueryById,
-  // alertLevelListByPage,
-  // alertLevelDelete,
-  // alertLevelEdit,
-  alertLevelAdd,
+  storeconfigAddOrEdit_store_params,
+  storeconfigGetStoreConfigParams,
+  storePointAdd,
+  storePointListAllNotBindPoint,
+  storePointListAllBindPoint,
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination },
@@ -164,6 +255,7 @@ export default {
     return {
       depOpts: [],
       firstMenuOpts: [],
+      allPointOpts: [],
       secondMenuOpts: [],
       thirdMenuOpts: [],
       filterForm: {
@@ -175,50 +267,66 @@ export default {
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
 
-      dialog: {
-        id: "",
+      remouldAspirationOption: [],
+      forms: {},
+      rules: {
+        // 表单验证
+        clanGroundNum: [{ required: true, tiggter: "blur", message: "请输入" }],
+        clanCode: [{ required: true, tiggter: "blur", message: "请输入" }],
+      },
+
+      dialogCD: {
         visible: false,
         forms: {},
-        rules: {
-          name: [{ required: true, trigger: "blur", message: "请输入" }],
-          permission: [{ required: true, trigger: "blur", message: "请输入" }],
-          menuType: [{ required: true, trigger: "change", message: "请输入" }],
-          firstMenuId: [{ required: true, trigger: "blur", message: "请输入" }],
-          secondMenuId: [
-            { required: true, trigger: "blur", message: "请输入" },
-          ],
-          thirdMenuId: [{ required: true, trigger: "blur", message: "请输入" }],
-        },
+        rules: {},
       },
     };
   },
-  watch: {
-  },
+  watch: {},
   async created() {
     this.handleQuery();
   },
   mounted() {},
   methods: {
-    dialogSubmit() {
-      this.$refs["dialogForm"].validate((valid, obj) => {
+    async handleCDDialog() {
+      // dialog显示时获取一级菜单列表
+      // 编辑
+      this.dialogCD.forms = {};
+      const r1 = await storePointListAllNotBindPoint();
+      this.pointNotBindDeviceGroupOpts = r1.data;
+      const r2 = await storePointListAllBindPoint();
+      this.pointBindDeviceGroupOpts = r2.data;
+      // this.dialogCD.forms.poindIdArray = r2.data.map((i) => i.id);
+      this.$set(
+        this.dialogCD.forms,
+        "poindIdArray",
+        r2.data.map((i) => i.id)
+      );
+      this.allPointOpts = this.pointNotBindDeviceGroupOpts.concat(
+        this.pointBindDeviceGroupOpts
+      );
+      this.dialogCD.visible = true;
+      this.$nextTick((_) => this.$refs["dialogCDForm"].clearValidate());
+    },
+    dialogCDSubmit() {
+      this.$refs["dialogCDForm"].validate((valid, obj) => {
         if (valid) {
-          let callAPI = null;
-          // 根据 menuType 确定父级id编号 parentId
-          if (!this.dialog.forms.thirdMenuId) {
-            this.$message.error("请选择父级菜单");
-            return;
-          }
-          this.dialog.forms.menuId = this.dialog.forms.thirdMenuId;
-          if (this.dialog.forms.id) {
-            callAPI = alertLevelEdit;
-          } else {
-            callAPI = alertLevelAdd;
-          }
-          callAPI(this.dialog.forms).then((res) => {
+          storePointAdd(this.dialogCD.forms).then((res) => {
             this.$message.success("操作成功!");
-            this.$refs["dialogForm"].resetFields();
-            this.dialog.visible = false;
+            this.$refs["dialogCDForm"].resetFields();
+            this.dialogCD.visible = false;
             this.getList();
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+    handleSubmit() {
+      this.$refs["forms"].validate((valid, obj) => {
+        if (valid) {
+          storeconfigAddOrEdit_store_params(this.forms).then((r) => {
+            this.handleQuery();
           });
         } else {
           return false;
@@ -231,23 +339,22 @@ export default {
       this.filterForm.pageNo = 1;
       this.getList();
     },
-    // 重置
-    handleReset(form) {
-      this.$refs[form].resetFields();
-      this.handleQuery();
-    },
+    // // 重置
+    // handleReset(form) {
+    //   this.$confirm("是否恢复默认设置 ? ", "提示", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning",
+    //   })
+    //     .then(() => {
+    //       this.$refs[form].resetFields();
+    //       alertconfigAlertparam_reset().then((r) => {
+    //         this.handleQuery();
+    //       });
+    //     })
+    //     .catch(() => {});
+    // },
     // 查看
-    async handleDialog(row) {
-      // dialog显示时获取一级菜单列表
-      if (row) {
-        // 编辑
-        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
-      } else {
-        this.dialog.forms = {};
-      }
-      this.dialog.visible = true;      
-      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
-    },
     // 删除
     handleDel(id) {
       this.$confirm("确认删除?", "提示", {
@@ -268,9 +375,8 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      alertLevelListByPage(this.filterForm).then((res) => {
-        this.listData = res.data.list;
-        this.listTotal = res.data.total;
+      storeconfigGetStoreConfigParams().then((res) => {
+        this.forms = res.data;
         this.listLoading = false;
       });
     },
@@ -281,7 +387,7 @@ export default {
 <style lang="scss" scoped>
 .auth-manage {
   display: grid;
-  grid-template-rows: 60px auto 70px;
+  grid-template-rows: 60px auto;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: 100%;
 }

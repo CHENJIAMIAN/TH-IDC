@@ -36,6 +36,25 @@ export function alertconfigAlertparam_reset(data) { return request({ url: '/admi
 // 告警显示参数设置接口
 export function alertconfigAddOrEdit_alert_params(data) { return request({ url: '/admin/alert/alertconfig/addOrEdit_alert_params', method: 'post', data }) }
 
+// 配置存储配置数据
+export function storeconfigAddOrEdit_store_params(data) { return request({ url: '/admin/alert/storeconfig/addOrEdit_store_params', method: 'post', data }) }
+// 获取存储配置数据
+export function storeconfigGetStoreConfigParams(data) { return request({ url: '/admin/alert/storeconfig/getStoreConfigParams', method: 'post', data }) }
+// 组合存储时绑定测点接口
+export function storePointAdd(data) { return request({ url: '/admin/alert/storePoint/add', method: 'post', data }) }
+// 组合存储时所有未绑定的测点
+export function storePointListAllNotBindPoint(data) { return request({ url: '/admin/alert/storePoint/listAllNotBindPoint', method: 'post', data }) }
+// 组合存储时所有已经绑定的测点
+export function storePointListAllBindPoint(data) { return request({ url: '/admin/alert/storePoint/listAllBindPoint', method: 'post', data }) }
+// 组合存储时未绑定的测点（带分页）
+export function storePointListByPageNotBindPoint(data) { return request({ url: '/admin/alert/storePoint/listByPageNotBindPoint', method: 'post', data }) }
+// 组合存储时已经绑定的测点（带分页）
+export function storePointListByPageBindPoint(data) { return request({ url: '/admin/alert/storePoint/listByPageBindPoint', method: 'post', data }) }
+
+
+
+
+
 
 
 
@@ -85,6 +104,24 @@ export function alertRuleTemplateDelete(data) { return request({ url: '/admin/al
 export function alertRuleTemplateEdit(data) { return request({ url: '/admin/alert/alertRuleTemplate/edit', method: 'post', data }) }
 // 新增告警模板
 export function alertRuleTemplateAdd(data) { return request({ url: '/admin/alert/alertRuleTemplate/add', method: 'post', data }) }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

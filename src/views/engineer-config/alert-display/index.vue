@@ -27,7 +27,6 @@
     </div>
 
     <el-form
-      class="form-vertical"
       ref="forms"
       :model="forms"
       :rules="rules"
@@ -78,19 +77,6 @@
             ></el-checkbox>
           </el-form-item>
         </el-col>
-
-        <!-- <el-col :span="8">
-            <el-form-item label="改造意愿">
-              <el-select v-model="forms.remouldAspiration">
-                <el-option
-                  v-for="item in remouldAspirationOption"
-                  :key="item.id"
-                  :label="item.paramValue"
-                  :value="item.id"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col> -->
       </el-row>
     </el-form>
   </div>
@@ -229,7 +215,7 @@ export default {
   display: grid;
   grid-template-rows: 60px auto 70px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
-  height: 100%;
+  height: calc(100vh - 260px);
 }
 .head {
   display: grid;

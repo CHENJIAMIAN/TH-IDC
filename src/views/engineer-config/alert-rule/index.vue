@@ -8,12 +8,29 @@
         size="medium"
         :model="filterForm"
       >
+        <el-form-item prop="name">
+          <el-input v-model="filterForm.name" placeholder="测点类型名称" />
+        </el-form-item>
+        <el-form-item prop="deviceTypeId">
+          <el-select
+            placeholder="设备类型"
+            v-model="filterForm.deviceTypeId"
+            popper-class="three-column"
+          >
+            <el-option
+              v-for="item in deviceTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item>
-          <!-- <el-button
+          <el-button
             type="primary"
             icon="el-icon-search"
             @click="handleQuery"
-          ></el-button>-->
+          ></el-button>
           <el-button
             type="primary"
             icon="el-icon-refresh"
@@ -21,10 +38,6 @@
             @click="handleReset('filterForm')"
             >重置</el-button
           >
-          <el-button type="primary" size="medium" @click="handleDialog()">
-            <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
-            <i class="el-icon-plus" />
-          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -36,47 +49,20 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="pointTypeId" label="测点类型ID" />
-      <el-table-column sortable prop="alertAlgorithm" label="告警算法">
+      <el-table-column sortable prop="name" label="测点类型名称" />
+      <!-- <el-table-column sortable prop="deviceTypeId" label="设备类型ID" /> -->
+      <el-table-column sortable prop="units" label="单位" />
+      <el-table-column sortable prop="valueType" label="值类型">
         <template slot-scope="{ row }">
-          <div v-for="item in row.alertAlgorithm" :key="item">
-            {{
-              alertAlgorithmOpts.find((i) => i.id == item) &&
-              alertAlgorithmOpts.find((i) => i.id == item).name
-            }}
-          </div>
+          {{
+            valueTypeOpts.find((i) => i.id == row.valueType) &&
+            valueTypeOpts.find((i) => i.id == row.valueType).name
+          }}
         </template>
       </el-table-column>
-      <el-table-column sortable prop="alertOperator" label="告警运算符" />
-      <el-table-column sortable prop="alertOperatorValue" label="告警运算值" />
-      <el-table-column sortable prop="recoverOperator" label="恢复运算符" />
-      <el-table-column
-        sortable
-        prop="recoverOperatorValue"
-        label="恢复运算值"
-      />
-      <el-table-column sortable prop="alertType" label="告警类型">
-        <template slot-scope="{ row }">
-          <div v-for="item in row.alertType" :key="item">
-            {{
-              alertTypeOpts.find((i) => i.id == item) &&
-              alertTypeOpts.find((i) => i.id == item).name
-            }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="alertLevelId" label="告警等级Id" />
-      <el-table-column sortable prop="filterTime" label="闪烁过滤时间(秒)" />
-      <el-table-column sortable prop="continueTime" label="持续超限时间(秒)" />
-      <el-table-column sortable prop="alertContent" label="告警内容" />
-      <el-table-column sortable prop="handlerAdvise" label="处理建议" />
-      <el-table-column sortable prop="status" label="状态">
-        <template slot-scope="{ row }">
-          <span style="color: #55fb55" v-if="row.status == 1">启用</span>
-          <span style="color: gray" v-else>禁用</span>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="points" label="指定测点" />
+      <el-table-column sortable prop="columnName" label="字段名" />
+      <el-table-column sortable prop="deviceTypeName" label="设备类型名称" />
+      <el-table-column sortable prop="count" label="告警规则条数" />
 
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
@@ -85,13 +71,8 @@
             type="primary"
             plain
             @click="handleDialog(row)"
-          ></el-button>
-          <el-button
-            icon="el-icon-delete"
-            type="primary"
-            plain
-            @click="handleDel(row.id)"
-          ></el-button>
+            >规则</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -104,81 +85,190 @@
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog :visible.sync="dialog.visible" top="25vh">
+    <el-dialog :visible.sync="dialogVisible" fullscreen custom-class="dialog-img">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
-        <img src="@/assets/img/hl.png" />
+        <span class="title-txt">基本设置</span>
+        <!-- <img src="@/assets/img/hl.png" /> -->
       </div>
-      <el-form
-        :model="dialog.forms"
-        :rules="dialog.rules"
-        ref="dialogForm"
-        label-width="120px"
-      >
-        <el-form-item label="测点类型ID" prop="pointTypeId">
-          <el-input v-model="dialog.forms.pointTypeId"></el-input>
-        </el-form-item>
 
-        <el-form-item label="告警算法" prop="alertAlgorithm">
-          <el-radio-group
-            v-model="dialog.forms.alertAlgorithm"
-            style="width: 100%"
-          >
-            <el-radio border :label="1">阈值算法</el-radio>
-            <el-radio border :label="2">中断算法</el-radio>
-            <el-radio border :label="3">故障算法</el-radio>
-          </el-radio-group>
-        </el-form-item>
-
-        <el-form-item prop="alertOperator" label="告警运算符">
-          <el-input v-model="dialog.forms.alertOperator"></el-input>
-        </el-form-item>
-        <el-form-item prop="alertOperatorValue" label="告警运算值">
-          <el-input v-model="dialog.forms.alertOperatorValue"></el-input>
-        </el-form-item>
-        <el-form-item prop="recoverOperator" label="恢复运算符">
-          <el-input v-model="dialog.forms.recoverOperator"></el-input>
-        </el-form-item>
-        <el-form-item prop="recoverOperatorValue" label="恢复运算值">
-          <el-input v-model="dialog.forms.recoverOperatorValue"></el-input>
-        </el-form-item>
-
-        <el-form-item prop="alertType" label="告警类型">
-          <el-radio-group v-model="dialog.forms.alertType" style="width: 100%">
-            <el-radio
-              v-for="item in alertTypeOpts"
-              :key="item.id"
-              :label="item.id"
-              border
-              >{{ item.name }}</el-radio
+      <div class="dialog-content">
+        <div class="measure-point-info">
+          <el-card>
+            <el-form
+              :model="dialogCD.forms"
+              :rules="dialogCD.rules"
+              ref="dialogCDForm"
+              label-width="150px"
             >
-          </el-radio-group>
-        </el-form-item>
+              <el-form-item label="测点类型名称" prop="name">
+                <el-input v-model="dialogCD.forms.name"></el-input>
+              </el-form-item>
 
-        <el-form-item prop="alertLevelId" label="告警等级Id">
-          <el-input v-model="dialog.forms.alertLevelId"></el-input>
-        </el-form-item>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                <el-form-item label="设备类型" prop="deviceTypeId">
+                  <el-select
+                    v-model="dialogCD.forms.deviceTypeId"
+                    popper-class="three-column"
+                  >
+                    <el-option
+                      v-for="item in deviceTypeOpts"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="值类型" prop="valueType">
+                  <el-select v-model="dialogCD.forms.valueType">
+                    <el-option
+                      v-for="item in valueTypeOpts"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    />
+                  </el-select>
+                </el-form-item>
+              </div>
 
-        <el-form-item prop="filterTime" label="闪烁过滤时间(秒)">
-          <el-input v-model="dialog.forms.filterTime"></el-input>
-        </el-form-item>
-        <el-form-item prop="continueTime" label="持续超限时间(秒)">
-          <el-input v-model="dialog.forms.continueTime"></el-input>
-        </el-form-item>
-        <el-form-item prop="alertContent" label="告警内容">
-          <el-input v-model="dialog.forms.alertContent"></el-input>
-        </el-form-item>
-        <el-form-item prop="handlerAdvise" label="处理建议">
-          <el-input v-model="dialog.forms.handlerAdvise"></el-input>
-        </el-form-item>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                <el-form-item label="单位" prop="units">
+                  <el-input v-model="dialogCD.forms.units"></el-input>
+                </el-form-item>
+                <el-form-item label="字段名" prop="columnName">
+                  <el-input
+                    @keyup.enter.native="dialogCDSubmit"
+                    v-model="dialogCD.forms.columnName"
+                  ></el-input>
+                </el-form-item>
+              </div>
+            </el-form>
+          </el-card>
+        </div>
 
-        <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-            <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
-            <el-radio border :label="0" style="color: gray">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
+        <div class="rule-list">
+          <el-card style="min-width: 340px;" 
+           v-for="alertRule in alertRuleList" :key="alertRule">
+            <el-form
+              :model="dialogRule.forms"
+              :rules="dialogRule.rules"
+              ref="dialogForm"
+              label-width="120px"
+            >
+              <el-form-item label="测点类型ID" prop="pointTypeId">
+                <el-input v-model="dialogRule.forms.pointTypeId"></el-input>
+              </el-form-item>
+
+              <el-form-item label="告警算法" prop="alertAlgorithm">
+                <el-select
+                  v-model="dialogRule.forms.alertAlgorithm"
+                  style="width: 100%"
+                >
+                  <el-option border label="阈值算法" :value="1"></el-option>
+                  <el-option border label="中断算法" :value="2"></el-option>
+                  <el-option border label="故障算法" :value="3"></el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item prop="alertOperator" label="告警运算符">
+                <el-select
+                  v-model="dialogRule.forms.alertOperator"
+                  style="width: 100%"
+                >
+                  <el-option border label="大于" :value="1"></el-option>
+                  <el-option border label="小于" :value="2"></el-option>
+                  <el-option border label="等于" :value="3"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="alertOperatorValue" label="告警运算值">
+                <el-input
+                  v-model="dialogRule.forms.alertOperatorValue"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="recoverOperator" label="恢复运算符">
+                <el-select
+                  v-model="dialogRule.forms.recoverOperator"
+                  style="width: 100%"
+                >
+                  <el-option border label="大于" :value="1"></el-option>
+                  <el-option border label="小于" :value="2"></el-option>
+                  <el-option border label="等于" :value="3"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="recoverOperatorValue" label="恢复运算值">
+                <el-input
+                  v-model="dialogRule.forms.recoverOperatorValue"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item prop="alertType" label="告警类型">
+                <el-select
+                  v-model="dialogRule.forms.alertType"
+                  style="width: 100%"
+                >
+                  <el-option
+                    v-for="item in alertTypeOpts"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item prop="alertLevelId" label="告警等级Id">
+                <el-input v-model="dialogRule.forms.alertLevelId"></el-input>
+              </el-form-item>
+
+              <el-form-item prop="filterTime" label="闪烁过滤时间(秒)">
+                <el-input v-model="dialogRule.forms.filterTime"></el-input>
+              </el-form-item>
+              <el-form-item prop="continueTime" label="持续超限时间(秒)">
+                <el-input v-model="dialogRule.forms.continueTime"></el-input>
+              </el-form-item>
+              <el-form-item prop="alertContent" label="告警内容">
+                <el-input v-model="dialogRule.forms.alertContent"></el-input>
+              </el-form-item>
+              <el-form-item prop="handlerAdvise" label="处理建议">
+                <el-input v-model="dialogRule.forms.handlerAdvise"></el-input>
+              </el-form-item>
+
+              <el-form-item label="状态" prop="status">
+                <el-radio-group
+                  v-model="dialogRule.forms.status"
+                  style="width: 100%"
+                >
+                  <el-radio border :label="1" style="color: #55fb55"
+                    >启用</el-radio
+                  >
+                  <el-radio border :label="2" style="color: gray"
+                    >禁用</el-radio
+                  >
+                </el-radio-group>
+              </el-form-item>
+            </el-form>
+            <div style="text-align: center">
+              <el-button
+                icon="el-icon-delete"
+                type="primary"
+                plain
+                @click="handleDel()"
+                >删除规则</el-button
+              >
+              <el-button type="primary" @click="dialogSubmit"
+                >保存规则</el-button
+              >
+            </div>
+          </el-card>
+          <el-button
+            icon="el-icon-plus"
+            type="primary"
+            size="medium"
+            @click="alertRuleList.push('')"
+          >
+            添加规则
+          </el-button>
+        </div>
+      </div>
+
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"
           >保 存</el-button
@@ -189,6 +279,10 @@
 </template>
 
 <script>
+import {
+  valueTypeOpts,
+  sortValidator,
+} from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   // alertRuleDelete,
@@ -199,10 +293,17 @@ import {
   alertRuleListAll,
   alertRuleQueryById,
 } from "@/api/engineer-config.js";
+import {
+  deviceTypeListAll,
+  pointTypeQueryById,
+} from "@/api/resource-manage.js";
 export default {
   components: { pagination },
   data() {
     return {
+      dialogVisible: true,
+      valueTypeOpts,
+      deviceTypeOpts: [],
       filterForm: {
         // 筛选条件
         pageNo: 1, // 当前页码
@@ -221,12 +322,13 @@ export default {
         { id: 5, name: "事件" },
         { id: 6, name: "其他" },
       ],
+      alertRuleList:["1","2"],
 
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
 
-      dialog: {
+      dialogRule: {
         id: "",
         visible: false,
         forms: {},
@@ -265,9 +367,15 @@ export default {
           points: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
+      dialogCD: {
+        id: "",
+        visible: false,
+        forms: {},
+      },
     };
   },
   created() {
+    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
@@ -276,15 +384,15 @@ export default {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
           let callAPI = null;
-          if (this.dialog.forms.id) {
+          if (this.dialogRule.forms.id) {
             callAPI = alertRuleEdit;
           } else {
             callAPI = alertRuleAdd;
           }
-          callAPI(this.dialog.forms).then((res) => {
+          callAPI(this.dialogRule.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogForm"].resetFields();
-            this.dialog.visible = false;
+            this.dialogVisible = false;
             this.getList();
           });
         } else {
@@ -306,12 +414,13 @@ export default {
     // 查看
     handleDialog(row) {
       if (row) {
+        pointTypeQueryById({ id: row.id }).then(
+          (r) => (this.dialogCD.forms = r.data)
+        );
         // 编辑
-        this.dialog.forms = JSON.parse(JSON.stringify(row));
-      } else {
-        this.dialog.forms = {};
+        this.dialogRule.forms = JSON.parse(JSON.stringify(row));
       }
-      this.dialog.visible = true;
+      this.dialogVisible = true;
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     // 删除
@@ -354,5 +463,25 @@ export default {
 .head {
   display: grid;
   justify-content: end;
+}
+.dialog-content {
+  display: grid;
+  gap: 20px;
+  .rule-list {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 20px;
+    overflow: auto;
+  }
+}
+
+  ::v-deep{
+.dialog-img{
+  background: #0b2a52;
+  .el-dialog__body{
+  }
+  .el-dialog__header{
+  }
+  }
 }
 </style>
