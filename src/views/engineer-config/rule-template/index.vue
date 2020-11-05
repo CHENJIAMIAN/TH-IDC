@@ -152,11 +152,11 @@ menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 
 <script>
 import pagination from "@/components/Pagination";
 import {
-  alertLevelQueryById,
-  // alertLevelListByPage,
-  // alertLevelDelete,
-  // alertLevelEdit,
-  alertLevelAdd,
+   alertRuleTemplateQueryById,
+   alertRuleTemplateListByPage,
+   alertRuleTemplateDelete,
+   alertRuleTemplateEdit,
+   alertRuleTemplateAdd,
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination },
@@ -210,9 +210,9 @@ export default {
           }
           this.dialog.forms.menuId = this.dialog.forms.thirdMenuId;
           if (this.dialog.forms.id) {
-            callAPI = alertLevelEdit;
+            callAPI =  alertRuleTemplateEdit;
           } else {
-            callAPI = alertLevelAdd;
+            callAPI =  alertRuleTemplateAdd;
           }
           callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
@@ -256,7 +256,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          alertLevelDelete({
+           alertRuleTemplateDelete({
             id: id,
           }).then((res) => {
             this.getList();
@@ -268,7 +268,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      alertLevelListByPage(this.filterForm).then((res) => {
+       alertRuleTemplateListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;

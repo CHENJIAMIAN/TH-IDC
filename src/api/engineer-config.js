@@ -44,6 +44,10 @@ export function alertconfigAddOrEdit_alert_params(data) { return request({ url: 
 
 // 查看所有告警规则
 export function alertRuleListAll(data) { return request({ url: '/admin/alert/alertRule/listAll', method: 'post', data }) }
+// 删除告警规则
+export function alertRuleDelete(data) { return request({ url: '/admin/alert/alertRule/delete', method: 'post', data }) }
+// 查看告警规则
+export function alertRuleQueryById(data) { return request({ url: '/admin/alert/alertRule/queryById', method: 'post', data }) }
 // 分页查看告警规则
 export function alertRuleListByPage(data) { return request({ url: '/admin/alert/alertRule/listByPage', method: 'post', data }) }
 //修改告警规则
@@ -69,6 +73,21 @@ export function alertNotificationEditResumeStatus(data) { return request({ url: 
 export function alertNotificationEditStatus(data) { return request({ url: '/admin/alert/alertNotification/editStatus', method: 'post', data }) }
 //分页查看告警通知
 export function alertNotificationListByPage(data) { return request({ url: '/admin/alert/alertNotification/listByPage', method: 'post', data }) }
+
+
+// 分页查看
+export function alertRuleTemplateListByPage(data) { return request({ url: '/admin/alert/alertRuleTemplate/listByPage', method: 'post', data }) }
+// 查看告警模板
+export function alertRuleTemplateQueryById(data) { return request({ url: '/admin/alert/alertRuleTemplate/queryById', method: 'post', data }) }
+// 删除告警模板
+export function alertRuleTemplateDelete(data) { return request({ url: '/admin/alert/alertRuleTemplate/delete', method: 'post', data }) }
+// 修改告警模板
+export function alertRuleTemplateEdit(data) { return request({ url: '/admin/alert/alertRuleTemplate/edit', method: 'post', data }) }
+// 新增告警模板
+export function alertRuleTemplateAdd(data) { return request({ url: '/admin/alert/alertRuleTemplate/add', method: 'post', data }) }
+
+
+
 
 
 

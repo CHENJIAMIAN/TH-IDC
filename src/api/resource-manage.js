@@ -45,6 +45,8 @@ export function spaceFloorDelete(data) { return request({ url: '/admin/space/spa
 export function spaceFloorEdit(data) { return request({ url: '/admin/space/spaceFloor/edit', method: 'post', data }) }
 //新增楼层接口
 export function spaceFloorAdd(data) { return request({ url: '/admin/space/spaceFloor/add', method: 'post', data }) }
+// 获取所有测点列表
+export function pointListAll(data) { return request({ url: '/admin/device/point/listAll', method: 'post', data }) }
 // 获取测点列表接口（带分页功能）
 export function pointListByPage(data) { return request({ url: '/admin/device/point/listByPage', method: 'post', data }) }
 // 获取测点信息接口

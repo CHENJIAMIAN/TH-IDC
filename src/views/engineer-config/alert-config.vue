@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      activeName: "alert-level",
+      activeName: "alert-mask-setting",
     };
   },
   methods: {

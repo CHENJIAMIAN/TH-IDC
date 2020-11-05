@@ -49,68 +49,72 @@
         </template>
       </el-table-column>
 
-      <el-table-column sortable prop="deviceTypes" label="设备类型[1,2,3]">
+      <el-table-column sortable label="屏蔽对象">
         <template slot-scope="{ row }">
-          <div v-for="item in row.deviceTypes" :key="item">
-            {{
-              deviceTypesOpts.find((i) => i.id == item) &&
-              deviceTypesOpts.find((i) => i.id == item).name
-            }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="pointTypes" label="测点类型[1,2,3]">
-        <template slot-scope="{ row }">
-          <div v-for="item in row.pointTypes" :key="item">
-            {{
-              pointTypesOpts.find((i) => i.id == item) &&
-              pointTypesOpts.find((i) => i.id == item).name
-            }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="deviceGroups" label="指定设备组[1,2,3]">
-        <template slot-scope="{ row }">
-          <div v-for="item in row.deviceGroups" :key="item">
-            {{
-              deviceGroupsOpts.find((i) => i.id == item) &&
-              deviceGroupsOpts.find((i) => i.id == item).name
-            }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="devices" label="指定设备[1,2,3]">
-        <template slot-scope="{ row }">
-          <div v-for="item in row.devices" :key="item">
-            {{
-              devicesOpts.find((i) => i.id == item) &&
-              devicesOpts.find((i) => i.id == item).name
-            }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="points" label="指定测点[1,2,3]">
-        <template slot-scope="{ row }">
-          <div v-for="item in row.points" :key="item">
-            {{
-              pointsOpts.find((i) => i.id == item) &&
-              pointsOpts.find((i) => i.id == item).name
-            }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="maskPeriod" label="屏蔽时段">
-        <template slot-scope="{ row }">
-          <div v-for="item in row.maskPeriod" :key="item">
-            {{
-              maskPeriodOpts.find((i) => i.id == item) &&
-              maskPeriodOpts.find((i) => i.id == item).name
-            }}
+          <div
+            v-for="item in row.points ||
+            row.devices ||
+            row.deviceGroups ||
+            row.pointTypes ||
+            row.deviceTypes"
+            :key="item.id"
+          >
+            {{ item.name }}
           </div>
         </template>
       </el-table-column>
 
-      <el-table-column sortable prop="status" label="状态">
+      <!-- <el-table-column sortable prop="deviceTypes" label="设备类型">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.deviceTypes" :key="item.id">
+            {{ item.name }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column sortable prop="pointTypes" label="测点类型">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.pointTypes" :key="item.id">
+            {{ item.name }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column sortable prop="deviceGroups" label="指定设备组">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.deviceGroups" :key="item.id">
+            {{ item.name }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column sortable prop="devices" label="指定设备">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.devices" :key="item.id">
+            {{ item.name }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column sortable prop="points" label="指定测点">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.points" :key="item.id">
+            {{ item.name }}
+          </div>
+        </template>
+      </el-table-column> -->
+
+      <el-table-column
+        align="center"
+        sortable
+        prop="maskPeriod"
+        label="屏蔽时段"
+        width="300"
+      >
+        <template slot-scope="{ row }">
+          <div v-for="item in row.maskPeriod.split(',')" :key="item">
+            {{ item }}
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column sortable prop="status" label="状态" align="center">
         <template slot-scope="{ row }">
           <span style="color: #55fb55" v-if="row.status == 1">启用</span>
           <span style="color: gray" v-else>禁用</span>
@@ -154,8 +158,33 @@
         ref="dialogForm"
         label-width="100px"
       >
-        <el-form-item label="角色名称" prop="name">
+        <!-- <el-form-item label="角色名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
+        </el-form-item> -->
+
+        <el-form-item label="楼层" prop="floorCode">
+          <el-select
+            v-model="dialog.forms.floorCode"
+            @change="$set(dialog.forms, 'roomCode', '')"
+          >
+            <el-option
+              v-for="item in floorOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.floorCode"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="房间" prop="roomCode">
+          <el-select v-model="dialog.forms.roomCode" @change="handleRoomChange">
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
         </el-form-item>
 
         <el-form-item label="屏蔽方式" prop="maskType">
@@ -169,10 +198,127 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item
+          label="设备类型"
+          prop="deviceTypes"
+          v-show="dialog.forms.maskType == 2"
+        >
+          <el-select
+            multiple
+            v-model="dialog.forms.deviceTypes"
+            popper-class="three-column"
+          >
+            <el-option
+              v-for="item in deviceTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
+          label="测点类型"
+          prop="pointTypes"
+          v-show="dialog.forms.maskType == 3"
+        >
+          <el-select
+            multiple
+            v-model="dialog.forms.pointTypes"
+            popper-class="three-column"
+          >
+            <el-option
+              v-for="item in pointTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
+          label="设备组"
+          prop="deviceGroups"
+          v-show="dialog.forms.maskType == 4"
+        >
+          <el-select multiple v-model="dialog.forms.deviceGroups">
+            <el-option
+              v-for="item in deviceGroupOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
+          label="设备"
+          prop="devices"
+          v-show="dialog.forms.maskType == 5"
+        >
+          <el-select multiple v-model="dialog.forms.devices">
+            <el-option
+              v-for="item in deviceOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
+          label="测点"
+          prop="points"
+          v-show="dialog.forms.maskType == 6"
+        >
+          <el-select multiple v-model="dialog.forms.points">
+            <el-option
+              v-for="item in pointOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="屏蔽时段" prop="maskPeriod2">
+          <template v-for="(item, index) in dialog.forms.maskPeriod2">
+            <div
+              :key="index + Math.random()"
+              style="display: flex; gap: 10px; margin: 5px"
+            >
+              <el-date-picker
+                v-model="dialog.forms.maskPeriod2[index]"
+                type="datetimerange"
+                placeholder="请选择"
+                value-format="yyyy-MM-dd HH:mm"
+              />
+              <el-button
+                type="primary"
+                size="mini"
+                icon="el-icon-minus"
+                plain
+                @click="dialog.forms.maskPeriod2.splice(index, 1)"
+              ></el-button>
+            </div>
+          </template>
+        </el-form-item>
+        <el-form-item label="" prop="">
+          <div style="display: grid">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-plus"
+              plain
+              @click="dialog.forms.maskPeriod2.push('')"
+            ></el-button>
+          </div>
+        </el-form-item>
+
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="dialog.forms.status" style="width: 100%">
             <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
-            <el-radio border :label="0" style="color: gray">禁用</el-radio>
+            <el-radio border :label="2" style="color: gray">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -194,10 +340,21 @@ import {
   alertMaskListByPage,
   alertMaskAdd,
 } from "@/api/engineer-config.js";
+
+import {
+  pointListAll,
+  pointTypeListAll,
+  spaceFloorListAll,
+  deviceTypeListAll,
+  deviceListAll,
+  deviceGroupListAll,
+  spaceRoomListAll,
+} from "@/api/resource-manage.js";
 export default {
   components: { pagination },
   data() {
     return {
+      teststr: "",
       filterForm: {
         // 筛选条件
         pageNo: 1, // 当前页码
@@ -211,16 +368,18 @@ export default {
         { id: 5, name: "指定设备" },
         { id: 6, name: "指定测点" },
       ],
-      deviceTypesOpts: [],
+      floorOpts: [],
+      roomOpts: [],
+
+      pointOpts: [],
+      pointTypeOpts: [],
+      deviceGroupOpts: [],
+      deviceTypeOpts: [],
+      deviceOpts: [],
       pointTypesOpts: [],
       deviceGroupsOpts: [],
       devicesOpts: [],
       pointsOpts: [],
-      maskPeriodOpts: [
-        "2020-11-03 12:30 - 2020-11-04 13:30",
-        "2020-11-04 12:30 - 2020-11-05 13:30",
-      ],
-
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
@@ -231,19 +390,44 @@ export default {
       dialog: {
         id: "",
         visible: false,
-        forms: {},
+        forms: { maskPeriod2: [""] },
         rules: {
-          name: [{ required: true, trigger: "blur", message: "请输入" }],
+          floorCode: [{ required: true, trigger: "blur", message: "请输入" }],
+          roomCode: [{ required: true, trigger: "blur", message: "请输入" }],
+          maskType: [{ required: true, trigger: "blur", message: "请输入" }],
+          status: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };
   },
+  watch: {
+    async "dialog.forms.floorCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.roomOpts = [];
+      const r = await spaceRoomListAll({ floorCode: n });
+      this.roomOpts = r.data;
+    },
+  },
   created() {
+    spaceFloorListAll().then((r) => (this.floorOpts = r.data));
+    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
+    pointTypeListAll().then((r) => (this.pointTypeOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
   methods: {
+    handleRoomChange(n) {
+      pointListAll({ roomCode: n }).then((r) => (this.pointOpts = r.data));
+      deviceListAll({ roomCode: n }).then((r) => (this.deviceOpts = r.data));
+      deviceGroupListAll({ roomCode: n }).then(
+        (r) => (this.deviceGroupOpts = r.data)
+      );
+    },
     dialogSubmit() {
+      this.dialog.forms.maskPeriod = this.dialog.forms.maskPeriod2
+        .filter((i) => i)
+        .map((i) => i.join(" - "));
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
           let callAPI = null;
@@ -275,12 +459,46 @@ export default {
       this.handleQuery();
     },
     // 查看
-    handleDialog(row) {
+    async handleDialog(row) {
       if (row) {
         // 编辑
-        this.dialog.forms = JSON.parse(JSON.stringify(row));
+        const r = await alertMaskQueryById({ id: row.id });
+        this.dialog.forms = r.data;
+        this.floorOpts = r.data.spaceFloorList;
+        this.dialog.forms.floorCode = r.data.spaceFloorList.find(
+          (i) => i.has
+        ).floorCode;
+
+        this.roomOpts = r.data.spaceRoomList;
+        this.dialog.forms.roomCode = r.data.spaceRoomList.find(
+          (i) => i.has
+        ).roomCode;
+
+        this.deviceTypeOpts = r.data.deviceTypes;
+        this.dialog.forms.deviceTypes =
+          r.data.deviceTypes &&
+          r.data.deviceTypes.filter((i) => i.has).map((i) => i.id);
+
+        this.deviceGroupOpts = r.data.deviceGroups;
+        this.dialog.forms.deviceGroups =
+          r.data.deviceGroups &&
+          r.data.deviceGroups.filter((i) => i.has).map((i) => i.id);
+
+        this.pointOpts = r.data.points;
+        this.dialog.forms.points =
+          r.data.points && r.data.points.filter((i) => i.has).map((i) => i.id);
+
+        this.pointTypeOpts = r.data.pointTypes;
+        this.dialog.forms.pointTypes =
+          r.data.pointTypes &&
+          r.data.pointTypes.filter((i) => i.has).map((i) => i.id);
+        this.$set(
+          this.dialog.forms,
+          "maskPeriod2",
+          r.data.maskPeriod.split(",").map((i) => i.split(" - "))
+        );
       } else {
-        this.dialog.forms = {};
+        this.dialog.forms = { maskPeriod2: [""] };
       }
       this.dialog.visible = true;
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());

@@ -1,12 +1,18 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
-
-
-
+.el-date-table td.in-range div {
+  background-color: #00f7ff4d;
+}
+.el-date-editor .el-range-input {
+  background: #0e305c;
+}
+.el-tabs--border-card {
+  background: transparent;
+}
 
 .el-dialog__headerbtn {
-  transform: translate(0px, -10px) scale(.8);
+  transform: translate(0px, -10px) scale(0.8);
   width: 22px;
 }
 .el-radio {
@@ -51,7 +57,6 @@
 .el-loading-mask {
   background-color: rgb(255 255 255 / 15%);
 }
-
 
 .el-table {
   font-size: 16px;
