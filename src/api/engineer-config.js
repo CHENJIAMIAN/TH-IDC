@@ -62,7 +62,7 @@ export function storePointListByPageBindPoint(data) { return request({ url: '/ad
 
 
 // 查看所有告警规则
-export function alertRuleListAll(data) { return request({ url: '/admin/alert/alertRule/listAll', method: 'post', data }) }
+export function alertRuleListByPointTypeId(data) { return request({ url: '/admin/alert/alertRule/listByPointTypeId', method: 'post', data }) }
 // 删除告警规则
 export function alertRuleDelete(data) { return request({ url: '/admin/alert/alertRule/delete', method: 'post', data }) }
 // 查看告警规则
@@ -104,6 +104,19 @@ export function alertRuleTemplateDelete(data) { return request({ url: '/admin/al
 export function alertRuleTemplateEdit(data) { return request({ url: '/admin/alert/alertRuleTemplate/edit', method: 'post', data }) }
 // 新增告警模板
 export function alertRuleTemplateAdd(data) { return request({ url: '/admin/alert/alertRuleTemplate/add', method: 'post', data }) }
+
+
+// 修改状态
+export function configEmailUpdateState(data) { return request({ url: '/admin/alert/configEmail/updateState', method: 'post', data }) }
+// 获取邮箱配置列表 （带分页）
+export function configEmailListByPage(data) { return request({ url: '/admin/alert/configEmail/listByPage', method: 'post', data }) }
+// 删除邮箱配置
+export function configEmailDelete(data) { return request({ url: '/admin/alert/configEmail/delete', method: 'post', data }) }
+// 修改邮箱配置
+export function configEmailEdit(data) { return request({ url: '/admin/alert/configEmail/edit', method: 'post', data }) }
+// 新增邮箱配置
+export function configEmailAdd(data) { return request({ url: '/admin/alert/configEmail/add', method: 'post', data }) }
+
 
 
 
