@@ -1,6 +1,13 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
+.el-card.is-always-shadow {
+  box-shadow: 0px 1px 5px 4px rgb(0 31 79);
+}
+.el-card {
+  border: 1px solid #00f7ff94;
+  background-color: #1236636e;
+}
 .el-date-table td.in-range div {
   background-color: #00f7ff4d;
 }

@@ -85,7 +85,11 @@
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog :visible.sync="dialogVisible" fullscreen custom-class="dialog-img">
+    <el-dialog
+      :visible.sync="dialogVisible"
+      fullscreen
+      custom-class="dialog-img"
+    >
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">基本设置</span>
         <!-- <img src="@/assets/img/hl.png" /> -->
@@ -99,12 +103,18 @@
               :rules="dialogCD.rules"
               ref="dialogCDForm"
               label-width="150px"
+              style="pointer-events: none"
             >
-              <el-form-item label="测点类型名称" prop="name">
-                <el-input v-model="dialogCD.forms.name"></el-input>
-              </el-form-item>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+                "
+              >
+                <el-form-item label="测点类型名称" prop="name">
+                  <el-input v-model="dialogCD.forms.name"></el-input>
+                </el-form-item>
 
-              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
                 <el-form-item label="设备类型" prop="deviceTypeId">
                   <el-select
                     v-model="dialogCD.forms.deviceTypeId"
@@ -128,9 +138,7 @@
                     />
                   </el-select>
                 </el-form-item>
-              </div>
 
-              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
                 <el-form-item label="单位" prop="units">
                   <el-input v-model="dialogCD.forms.units"></el-input>
                 </el-form-item>
@@ -146,8 +154,11 @@
         </div>
 
         <div class="rule-list">
-          <el-card style="min-width: 340px;" 
-           v-for="alertRule in alertRuleList" :key="alertRule">
+          <el-card
+            style="min-width: 340px"
+            v-for="(alertRule, index) in alertRuleList"
+            :key="alertRule"
+          >
             <el-form
               :model="dialogRule.forms"
               :rules="dialogRule.rules"
@@ -155,7 +166,19 @@
               label-width="120px"
             >
               <el-form-item label="测点类型ID" prop="pointTypeId">
-                <el-input v-model="dialogRule.forms.pointTypeId"></el-input>
+                <el-select
+                  clearable
+                  v-model="filterForm.pointTypeId"
+                  placeholder="测点类型"
+                  popper-class="three-column"
+                >
+                  <el-option
+                    v-for="item in pointTypeOpts"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  />
+                </el-select>
               </el-form-item>
 
               <el-form-item label="告警算法" prop="alertAlgorithm">
@@ -250,7 +273,7 @@
                 icon="el-icon-delete"
                 type="primary"
                 plain
-                @click="handleDel()"
+                @click="handleDeleteRule(dialogRule.forms.id, index)"
                 >删除规则</el-button
               >
               <el-button type="primary" @click="dialogSubmit"
@@ -302,6 +325,7 @@ export default {
   data() {
     return {
       dialogVisible: true,
+      pointTypeOpts: [],
       valueTypeOpts,
       deviceTypeOpts: [],
       filterForm: {
@@ -322,7 +346,7 @@ export default {
         { id: 5, name: "事件" },
         { id: 6, name: "其他" },
       ],
-      alertRuleList:["1","2"],
+      alertRuleList: ["1", "2"],
 
       listLoading: true,
       listData: [], // 列表数据
@@ -424,7 +448,7 @@ export default {
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     // 删除
-    handleDel(id) {
+    handleDeleteRule(id, index) {
       this.$confirm("确认删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -434,7 +458,7 @@ export default {
           alertRuleDelete({
             id: id,
           }).then((res) => {
-            this.getList();
+            this.dialogRule.forms.alertRuleList.splice(index, 1);
             this.$message.success("删除成功!");
           });
         })
@@ -475,13 +499,13 @@ export default {
   }
 }
 
-  ::v-deep{
-.dialog-img{
-  background: #0b2a52;
-  .el-dialog__body{
-  }
-  .el-dialog__header{
-  }
+::v-deep {
+  .dialog-img {
+    background: #0b2a52;
+    .el-dialog__body {
+    }
+    .el-dialog__header {
+    }
   }
 }
 </style>
