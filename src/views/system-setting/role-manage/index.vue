@@ -185,10 +185,10 @@ updateUserId	[int]		修改人ID （可为空）
         <img src="@/assets/img/hl.png" />
       </div>
       <el-form
+        style="display: grid; justify-content: center"
         :model="dialogQX.forms"
         :rules="dialogQX.rules"
         ref="dialogQXForm"
-        label-width="150px"
       >
         <el-tree
           default-expand-all
@@ -444,9 +444,9 @@ export default {
       border-radius: 5px;
     }
     .rooms-el-checkbox-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      display: flex;
       gap: 10px;
+      flex-wrap: wrap;
       .el-checkbox.is-bordered + .el-checkbox.is-bordered {
         margin-left: 0;
       }

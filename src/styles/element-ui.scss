@@ -1,6 +1,9 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
+.el-tree{
+  background: transparent;
+}
 .radio-status > .el-radio:nth-child(1) .el-radio__label {
   color: #55fb55;
 }

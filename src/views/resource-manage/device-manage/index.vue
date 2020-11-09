@@ -264,10 +264,10 @@
         <img  src="@/assets/img/hl.png" />
       </div>
       <el-form
+        style="display: grid;justify-content: center;"
         :model="dialogCD.forms"
         :rules="dialogCD.rules"
         ref="dialogCDForm"
-        label-width="150px"
       >
         <el-form-item label="" prop="">
           <el-transfer
