@@ -64,6 +64,12 @@ export default {
           meta: { title: '规则模板', icon: 'icon' }
         },
         {
+          path: 'mail-config',
+          component: () => import('@/views/engineer-config/mail-config/index'),
+          name: 'mail-config',
+          meta: { title: '邮箱配置', icon: 'icon' }
+        },
+        {
           path: 'alert-rule',
           component: () => import('@/views/engineer-config/alert-rule/index'),
           name: 'alert-rule',
