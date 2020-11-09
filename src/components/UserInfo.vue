@@ -49,7 +49,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="账号状态" prop="status">
-          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
+          <el-radio-group class="radio-status" v-model="dialog.forms.status" style="width: 100%">
             <el-radio border :label="1">启用</el-radio>
             <el-radio border :label="0">禁用</el-radio>
           </el-radio-group>
@@ -81,7 +81,7 @@ export default {
       dialog: {
         id: "",
         visible: false,
-        forms: {},
+        forms: {status:1},
         rules: {
           userName: [{ required: true, trigger: "blur", message: "请输入" }],
           password: [{ required: true, trigger: "blur", message: "请输入" }],

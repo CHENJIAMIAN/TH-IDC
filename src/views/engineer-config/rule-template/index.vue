@@ -243,7 +243,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = {};
+        this.dialog.forms = {status:1};
       }
       this.dialog.visible = true;      
       this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());

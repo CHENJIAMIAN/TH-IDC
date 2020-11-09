@@ -64,22 +64,7 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
         width="180"
       />
       <el-table-column sortable prop="takeTime" label="耗时（毫秒）" />
-      <!-- <el-table-column label="操作" align="center" width="240">
-        <template slot-scope="{ row }">
-          <el-button
-            icon="el-icon-edit-outline"
-            type="primary"
-            plain
-            @click="handleDialog(row)"
-          ></el-button>
-          <el-button
-            icon="el-icon-delete"
-            type="primary"
-            plain
-            @click="handleDel(row.id)"
-          ></el-button>
-        </template>
-      </el-table-column> -->
+
     </el-table>
     <pagination
       :hidden="listTotal > 0 ? false : true"
@@ -89,57 +74,6 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
       @pagination="getList"
     />
 
-    <!-- 详情弹窗 -->
-    <el-dialog :visible.sync="dialog.visible">
-      <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
-      </div>
-      <el-form
-        :model="dialog.forms"
-        :rules="dialog.rules"
-        ref="dialogForm"
-        label-width="100px"
-      >
-        <el-form-item label="用户账号" prop="userName">
-          <el-input v-model="dialog.forms.userName"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password" v-if="!dialog.forms.id">
-          <el-input v-model="dialog.forms.password"></el-input>
-        </el-form-item>
-        <el-form-item label="用户名称" prop="realName">
-          <el-input v-model="dialog.forms.realName"></el-input>
-        </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="dialog.forms.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="dialog.forms.email"></el-input>
-        </el-form-item>
-        <el-form-item label="微信" prop="wechat">
-          <el-input v-model="dialog.forms.wechat"></el-input>
-        </el-form-item>
-        <el-form-item label="钉钉" prop="dingtalk">
-          <el-input v-model="dialog.forms.dingtalk"></el-input>
-        </el-form-item>
-        <el-form-item label="描述" prop="remarks">
-          <el-input v-model="dialog.forms.remarks"></el-input>
-        </el-form-item>
-        <el-form-item label="账号状态" prop="status">
-          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-            <el-radio border :label="1">启用</el-radio>
-            <el-radio border :label="0">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" style="text-align: center">
-        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
-          >保 存</el-button
-        >
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -159,13 +93,6 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-
-      dialog: {
-        id: "",
-        visible: false,
-        forms: {},
-        rules: {},
-      },
     };
   },
   created() {
@@ -191,16 +118,6 @@ export default {
     handleReset(form) {
       this.$refs[form].resetFields();
       this.handleQuery();
-    },
-    // 查看
-    handleDialog(row) {
-      if (row) {
-        // 编辑
-        this.dialog.forms = JSON.parse(JSON.stringify(row));
-      } else {
-        this.dialog.forms = {};
-      }
-      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

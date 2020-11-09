@@ -42,8 +42,8 @@
             v-model="filterForm.status"
             placeholder="状态"
           >
-            <el-option      label="启用"       :value="1"            />
-            <el-option      label="禁用"       :value="0"            />
+            <el-option   text-color="#55fb55"   label="启用"       :value="1"            />
+            <el-option   text-color="gray"   label="禁用"       :value="0"            />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -189,7 +189,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
+          <el-radio-group class="radio-status" v-model="dialog.forms.status" style="width: 100%">
             <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
             <el-radio border :label="0" style="color: gray"    >禁用</el-radio>
           </el-radio-group>
@@ -307,7 +307,7 @@ export default {
         this.$set(this.dialog.forms,"roleIdArray",r.data.roleList.filter(i=>i.has=='1').map(i=>i.id))
         // this.dialog.forms = JSON.parse(JSON.stringify(row));
       } else {
-        this.dialog.forms = {};
+        this.dialog.forms = {status:1};
         this.$set(this.dialog.forms,"roleIdArray",[])
       }
       this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());

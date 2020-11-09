@@ -326,6 +326,7 @@ export default {
       this.$refs["forms"].validate((valid, obj) => {
         if (valid) {
           storeconfigAddOrEdit_store_params(this.forms).then((r) => {
+            this.$message.success('操作成功!');
             this.handleQuery();
           });
         } else {

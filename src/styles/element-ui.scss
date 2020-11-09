@@ -1,6 +1,12 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
+.radio-status > .el-radio:nth-child(1) .el-radio__label {
+  color: #55fb55;
+}
+.radio-status > .el-radio:nth-child(2) .el-radio__label {
+  color: gray;
+}
 .el-card.is-always-shadow {
   box-shadow: 0px 1px 5px 4px rgb(0 31 79);
 }

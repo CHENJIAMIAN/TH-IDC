@@ -34,6 +34,11 @@ handlerUserName
 
 
 
+status 状态，1是 待受理 2是 已受理，3是 取消		
+handlerRemark		受理说明
+resumeStatus 恢复状态 ，1是 已恢复 ，其它是 未恢复
+
+
 
 
 

@@ -115,7 +115,8 @@ export default {
     border-image-outset: 35px 37px 37px 35px;
     border-image-repeat: stretch stretch;
     left: 60px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 

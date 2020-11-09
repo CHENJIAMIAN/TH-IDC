@@ -139,7 +139,7 @@
 
         <div class="rule-list">
           <el-card
-            style="min-width: 350px; overflow: auto"
+            style="width: 340px"
             v-for="(alertRule, index) in cdForm.forms.alertRuleList"
             :key="index"
           >
@@ -244,6 +244,7 @@
 
               <el-form-item label="状态" prop="status">
                 <el-radio-group
+                  class="radio-status"
                   v-model="cdForm.forms.alertRuleList[index].status"
                   style="width: 100%"
                 >
@@ -275,10 +276,11 @@
             </div>
           </el-card>
           <el-button
+            style="width: 200px"
             icon="el-icon-plus"
             type="primary"
             size="medium"
-            @click="cdForm.forms.alertRuleList.push({})"
+            @click="cdForm.forms.alertRuleList.push({ status: 1 })"
           >
             添加规则
           </el-button>
@@ -349,7 +351,7 @@ export default {
 
       cdForm: {
         forms: {
-          alertRuleList: [{}],
+          alertRuleList: [{ status: 1 }],
         },
         rules: {},
         ruleForm: {
@@ -479,7 +481,10 @@ export default {
     },
     // 删除
     handleDeleteRule(id, index) {
-      if (!id) return;
+      if (!id) {
+        this.cdForm.forms.alertRuleList.splice(index, 1);
+        return;
+      }
       this.$confirm("确认删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -534,10 +539,9 @@ export default {
   height: 100%;
   overflow: auto;
   .rule-list {
-    display: grid;
-    grid-auto-flow: column;
-    gap: 10px;
-    overflow: auto;
+    display: flex;
+    gap: 40px 10px;
+    flex-flow: wrap;
   }
 }
 

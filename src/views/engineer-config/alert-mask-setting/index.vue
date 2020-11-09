@@ -36,9 +36,9 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="floorCode" label="楼层编号" />
-      <el-table-column sortable prop="roomCode" label="房间编号" />
-      <el-table-column sortable prop="maskType" label="屏蔽方式">
+      <el-table-column  prop="floorCode" label="楼层编号" />
+      <el-table-column  prop="roomCode" label="房间编号" />
+      <el-table-column  prop="maskType" label="屏蔽方式">
         <template slot-scope="{ row }">
           <div>
             {{
@@ -49,7 +49,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column sortable label="屏蔽对象">
+      <el-table-column  label="屏蔽对象">
         <template slot-scope="{ row }">
           <div
             v-for="item in row.points ||
@@ -64,35 +64,35 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column sortable prop="deviceTypes" label="设备类型">
+      <!-- <el-table-column  prop="deviceTypes" label="设备类型">
         <template slot-scope="{ row }">
           <div v-for="item in row.deviceTypes" :key="item.id">
             {{ item.name }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="pointTypes" label="测点类型">
+      <el-table-column  prop="pointTypes" label="测点类型">
         <template slot-scope="{ row }">
           <div v-for="item in row.pointTypes" :key="item.id">
             {{ item.name }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="deviceGroups" label="指定设备组">
+      <el-table-column  prop="deviceGroups" label="指定设备组">
         <template slot-scope="{ row }">
           <div v-for="item in row.deviceGroups" :key="item.id">
             {{ item.name }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="devices" label="指定设备">
+      <el-table-column  prop="devices" label="指定设备">
         <template slot-scope="{ row }">
           <div v-for="item in row.devices" :key="item.id">
             {{ item.name }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="points" label="指定测点">
+      <el-table-column  prop="points" label="指定测点">
         <template slot-scope="{ row }">
           <div v-for="item in row.points" :key="item.id">
             {{ item.name }}
@@ -102,7 +102,7 @@
 
       <el-table-column
         align="center"
-        sortable
+        
         prop="maskPeriod"
         label="屏蔽时段"
         width="300"
@@ -114,7 +114,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column sortable prop="status" label="状态" align="center">
+      <el-table-column  prop="status" label="状态" align="center">
         <template slot-scope="{ row }">
           <span style="color: #55fb55" v-if="row.status == 1">启用</span>
           <span style="color: gray" v-else>禁用</span>
@@ -316,7 +316,7 @@
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
+          <el-radio-group class="radio-status" v-model="dialog.forms.status" style="width: 100%">
             <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
             <el-radio border :label="2" style="color: gray">禁用</el-radio>
           </el-radio-group>
@@ -498,7 +498,7 @@ export default {
           r.data.maskPeriod.split(",").map((i) => i.split(" - "))
         );
       } else {
-        this.dialog.forms = { maskPeriod2: [""] };
+        this.dialog.forms = {status:1, maskPeriod2: [""] };
       }
       this.dialog.visible = true;
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());

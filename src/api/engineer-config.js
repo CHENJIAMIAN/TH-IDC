@@ -51,16 +51,6 @@ export function storePointListByPageNotBindPoint(data) { return request({ url: '
 // 组合存储时已经绑定的测点（带分页）
 export function storePointListByPageBindPoint(data) { return request({ url: '/admin/alert/storePoint/listByPageBindPoint', method: 'post', data }) }
 
-
-
-
-
-
-
-
-
-
-
 // 查看所有告警规则
 export function alertRuleListByPointTypeId(data) { return request({ url: '/admin/alert/alertRule/listByPointTypeId', method: 'post', data }) }
 // 删除告警规则
@@ -84,6 +74,16 @@ export function alertMaskEdit(data) { return request({ url: '/admin/alert/alertM
 export function alertMaskListByPage(data) { return request({ url: '/admin/alert/alertMask/listByPage', method: 'post', data }) }
 //新增屏蔽
 export function alertMaskAdd(data) { return request({ url: '/admin/alert/alertMask/add', method: 'post', data }) }
+
+
+
+
+
+
+
+
+
+
 
 
 // 恢复状态操作

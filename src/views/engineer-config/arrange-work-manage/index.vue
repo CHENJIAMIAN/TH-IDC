@@ -76,7 +76,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="状态" width="240" align="center">
+      <el-table-column label="状态" width="150" align="center">
         <template slot-scope="{ row }">
           <el-switch
             @change="handleStatusChange($event, row)"
@@ -86,7 +86,7 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="240">
+      <el-table-column label="操作" align="center" width="150">
         <template slot-scope="{ row }">
           <el-button
             icon="el-icon-delete"
@@ -105,10 +105,11 @@
         <img src="@/assets/img/hl.png" />
       </div>
       <el-form
+        style="display: grid;justify-content: center;"
         :model="dialogRY.forms"
         :rules="dialogRY.rules"
         ref="dialogRYForm"
-        label-width="150px"
+        label-width="50"
       >
         <el-form-item label="" prop="">
           <el-transfer

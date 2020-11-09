@@ -35,7 +35,7 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="level" label="级别"/>
+      <el-table-column  prop="level" label="级别"/>
         <!-- <template slot-scope="{ row }">
           <div>
             {{
@@ -46,14 +46,14 @@
         </template>
       </el-table-column> -->
 
-      <el-table-column sortable prop="name" label="自定义名称" />
-      <el-table-column sortable prop="noteType" label="通知方式">
+      <el-table-column  prop="name" label="自定义名称" />
+      <el-table-column  prop="noteType" label="通知方式">
         <template slot-scope="{ row }">
           <span v-if="row.noteType == 1">语音</span>
           <span v-else>文字</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="noteContent" label="通知内容">
+      <el-table-column  prop="noteContent" label="通知内容">
         <template slot-scope="{ row }">
           <div v-for="item in row.noteContent" :key="item">
             {{
@@ -64,7 +64,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column sortable prop="status" label="状态">
+      <el-table-column  prop="status" label="状态">
         <template slot-scope="{ row }">
           <span style="color: #55fb55" v-if="row.status == 1">启用</span>
           <span style="color: gray" v-else>禁用</span>
@@ -80,6 +80,7 @@
             @click="handleDialog(row)"
           ></el-button>
           <el-button
+            v-if="!(row.level>0 && row.level<6)"
             icon="el-icon-delete"
             type="primary"
             plain
@@ -151,7 +152,7 @@
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="dialog.forms.status" style="width: 100%">
+          <el-radio-group class="radio-status" v-model="dialog.forms.status" style="width: 100%">
             <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
             <el-radio border :label="0" style="color: gray">禁用</el-radio>
           </el-radio-group>
@@ -262,7 +263,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = {};
+        this.dialog.forms = {status:1};
         this.$set(this.dialog.forms, "noteContent", []);
       }
       this.dialog.visible = true;
