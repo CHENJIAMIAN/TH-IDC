@@ -40,6 +40,20 @@ export default {
       // ]
     },
     {
+      path: 'channel-config',
+      component: () => import('@/views/engineer-config/channel-config'),
+      name: 'channel-config',
+      meta: { title: '通道配置', icon: 'icon' },
+      /* 
+channel-config
+mailbox-config
+sms-config
+voice-config
+wechat-config
+dingding-config
+      */
+    },
+    {
       path: 'rule-manage',
       component: () => import('@/views/engineer-config/index'),
       name: 'rule-manage',

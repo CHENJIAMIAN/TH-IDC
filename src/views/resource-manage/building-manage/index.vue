@@ -2,15 +2,21 @@
   <div class="app-container building-manage">
     <!-- 筛选条件 -->
     <div class="head">
-      <el-form
-        ref="filterForm"
-        :inline="true"
-        size="medium"
-      >
+      <el-form ref="filterForm" :inline="true" size="medium">
         <el-form-item>
-          <el-button icon="el-icon-upload2" type="primary" @click="handleDialog()" title="上传/修改建筑物图片"
-            ></el-button
+          <el-button
+            type="primary"
+            icon="el-icon-refresh"
+            plain
+            @click="handleReset"
+            >刷新缓存</el-button
           >
+          <el-button
+            icon="el-icon-upload2"
+            type="primary"
+            @click="handleDialog()"
+            title="上传/修改建筑物图片"
+          ></el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -22,7 +28,7 @@
     <el-dialog :visible.sync="dialog.visible">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">建筑物图片</span>
-        <img  src="@/assets/img/hl.png" />
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
@@ -72,6 +78,7 @@
 import { sortValidator } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
+  pointUpdateToRedis,
   configGetBuilding_bg,
   configAddOrEdit_building_bg,
 } from "@/api/resource-manage.js";
@@ -109,6 +116,10 @@ export default {
   },
   mounted() {},
   methods: {
+    // 重置
+    handleReset() {
+      pointUpdateToRedis();
+    },
     // 附件上传成功
     uploadSuccess(response, file, fileList) {
       if (response.res === 0) {
@@ -131,9 +142,7 @@ export default {
             this.$message.success("操作成功!");
             this.$refs["dialogForm"].resetFields();
             this.dialog.visible = false;
-            configGetBuilding_bg().then(
-              (r) => (this.imgUrl = r.data.imgUrl)
-            );
+            configGetBuilding_bg().then((r) => (this.imgUrl = r.data.imgUrl));
           });
         } else {
           return false;
