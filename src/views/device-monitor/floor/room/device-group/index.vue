@@ -156,27 +156,16 @@
                   roomName.includes('UPS配电')
                 "
               >
-                <el-table-column sortable prop="inUa" label="IN_UA" />
-                <el-table-column sortable prop="inUb" label="IN_UB" />
-                <el-table-column sortable prop="inUc" label="IN_UC" />
-                <el-table-column sortable prop="inUab" label="IN_UAB" />
-                <el-table-column sortable prop="inUbc" label="IN_UBC" />
-                <el-table-column sortable prop="inUac" label="IN_UAC" />
-                <el-table-column sortable prop="inFrequency" label="输入频率" />
-                <el-table-column sortable prop="outUa" label="OUT_UA" />
-                <el-table-column sortable prop="outUb" label="OUT_UB" />
-                <el-table-column sortable prop="outUc" label="OUT_UC" />
-                <el-table-column sortable prop="outUab" label="OUT_UAB" />
-                <el-table-column sortable prop="outUbc" label="OUT_UBC" />
-                <el-table-column sortable prop="outUac" label="OUT_UAC" />
-                <el-table-column sortable prop="outIa" label="OUT_IA" />
-                <el-table-column sortable prop="outIb" label="OUT_IB" />
-                <el-table-column sortable prop="outIc" label="OUT_IC" />
-                <el-table-column
-                  sortable
-                  prop="outFrequency"
-                  label="输出频率"
-                />
+                <el-table-column sortable prop="ua" label="UA" />
+                <el-table-column sortable prop="ub" label="UB" />
+                <el-table-column sortable prop="uc" label="UC" />
+                <el-table-column sortable prop="uab" label="UAB" />
+                <el-table-column sortable prop="ubc" label="UBC" />
+                <el-table-column sortable prop="uac" label="UAC" />
+                <el-table-column sortable prop="ia" label="IA" />
+                <el-table-column sortable prop="ib" label="IB" />
+                <el-table-column sortable prop="ic" label="IC" />
+                <el-table-column sortable prop="frequency" label="频率" />
                 <el-table-column sortable prop="temperature" label="温度" />
                 <el-table-column sortable prop="sync" label="同步状态">
                   <template slot-scope="{ row }">
