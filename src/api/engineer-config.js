@@ -82,7 +82,6 @@ export function alertNotificationEditStatus(data) { return request({ url: '/admi
 //分页查看告警通知
 export function alertNotificationListByPage(data) { return request({ url: '/admin/alert/alertNotification/listByPage', method: 'post', data }) }
 
-
 // 分页查看
 export function alertRuleTemplateListByPage(data) { return request({ url: '/admin/alert/alertRuleTemplate/listByPage', method: 'post', data }) }
 // 查看告警模板
@@ -93,7 +92,6 @@ export function alertRuleTemplateDelete(data) { return request({ url: '/admin/al
 export function alertRuleTemplateEdit(data) { return request({ url: '/admin/alert/alertRuleTemplate/edit', method: 'post', data }) }
 // 新增告警模板
 export function alertRuleTemplateAdd(data) { return request({ url: '/admin/alert/alertRuleTemplate/add', method: 'post', data }) }
-
 
 //获取所有邮箱配置列表
 export function configEmailListAll(data) { return request({ url: '/admin/alert/configEmail/listAll', method: 'post', data }) }
@@ -108,11 +106,11 @@ export function configEmailEdit(data) { return request({ url: '/admin/alert/conf
 // 新增邮箱配置
 export function configEmailAdd(data) { return request({ url: '/admin/alert/configEmail/add', method: 'post', data }) }
 
-
 //获取语音配置接口
 export function phoneSoundConfigGetSoundConfig(data) { return request({ url: '/admin/alert/phoneSoundConfig/getSoundConfig', method: 'post', data }) }
 //语音配置接口
 export function phoneSoundConfigAddOrEdit_sound(data) { return request({ url: '/admin/alert/phoneSoundConfig/addOrEdit_sound', method: 'post', data }) }
+
 //获取短信配置接口
 export function smsconfigGetSmsConfig(data) { return request({ url: '/admin/alert/smsconfig/getSmsConfig', method: 'post', data }) }
 //短信配置接口

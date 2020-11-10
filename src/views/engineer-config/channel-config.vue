@@ -5,30 +5,25 @@
         <mail-config />
       </el-tab-pane>
       <el-tab-pane label="短信配置" name="sms-config">
+        <sms-config />>
       </el-tab-pane>
       <el-tab-pane label="语音配置" name="voice-config">
-        <alert-mask-setting />
+        <voice-config />
       </el-tab-pane>
-      <el-tab-pane label="微信配置" name="wechat-config">
-        <alert-mask-setting />
-      </el-tab-pane>
-      <el-tab-pane label="钉钉配置" name="dingding-config">
-        <alert-mask-setting />
-      </el-tab-pane>
+      <el-tab-pane label="微信配置" name="wechat-config"> </el-tab-pane>
+      <el-tab-pane label="钉钉配置" name="dingding-config"> </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
-import alertLevel from "@/views/engineer-config/alert-level/index";
-import alertDisplay from "@/views/engineer-config/alert-display/index";
-import alertMaskSetting from "@/views/engineer-config/alert-mask-setting/index";
-import mailConfig from "@/views/engineer-config/mail-config/index.vue"
+import mailConfig from "@/views/engineer-config/mail-config/index.vue";
+import smsConfig from "@/views/engineer-config/sms-config/index.vue";
+import voiceConfig from "@/views/engineer-config/voice-config/index.vue";
 export default {
   components: {
-    alertLevel,
-    alertDisplay,
-    alertMaskSetting,
     mailConfig,
+    smsConfig,
+    voiceConfig,
   },
   data() {
     return {

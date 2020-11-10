@@ -10,15 +10,6 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item>
-          <el-button
-            type="primary"
-            icon="el-icon-refresh"
-            plain
-            @click="handleReset('filterForm')"
-            >恢复默认值</el-button
-          >
-        </el-form-item>
-        <el-form-item>
           <el-button type="primary" size="medium" @click="handleSubmit">
             保存
           </el-button>
@@ -36,54 +27,33 @@
       >
         <el-row :gutter="80">
           <el-col :span="8">
-            <el-form-item label="实时告警显示条数" prop="realtimeCount">
-              <el-input v-model="forms.realtimeCount" placeholder="请输入" />
+            <el-form-item label="SecretId" prop="sms_secretId">
+              <el-input v-model="forms.sms_secretId" placeholder="请输入" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item
-              label="实时告警确认后是否还显示"
-              prop="realtimeIsConfirmShow"
-            >
-              <el-checkbox
-                v-model="forms.realtimeIsConfirmShow"
-                :true-label="1"
-                :false-label="2"
-              ></el-checkbox>
+            <el-form-item label="SecretKey" prop="sms_secretKey">
+              <el-input v-model="forms.sms_secretKey" placeholder="请输入" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="实时告警最低级别" prop="realtimeLowlevelShow">
-              <el-input
-                v-model="forms.realtimeLowlevelShow"
-                placeholder="请输入"
-              />
+            <el-form-item label="签名" prop="sms_sign">
+              <el-input v-model="forms.sms_sign" placeholder="请输入" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="空间告警最低级别" prop="spaceLowlevelShow">
-              <el-input
-                v-model="forms.spaceLowlevelShow"
-                placeholder="请输入"
-              />
+            <el-form-item label="模板ID" prop="sms_template_id">
+              <el-input v-model="forms.sms_template_id" placeholder="请输入" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item
-              label="空间告警确认后是否还显示"
-              prop="spaceIsConfirmShow"
-            >
-              <el-checkbox
-                v-model="forms.spaceIsConfirmShow"
-                :true-label="1"
-                :false-label="2"
-              ></el-checkbox>
+            <el-form-item label="应用ID" prop="sms_sdk_appid">
+              <el-input v-model="forms.sms_sdk_appid" placeholder="请输入" />
             </el-form-item>
           </el-col>
-
           <el-col :span="8">
-            <el-form-item label="告警间隔(分)" prop="alertTimeGap">
-              <el-input v-model="forms.alertTimeGap" placeholder="请输入" />
+            <el-form-item label="EndPoint地址" prop="sms_endpoint">
+              <el-input v-model="forms.sms_endpoint" placeholder="请输入" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -95,9 +65,8 @@
 <script>
 import pagination from "@/components/Pagination";
 import {
-  alertconfigGetAlertConfigParams,
-  alertconfigAlertparam_reset,
-  alertconfigAddOrEdit_alert_params,
+  smsconfigGetSmsConfig,
+  smsconfigAddOrEdit_sms,
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination },
@@ -150,8 +119,8 @@ export default {
     handleSubmit() {
       this.$refs["forms"].validate((valid, obj) => {
         if (valid) {
-          alertconfigAddOrEdit_alert_params(this.forms).then((r) => {
-            this.$message.success('操作成功!');
+          smsconfigAddOrEdit_sms(this.forms).then((r) => {
+            this.$message.success("操作成功!");
             this.handleQuery();
           });
         } else {
@@ -164,21 +133,6 @@ export default {
       this.listTotal = 0;
       this.filterForm.pageNo = 1;
       this.getList();
-    },
-    // 重置
-    handleReset(form) {
-      this.$confirm("是否恢复默认设置 ? ", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          this.$refs[form].resetFields();
-          alertconfigAlertparam_reset().then((r) => {
-            this.handleQuery();
-          });
-        })
-        .catch(() => {});
     },
     // 查看
     async handleDialog(row) {
@@ -212,7 +166,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      alertconfigGetAlertConfigParams().then((res) => {
+      smsconfigGetSmsConfig().then((res) => {
         this.forms = res.data;
         this.listLoading = false;
       });
