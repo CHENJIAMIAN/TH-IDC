@@ -80,6 +80,12 @@
               ></el-checkbox>
             </el-form-item>
           </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="告警间隔(分)" prop="alertTimeGap">
+              <el-input v-model="forms.alertTimeGap" placeholder="请输入" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </el-card>
