@@ -11,6 +11,8 @@ export function floorListAll(data){return request({url:'/admin/devicemonitor/flo
 export function roomTypeDeviceGroupListAllRoomType4(data){return request({url:'/admin/devicemonitor/RoomTypeDeviceGroup/listAllRoomType4',method:'post',data})}
 
 
+// 8. 柴油发电机房设备组数据接口
+export function roomTypeDeviceGroupListAllRoomType8(data){return request({url:'/admin/devicemonitor/RoomTypeDeviceGroup/listAllRoomType8',method:'post',data})}
 // 7. IDC机房设备组数据接口
 export function roomTypeDeviceGroupListAllRoomType7(data){return request({url:'/admin/devicemonitor/RoomTypeDeviceGroup/listAllRoomType7',method:'post',data})}
 // 6. 变压器房设备组数据接口

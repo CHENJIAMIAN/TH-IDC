@@ -224,6 +224,7 @@ export default {
         rules: {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           deviceTypeId: [{ required: true, trigger: "blur", message: "请输入" }],
+          columnName: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };

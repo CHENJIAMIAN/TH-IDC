@@ -1,6 +1,10 @@
 <template>
   <div class="alert-config">
-    <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+    <el-tabs
+      v-model="activeName"
+      type="border-card"
+      @tab-click="handleTabClick"
+    >
       <el-tab-pane label="告警等级" name="alert-level">
         <alert-level />
       </el-tab-pane>
@@ -30,9 +34,9 @@ export default {
     };
   },
   methods: {
-    handleClick(tab, event) {
+    handleTabClick(tab, event) {
       //   console.log(this.activeName,tab, event);
-    //   this.$router.push(`/engineer-config/alert-config/${this.activeName}`);
+      //   this.$router.push(`/engineer-config/alert-config/${this.activeName}`);
     },
   },
 };

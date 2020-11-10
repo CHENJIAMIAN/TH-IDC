@@ -129,6 +129,7 @@ export default {
         forms: {},
         rules: {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
+          tableName: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };

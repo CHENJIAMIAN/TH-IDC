@@ -1,11 +1,10 @@
 <template>
   <div class="alert-config">
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-      <el-tab-pane label="邮箱配置" name="mailbox-config">
-        <alert-level />
+      <el-tab-pane label="邮箱配置" name="mail-config">
+        <mail-config />
       </el-tab-pane>
       <el-tab-pane label="短信配置" name="sms-config">
-        <alert-display />
       </el-tab-pane>
       <el-tab-pane label="语音配置" name="voice-config">
         <alert-mask-setting />
@@ -23,16 +22,17 @@
 import alertLevel from "@/views/engineer-config/alert-level/index";
 import alertDisplay from "@/views/engineer-config/alert-display/index";
 import alertMaskSetting from "@/views/engineer-config/alert-mask-setting/index";
-
+import mailConfig from "@/views/engineer-config/mail-config/index.vue"
 export default {
   components: {
     alertLevel,
     alertDisplay,
     alertMaskSetting,
+    mailConfig,
   },
   data() {
     return {
-      activeName: "alert-mask-setting",
+      activeName: "mail-config",
     };
   },
   methods: {

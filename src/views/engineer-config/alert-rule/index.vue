@@ -386,9 +386,9 @@ export default {
             alertContent: [
               { required: true, trigger: "blur", message: "请输入" },
             ],
-            handlerAdvise: [
-              { required: true, trigger: "blur", message: "请输入" },
-            ],
+            // handlerAdvise: [
+            //   { required: true, trigger: "blur", message: "请输入" },
+            // ],
             status: [{ required: true, trigger: "blur", message: "请输入" }],
             points: [{ required: true, trigger: "blur", message: "请输入" }],
           },

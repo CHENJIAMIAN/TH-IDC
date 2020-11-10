@@ -74,13 +74,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination
+    <!-- <pagination
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
       :limit.sync="filterForm.pageSize"
       @pagination="getList"
-    />
+    /> -->
 
     <el-dialog :visible.sync="dialog.visible" top="20vh">
       <div slot="title" class="el-dialog-title-custom">
@@ -111,7 +111,7 @@
         <el-form-item label="密码" prop="password">
           <el-input v-model="dialog.forms.password"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item label="状态" prop="status" v-if="!dialog.forms.id">
           <el-radio-group
             class="radio-status"
             v-model="dialog.forms.status"
@@ -139,6 +139,7 @@ import pagination from "@/components/Pagination";
 import {
   configEmailUpdateState,
   //  configEmailQueryById,
+  configEmailListAll,
   configEmailListByPage,
   configEmailDelete,
   configEmailEdit,
@@ -251,9 +252,9 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      configEmailListByPage(this.filterForm).then((res) => {
-        this.listData = res.data.list;
-        this.listTotal = res.data.total;
+      configEmailListAll().then((res) => {
+        this.listData = res.data;
+        // this.listTotal = res.data.total;
         this.listLoading = false;
       });
     },
