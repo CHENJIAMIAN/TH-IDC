@@ -1,29 +1,29 @@
 <template>
   <div id="tags-view-container" class="tags-view-container">
-    <scroll-pane
+    <!-- <scroll-pane
       ref="scrollPane"
       class="tags-view-wrapper"
       @scroll="handleScroll"
+    > -->
+    <router-link
+      v-for="tag in visitedViews"
+      ref="tag"
+      :key="tag.path"
+      :class="isActive(tag) ? 'active' : ''"
+      :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+      tag="span"
+      class="el-button el-button--default el-button--medium el-button-custom"
     >
-      <router-link
-        v-for="tag in visitedViews"
-        ref="tag"
-        :key="tag.path"
-        :class="isActive(tag) ? 'active' : ''"
-        :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        tag="span"
-        class="el-button el-button--default el-button--medium el-button-custom"
-      >
-        <!-- @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''" -->
-        <!-- @contextmenu.prevent.native="openMenu(tag,$event)" -->
-        {{ tag.title }}
-        <!-- <span
+      <!-- @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''" -->
+      <!-- @contextmenu.prevent.native="openMenu(tag,$event)" -->
+      {{ tag.title }}
+      <!-- <span
           v-if="!isAffix(tag)"
           class="el-icon-close"
           @click.prevent.stop="closeSelectedTag(tag)"
         /> -->
-      </router-link>
-    </scroll-pane>
+    </router-link>
+    <!-- </scroll-pane> -->
     <!-- <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
       <li @click="refreshSelectedTag(selectedTag)">Refresh</li>
       <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">Close</li>
@@ -45,7 +45,7 @@ export default {
       top: 0,
       left: 0,
       selectedTag: {},
-      affixTags: []
+      affixTags: [],
     };
   },
   computed: {
@@ -54,7 +54,7 @@ export default {
     },
     routes() {
       return this.$store.state.permission.routes;
-    }
+    },
   },
   watch: {
     $route() {
@@ -68,7 +68,7 @@ export default {
       } else {
         document.body.removeEventListener("click", this.closeMenu);
       }
-    }
+    },
   },
   mounted() {
     this.initTags();
@@ -83,14 +83,14 @@ export default {
     },
     filterAffixTags(routes, basePath = "/") {
       let tags = [];
-      routes.forEach(route => {
+      routes.forEach((route) => {
         if (route.meta && route.meta.affix) {
           const tagPath = path.resolve(basePath, route.path);
           tags.push({
             fullPath: tagPath,
             path: tagPath,
             name: route.name,
-            meta: { ...route.meta }
+            meta: { ...route.meta },
           });
         }
         if (route.children) {
@@ -139,7 +139,7 @@ export default {
         const { fullPath } = view;
         this.$nextTick(() => {
           this.$router.replace({
-            path: "/redirect" + fullPath
+            path: "/redirect" + fullPath,
           });
         });
       });
@@ -163,7 +163,7 @@ export default {
     },
     closeAllTags(view) {
       this.$store.dispatch("tagsView/delAllViews").then(({ visitedViews }) => {
-        if (this.affixTags.some(tag => tag.path === view.path)) {
+        if (this.affixTags.some((tag) => tag.path === view.path)) {
           return;
         }
         this.toLastView(visitedViews, view);
@@ -206,27 +206,28 @@ export default {
     },
     handleScroll() {
       this.closeMenu();
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .tags-view-container {
-  width: 960px;
+  width: calc(100vw - 400px);
+  display: flex;
+  justify-content: flex-end;
   position: absolute;
   right: 1rem;
   bottom: 0.5rem;
 
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
-  .tags-view-wrapper {
-    .active {
-      color: #e39f40;
-      border: none;
-      background: url(../../../assets/img/jx2.png) 0 0 / 100% 100% no-repeat;
-    }
+  // .tags-view-wrapper {
+  .active {
+    color: #e39f40;
+    border: none;
+    background: url(../../../assets/img/jx2.png) 0 0 / 100% 100% no-repeat;
   }
+  // }
   .contextmenu {
     margin: 0;
     background: #fff;
