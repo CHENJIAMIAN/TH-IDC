@@ -1,6 +1,9 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
+.el-tabs--border-card {
+  overflow: auto;
+}
 .el-tree{
   background: transparent;
 }

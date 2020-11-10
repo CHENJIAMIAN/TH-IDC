@@ -194,20 +194,6 @@
               </template>
             </el-table>
           </el-tab-pane>
-        </el-tabs>
-      </div>
-    </div>
-  </div>
-</template>
-            </el-table>
-            <!-- <pagination
-            :hidden="listTotal > 0 ? false : true"
-            :total="listTotal"
-            :page.sync="filterForm.pageNo"
-            :limit.sync="filterForm.pageSize"
-            @pagination="getList"
-          /> -->
-          </el-tab-pane>
           <el-tab-pane label="参数状态" name="param-status"> </el-tab-pane>
           <el-tab-pane label="告警记录" name="alert-record"> </el-tab-pane>
           <el-tab-pane label="资产信息" name="asset-info"> </el-tab-pane>
@@ -296,6 +282,7 @@ export default {
   display: grid;
   grid-template-rows: 1fr 220px;
   align-items: center;
+  height: 100%;
 
   .row1 {
     display: grid;
@@ -304,10 +291,14 @@ export default {
     &-col1 {
       display: grid;
       border: solid #119aca;
+      // 图片多大都不会撑开
+      height: calc(100vh - 460px);
     }
     &-col2 {
       display: grid;
       border: solid #119aca;
+      // 图片多大都不会撑开
+      height: calc(100vh - 460px);
     }
   }
   .row2 {

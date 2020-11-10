@@ -2,26 +2,77 @@
   <div class="room-index">
     <div class="room-index-self">
       <div class="row1">
-        <div>
-            <el-button
-              class="el-button-custom active"
-              v-for="deviceGroup in deviceGroupList"
-              :key="deviceGroup.id"
-              @click="
-                $router.push(
-                  `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
-                )
-              "
-              >{{ deviceGroup.name }}</el-button
-            >
+        <div class="btns">
+          <el-button
+            class="el-button-custom"
+            :class="{
+              active: deviceGroup.name == $route.params.deviceGroupName,
+            }"
+            v-for="deviceGroup in deviceGroupList.slice(0, 5)"
+            :key="deviceGroup.id"
+            @click="
+              $router.push(
+                `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
+              )
+            "
+            >{{ deviceGroup.name }}</el-button
+          >
+          <el-popover placement="bottom-end" trigger="hover" v-if="deviceGroupList.slice(5).length>0">
+            <div class="btns">
+              <span
+                class="btn-as-txt"
+                :class="{
+                  'active-txt': deviceGroup.name == $route.params.deviceGroupName,
+                }"
+                v-for="deviceGroup in deviceGroupList.slice(5)"
+                :key="deviceGroup.id"
+                @click="
+                  $router.push(
+                    `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
+                  )
+                "
+                >{{ deviceGroup.name }}</span
+              >
+            </div>
+            <!-- <i slot="reference" class="el-icon-arrow-down el-icon--right"></i> -->
+            <img
+              slot="reference"
+              width="10"
+              src="@/assets/img/sjx.png"
+              style="transform: rotate(45deg); cursor: pointer"
+            />
+          </el-popover>
         </div>
-          
-        <div style="color:#00f7ff;font-size:1.2rem;display: flex;align-items: center;gap: 4px;"><img width="20" src="@/assets/img/wd.png" /><span> {{temperature}}</span></div>
-        <div style="color:#00f7ff;font-size:1.2rem;display: flex;align-items: center;gap: 4px;"><img width="25" src="@/assets/img/gj.png" /><span>告警 <span style="color:#ea2d2a;">{{alarmCount}}</span> 条</span></div>
+
+        <div
+          style="
+            color: #00f7ff;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          "
+        >
+          <img width="20" src="@/assets/img/wd.png" /><span>
+            {{ temperature }}</span
+          >
+        </div>
+        <div
+          style="
+            color: #00f7ff;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          "
+        >
+          <img width="25" src="@/assets/img/gj.png" /><span
+            >告警 <span style="color: #ea2d2a">{{ alarmCount }}</span> 条</span
+          >
+        </div>
       </div>
       <router-view />
     </div>
-
   </div>
 </template>
 
@@ -30,7 +81,7 @@
 import { deviceGroupListAll } from "@/api/device-monitor.js";
 
 export default {
-  name:'room',
+  name: "room",
   data() {
     return {
       floorId: "",
@@ -44,8 +95,8 @@ export default {
     };
   },
   created() {
-    const {floorId,floorName,roomId,roomName}=this.$route.params;
-    Object.assign(this, { floorId,floorName,roomId,roomName });
+    const { floorId, floorName, roomId, roomName } = this.$route.params;
+    Object.assign(this, { floorId, floorName, roomId, roomName });
     this.$route.meta.title = roomName;
 
     deviceGroupListAll({ id: this.roomId }).then((r) => {
@@ -59,28 +110,36 @@ export default {
         alarmCount,
         deviceGroupList,
       } = r.data;
-      Object.assign(this, { temperature,alarmCount,roomImage, deviceGroupList });
+      Object.assign(this, {
+        temperature,
+        alarmCount,
+        roomImage,
+        deviceGroupList,
+      });
 
-      const deviceGroup = deviceGroupList[0];
-      this.$router.push(
-              `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
-            )
+      if (deviceGroupList.length == 1 || !this.$route.params.deviceGroupName) {
+        // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
+        const deviceGroup = deviceGroupList[0];
+        this.$router.push(
+          `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
+        );
+      }
     });
   },
 };
 </script>
 <style lang="scss" scoped>
-.room-index{
-  height:100%;
+.room-index {
+  height: 100%;
   overflow: auto;
 }
 .room-index-self {
   display: grid;
   grid-template-rows: 50px 1fr;
-  height:100%;
+  height: 100%;
   .row1 {
     display: grid;
-    grid-auto-flow:column;
+    grid-auto-flow: column;
     align-items: center;
     align-content: center;
     grid-template-columns: 1fr 120px 140px;
@@ -97,11 +156,33 @@ export default {
   }
 }
 
-.active {
-      color: #e39f40;
-      border: none;
-      background: url(../../../../assets/img/jx2.png) 0 0 / 100% 100% no-repeat;
+
+.btns {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 1rem;
+  align-items: center;
 }
+
+.btn-as-txt {
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  width: 150px;
+  text-align: center;
+  cursor: pointer;
+}
+.active {
+  color: #e39f40;
+  border: none;
+  background: url(../../../../assets/img/jx2.png) 0 0 / 100% 100% no-repeat;
+}
+
+.active-txt {
+  color: #e39f40;
+  border: none;
+}
+
 
 .preview-img {
   width: auto;
