@@ -26,7 +26,7 @@
       </el-form>
     </div>
 
-    <div class="content" style="overflow: auto;">
+    <div class="content" style="overflow: auto">
       <el-form
         ref="forms"
         :model="forms"
@@ -38,9 +38,10 @@
         <el-card>
           <h3>实时数据存储方式</h3>
           <el-row>
-            <el-col :span="8">
+            <el-col :span="16">
               <el-form-item label="实时存储方式" prop="realtime_store_type">
                 <el-radio-group
+                  class="new-el-radio-group"
                   v-model="forms.realtime_store_type"
                   style="width: 100%"
                 >
@@ -206,7 +207,7 @@
         <img src="@/assets/img/hl.png" />
       </div>
       <el-form
-        style="display: grid;justify-content: center;"
+        style="display: grid; justify-content: center"
         :model="dialogCD.forms"
         :rules="dialogCD.rules"
         ref="dialogCDForm"
@@ -326,7 +327,7 @@ export default {
       this.$refs["forms"].validate((valid, obj) => {
         if (valid) {
           storeconfigAddOrEdit_store_params(this.forms).then((r) => {
-            this.$message.success('操作成功!');
+            this.$message.success("操作成功!");
             this.handleQuery();
           });
         } else {
@@ -395,5 +396,17 @@ export default {
 .head {
   display: grid;
   justify-content: end;
+}
+
+.new-el-radio-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  .el-radio.is-bordered + .el-radio.is-bordered {
+    margin-left: 0;
+  }
+  .el-radio:last-of-type {
+    margin-right: 30px;
+  }
 }
 </style>
