@@ -116,8 +116,8 @@ export function smsconfigGetSmsConfig(data) { return request({ url: '/admin/aler
 //短信配置接口
 export function smsconfigAddOrEdit_sms(data) { return request({ url: '/admin/alert/smsconfig/addOrEdit_sms', method: 'post', data }) }
 
-
-
+// 告警通知发送记录管理
+export function alertNotificationSendListByPage(data) { return request({ url: '/admin/alert/alertNotificationSend/listByPage', method: 'post', data }) }
 
 
 

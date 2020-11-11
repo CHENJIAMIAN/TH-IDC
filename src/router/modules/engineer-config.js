@@ -66,6 +66,12 @@ dingding-config
           meta: { title: '告警通知', icon: 'icon' }
         },
         {
+          path: 'notify-record',
+          component: () => import('@/views/engineer-config/notify-record/index.vue'),
+          name: 'notify-record',
+          meta: { title: '通知记录', icon: 'icon' }
+        },
+        {
           path: 'arrange-work-manage',
           component: () => import('@/views/engineer-config/arrange-work-manage/index'),
           name: 'arrange-work-manage',

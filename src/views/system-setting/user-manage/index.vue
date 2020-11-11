@@ -33,10 +33,6 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="status">
-          <!-- <el-radio-group  v-model="filterForm.status" style="width: 100%">
-            <el-radio border :label="1">启用</el-radio>
-            <el-radio border :label="0">禁用</el-radio>
-          </el-radio-group> -->
           <el-select
             clearable
             v-model="filterForm.status"
