@@ -3,69 +3,60 @@
     <div class="room-index-self">
       <div class="row1">
         <div class="btns">
-          <el-button
-            class="el-button-custom"
-            :class="{
-              active: deviceGroup.name == $route.params.deviceGroupName,
-            }"
-            v-for="deviceGroup in deviceGroupList.slice(0, 5)"
-            :key="deviceGroup.id"
-            @click="
-              $router.push(
-                `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
-              )
-            "
-            >{{ deviceGroup.name }}</el-button
-          >
-          <el-popover placement="bottom-end" trigger="hover" v-if="deviceGroupList.slice(5).length>0">
-            <div class="btns">
-              <span
-                class="btn-as-txt"
-                :class="{
-                  'active-txt': deviceGroup.name == $route.params.deviceGroupName,
-                }"
-                v-for="deviceGroup in deviceGroupList.slice(5)"
-                :key="deviceGroup.id"
-                @click="
-                  $router.push(
-                    `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
-                  )
-                "
-                >{{ deviceGroup.name }}</span
-              >
-            </div>
-            <!-- <i slot="reference" class="el-icon-arrow-down el-icon--right"></i> -->
-            <img
-              slot="reference"
-              width="10"
-              src="@/assets/img/sjx.png"
-              style="transform: rotate(45deg); cursor: pointer"
-            />
-          </el-popover>
+          <template v-if="showBtns">
+            <el-button
+              class="el-button-custom"
+              :class="{
+                active: deviceGroup.name == $route.params.deviceGroupName,
+              }"
+              v-for="deviceGroup in deviceGroupList.slice(0, 5)"
+              :key="deviceGroup.id"
+              @click="
+                $router.push(
+                  `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
+                )
+              "
+              >{{ deviceGroup.name }}</el-button
+            >
+            <el-popover
+              placement="bottom-end"
+              trigger="hover"
+              v-if="deviceGroupList.slice(5).length > 0"
+            >
+              <div class="btns">
+                <span
+                  class="btn-as-txt"
+                  :class="{
+                    'active-txt':
+                      deviceGroup.name == $route.params.deviceGroupName,
+                  }"
+                  v-for="deviceGroup in deviceGroupList.slice(5)"
+                  :key="deviceGroup.id"
+                  @click="
+                    $router.push(
+                      `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
+                    )
+                  "
+                  >{{ deviceGroup.name }}</span
+                >
+              </div>
+              <!-- <i slot="reference" class="el-icon-arrow-down el-icon--right"></i> -->
+              <img
+                slot="reference"
+                width="10"
+                src="@/assets/img/sjx.png"
+                style="transform: rotate(45deg); cursor: pointer"
+              />
+            </el-popover>
+          </template>
         </div>
 
-        <div
-          style="
-            color: #00f7ff;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-          "
-        >
+        <div class="img-container">
           <img width="20" src="@/assets/img/wd.png" /><span>
             {{ temperature }}</span
           >
         </div>
-        <div
-          style="
-            color: #00f7ff;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-          "
-        >
+        <div class="img-container">
           <img width="25" src="@/assets/img/gj.png" /><span
             >告警 <span style="color: #ea2d2a">{{ alarmCount }}</span> 条</span
           >
@@ -93,6 +84,16 @@ export default {
       alarmCount: "",
       deviceGroupList: [],
     };
+  },
+  computed: {
+    showBtns() {
+      return (
+        this.roomName.includes("UPS配电") ||
+        this.roomName.includes("低压配电") ||
+        this.roomName.includes("高压配电") ||
+        this.roomName.includes("变压器")
+      );
+    },
   },
   created() {
     const { floorId, floorName, roomId, roomName } = this.$route.params;
@@ -131,7 +132,6 @@ export default {
 <style lang="scss" scoped>
 .room-index {
   height: 100%;
-  overflow: auto;
 }
 .room-index-self {
   display: grid;
@@ -155,7 +155,6 @@ export default {
     display: grid;
   }
 }
-
 
 .btns {
   display: grid;
@@ -183,7 +182,6 @@ export default {
   border: none;
 }
 
-
 .preview-img {
   width: auto;
   height: auto;
@@ -192,5 +190,13 @@ export default {
   justify-self: center;
   align-self: center;
   overflow: auto;
+}
+
+.img-container {
+  color: #00f7ff;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 </style>

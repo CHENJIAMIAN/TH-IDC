@@ -1,19 +1,56 @@
 <template>
-  <div class="device-group-index">
-    <div class="row1">
+  <div
+    class="device-group-index"
+    :style="
+      roomName.includes('电池')
+        ? 'grid-template-columns: 500px auto;'
+        : 'grid-template-rows: 1fr 220px;'
+    "
+  >
+    <div
+      class="row1"
+      :style="{ gap: showRoomImg ? '20px' : 'initial' }"
+      v-if="!roomName.includes('电池')"
+    >
       <div class="row1-col1">
         <img class="preview-img" :src="deviceGroupImg" alt="加载失败" />
       </div>
-      <div class="row1-col2">
+      <div class="row1-col2" v-if="showRoomImg">
         <img class="preview-img" :src="$parent.roomImage" alt="加载失败" />
       </div>
     </div>
+    <div v-else class="dc-tab">
+      <el-tabs stretch v-model="imgActiveName" @tab-click="handleImgTabClick">
+        <el-tab-pane label="设备组" name="device">
+          <img class="preview-img" :src="deviceGroupImg" alt="加载失败" />
+          <div>
+            <span>电池组电压</span>
+            <span>电池组电流</span>
+            <span>环境温度</span>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="房间" name="room">
+          <img class="preview-img" :src="$parent.roomImage" alt="加载失败" />
+        </el-tab-pane>
+      </el-tabs>
+      <i
+        @click="imgActiveName = 'room' ? (imgActiveName = 'device') : false"
+        class="el-icon-arrow-left arrow"
+        style="left: 1rem"
+      />
+      <i
+        @click="imgActiveName = 'device' ? (imgActiveName = 'room') : false"
+        class="el-icon-arrow-right arrow"
+        style="right: 1rem;r"
+      />
+    </div>
+
     <div>
       <div class="row2">
         <el-tabs
-          v-model="activeName"
           type="border-card"
-          @tab-click="handleTabClick"
+          v-model="tableActiveName"
+          @tab-click="handleTableTabClick"
         >
           <el-tab-pane label="数据信息" name="data-info">
             <!-- 列表 -->
@@ -148,12 +185,12 @@
               <!-- 2-7 -->
               <template
                 v-if="
-                  roomName.includes('IDC机') ||
-                  roomName.includes('变压器') ||
-                  roomName.includes('电池') ||
-                  roomName.includes('高压配电') ||
+                  roomName.includes('UPS配电') ||
                   roomName.includes('低压配电') ||
-                  roomName.includes('UPS配电')
+                  roomName.includes('高压配电') ||
+                  roomName.includes('变压器') ||
+                  roomName.includes('IDC机') ||
+                  roomName.includes('电池')
                 "
               >
                 <el-table-column sortable prop="ua" label="UA" />
@@ -195,6 +232,18 @@
 
 
 <script>
+/* 
+2. UPS配电房    有设备组 布局 
+3.低压配电房    有设备组 布局 
+4. 高压配电房   有设备组 布局 
+6. 变压器房     有设备组 布局 
+1. 精密空调房   无设备组 布局          
+7. IDC机房      无设备组 布局
+8.柴油发电机    无设备组 布局
+5. 电池房       电池房   布局          
+
+都有表格数据， 表格数据对应房间接口
+*/
 import {
   deviceGroupListAll,
   roomTypeDeviceGroupListAllRoomType8, // 8. 柴油发电机房
@@ -213,7 +262,8 @@ export default {
   name: "device-group",
   data() {
     return {
-      activeName: "data-info",
+      imgActiveName: "device",
+      tableActiveName: "data-info",
       floorId: "",
       floorName: "",
       roomId: "",
@@ -230,6 +280,17 @@ export default {
       listLoading: false,
       listData: [],
     };
+  },
+  computed: {
+    showRoomImg() {
+      return (
+        this.roomName.includes("UPS配电") ||
+        this.roomName.includes("低压配电") ||
+        this.roomName.includes("高压配电") ||
+        this.roomName.includes("变压器") ||
+        this.roomName.includes("电池")
+      );
+    },
   },
   created() {
     const {
@@ -255,7 +316,10 @@ export default {
     this.getList();
   },
   methods: {
-    handleTabClick(tab, event) {},
+    handleImgTabClick(tab, event) {
+      // console.log(tab,event); //tab.name
+    },
+    handleTableTabClick(tab, event) {},
     getList() {
       this.listLoading = true;
       roomTypeDeviceGroupListAllRoomType4({ id: this.roomId }).then((res) => {
@@ -269,14 +333,12 @@ export default {
 <style lang="scss" scoped>
 .device-group-index {
   display: grid;
-  grid-template-rows: 1fr 220px;
-  align-items: center;
   height: 100%;
+  gap: 20px;
 
   .row1 {
     display: grid;
-    grid-template-columns: 40fr 10fr;
-    gap: 20px;
+    grid-template-columns: 40fr auto;
     &-col1 {
       display: grid;
       border: solid #119aca;
@@ -292,16 +354,20 @@ export default {
   }
   .row2 {
     display: grid;
-    background: url(../../../../../assets/img/btmwk.png) 0 0 / 100% 100%
-      no-repeat;
+    // background: url(../../../../../assets/img/btmwk.png) 0 0 / 100% 100%
+    //   no-repeat;
     height: 100%;
   }
+}
+.dc-tab {
+  position: relative;
+  border: solid #119aca;
 }
 
 ::v-deep {
   .el-table th:first-child {
     //切掉第一个表头列的一个角
-    background: linear-gradient(-217deg, transparent 17px, #0838698c 0);
+    // background: linear-gradient(-217deg, transparent 17px, #0838698c 0);
   }
 }
 
@@ -313,5 +379,15 @@ export default {
   justify-self: center;
   align-self: center;
   overflow: auto;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+
+  cursor: pointer;
+  color: #119aca;
+  font-weight: bold;
+  font-size: 2rem;
 }
 </style>
