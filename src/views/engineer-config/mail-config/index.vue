@@ -109,7 +109,7 @@
           <el-input v-model="dialog.forms.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="dialog.forms.password"></el-input>
+          <el-input type="password" v-model="dialog.forms.password"></el-input>
         </el-form-item>
         <el-form-item label="状态" prop="status" v-if="!dialog.forms.id">
           <el-radio-group
