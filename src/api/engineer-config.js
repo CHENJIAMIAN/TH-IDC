@@ -93,6 +93,8 @@ export function alertRuleTemplateEdit(data) { return request({ url: '/admin/aler
 // 新增告警模板
 export function alertRuleTemplateAdd(data) { return request({ url: '/admin/alert/alertRuleTemplate/add', method: 'post', data }) }
 
+// 获取邮箱配置接口
+export function configEmailQueryById(data) { return request({ url: '/admin/alert/configEmail/queryById', method: 'post', data }) }
 //获取所有邮箱配置列表
 export function configEmailListAll(data) { return request({ url: '/admin/alert/configEmail/listAll', method: 'post', data }) }
 // 修改状态

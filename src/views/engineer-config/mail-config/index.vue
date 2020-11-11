@@ -138,7 +138,7 @@
 import pagination from "@/components/Pagination";
 import {
   configEmailUpdateState,
-  //  configEmailQueryById,
+   configEmailQueryById,
   configEmailListAll,
   configEmailListByPage,
   configEmailDelete,
@@ -224,8 +224,9 @@ export default {
     async handleDialog(row) {
       // dialog显示时获取一级菜单列表
       if (row) {
+        const r = await configEmailQueryById({id:row.id})
         // 编辑
-        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
+        this.dialog.forms = r.data;
       } else {
         this.dialog.forms = { status: 1 };
       }
