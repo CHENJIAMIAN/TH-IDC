@@ -16,10 +16,20 @@ export const noteModeOpts = [
     { id: 9, name: "声光" },
 ];
 
-export const sortValidator = (rule, value, callback) => {
-    if (Number(value) > 100) {
-        callback(new Error('不合法数值,需小于100'))
+
+export const isIntNumber = (rule, value, callback) => {
+    if (!Number.isInteger(+value) || +value < 0) {
+        callback(new Error('请输入整数值'));
     } else {
         callback()
     }
 }
+
+export const isBiggerThanZero = (rule, value, callback) => {
+    if (value==="" || isNaN(value) || Number(value) < 0) {
+        callback(new Error('请输入非负数字'));
+    } else {
+        callback()
+    }
+}
+

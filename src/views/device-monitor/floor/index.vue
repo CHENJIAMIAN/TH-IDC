@@ -68,10 +68,12 @@ export default {
     bottom: 60px;
     left: 60px;
 
-    display: grid;
-    align-items: center;
-    align-content: center;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding-right: 5px;
+    justify-content: space-evenly;
+
     ::v-deep {
       .el-button + .el-button {
         margin-left: 0;

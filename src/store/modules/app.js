@@ -30,6 +30,9 @@ const mutations = {
     state.sidebar.opened = true;
     state.sidebar.withoutAnimation = withoutAnimation
   },
+  TOGGLE_SIDE: (state) => {
+    state.sidebar.showSide = !state.sidebar.showSide;
+  },
   CLOSE_SIDE: (state) => {
     state.sidebar.showSide = false
   },

@@ -29,7 +29,8 @@
 
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -228,7 +229,7 @@ export default {
         // 编辑
         this.dialog.forms = r.data;
       } else {
-        this.dialog.forms = { status: 1 };
+        this.dialog.forms = { status: 1 ,auth:2};
       }
       this.dialog.visible = true;
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());

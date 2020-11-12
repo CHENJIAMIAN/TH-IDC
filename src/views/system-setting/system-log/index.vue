@@ -7,34 +7,63 @@
         :inline="true"
         size="medium"
         :model="filterForm"
+        style="display: grid; grid-auto-flow: column"
       >
+        <el-form-item prop="userName">
+          <el-input v-model="filterForm.userName" placeholder="操作人账号" />
+        </el-form-item>
+        <el-form-item prop="realName">
+          <el-input v-model="filterForm.realName" placeholder="操作人姓名" />
+        </el-form-item>
+        <el-form-item prop="moduleName">
+          <el-input v-model="filterForm.moduleName" placeholder="模块名称" />
+        </el-form-item>
+        <el-form-item prop="moduleMethod">
+          <el-input v-model="filterForm.moduleMethod" placeholder="模块方法" />
+        </el-form-item>
+        <el-form-item prop="logType">
+          <el-select
+            clearable
+            v-model="filterForm.logType"
+            placeholder="日志类型"
+          >
+            <el-option label="正常日志" :value="1" />
+            <el-option label="异常日志" :value="2" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item prop="startDate_endDate">
+          <el-date-picker
+            v-model="filterForm.startDate_endDate"
+            type="datetimerange"
+            placeholder="时间范围"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          />
+        </el-form-item>
+
         <el-form-item>
-          <!-- <el-button
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            @click="handleQuery"
+          ></el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
             >重置</el-button
-          > -->
+          >
         </el-form-item>
       </el-form>
     </div>
 
-    <!-- 
-id 复制[int]	是	日志ID		
-userId	[int]	是	操作人ID	 展开	
-userName	[string]	是	操作人账号		
-realName	[string]	是	操作人姓名		
-moduleName	[string]	是	模块名称		
-moduleMethod	[string]	是	模块方法		
-userIp	[string]		操作人IP		
-description	[string]		描述		
-logType	[short]	是	日志类型 。1是正常日志，2是异常日志		
-createTime	[string]	是	创建时间		
-takeTime	[long]	是	耗时时间（毫秒）  -->
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -64,7 +93,16 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
         width="180"
       />
       <el-table-column sortable prop="takeTime" label="耗时（毫秒）" />
-
+      <el-table-column label="操作" align="center">
+        <template slot-scope="{ row }">
+          <el-button
+            icon="el-icon-edit-outline"
+            type="primary"
+            plain
+            @click="handleDialog(row)"
+          ></el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <pagination
       :hidden="listTotal > 0 ? false : true"
@@ -74,6 +112,58 @@ takeTime	[long]	是	耗时时间（毫秒）  -->
       @pagination="getList"
     />
 
+    <!-- 详情弹窗 -->
+    <el-dialog :visible.sync="dialog.visible" top="25vh">
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
+      </div>
+      <el-form
+        :model="dialog.forms"
+        :rules="dialog.rules"
+        ref="dialogForm"
+        label-width="100px"
+      >
+        <el-form-item label="操作人ID" prop="userId">
+          <el-input disabled v-model="dialog.forms.userId"></el-input>
+        </el-form-item>
+        <el-form-item label="操作人账号" prop="userName">
+          <el-input disabled v-model="dialog.forms.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="操作人姓名" prop="realName">
+          <el-input disabled v-model="dialog.forms.realName"></el-input>
+        </el-form-item>
+        <el-form-item label="模块名称" prop="moduleName">
+          <el-input disabled v-model="dialog.forms.moduleName"></el-input>
+        </el-form-item>
+        <el-form-item label="模块方法" prop="moduleMethod">
+          <el-input disabled v-model="dialog.forms.moduleMethod"></el-input>
+        </el-form-item>
+        <el-form-item label="操作人IP" prop="userIp">
+          <el-input disabled v-model="dialog.forms.userIp"></el-input>
+        </el-form-item>
+        <el-form-item label="描述" prop="description">
+          <el-input disabled v-model="dialog.forms.description"></el-input>
+        </el-form-item>
+        <el-form-item label="日志类型" prop="logType">
+          <el-select disabled v-model="dialog.forms.logType">
+            <el-option label="正常日志" :value="1" />
+            <el-option label="异常日志" :value="2" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="创建时间" prop="createTime">
+          <el-input disabled v-model="dialog.forms.createTime"></el-input>
+        </el-form-item>
+        <el-form-item label="耗时时间（单位毫秒）" prop="takeTime">
+          <el-input disabled v-model="dialog.forms.takeTime"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
+          >保 存</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -87,19 +177,54 @@ export default {
     return {
       filterForm: {
         // 筛选条件
+        userName: "",
+        realName: "",
+        moduleName: "",
+        moduleMethod: "",
+        logType: null,
+        startTime: null,
+        endTime: null,
+        startDate_endDate: [],
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
+
+      dialog: {
+        id: "",
+        visible: false,
+        forms: {},
+        rules: {
+          // name: [{ required: true, trigger: "blur", message: "请输入" }],
+        },
+      },
     };
+  },
+  watch: {
+    "filterForm.startDate_endDate"(n, o) {
+      this.filterForm.startTime = n[0];
+      this.filterForm.endTime = n[1];
+    },
   },
   created() {
     this.handleQuery();
   },
   mounted() {},
   methods: {
+    // 查看
+    async handleDialog(row) {
+      if (row) {
+        // 编辑
+        const r = await sysLogQueryById({ id: row.id });
+        this.dialog.forms = r.data;
+      } else {
+        this.dialog.forms = {};
+      }
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
+    },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {

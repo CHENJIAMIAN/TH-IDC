@@ -29,18 +29,10 @@
       </el-form>
     </div>
 
-    <!-- 
-id 复制 [int]	是	菜单编号ID （唯一）		
-name	[string]	是	菜单名称 （最大长度64）		
-parentId	[int]	是	父级菜单编号ID 		
-menuType	[short]	是	菜单类型  1 子系统 2 模块 3 菜单		
-createTime	[datetime]	是	创建时间		
-updateTime	[datetime]		修改时间		
-createUserId	[int]	是	创建人ID		
-updateUserId	[int]		修改人ID  -->
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -105,7 +97,7 @@ menuType	[short]	是	菜单类型  1 子系统 2 模块 3 菜单 -->
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
         <el-form-item label="菜单类型" prop="menuType">
-          <el-radio-group v-model="dialog.forms.menuType" style="width: 100%">
+          <el-radio-group v-model="dialog.forms.menuType" style="width: 100%" :disabled="dialog.forms.id">
             <el-radio border :label="1">子系统</el-radio>
             <el-radio border :label="2">模块</el-radio>
             <el-radio border :label="3">菜单</el-radio>

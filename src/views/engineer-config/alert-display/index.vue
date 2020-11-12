@@ -34,13 +34,13 @@
         inline
         style="align-self: center; justify-self: center"
       >
-        <el-row :gutter="80">
-          <el-col :span="8">
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="实时告警显示条数" prop="realtimeCount">
               <el-input v-model="forms.realtimeCount" placeholder="请输入" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item
               label="实时告警确认后是否还显示"
               prop="realtimeIsConfirmShow"
@@ -52,7 +52,7 @@
               ></el-checkbox>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="实时告警最低级别" prop="realtimeLowlevelShow">
               <el-input
                 v-model="forms.realtimeLowlevelShow"
@@ -60,7 +60,7 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="空间告警最低级别" prop="spaceLowlevelShow">
               <el-input
                 v-model="forms.spaceLowlevelShow"
@@ -68,7 +68,7 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item
               label="空间告警确认后是否还显示"
               prop="spaceIsConfirmShow"
@@ -81,7 +81,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="告警间隔(分)" prop="alertTimeGap">
               <el-input v-model="forms.alertTimeGap" placeholder="请输入" />
             </el-form-item>
@@ -93,6 +93,7 @@
 </template>
 
 <script>
+import { isIntNumber } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   alertconfigGetAlertConfigParams,
@@ -119,25 +120,18 @@ export default {
       remouldAspirationOption: [],
       forms: {},
       rules: {
-        // 表单验证
-        clanGroundNum: [{ required: true, tiggter: "blur", message: "请输入" }],
-        clanCode: [{ required: true, tiggter: "blur", message: "请输入" }],
-      },
-
-      dialog: {
-        id: "",
-        visible: false,
-        forms: {},
-        rules: {
-          name: [{ required: true, trigger: "blur", message: "请输入" }],
-          permission: [{ required: true, trigger: "blur", message: "请输入" }],
-          menuType: [{ required: true, trigger: "change", message: "请输入" }],
-          firstMenuId: [{ required: true, trigger: "blur", message: "请输入" }],
-          secondMenuId: [
-            { required: true, trigger: "blur", message: "请输入" },
-          ],
-          thirdMenuId: [{ required: true, trigger: "blur", message: "请输入" }],
-        },
+        realtimeCount: [
+          { required: false, trigger: "blur", validator: isIntNumber },
+        ],
+        realtimeLowlevelShow: [
+          { required: false, trigger: "blur", validator: isIntNumber },
+        ],
+        spaceLowlevelShow: [
+          { required: false, trigger: "blur", validator: isIntNumber },
+        ],
+        alertTimeGap: [
+          { required: false, trigger: "blur", validator: isIntNumber },
+        ],
       },
     };
   },
@@ -151,7 +145,7 @@ export default {
       this.$refs["forms"].validate((valid, obj) => {
         if (valid) {
           alertconfigAddOrEdit_alert_params(this.forms).then((r) => {
-            this.$message.success('操作成功!');
+            this.$message.success("操作成功!");
             this.handleQuery();
           });
         } else {
@@ -176,35 +170,6 @@ export default {
           this.$refs[form].resetFields();
           alertconfigAlertparam_reset().then((r) => {
             this.handleQuery();
-          });
-        })
-        .catch(() => {});
-    },
-    // 查看
-    async handleDialog(row) {
-      // dialog显示时获取一级菜单列表
-      if (row) {
-        // 编辑
-        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
-      } else {
-        this.dialog.forms = {};
-      }
-      this.dialog.visible = true;
-      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
-    },
-    // 删除
-    handleDel(id) {
-      this.$confirm("确认删除?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          alertLevelDelete({
-            id: id,
-          }).then((res) => {
-            this.getList();
-            this.$message.success("删除成功!");
           });
         })
         .catch(() => {});

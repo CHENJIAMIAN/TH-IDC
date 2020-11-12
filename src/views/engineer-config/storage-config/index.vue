@@ -52,8 +52,8 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-card v-show="forms.realtime_store_type == 1">
-            <el-col :span="8">
+          <el-card v-if="forms.realtime_store_type == 1">
+            <el-col :span="12">
               <el-form-item label="周期存储(分钟)" prop="cyclestore">
                 <el-select v-model="forms.cyclestore" style="width: 100%">
                   <el-option border value="1"></el-option>
@@ -71,7 +71,7 @@
                 ></el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="变化率存储(%)" prop="changerate">
                 <el-input v-model="forms.changerate" placeholder="请输入" />
               </el-form-item>
@@ -83,7 +83,7 @@
                 ></el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="变化大小存储" prop="changesize">
                 <el-input v-model="forms.changesize" placeholder="请输入" />
               </el-form-item>
@@ -95,7 +95,7 @@
                 ></el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="测点实时存储" prop="points_has">
                 <el-checkbox
                   v-model="forms.points_has"
@@ -120,7 +120,7 @@
         <el-card>
           <h3>存储时间</h3>
           <el-row>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="全量实时数据(月)" prop="all_realtime_data">
                 <el-input
                   v-model="forms.all_realtime_data"
@@ -128,7 +128,7 @@
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="组合实时数据(月)" prop="union_realtime_data">
                 <el-input
                   v-model="forms.union_realtime_data"
@@ -136,17 +136,17 @@
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="规整数据(年)" prop="regular_data">
                 <el-input v-model="forms.regular_data" placeholder="请输入" />
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="告警事件(年)" prop="alert_data">
                 <el-input v-model="forms.alert_data" placeholder="请输入" />
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="操作日志(年)" prop="action_log">
                 <el-input v-model="forms.action_log" placeholder="请输入" />
               </el-form-item>
@@ -157,25 +157,28 @@
         <el-card>
           <h3>磁盘</h3>
           <el-row>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="磁盘总容量(GB)" prop="store_all_size">
                 <el-input v-model="forms.store_all_size" placeholder="请输入" />
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="磁盘已使用容量(GB)" prop="store_use_size">
                 <el-input v-model="forms.store_use_size" placeholder="请输入" />
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="磁盘空间占用报警阀值" prop="store_use_alert">
+            <el-col :span="12">
+              <el-form-item
+                label="磁盘空间占用报警阀值(%)"
+                prop="store_use_alert"
+              >
                 <el-input
                   v-model="forms.store_use_alert"
                   placeholder="请输入"
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="磁盘容量告警" prop="store_alert_switch">
                 <el-checkbox
                   v-model="forms.store_alert_switch"
@@ -185,7 +188,7 @@
                 >
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="数据删除" prop="delete_data_switch">
                 <el-checkbox
                   v-model="forms.delete_data_switch"
@@ -217,6 +220,7 @@
             filterable
             :filter-method="
               (query, item) => {
+                if (!item.name) return false;
                 return item.name.indexOf(query) > -1;
               }
             "
@@ -250,9 +254,17 @@ import {
   storePointListAllNotBindPoint,
   storePointListAllBindPoint,
 } from "@/api/engineer-config.js";
+import { isBiggerThanZero } from "@/views/resource-manage/common.js";
 export default {
   components: { pagination },
   data() {
+    const isBetween0To100 = (rule, value, callback) => {
+      if (value==="" || isNaN(value) || Number(value) < 0 || Number(value) > 100) {
+        callback(new Error("请输入小于100的非负数字"));
+      } else {
+        callback();
+      }
+    };
     return {
       depOpts: [],
       firstMenuOpts: [],
@@ -272,8 +284,64 @@ export default {
       forms: {},
       rules: {
         // 表单验证
-        clanGroundNum: [{ required: true, tiggter: "blur", message: "请输入" }],
-        clanCode: [{ required: true, tiggter: "blur", message: "请输入" }],
+        realtime_store_type: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        cyclestore: [
+          { required: true, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        changerate: [
+          {
+            required: true,
+            trigger: "blur",
+            validator: isBetween0To100,
+          },
+        ],
+        changesize: [
+          { required: true, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        // cyclestore_has: [
+        //   { required: false, trigger: "blur", validator: isBiggerThanZero },
+        // ],
+        // changerate_has: [
+        //   { required: false, trigger: "blur", validator: isBiggerThanZero },
+        // ],
+        // changesize_has: [
+        //   { required: false, trigger: "blur", validator: isBiggerThanZero },
+        // ],
+        // points_has: [
+        //   { required: false, trigger: "blur", validator: isBiggerThanZero },
+        // ],
+        all_realtime_data: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        union_realtime_data: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        regular_data: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        alert_data: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        action_log: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        store_all_size: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        store_use_size: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        store_use_alert: [
+          { required: false, trigger: "blur", validator: isBetween0To100 },
+        ],
+        store_alert_switch: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
+        delete_data_switch: [
+          { required: false, trigger: "blur", validator: isBiggerThanZero },
+        ],
       },
 
       dialogCD: {

@@ -44,8 +44,9 @@
       </div>
       <!-- 列表 -->
       <el-table
-        style="overflow: auto"
-        stripe
+              style="width: 100%"
+      height="100%"
+      stripe
         v-loading="listLoading"
         border
         :data="listData"
@@ -300,7 +301,7 @@
 <script>
 import {
   valueTypeOpts,
-  sortValidator,
+  isIntNumber,
 } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
@@ -379,10 +380,12 @@ export default {
             // alertLevelId: [
             //   { required: true, trigger: "blur", message: "请输入" },
             // ],
-            // filterTime: [{ required: true, trigger: "blur", message: "请输入" }],
-            // continueTime: [
-            //   { required: true, trigger: "blur", message: "请输入" },
-            // ],
+            filterTime: [
+              { required: !true, trigger: "blur", validator: isIntNumber },
+            ],
+            continueTime: [
+              { required: !true, trigger: "blur", validator: isIntNumber },
+            ],
             alertContent: [
               { required: true, trigger: "blur", message: "请输入" },
             ],

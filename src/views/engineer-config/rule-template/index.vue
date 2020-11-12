@@ -48,7 +48,8 @@
     </div>
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -262,7 +263,7 @@
 <script>
 import {
   valueTypeOpts,
-  sortValidator,
+  isIntNumber,
 } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {

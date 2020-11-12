@@ -28,17 +28,10 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- 
-id 复制[int]	是	角色编号（唯一）		
-name	[string]	是	角色名称  （最大长度64）		
-createTime	[datetime]	是	创建时间	 	
-updateTime	[datetime]		修改时间 （可为空）		
-createUserId	[int]	是	创建人ID		
-updateUserId	[int]		修改人ID （可为空）
- -->
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -99,24 +92,9 @@ updateUserId	[int]		修改人ID （可为空）
         ref="dialogForm"
         label-width="100px"
       >
-        <!-- name	[string]	是	角色名称 （最大长度64） -->
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <!-- <template v-if="dialog.forms.id">
-          <el-form-item label="创建时间" prop="createTime">
-            <el-input disabled v-model="dialog.forms.createTime"></el-input>
-          </el-form-item>
-          <el-form-item label="修改时间" prop="updateTime">
-            <el-input disabled v-model="dialog.forms.updateTime"></el-input>
-          </el-form-item>
-          <el-form-item label="创建人ID" prop="createUserId">
-            <el-input disabled v-model="dialog.forms.createUserId"></el-input>
-          </el-form-item>
-          <el-form-item label="修改人ID" prop="updateUserId">
-            <el-input disabled v-model="dialog.forms.updateUserId"></el-input>
-          </el-form-item>
-        </template> -->
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"

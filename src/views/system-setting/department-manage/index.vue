@@ -28,17 +28,11 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- 
-id 复制[int]	是	部门编号（唯一）		
-name	[string]	是	部门名称  （最大长度64）		
-createTime	[datetime]	是	创建时间	 	
-updateTime	[datetime]		修改时间 （可为空）		
-createUserId	[int]	是	创建人ID		
-updateUserId	[int]		修改人ID （可为空）
- -->
+
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border

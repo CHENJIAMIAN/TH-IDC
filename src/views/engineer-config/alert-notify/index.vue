@@ -7,20 +7,132 @@
         :inline="true"
         size="medium"
         :model="filterForm"
+        style="display: grid; grid-auto-flow: column"
       >
+        <el-form-item prop="floorCode">
+          <el-select
+            clearable
+            v-model="filterForm.floorCode"
+            @change="
+              $set(filterForm, 'roomCode', '');
+              $set(filterForm, 'deviceGroupCode', '');
+              $set(filterForm, 'deviceCode', '');
+            "
+            placeholder="楼层"
+          >
+            <el-option
+              v-for="item in floorOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.floorCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="roomCode">
+          <el-select
+            clearable
+            v-model="filterForm.roomCode"
+            @change="handleRoomChange"
+            placeholder="房间"
+          >
+            <el-option
+              v-for="item in roomOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.roomCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="deviceGroupCode">
+          <el-select
+            clearable
+            v-model="filterForm.deviceGroupCode"
+            placeholder="设备组"
+            @change="$set(filterForm, 'deviceCode', '')"
+          >
+            <el-option
+              v-for="item in deviceGroupOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.deviceGroupCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="deviceCode">
+          <el-select
+            clearable
+            v-model="filterForm.deviceCode"
+            placeholder="设备"
+          >
+            <el-option
+              v-for="item in deviceOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.deviceCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="pointCode">
+          <el-select v-model="filterForm.pointCode">
+            <el-option
+              placeholder="测点"
+              v-for="item in pointOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="name">
+          <el-input v-model="filterForm.name" placeholder="测点名称" />
+        </el-form-item>
+        <el-form-item prop="noteLevel">
+          <el-input v-model="filterForm.noteLevel" placeholder="通知等级" />
+        </el-form-item>
+        <el-form-item prop="status">
+          <el-select clearable v-model="filterForm.status" placeholder="状态">
+            <el-option label="待处理" :value="1" />
+            <el-option label="已受理" :value="2" />
+            <el-option label="取消" :value="3" />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="resumeStatus">
+          <el-select
+            clearable
+            v-model="filterForm.resumeStatus"
+            placeholder="恢复状态"
+          >
+            <el-option label="已经恢复" :value="1" />
+            <el-option label="未恢复" :value="2" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item prop="startDate_endDate">
+          <el-date-picker
+            v-model="filterForm.startDate_endDate"
+            type="datetimerange"
+            placeholder="时间范围"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          />
+        </el-form-item>
+
         <el-form-item>
-          <!-- <el-button
+          <el-button
             type="primary"
             icon="el-icon-search"
             @click="handleQuery"
-          ></el-button>-->
-          <!-- <el-button
+          ></el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
             >重置</el-button
-          > -->
+          >
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" size="medium" @click="handleDialog()">
             <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
             <i class="el-icon-plus" />
@@ -30,7 +142,8 @@
     </div>
 
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -136,7 +249,9 @@
 
     <el-dialog :visible.sync="dialog.visible" top="25vh">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{ dialog.type == 1 ? "告警受理" : "告警恢复" }}</span>
+        <span class="title-txt">{{
+          dialog.type == 1 ? "告警受理" : "告警恢复"
+        }}</span>
         <img src="@/assets/img/hl.png" />
       </div>
       <el-form
@@ -181,6 +296,19 @@
 <script>
 import pagination from "@/components/Pagination";
 import {
+  pointListAll,
+  deviceTypeListAll,
+  pointTypeListAll,
+  deviceListAll,
+  deviceGroupListAll,
+  spaceFloorListAll,
+  spaceRoomListAll,
+  pointListByPage,
+  pointDelete,
+  pointEdit,
+  pointAdd,
+} from "@/api/resource-manage.js";
+import {
   // 没用到
   alertNotificationEditResumeStatus,
   alertNotificationEditStatus,
@@ -190,11 +318,29 @@ export default {
   components: { pagination },
   data() {
     return {
+      pointOpts: [],
+      floorOpts: [],
+      roomOpts: [],
+      deviceGroupOpts: [],
+      deviceOpts: [],
+      pointTypeOpts: [],
       depOpts: [],
       firstMenuOpts: [],
       secondMenuOpts: [],
       filterForm: {
         // 筛选条件
+        floorCode: "",
+        roomCode: "",
+        deviceGroupCode: "",
+        deviceCode: "",
+        pointCode: "",
+        pointName: "",
+        noteLevel: null,
+        status: null,
+        resumeStatus: null,
+        startDate: null,
+        endDate: null,
+        startDate_endDate: [],
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
@@ -220,6 +366,39 @@ export default {
     };
   },
   watch: {
+    "filterForm.startDate_endDate"(n, o) {
+      this.filterForm.startDate = n[0];
+      this.filterForm.endDate = n[1];
+    },
+    async "dialog.forms.deviceTypeId"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.pointTypeOpts = [];
+      const r = await pointTypeListAll({ deviceTypeId: n });
+      this.pointTypeOpts = r.data;
+    },
+    async "filterForm.floorCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.roomOpts = [];
+      this.deviceGroupOpts = [];
+      this.deviceOpts = [];
+      const r = await spaceRoomListAll({ floorCode: n });
+      this.roomOpts = r.data;
+    },
+    async "filterForm.roomCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.deviceGroupOpts = [];
+      this.deviceOpts = [];
+      const r1 = await deviceListAll({ roomCode: n });
+      const r2 = await deviceGroupListAll({ roomCode: n });
+      this.deviceOpts = r1.data;
+      this.deviceGroupOpts = r2.data;
+    },
+    async "filterForm.deviceGroupCode"(n, o) {
+      if (!n) return;
+    },
     async "dialog.forms.firstMenuId"(n, o) {
       if (!n) return;
       // 一级变,二级也变
@@ -229,10 +408,24 @@ export default {
     },
   },
   created() {
+    spaceFloorListAll().then((r) => (this.floorOpts = r.data));
+    // spaceRoomListAll().then((r) => (this.roomOpts = r.data));
+    // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
+    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
+    pointTypeListAll().then((r) => (this.pointAllTypeOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
   methods: {
+    handleRoomChange(n) {
+      this.$set(this.filterForm, "deviceGroupCode", "");
+      this.$set(this.filterForm, "deviceCode", "");
+      pointListAll({ roomCode: n }).then((r) => (this.pointOpts = r.data));
+      // deviceListAll({ roomCode: n }).then((r) => (this.deviceOpts = r.data));
+      // deviceGroupListAll({ roomCode: n }).then(
+      //   (r) => (this.deviceGroupOpts = r.data)
+      // );
+    },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {

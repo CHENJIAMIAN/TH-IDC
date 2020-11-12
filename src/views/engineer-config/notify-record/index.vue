@@ -7,6 +7,7 @@
         :inline="true"
         size="medium"
         :model="filterForm"
+        style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="noteLevel">
           <el-input v-model="filterForm.noteLevel" placeholder="通知等级" />
@@ -62,7 +63,8 @@
     </div>
 
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border

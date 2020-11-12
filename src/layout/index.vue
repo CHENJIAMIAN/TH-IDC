@@ -9,17 +9,27 @@
       <navbar />
       <tags-view v-if="needTagsView" />
     </div>
-    <div class="side-breadcrumb" style="margin-left: 2rem;position: absolute;transform: translate(0px, -10px);z-index: 1;">
-      <img
-        src="@/assets/img/dw.png"
-        style="transform: translate(0px, -13px);"
-      />
+    <div
+      class="side-breadcrumb"
+      style="
+        margin-left: 2rem;
+        position: absolute;
+        transform: translate(0px, -10px);
+        z-index: 1;
+      "
+    >
+      <img src="@/assets/img/dw.png" style="transform: translate(0px, -13px)" />
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     </div>
     <!-- 次级路由，从路由$route获取 -->
+    <i
+      title="切换菜单显示"
+      class="el-icon-s-unfold side-toggler"
+      @click="$store.commit('app/TOGGLE_SIDE')"
+    ></i>
     <div class="side" v-show="this.sidebar.showSide">
-      <sidebar v-show="!isCollapse"/>
-    </div >
+      <sidebar v-show="!isCollapse" />
+    </div>
     <div class="main-container">
       <app-main />
       <!-- <right-panel v-if="showSettings">
@@ -32,7 +42,7 @@
 <script>
 import { AppMain, Navbar, Sidebar, TagsView } from "./components";
 import ResizeMixin from "./mixin/ResizeHandler";
-import { mapState,mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 
 export default {
@@ -42,16 +52,16 @@ export default {
     AppMain,
     Navbar,
     Sidebar,
-    TagsView
+    TagsView,
   },
   mixins: [ResizeMixin],
   computed: {
     ...mapState({
-      sidebar: state => state.app.sidebar,
-      device: state => state.app.device,
-      showSettings: state => state.settings.showSettings,
-      needTagsView: state => state.settings.tagsView,
-      fixedHeader: state => state.settings.fixedHeader
+      sidebar: (state) => state.app.sidebar,
+      device: (state) => state.app.device,
+      showSettings: (state) => state.settings.showSettings,
+      needTagsView: (state) => state.settings.tagsView,
+      fixedHeader: (state) => state.settings.fixedHeader,
     }),
     isCollapse() {
       return !this.sidebar.opened;
@@ -62,15 +72,15 @@ export default {
         hideNavMenuInSide: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
         withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === "mobile"
+        mobile: this.device === "mobile",
       };
-    }
+    },
   },
   methods: {
     handleClickOutside() {
       this.$store.dispatch("app/closeSideBar", { withoutAnimation: false });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -91,7 +101,6 @@ export default {
     top: 0;
   }
 
-
   .head {
     position: relative;
     height: $headhei;
@@ -103,18 +112,27 @@ export default {
     }
   }
 
+  .side-toggler {
+    position: fixed;
+    top: calc(#{$headhei} + 5em - 71px);
+    left: 12px;
+    cursor: pointer;
+    color: #31c6f1;
+    z-index: 1;
+  }
+
   .side {
     position: fixed;
     top: calc(#{$headhei} + 5em);
-    width: 200px;
+    left: 60px;
     bottom: 60px;
+    width: 200px;
     border-style: solid;
     border-image-source: url(../assets/img/sideborder.png);
     border-image-slice: 47 92 47 87;
     border-image-width: 47px 92px 47px 90px;
     border-image-outset: 35px 37px 37px 35px;
     border-image-repeat: stretch stretch;
-    left: 60px;
     overflow-y: auto;
     overflow-x: hidden;
   }

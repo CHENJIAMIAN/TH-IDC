@@ -8,13 +8,13 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item>
-          <el-button
+          <!-- <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset()"
             >重置</el-button
-          >
+          > -->
           <el-button type="primary" size="medium" @click="handleAdd">
             <i class="el-icon-plus" />
           </el-button>
@@ -25,7 +25,8 @@
     <!-- 列表 -->
     <el-table
       class="arrange-work-table"
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       :data="listData"

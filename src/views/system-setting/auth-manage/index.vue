@@ -80,7 +80,8 @@
 
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -257,7 +258,7 @@ export default {
       const r = await sysMenuListAll({ parentId: n, menuType: 2 });
       this.secondMenuOpts = r.data;
     },
-    async "filterForm.level2Idd"(n, o) {
+    async "filterForm.level2Id"(n, o) {
       if (!n) return;
       // 一级变,二级也变
       this.thirdMenuOpts = [];

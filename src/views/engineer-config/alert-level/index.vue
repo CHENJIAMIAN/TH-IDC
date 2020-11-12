@@ -29,7 +29,8 @@
 
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -168,6 +169,7 @@
 </template>
 
 <script>
+import { isIntNumber } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   alertLevelQueryById,
@@ -210,7 +212,7 @@ export default {
         visible: false,
         forms: {},
         rules: {
-          level: [{ required: true, trigger: "blur", message: "请输入" }],
+          level: [{ required: true, trigger: "blur", validator: isIntNumber }],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           noteType: [{ required: true, trigger: "blur", message: "请输入" }],
           noteContent: [{ required: true, trigger: "blur", message: "请输入" }],

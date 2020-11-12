@@ -54,7 +54,8 @@
 
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -164,7 +165,7 @@
 </template>
 
 <script>
-import { valueTypeOpts, sortValidator } from "@/views/resource-manage/common.js";
+import { valueTypeOpts, isIntNumber } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   deviceTypeListAll,

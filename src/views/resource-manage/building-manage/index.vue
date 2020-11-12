@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { sortValidator } from "@/views/resource-manage/common.js";
+import { isIntNumber } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   pointUpdateToRedis,
@@ -167,7 +167,7 @@ export default {
 <style lang="scss" scoped>
 .building-manage {
   display: grid;
-  grid-template-rows: 60px auto 70px;
+  grid-template-rows: 60px auto;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: 100%;
 }

@@ -77,17 +77,11 @@ dingding-config
           name: 'arrange-work-manage',
           meta: { title: '排班管理', icon: 'icon' }
         },
-        {
-          path: 'rule-template',
-          component: () => import('@/views/engineer-config/rule-template/index'),
-          name: 'rule-template',
-          meta: { title: '规则模板', icon: 'icon' }
-        },
         // {
-        //   path: 'mail-config',
-        //   component: () => import('@/views/engineer-config/mail-config/index'),
-        //   name: 'mail-config',
-        //   meta: { title: '邮箱配置', icon: 'icon' }
+        //   path: 'rule-template',
+        //   component: () => import('@/views/engineer-config/rule-template/index'),
+        //   name: 'rule-template',
+        //   meta: { title: '规则模板', icon: 'icon' }
         // },
         {
           path: 'alert-rule',

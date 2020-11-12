@@ -77,7 +77,8 @@
 
     <!-- 列表 -->
     <el-table
-      style="overflow: auto"
+            style="width: 100%"
+      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -220,7 +221,7 @@
 </template>
 
 <script>
-import { sortValidator } from "@/views/resource-manage/common.js";
+import { isIntNumber } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   spaceFloorListAll,
@@ -290,7 +291,7 @@ export default {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           roomType: [{ required: true, trigger: "blur", message: "请输入" }],
           imgUrl: [{ required: true, message: "请上传图片" }],
-          sort: [{ required: true, trigger: "blur", validator: sortValidator }],
+          sort: [{ required: true, trigger: "blur", validator: isIntNumber }],
         },
       },
     };
