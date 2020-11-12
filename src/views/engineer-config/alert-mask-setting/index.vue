@@ -14,13 +14,13 @@
             icon="el-icon-search"
             @click="handleQuery"
           ></el-button>-->
-          <el-button
+          <!-- <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
             >重置</el-button
-          >
+          > -->
           <el-button type="primary" size="medium" @click="handleDialog()">
             <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
             <i class="el-icon-plus" />
