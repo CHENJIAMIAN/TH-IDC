@@ -92,7 +92,7 @@
         label="创建时间"
         width="180"
       />
-      <el-table-column sortable prop="takeTime" label="耗时（毫秒）" />
+      <el-table-column sortable prop="takeTime" label="耗时(毫秒)" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button
@@ -154,7 +154,7 @@
         <el-form-item label="创建时间" prop="createTime">
           <el-input disabled v-model="dialog.forms.createTime"></el-input>
         </el-form-item>
-        <el-form-item label="耗时时间（单位毫秒）" prop="takeTime">
+        <el-form-item label="耗时(毫秒)" prop="takeTime">
           <el-input disabled v-model="dialog.forms.takeTime"></el-input>
         </el-form-item>
       </el-form>
