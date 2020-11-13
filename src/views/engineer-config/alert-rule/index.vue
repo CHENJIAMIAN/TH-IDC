@@ -364,18 +364,18 @@ export default {
             alertAlgorithm: [
               { required: true, trigger: "blur", message: "请输入" },
             ],
-            // alertOperator: [
-            //   { required: true, trigger: "blur", message: "请输入" },
-            // ],
-            // alertOperatorValue: [
-            //   { required: true, trigger: "blur", message: "请输入" },
-            // ],
-            // recoverOperator: [
-            //   { required: true, trigger: "blur", message: "请输入" },
-            // ],
-            // recoverOperatorValue: [
-            //   { required: true, trigger: "blur", message: "请输入" },
-            // ],
+            alertOperator: [
+              { required: true, trigger: "blur", message: "请输入" },
+            ],
+            alertOperatorValue: [
+              { required: true, trigger: "blur", message: "请输入" },
+            ],
+            recoverOperator: [
+              { required: true, trigger: "blur", message: "请输入" },
+            ],
+            recoverOperatorValue: [
+              { required: true, trigger: "blur", message: "请输入" },
+            ],
             // alertType: [{ required: true, trigger: "blur", message: "请输入" }],
             // alertLevelId: [
             //   { required: true, trigger: "blur", message: "请输入" },
