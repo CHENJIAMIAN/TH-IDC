@@ -22,8 +22,8 @@ router.beforeEach(async (to, from, next) => {
 
   if (hasToken) {
     // 跳到驾驶舱单页
-    if (to.path === '/Cockpit') {
-      location.href = '/home.html'
+    if (to.path === '/BIM') {
+      next();
     }
     else if (to.path === '/login') {
       // if is logged in, redirect to the home page

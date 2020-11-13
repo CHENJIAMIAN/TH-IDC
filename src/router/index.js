@@ -53,6 +53,11 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/BIM2',
+    component: () => import('@/BIM.vue'),
+    hidden: true
+  },
+  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
@@ -95,12 +100,10 @@ export const constantRoutes = [
 export const asyncRoutes = [
   /**当您的路由映射表太长时，您可以将其拆分为小模块**/
   {
-    path: '/Cockpit',
+    path: '/BIM',
     name: "驾驶舱",
     component: Layout,
-    beforeEnter: (to, from, next) => {
-      debugger
-    },
+    redirect: '/BIM2',
     meta: {
       title: '驾驶舱',
       icon: 'nested',
