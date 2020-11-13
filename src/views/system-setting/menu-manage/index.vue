@@ -97,7 +97,7 @@ menuType	[short]	是	菜单类型  1 子系统 2 模块 3 菜单 -->
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
         <el-form-item label="菜单类型" prop="menuType">
-          <el-radio-group v-model="dialog.forms.menuType" style="width: 100%" :disabled="dialog.forms.id">
+          <el-radio-group v-model="dialog.forms.menuType" style="width: 100%" :disabled="!!dialog.forms.id">
             <el-radio border :label="1">子系统</el-radio>
             <el-radio border :label="2">模块</el-radio>
             <el-radio border :label="3">菜单</el-radio>

@@ -9,6 +9,7 @@
         :model="filterForm"
         style="display: grid; grid-auto-flow: column"
       >
+        <!-- v-show="!$route.name === 'device-group'" -->
         <el-form-item prop="floorCode">
           <el-select
             clearable
@@ -175,17 +176,6 @@
           <div>通知内容:{{ row.noteContent || "无" }}</div>
         </template>
       </el-table-column>
-
-      <!-- <el-table-column sortable prop="floorCode" label="楼层编号" />
-      <el-table-column sortable prop="roomCode" label="房间编号" />
-      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
-      <el-table-column sortable prop="deviceCode" label="设备编号" /> -->
-      <!-- <el-table-column sortable prop="pointCode" label="测点编号" />
-      <el-table-column sortable prop="pointName" label="测点名称" /> -->
-      <!-- <el-table-column sortable prop="triggerValue" label="触发值" />
-      <el-table-column sortable prop="currentValue" label="当前值" /> -->
-      <!-- <el-table-column sortable prop="noteLevel" label="通知等级" />
-      <el-table-column sortable prop="noteContent" label="通知内容" /> -->
       <el-table-column sortable prop="status" label="状态" width="80">
         <template slot-scope="{ row }">
           <div v-if="row.status == 1">待处理</div>
@@ -207,11 +197,6 @@
           <div>受理备注:{{ row.handlerRemark || "无" }}</div>
         </template>
       </el-table-column>
-
-      <!-- <el-table-column sortable prop="handlerUserName" label="受理人" /> -->
-      <!-- <el-table-column sortable prop="handlerTime" label="受理时间" /> -->
-      <!-- <el-table-column sortable prop="handlerUserId" label="受理人ID" /> -->
-      <!-- <el-table-column sortable prop="handlerRemark" label="受理备注" /> -->
       <el-table-column sortable prop="resumeStatus" label="恢复状态">
         <template slot-scope="{ row }">
           <div v-if="row.resumeStatus == 1">已经恢复</div>
@@ -413,6 +398,7 @@ export default {
     // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
     deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
     pointTypeListAll().then((r) => (this.pointAllTypeOpts = r.data));
+    // if(this.$route.name === "device-group") this.filterForm.deviceGroupCode =  this.$route.query.deviceGroupCode;
     this.handleQuery();
   },
   mounted() {},
@@ -420,6 +406,7 @@ export default {
     handleRoomChange(n) {
       this.$set(this.filterForm, "deviceGroupCode", "");
       this.$set(this.filterForm, "deviceCode", "");
+      if(!n) return;
       pointListAll({ roomCode: n }).then((r) => (this.pointOpts = r.data));
       // deviceListAll({ roomCode: n }).then((r) => (this.deviceOpts = r.data));
       // deviceGroupListAll({ roomCode: n }).then(

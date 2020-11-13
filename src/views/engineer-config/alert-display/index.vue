@@ -86,6 +86,12 @@
               <el-input v-model="forms.alertTimeGap" placeholder="请输入" />
             </el-form-item>
           </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="失败重发间隔(分)" prop="alertFailTimeGap">
+              <el-input v-model="forms.alertFailTimeGap" placeholder="请输入" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </el-card>
@@ -130,6 +136,9 @@ export default {
           { required: false, trigger: "blur", validator: isIntNumber },
         ],
         alertTimeGap: [
+          { required: false, trigger: "blur", validator: isIntNumber },
+        ],
+        alertFailTimeGap: [
           { required: false, trigger: "blur", validator: isIntNumber },
         ],
       },

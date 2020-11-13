@@ -13,7 +13,7 @@
               :key="deviceGroup.id"
               @click="
                 $router.push(
-                  `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
+                  `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${deviceGroup.deviceGroupCode}`
                 )
               "
               >{{ deviceGroup.name }}</el-button
@@ -34,7 +34,7 @@
                   :key="deviceGroup.id"
                   @click="
                     $router.push(
-                      `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
+                      `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${deviceGroup.deviceGroupCode}`
                     )
                   "
                   >{{ deviceGroup.name }}</span
@@ -122,7 +122,7 @@ export default {
         // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
         const deviceGroup = deviceGroupList[0];
         this.$router.push(
-          `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}`
+          `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${deviceGroup.deviceGroupCode}`
         );
       }
     });

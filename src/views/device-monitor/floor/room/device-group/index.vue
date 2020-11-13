@@ -48,6 +48,7 @@
     <div>
       <div class="row2">
         <el-tabs
+          class="btm-el-tabs"
           type="border-card"
           v-model="tableActiveName"
           @tab-click="handleTableTabClick"
@@ -55,9 +56,9 @@
           <el-tab-pane label="数据信息" name="data-info">
             <!-- 列表 -->
             <el-table
-                    style="width: 100%"
-      height="100%"
-      stripe
+              style="width: 100%"
+              height="100%"
+              stripe
               v-loading="listLoading"
               border
               :data="listData"
@@ -222,8 +223,12 @@
             </el-table>
           </el-tab-pane>
           <el-tab-pane label="参数状态" name="param-status"> </el-tab-pane>
-          <el-tab-pane label="告警记录" name="alert-record"> </el-tab-pane>
-          <el-tab-pane label="资产信息" name="asset-info"> </el-tab-pane>
+          <el-tab-pane label="告警记录" name="alert-record">
+            <alert-notify />
+          </el-tab-pane>
+          <el-tab-pane label="资产信息" name="asset-info"> 
+            <device-manage/>
+          </el-tab-pane>
           <el-tab-pane label="设备控制" name="equipment-control"> </el-tab-pane>
         </el-tabs>
       </div>
@@ -258,9 +263,13 @@ import {
   /* 2-7返回字段相同 */
   roomTypeDeviceGroupListAllRoomType1, // 1. 精密空调房
 } from "@/api/device-monitor.js";
-
+import alertNotify from "@/views/engineer-config/alert-notify/index.vue";
+import deviceManage from "@/views/resource-manage/device-manage/index.vue"
 export default {
   name: "device-group",
+  components: {
+    alertNotify,deviceManage
+  },
   data() {
     return {
       imgActiveName: "device",
@@ -369,6 +378,12 @@ export default {
   .el-table th:first-child {
     //切掉第一个表头列的一个角
     // background: linear-gradient(-217deg, transparent 17px, #0838698c 0);
+  }
+  .btm-el-tabs {
+    .el-tabs__content {
+      overflow: auto;
+      height: 180px;
+    }
   }
 }
 
