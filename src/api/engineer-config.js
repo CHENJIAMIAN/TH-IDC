@@ -121,6 +121,18 @@ export function smsconfigAddOrEdit_sms(data) { return request({ url: '/admin/ale
 // 告警通知发送记录管理
 export function alertNotificationSendListByPage(data) { return request({ url: '/admin/alert/alertNotificationSend/listByPage', method: 'post', data }) }
 
+// 获取策略
+export function alertStrategyQueryById(data) { return request({ url: '/admin/alert/alertStrategy/queryById', method: 'post', data }) }
+// 修改策略
+export function alertStrategyEdit(data) { return request({ url: '/admin/alert/alertStrategy/edit', method: 'post', data }) }
+// 新增策略
+export function alertStrategyAdd(data) { return request({ url: '/admin/alert/alertStrategy/add', method: 'post', data }) }
+// 删除策略
+export function alertStrategyDelete(data) { return request({ url: '/admin/alert/alertStrategy/delete', method: 'post', data }) }
+// 获取所有告警策略列表
+export function alertStrategyListAll(data) { return request({ url: '/admin/alert/alertStrategy/listAll', method: 'post', data }) }
+// 获取告警策略列表 带分页
+export function alertStrategyListByPage(data) { return request({ url: '/admin/alert/alertStrategy/listByPage', method: 'post', data }) }
 
 
 

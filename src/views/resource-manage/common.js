@@ -13,7 +13,7 @@ export const noteModeOpts = [
     { id: 3, name: "语音" },
     { id: 4, name: "微信" },
     { id: 5, name: "钉钉" },
-    { id: 9, name: "声光" },
+    { id: 6, name: "声光" },
 ];
 
 

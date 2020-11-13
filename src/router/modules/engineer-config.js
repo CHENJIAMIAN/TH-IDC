@@ -66,6 +66,12 @@ dingding-config
           meta: { title: '告警通知', icon: 'icon' }
         },
         {
+          path: 'alert-stratege',
+          component: () => import('@/views/engineer-config/alert-stratege/index.vue'),
+          name: 'alert-stratege',
+          meta: { title: '告警策略', icon: 'icon' }
+        },
+        {
           path: 'notify-record',
           component: () => import('@/views/engineer-config/notify-record/index.vue'),
           name: 'notify-record',

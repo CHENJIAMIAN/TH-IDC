@@ -29,32 +29,73 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
       border
       :data="listData"
     >
-      <el-table-column sortable prop="smtp" label="邮箱服务器" />
-      <el-table-column sortable prop="auth" label="是否验证">
+      <el-table-column prop="level" label="告警等级">
         <template slot-scope="{ row }">
-          <span v-if="row.auth == 1">验证</span>
-          <span v-else>不验证</span>
+          <div>
+            {{
+              levelOpts.find((i) => i.id == row.level) &&
+              levelOpts.find((i) => i.id == row.level).name
+            }}
+          </div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="email" label="邮箱地址" />
-      <el-table-column sortable prop="username" label="邮箱用户名" />
-      <!-- <el-table-column sortable prop="password" label="密码" /> -->
-      <el-table-column sortable prop="remark" label="描述" />
-      <el-table-column label="状态" width="150" align="center">
+      <!-- <el-table-column prop="levelName" label="告警等级名称" /> -->
+
+      <el-table-column prop="step1" label="步骤1">
         <template slot-scope="{ row }">
-          <el-switch
-            @change="handleStatusChange($event, row)"
-            v-model="row.status"
-            :active-value="1"
-            :inactive-value="0"
-          ></el-switch>
+          <div v-for="item in row.step1" :key="item">
+            <div>
+              {{
+                noteModeOpts.find((i) => i.id == item) &&
+                noteModeOpts.find((i) => i.id == item).name
+              }}
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="step2" label="步骤2">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.step2" :key="item">
+            <div>
+              {{
+                noteModeOpts.find((i) => i.id == item) &&
+                noteModeOpts.find((i) => i.id == item).name
+              }}
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="step3" label="步骤3">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.step3" :key="item">
+            <div>
+              {{
+                noteModeOpts.find((i) => i.id == item) &&
+                noteModeOpts.find((i) => i.id == item).name
+              }}
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="step4" label="步骤4">
+        <template slot-scope="{ row }">
+          <div v-for="item in row.step4" :key="item">
+            <div>
+              {{
+                noteModeOpts.find((i) => i.id == item) &&
+                noteModeOpts.find((i) => i.id == item).name
+              }}
+            </div>
+          </div>
         </template>
       </el-table-column>
 
@@ -75,13 +116,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <pagination
+    <pagination
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
       :limit.sync="filterForm.pageSize"
       @pagination="getList"
-    /> -->
+    />
 
     <el-dialog :visible.sync="dialog.visible" top="20vh">
       <div slot="title" class="el-dialog-title-custom">
@@ -94,36 +135,56 @@
         ref="dialogForm"
         label-width="100px"
       >
-        <el-form-item label="邮箱服务器" prop="smtp">
-          <el-input v-model="dialog.forms.smtp"></el-input>
+        <el-form-item label="告警等级" prop="level">
+          <el-select filterable v-model="dialog.forms.level">
+            <el-option
+              v-for="item in levelOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="是否验证" prop="auth">
-          <el-radio-group v-model="dialog.forms.auth" style="width: 100%">
-            <el-radio border :label="1">验证</el-radio>
-            <el-radio border :label="2">不验证</el-radio>
-          </el-radio-group>
+
+        <el-form-item label="步骤1" prop="step1">
+          <el-select multiple v-model="dialog.forms.step1">
+            <el-option
+              v-for="item in noteModeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="邮箱地址" prop="email">
-          <el-input v-model="dialog.forms.email"></el-input>
+        <el-form-item label="步骤2" prop="step2">
+          <el-select multiple v-model="dialog.forms.step2">
+            <el-option
+              v-for="item in noteModeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="邮箱用户名" prop="username">
-          <el-input v-model="dialog.forms.username"></el-input>
+        <el-form-item label="步骤3" prop="step3">
+          <el-select multiple v-model="dialog.forms.step3">
+            <el-option
+              v-for="item in noteModeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="dialog.forms.password"></el-input>
-        </el-form-item>
-        <el-form-item label="状态" prop="status" v-if="!dialog.forms.id">
-          <el-radio-group
-            class="radio-status"
-            v-model="dialog.forms.status"
-            style="width: 100%"
-          >
-            <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
-            <el-radio border :label="0" style="color: gray">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="描述" prop="remark">
-          <el-input v-model="dialog.forms.remark"></el-input>
+        <el-form-item label="步骤4" prop="step4">
+          <el-select multiple v-model="dialog.forms.step4">
+            <el-option
+              v-for="item in noteModeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -136,22 +197,34 @@
 </template>
 
 <script>
+import { isIntNumber, noteModeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
-  configEmailUpdateState,
-   configEmailQueryById,
-  configEmailListAll,
-  configEmailListByPage,
-  configEmailDelete,
-  configEmailEdit,
-  configEmailAdd,
+  alertStrategyQueryById,
+  alertStrategyListByPage,
+  alertStrategyDelete,
+  alertStrategyEdit,
+  alertStrategyAdd,
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination },
   data() {
     return {
+      noteModeOpts,
       depOpts: [],
-      firstMenuOpts: [],
+      levelOpts: [
+        { id: 1, name: "紧急" },
+        { id: 2, name: "严重" },
+        { id: 3, name: "重要" },
+        { id: 4, name: "次要" },
+        { id: 5, name: "预警" },
+      ],
+      noteContentOpts: [
+        { id: "1", name: "时间" },
+        { id: "2", name: "位置" },
+        { id: "3", name: "内容" },
+        { id: "4", name: "告警值" }, //后台返回的id是用string的
+      ],
       secondMenuOpts: [],
       thirdMenuOpts: [],
       filterForm: {
@@ -168,13 +241,11 @@ export default {
         visible: false,
         forms: {},
         rules: {
-          smtp: [{ required: true, trigger: "blur", message: "请输入" }],
-          auth: [{ required: true, trigger: "blur", message: "请输入" }],
-          email: [{ required: true, trigger: "blur", message: "请输入" }],
-          username: [{ required: true, trigger: "blur", message: "请输入" }],
-          password: [{ required: true, trigger: "blur", message: "请输入" }],
+          level: [{ required: true, trigger: "blur", validator: isIntNumber }],
+          name: [{ required: true, trigger: "blur", message: "请输入" }],
+          noteType: [{ required: true, trigger: "blur", message: "请输入" }],
+          noteContent: [{ required: true, trigger: "blur", message: "请输入" }],
           status: [{ required: true, trigger: "blur", message: "请输入" }],
-          // remark: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };
@@ -185,19 +256,14 @@ export default {
   },
   mounted() {},
   methods: {
-    handleStatusChange(v, row) {
-      configEmailUpdateState({ id: row.id, status: v }).then((r) => {
-        this.getList();
-      });
-    },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
           let callAPI = null;
           if (this.dialog.forms.id) {
-            callAPI = configEmailEdit;
+            callAPI = alertStrategyEdit;
           } else {
-            callAPI = configEmailAdd;
+            callAPI = alertStrategyAdd;
           }
           callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
@@ -225,11 +291,11 @@ export default {
     async handleDialog(row) {
       // dialog显示时获取一级菜单列表
       if (row) {
-        const r = await configEmailQueryById({id:row.id})
         // 编辑
-        this.dialog.forms = r.data;
+        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = { status: 1 ,auth:2};
+        this.dialog.forms = { status: 1 };
+        this.$set(this.dialog.forms, "noteContent", []);
       }
       this.dialog.visible = true;
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
@@ -242,7 +308,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          configEmailDelete({
+          alertStrategyDelete({
             id: id,
           }).then((res) => {
             this.getList();
@@ -254,9 +320,9 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      configEmailListAll().then((res) => {
-        this.listData = res.data;
-        // this.listTotal = res.data.total;
+      alertStrategyListByPage(this.filterForm).then((res) => {
+        this.listData = res.data.list;
+        this.listTotal = res.data.total;
         this.listLoading = false;
       });
     },
@@ -269,7 +335,7 @@ export default {
   display: grid;
   grid-template-rows: 60px auto 70px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
-  height: calc(100vh - 260px);
+  height: 100%;
 }
 .head {
   display: grid;
