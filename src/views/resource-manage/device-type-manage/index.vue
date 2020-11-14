@@ -215,8 +215,9 @@ export default {
 .department-manage {
   display: grid;
   grid-template-rows: 60px auto 70px;
-  background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
-  height: 100%;
+  // background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
+  height: calc(100vh - 260px);
+  // height: 100%;
 }
 .head {
   display: grid;

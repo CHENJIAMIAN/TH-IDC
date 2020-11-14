@@ -80,7 +80,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/device-monitor',//系统默认
+    redirect: '/BIM',//系统默认
     // redirect: '/system-setting',
     // children: [
     //   {

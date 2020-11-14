@@ -25,14 +25,13 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-card>
+    <!-- <el-card> -->
       <el-form
         ref="forms"
         :model="forms"
         :rules="rules"
         v-loading="listLoading"
         inline
-        style="align-self: center; justify-self: center"
       >
         <el-row>
           <el-col :span="12">
@@ -41,6 +40,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="实时告警最低级别" prop="realtimeLowlevelShow">
+              <el-input
+                v-model="forms.realtimeLowlevelShow"
+                placeholder="请输入"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
             <el-form-item
               label="实时告警确认后是否还显示"
               prop="realtimeIsConfirmShow"
@@ -52,15 +59,7 @@
               ></el-checkbox>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="实时告警最低级别" prop="realtimeLowlevelShow">
-              <el-input
-                v-model="forms.realtimeLowlevelShow"
-                placeholder="请输入"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="空间告警最低级别" prop="spaceLowlevelShow">
               <el-input
                 v-model="forms.spaceLowlevelShow"
@@ -68,7 +67,7 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item
               label="空间告警确认后是否还显示"
               prop="spaceIsConfirmShow"
@@ -94,7 +93,7 @@
           </el-col>
         </el-row>
       </el-form>
-    </el-card>
+    <!-- </el-card> -->
   </div>
 </template>
 
@@ -199,7 +198,7 @@ export default {
 .auth-manage {
   display: grid;
   grid-template-rows: 60px auto;
-  background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
+  // background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: calc(100vh - 260px);
 }
 .head {

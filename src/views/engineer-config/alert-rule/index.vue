@@ -44,9 +44,9 @@
       </div>
       <!-- 列表 -->
       <el-table
-              style="width: 100%"
-      height="100%"
-      stripe
+        style="width: 100%"
+        height="100%"
+        stripe
         v-loading="listLoading"
         border
         :data="listData"
@@ -90,15 +90,15 @@
     <div v-else class="page2">
       <div class="dialog-content">
         <div class="measure-point-info">
-          <el-card>
+          <el-card class="custom-card">
             <el-form
-              inline
               :model="cdForm.forms"
               :rules="cdForm.rules"
               ref="cdForm"
               style="pointer-events: none"
+              size="mini"
             >
-              <div style="display: grid; grid-auto-flow: column">
+              <div style="display: flex; justify-content: space-around">
                 <el-form-item label="测点类型名称" prop="name">
                   <el-input v-model="cdForm.forms.name"></el-input>
                 </el-form-item>
@@ -140,6 +140,7 @@
 
         <div class="rule-list">
           <el-card
+            class="custom-card"
             style="width: 340px"
             v-for="(alertRule, index) in cdForm.forms.alertRuleList"
             :key="index"
@@ -149,6 +150,8 @@
               :rules="cdForm.ruleForm.rules"
               :ref="`ruleForm${index}`"
               label-width="120px"
+              size="mini"
+              class="custom-rule-form"
             >
               <el-form-item label="告警算法" prop="alertAlgorithm">
                 <el-select
@@ -262,6 +265,7 @@
               <el-button
                 type="primary"
                 plain
+                size="mini"
                 @click="
                   handleDeleteRule(cdForm.forms.alertRuleList[index].id, index)
                 "
@@ -269,6 +273,7 @@
               >
               <el-button
                 type="primary"
+                size="mini"
                 @click="
                   dialogSubmitRule(cdForm.forms.alertRuleList[index].id, index)
                 "
@@ -299,10 +304,7 @@
 </template>
 
 <script>
-import {
-  valueTypeOpts,
-  isIntNumber,
-} from "@/views/resource-manage/common.js";
+import { valueTypeOpts, isIntNumber } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
 import {
   alertRuleDelete,
@@ -541,6 +543,7 @@ export default {
   gap: 10px;
   height: 100%;
   overflow: auto;
+  padding-right: 5px;
   .rule-list {
     display: flex;
     gap: 40px 10px;
@@ -554,6 +557,17 @@ export default {
     .el-dialog__body {
     }
     .el-dialog__header {
+    }
+  }
+  .custom-rule-form {
+    .el-form-item--mini.el-form-item {
+      margin-bottom: 5px;
+    }
+  }
+
+  .custom-card{
+    .el-card__body {
+      padding: 10px;
     }
   }
 }

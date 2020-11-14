@@ -54,6 +54,12 @@ dingding-config
       */
     },
     {
+      path: 'storage-config',
+      component: () => import('@/views/engineer-config/storage-config/index'),
+      name: 'storage-config',
+      meta: { title: '存储配置', icon: 'icon' }
+    },
+    {
       path: 'rule-manage',
       component: () => import('@/views/engineer-config/index'),
       name: 'rule-manage',
@@ -97,20 +103,14 @@ dingding-config
         },
       ]
     },
-    {
-      path: 'host-config',
-      component: () => import('@/views/engineer-config/index'),
-      name: 'host-config',
-      meta: { title: '主机配置', icon: 'icon' },
-      children: [
-        {
-          path: 'storage-config',
-          component: () => import('@/views/engineer-config/storage-config/index'),
-          name: 'storage-config',
-          meta: { title: '存储配置', icon: 'icon' }
-        },
-      ]
-    }
+    // {
+    //   path: 'host-config',
+    //   component: () => import('@/views/engineer-config/index'),
+    //   name: 'host-config',
+    //   meta: { title: '主机配置', icon: 'icon' },
+    //   children: [
+    //   ]
+    // }
   ]
 
 

@@ -5,7 +5,7 @@
         <mail-config />
       </el-tab-pane>
       <el-tab-pane label="短信配置" name="sms-config">
-        <sms-config />>
+        <sms-config />
       </el-tab-pane>
       <el-tab-pane label="语音配置" name="voice-config">
         <voice-config />
@@ -41,7 +41,7 @@ export default {
 <style lang="scss" scoped>
 .alert-config {
   display: grid;
-  background: url(../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
+  // background: url(../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: 100%;
 }
 </style>

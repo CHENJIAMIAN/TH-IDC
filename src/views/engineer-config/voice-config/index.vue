@@ -16,32 +16,21 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-card>
+    <!-- <el-card> -->
       <el-form
         ref="forms"
         :model="forms"
         :rules="rules"
         v-loading="listLoading"
         inline
-        style="align-self: center; justify-self: center"
       >
-        <el-row :gutter="80">
-          <el-col :span="8">
-            <el-form-item label="语音请求地址" prop="sound_url">
-              <el-input v-model="forms.sound_url" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="应用ID" prop="sound_appid">
               <el-input v-model="forms.sound_appid" placeholder="请输入" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="AppKey" prop="sound_appkey">
-              <el-input v-model="forms.sound_appkey" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="模板ID" prop="sound_template_id">
               <el-input
                 v-model="forms.sound_template_id"
@@ -49,9 +38,19 @@
               />
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="AppKey" prop="sound_appkey">
+              <el-input v-model="forms.sound_appkey" placeholder="请输入" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="语音请求地址" prop="sound_url">
+              <el-input v-model="forms.sound_url" placeholder="请输入" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
-    </el-card>
+    <!-- </el-card> -->
   </div>
 </template>
 
@@ -172,7 +171,7 @@ export default {
 .auth-manage {
   display: grid;
   grid-template-rows: 60px auto;
-  background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
+  // background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: calc(100vh - 260px);
 }
 .head {

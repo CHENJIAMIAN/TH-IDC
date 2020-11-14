@@ -194,11 +194,10 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              // this.$router.push({
-              //   path: this.redirect || "/",
-              //   query: this.otherQuery
-              // });
-              location.href = "/home.html";
+              this.$router.push({
+                path: this.redirect || "/",
+                query: this.otherQuery
+              });
               this.loading = false;
             })
             .catch(() => {

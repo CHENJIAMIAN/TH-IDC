@@ -5,7 +5,7 @@ import Layout from '@/layout'
 export default {
   path: '/resource-manage',
   component: Layout,
-  redirect: '/resource-manage/space-device/room-type-manage',
+  redirect: '/resource-manage/base-type',
   name: '资产管理',
   meta: {
     title: '资产管理',
@@ -14,30 +14,30 @@ export default {
   },
   children: [
     {
-      path: 'space-device',
-      component: () => import('@/views/resource-manage/index'),
-      name: 'space-device',
+      path: 'base-type',
+      component: () => import('@/views/resource-manage/base-type.vue'),
+      name: 'base-type',
       meta: { title: '基础类型', icon: 'icon' },
-      children: [
-        {
-          path: 'room-type-manage',
-          component: () => import('@/views/resource-manage/room-type-manage/index'),
-          name: 'room-type-manage',
-          meta: { title: '房间类型', icon: 'icon' }
-        },
-        {
-          path: 'device-type-manage',
-          component: () => import('@/views/resource-manage/device-type-manage/index'),
-          name: 'device-type-manage',
-          meta: { title: '设备类型', icon: 'icon' }
-        },
-        {
-          path: 'measure-point-type-manage',
-          component: () => import('@/views/resource-manage/measure-point-type-manage/index'),
-          name: 'measure-point-type-manage',
-          meta: { title: '测点类型', icon: 'icon' }
-        },
-      ]
+      // children: [
+      //   {
+      //     path: 'room-type-manage',
+      //     component: () => import('@/views/resource-manage/room-type-manage/index'),
+      //     name: 'room-type-manage',
+      //     meta: { title: '房间类型', icon: 'icon' }
+      //   },
+      //   {
+      //     path: 'device-type-manage',
+      //     component: () => import('@/views/resource-manage/device-type-manage/index'),
+      //     name: 'device-type-manage',
+      //     meta: { title: '设备类型', icon: 'icon' }
+      //   },
+      //   {
+      //     path: 'measure-point-type-manage',
+      //     component: () => import('@/views/resource-manage/measure-point-type-manage/index'),
+      //     name: 'measure-point-type-manage',
+      //     meta: { title: '测点类型', icon: 'icon' }
+      //   },
+      // ]
     },
     {
       path: 'basic-type',

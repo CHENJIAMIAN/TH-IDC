@@ -11,7 +11,7 @@ const name = defaultSettings.title || '潼湖数据中心动环监控系统' // 
 //如果您的端口设置为80，请使用管理员权限执行命令行。
 //例如，Mac：sudo npm run
 //您可以通过以下方法更改端口：port = 9527 npm run dev或npm run dev --port = 9527
-const port = process.env.port || process.env.npm_config_port || 9527 // dev port
+const port = 9823;//process.env.port || process.env.npm_config_port || 9527 // dev port
 
 //所有配置项说明均可在https://cli.vuejs.org/config/中找到 
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
-    open: true,
+    open: false,
     overlay: {
       warnings: false,
       errors: true

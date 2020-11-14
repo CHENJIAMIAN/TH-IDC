@@ -5,32 +5,32 @@
       type="border-card"
       @tab-click="handleTabClick"
     >
-      <el-tab-pane label="告警等级" name="alert-level">
-        <alert-level />
+      <el-tab-pane label="房间类型" name="room-type-manage">
+        <room-type-manage />
       </el-tab-pane>
-      <el-tab-pane label="告警显示" name="alert-display">
-        <alert-display />
+      <el-tab-pane label="设备类型" name="device-type-manage">
+        <device-type-manage />
       </el-tab-pane>
-      <el-tab-pane label="屏蔽设置" name="alert-mask-setting">
-        <alert-mask-setting />
+      <el-tab-pane label="测点类型" name="measure-point-type-manage">
+        <measure-point-type-manage />
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
-import alertLevel from "@/views/engineer-config/alert-level/index";
-import alertDisplay from "@/views/engineer-config/alert-display/index";
-import alertMaskSetting from "@/views/engineer-config/alert-mask-setting/index";
+import roomTypeManage from "@/views/resource-manage/room-type-manage/index";
+import deviceTypeManage from "@/views/resource-manage/device-type-manage/index";
+import measurePointTypeManage from "@/views/resource-manage/measure-point-type-manage/index";
 
 export default {
   components: {
-    alertLevel,
-    alertDisplay,
-    alertMaskSetting,
+    roomTypeManage,
+    deviceTypeManage,
+    measurePointTypeManage,
   },
   data() {
     return {
-      activeName: "alert-level",
+      activeName: "room-type-manage",
     };
   },
   methods: {
