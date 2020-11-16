@@ -9,19 +9,19 @@
 
     <div class="right-menu">
       <!-- <template v-if="device !== 'mobile'"> -->
-        <!-- <search id="header-search" class="right-menu-item" /> -->
+      <!-- <search id="header-search" class="right-menu-item" /> -->
 
-        <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->
+      <!-- <error-log class="errLog-container right-menu-item hover-effect" /> -->
 
-        <!-- <screenfull id="screenfull" class="right-menu-item hover-effect" /> -->
+      <!-- <screenfull id="screenfull" class="right-menu-item hover-effect" /> -->
 
-        <!-- <el-tooltip content="Global Size" effect="dark" placement="bottom">
+      <!-- <el-tooltip content="Global Size" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip> -->
       <!-- </template> -->
 
       <div class="avatar-wrapper">
-        <a title="消息"><img src="@/assets/img/xx.png"/></a>
+        <a title="消息"><img src="@/assets/img/xx.png" /></a>
         <el-dropdown
           class="avatar-container right-menu-item hover-effect"
           trigger="click"
@@ -51,33 +51,40 @@
 import { mapGetters } from "vuex";
 import ChangePassword from "@/components/ChangePassword.vue";
 import UserInfo from "@/components/UserInfo.vue";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 export default {
   components: {
     ChangePassword,
-    UserInfo
+    UserInfo,
   },
   data() {
     return {
-realName:"",
+      realName: "",
     };
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device"])
+    ...mapGetters(["sidebar", "avatar", "device"]),
   },
-  created(){
-            this.realName = Cookies.get('realName')
-
+  created() {
+    this.realName = Cookies.get("realName");
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
-    async logout() {
-      await this.$store.dispatch("user/logout");
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-    }
-  }
+    logout() {
+      this.$confirm("确认退出登录吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          await this.$store.dispatch("user/logout");
+          this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+        })
+        .catch(() => {});
+    },
+  },
 };
 </script>
 
@@ -135,11 +142,15 @@ realName:"",
     }
 
     .avatar-wrapper {
-    margin-top: 5px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    justify-items: center;
-    align-items: center;
+      margin-top: 5px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      justify-items: center;
+      align-items: center;
+
+      img:hover{
+        filter: brightness(1.2);
+      }
 
       .user {
         display: flex;
@@ -166,14 +177,17 @@ realName:"",
   }
 }
 
-.mine{
-    display: grid;
-    grid-auto-flow: column;
-    align-items: baseline;
-    gap: 5px;
-    color: #37d3ff;
-    .name{
-      transform: translate(0px, -5px);
+.mine {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: baseline;
+  gap: 5px;
+  color: #37d3ff;
+  .name {
+    transform: translate(0px, -5px);
+    &:hover{
+      filter: brightness(1.2);
     }
+  }
 }
 </style>

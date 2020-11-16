@@ -87,9 +87,9 @@
         <el-form-item prop="name">
           <el-input v-model="filterForm.name" placeholder="测点名称" />
         </el-form-item>
-        <el-form-item prop="noteLevel">
+        <!-- <el-form-item prop="noteLevel">
           <el-input v-model="filterForm.noteLevel" placeholder="通知等级" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item prop="status">
           <el-select clearable v-model="filterForm.status" placeholder="状态">
             <el-option label="待处理" :value="1" />
@@ -97,7 +97,7 @@
             <el-option label="取消" :value="3" />
           </el-select>
         </el-form-item>
-        <el-form-item prop="resumeStatus">
+        <!-- <el-form-item prop="resumeStatus">
           <el-select
             clearable
             v-model="filterForm.resumeStatus"
@@ -106,14 +106,15 @@
             <el-option label="已经恢复" :value="1" />
             <el-option label="未恢复" :value="2" />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item prop="startDate_endDate">
           <el-date-picker
+            style="width:240px;"
             v-model="filterForm.startDate_endDate"
-            type="datetimerange"
+            type="daterange"
             placeholder="时间范围"
-            value-format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd"
           />
         </el-form-item>
 
@@ -133,24 +134,23 @@
             >重置</el-button
           >
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item>
           <el-button type="primary" size="medium" @click="handleDialog()">
-            <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
             <i class="el-icon-plus" />
           </el-button>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
     </div>
 
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
       border
       :data="listData"
     >
-      <el-table-column sortable label="位置" width="200">
+      <el-table-column label="位置" width="200">
         <template slot-scope="{ row }">
           <div>楼层编号:{{ row.floorCode || "无" }}</div>
           <div>房间编号:{{ row.roomCode || "无" }}</div>
@@ -158,25 +158,25 @@
           <div>设备编号:{{ row.deviceCode || "无" }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable label="测点" width="200">
+      <el-table-column label="测点" width="200">
         <template slot-scope="{ row }">
           <div>测点编号:{{ row.pointCode || "无" }}</div>
           <div>测点名称:{{ row.pointName || "无" }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable label="数值">
+      <el-table-column label="数值">
         <template slot-scope="{ row }">
           <div>触发值:{{ row.triggerValue || "无" }}</div>
           <div>当前值:{{ row.currentValue || "无" }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable label="通知">
+      <el-table-column label="通知">
         <template slot-scope="{ row }">
           <div>通知等级:{{ row.noteLevel || "无" }}</div>
           <div>通知内容:{{ row.noteContent || "无" }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="status" label="状态" width="80">
+      <el-table-column prop="status" label="状态" width="80">
         <template slot-scope="{ row }">
           <div v-if="row.status == 1">待处理</div>
           <div v-if="row.status == 2">已受理</div>
@@ -184,28 +184,37 @@
         </template>
       </el-table-column>
       <el-table-column
-        sortable
         prop="createTime"
         label="告警时间"
         width="170"
         align="center"
       />
-      <el-table-column sortable label="受理信息">
+      <el-table-column label="受理信息">
         <template slot-scope="{ row }">
           <div>受理人:{{ row.handlerUserName || "无" }}</div>
           <div>受理时间:{{ row.handlerTime || "无" }}</div>
           <div>受理备注:{{ row.handlerRemark || "无" }}</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="resumeStatus" label="恢复状态">
+
+      <el-table-column label="恢复信息" width="150">
+        <template slot-scope="{ row }">
+          <div>
+            恢复状态:{{ row.resumeStatus == 1 ? "已经恢复" : "未恢复" || "无" }}
+          </div>
+          <div>恢复时间:{{ row.resumeTime || "无" }}</div>
+        </template>
+      </el-table-column>
+
+      <!-- <el-table-column prop="resumeStatus" label="恢复状态">
         <template slot-scope="{ row }">
           <div v-if="row.resumeStatus == 1">已经恢复</div>
           <div v-else>未恢复</div>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="resumeTime" label="恢复时间" />
+      <el-table-column prop="resumeTime" label="恢复时间" /> -->
 
-      <el-table-column label="操作" align="center" width="240">
+      <el-table-column label="操作" align="center" width="200">
         <template slot-scope="{ row }">
           <el-button
             title="告警受理"
@@ -406,7 +415,7 @@ export default {
     handleRoomChange(n) {
       this.$set(this.filterForm, "deviceGroupCode", "");
       this.$set(this.filterForm, "deviceCode", "");
-      if(!n) return;
+      if (!n) return;
       pointListAll({ roomCode: n }).then((r) => (this.pointOpts = r.data));
       // deviceListAll({ roomCode: n }).then((r) => (this.deviceOpts = r.data));
       // deviceGroupListAll({ roomCode: n }).then(

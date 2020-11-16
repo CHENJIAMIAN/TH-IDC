@@ -23,6 +23,7 @@
         :rules="rules"
         v-loading="listLoading"
         inline
+        label-width="200px"
       >
         <el-row>
           <el-col :span="12">

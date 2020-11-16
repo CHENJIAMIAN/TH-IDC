@@ -9,7 +9,7 @@ export default {
   name: '资产管理',
   meta: {
     title: '资产管理',
-    icon: 'nested',
+    icon: 'img-zc',
     affix: true
   },
   children: [
@@ -17,25 +17,25 @@ export default {
       path: 'base-type',
       component: () => import('@/views/resource-manage/base-type.vue'),
       name: 'base-type',
-      meta: { title: '基础类型', icon: 'icon' },
+      meta: { title: '基础类型', icon: 'img-jc' },
       // children: [
       //   {
       //     path: 'room-type-manage',
       //     component: () => import('@/views/resource-manage/room-type-manage/index'),
       //     name: 'room-type-manage',
-      //     meta: { title: '房间类型', icon: 'icon' }
+      //     meta: { title: '房间类型', icon: 'img-' }
       //   },
       //   {
       //     path: 'device-type-manage',
       //     component: () => import('@/views/resource-manage/device-type-manage/index'),
       //     name: 'device-type-manage',
-      //     meta: { title: '设备类型', icon: 'icon' }
+      //     meta: { title: '设备类型', icon: 'img-' }
       //   },
       //   {
       //     path: 'measure-point-type-manage',
       //     component: () => import('@/views/resource-manage/measure-point-type-manage/index'),
       //     name: 'measure-point-type-manage',
-      //     meta: { title: '测点类型', icon: 'icon' }
+      //     meta: { title: '测点类型', icon: 'img-' }
       //   },
       // ]
     },
@@ -43,43 +43,43 @@ export default {
       path: 'basic-type',
       component: () => import('@/views/resource-manage/index'),
       name: 'basic-type',
-      meta: { title: '空间设备', icon: 'icon' },
+      meta: { title: '空间设备', icon: 'img-kj' },
       children: [
         {
           path: 'building-manage',
           component: () => import('@/views/resource-manage/building-manage/index'),
           name: 'building-manage',
-          meta: { title: '楼幢管理', icon: 'icon' }
+          meta: { title: '楼幢管理', icon: 'img-ld' }
         },
         {
           path: 'floor-manage',
           component: () => import('@/views/resource-manage/floor-manage/index'),
           name: 'floor-manage',
-          meta: { title: '楼层管理', icon: 'icon' }
+          meta: { title: '楼层管理', icon: 'img-lc' }
         },
         {
           path: 'room-manage',
           component: () => import('@/views/resource-manage/room-manage/index'),
           name: 'room-manage',
-          meta: { title: '房间管理', icon: 'icon' }
+          meta: { title: '房间管理', icon: 'img-fjj' }
         },
         {
           path: 'device-group-manage',
           component: () => import('@/views/resource-manage/device-group-manage/index'),
           name: 'device-group-manage',
-          meta: { title: '设备分组', icon: 'icon' }
+          meta: { title: '设备分组', icon: 'img-sb' }
         },
         {
           path: 'device-manage',
           component: () => import('@/views/resource-manage/device-manage/index'),
           name: 'device-manage',
-          meta: { title: '设备管理', icon: 'icon' }
+          meta: { title: '设备管理', icon: 'img-sbb' }
         },
         {
           path: 'measure-point-manage',
           component: () => import('@/views/resource-manage/measure-point-manage/index'),
           name: 'measure-point-manage',
-          meta: { title: '测点管理', icon: 'icon' }
+          meta: { title: '测点管理', icon: 'img-cdd' }
         },
       ]
     }

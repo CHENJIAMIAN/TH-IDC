@@ -17,6 +17,14 @@ export const noteModeOpts = [
 ];
 
 
+export const imgTypeOpts = [
+    { id: 1, name: "北向开关" },
+    { id: 2, name: "东向开关" },
+    { id: 3, name: "西向开关" },
+    { id: 4, name: "南向开关" },
+    { id: 5, name: "温度计" }
+];
+
 export const isIntNumber = (rule, value, callback) => {
     if (!Number.isInteger(+value) || +value < 0) {
         callback(new Error('请输入整数值'));
@@ -26,7 +34,7 @@ export const isIntNumber = (rule, value, callback) => {
 }
 
 export const isBiggerThanZero = (rule, value, callback) => {
-    if (value==="" || isNaN(value) || Number(value) < 0) {
+    if (value === "" || isNaN(value) || Number(value) < 0) {
         callback(new Error('请输入非负数字'));
     } else {
         callback()

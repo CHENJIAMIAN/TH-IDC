@@ -85,7 +85,7 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -153,10 +153,12 @@
     <el-dialog :visible.sync="dialogImg.visible" class="dialog-img">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">图片采点</span>
-        <img  src="@/assets/img/hl.png" />
+        <img src="@/assets/img/hl.png" />
       </div>
       <div class="content">
-      <div style="margin-top: 12px;margin-bottom: 3px;text-align: right;">未绑测点</div>
+        <div style="margin-top: 12px; margin-bottom: 3px; text-align: right">
+          未绑测点
+        </div>
         <div class="grid">
           <div class="left">
             <div
@@ -181,7 +183,7 @@
           <div class="right">
             <div class="radios">
               <el-radio
-                style="width:190px;"
+                style="width: 190px"
                 v-for="i in listDataCDNotBind"
                 :key="i.id"
                 v-model="dialogImg.forms.selectedNotBind"
@@ -192,12 +194,30 @@
             </div>
           </div>
         </div>
-        <div style="margin-top: 12px;margin-bottom: 3px;">已绑测点</div>
+        <div style="margin-top: 12px; margin-bottom: 3px">已绑测点</div>
         <div class="table">
-          <el-table class="btm-table" style="overflow: auto" stripe border :data="listDataCDBind">
+          <el-table
+            class="btm-table"
+            style="overflow: auto"
+            stripe
+            border
+            :data="listDataCDBind"
+          >
             <el-table-column sortable prop="pointCode" label="测点编号" />
             <el-table-column sortable prop="name" label="测点名称" />
             <el-table-column sortable prop="location" label="位置" />
+            <el-table-column sortable prop="imgType" label="图片类型">
+              <template slot-scope="{ row }">
+                <el-select v-model="row.imgType">
+                  <el-option
+                    v-for="item in imgTypeOpts"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
             <el-table-column label="操作" align="center">
               <template slot-scope="{ row }">
                 <el-button
@@ -221,10 +241,8 @@
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="10vh">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
@@ -255,11 +273,8 @@
               />
             </el-select>
           </el-form-item>
-            <!-- style="transform: translate(-50px, 0px)" -->
-          <el-form-item
-            label="楼层"
-            prop="floorCode"
-          >
+          <!-- style="transform: translate(-50px, 0px)" -->
+          <el-form-item label="楼层" prop="floorCode">
             <el-select
               v-model="dialog.forms.floorCode"
               @change="$set(dialog.forms, 'roomCode', '')"
@@ -272,11 +287,8 @@
               />
             </el-select>
           </el-form-item>
-            <!-- style="transform: translate(-100px, 0px)" -->
-          <el-form-item
-            label="房间"
-            prop="roomCode"
-          >
+          <!-- style="transform: translate(-100px, 0px)" -->
+          <el-form-item label="房间" prop="roomCode">
             <el-select v-model="dialog.forms.roomCode">
               <el-option
                 v-for="item in roomOpts"
@@ -326,10 +338,10 @@
     <el-dialog :visible.sync="dialogCD.visible">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">绑定测点</span>
-        <img  src="@/assets/img/hl.png" />
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
-        style="display: grid;justify-content: center;"
+        style="display: grid; justify-content: center"
         :model="dialogCD.forms"
         :rules="dialogCD.rules"
         ref="dialogCDForm"
@@ -365,10 +377,10 @@
     <el-dialog :visible.sync="dialogSB.visible">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">绑定设备</span>
-        <img  src="@/assets/img/hl.png" />
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
-        style="display: grid;justify-content: center;"
+        style="display: grid; justify-content: center"
         :model="dialogSB.forms"
         :rules="dialogSB.rules"
         ref="dialogSBForm"
@@ -427,11 +439,13 @@ import {
 // 上传
 import { uploadUrl } from "@/api/common";
 import { getToken } from "@/utils/auth";
+import { imgTypeOpts } from "@/views/resource-manage/common.js";
 
 export default {
   components: { pagination },
   data() {
     return {
+      imgTypeOpts,
       // 上传
       uploadedFileUrl: "", // 附件ID数组
       headers: {
@@ -695,6 +709,7 @@ export default {
       });
       this.listDataCDBind = r1.data;
       this.listDataCDNotBind = r2.data;
+      this.imgMarkerIdDivMaps = [];//初始化
       this.dialogImg.visible = true;
       this.dialogImg.forms.deviceGroupId = row.id;
       this.dialogImg.forms.imgUrl = row.imgUrl;
@@ -898,12 +913,12 @@ export default {
   }
 }
 
-::v-deep{
-  .btm-table{
-      .el-table__body-wrapper{
-        height: 170px;
-        overflow: auto;
-      }
+::v-deep {
+  .btm-table {
+    .el-table__body-wrapper {
+      height: 170px;
+      overflow: auto;
+    }
   }
 }
 </style>

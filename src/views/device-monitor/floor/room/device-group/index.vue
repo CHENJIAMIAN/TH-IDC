@@ -65,52 +65,52 @@
             >
               <!-- 8 -->
               <template v-if="roomName.includes('柴油发电')">
-                <el-table-column sortable prop="onOff" label="开关状态">
+                <el-table-column  prop="onOff" label="开关状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.onOff">开</span>
                     <span v-else>关</span>
                   </template>
                 </el-table-column>
-                <el-table-column sortable prop="ua" label="UA" />
-                <el-table-column sortable prop="ub" label="UB" />
-                <el-table-column sortable prop="uc" label="UC" />
-                <el-table-column sortable prop="uab" label="UAB" />
-                <el-table-column sortable prop="ubc" label="UBC" />
-                <el-table-column sortable prop="uac" label="UAC" />
-                <el-table-column sortable prop="ia" label="IA" />
-                <el-table-column sortable prop="ib" label="IB" />
-                <el-table-column sortable prop="ic" label="IC" />
-                <el-table-column sortable prop="rotateSpeed" label="转速" />
-                <el-table-column sortable prop="waterTemp" label="水温" />
+                <el-table-column  prop="ua" label="UA" />
+                <el-table-column  prop="ub" label="UB" />
+                <el-table-column  prop="uc" label="UC" />
+                <el-table-column  prop="uab" label="UAB" />
+                <el-table-column  prop="ubc" label="UBC" />
+                <el-table-column  prop="uac" label="UAC" />
+                <el-table-column  prop="ia" label="IA" />
+                <el-table-column  prop="ib" label="IB" />
+                <el-table-column  prop="ic" label="IC" />
+                <el-table-column  prop="rotateSpeed" label="转速" />
+                <el-table-column  prop="waterTemp" label="水温" />
                 <el-table-column
-                  sortable
+                  
                   prop="lubricateOilPressure"
                   label="润滑油油压"
                 />
                 <el-table-column
-                  sortable
+                  
                   prop="lubricateOilTemp"
                   label="润滑油油温"
                 />
                 <el-table-column
-                  sortable
+                  
                   prop="startBatteryVoltage"
                   label="启动电池电压"
                 />
-                <el-table-column sortable prop="outputPower" label="输出功率" />
+                <el-table-column  prop="outputPower" label="输出功率" />
                 <el-table-column
-                  sortable
+                  
                   prop="outputVoltage"
                   label="输出电压"
                 />
-                <el-table-column sortable prop="oilLevel" label="液（油）位" />
-                <el-table-column sortable prop="workState" label="工作状态">
+                <el-table-column  prop="oilLevel" label="液（油）位" />
+                <el-table-column  prop="workState" label="工作状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.workState == 1">运行</span>
                     <span v-if="row.workState == 2">停机</span>
                   </template>
                 </el-table-column>
-                <el-table-column sortable prop="workMode" label="工作方式">
+                <el-table-column  prop="workMode" label="工作方式">
                   <template slot-scope="{ row }">
                     <span v-if="row.workMode == 1">自动</span>
                     <span v-if="row.workMode == 2">手动</span>
@@ -120,13 +120,13 @@
 
               <!-- 1 -->
               <template v-if="roomName.includes('精密空调')">
-                <el-table-column sortable prop="onOff" label="开关状态">
+                <el-table-column  prop="onOff" label="开关状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.onOff">开</span>
                     <span v-else>关</span>
                   </template>
                 </el-table-column>
-                <el-table-column sortable prop="workMode" label="工作模式">
+                <el-table-column  prop="workMode" label="工作模式">
                   <template slot-scope="{ row }">
                     <span v-if="row.workMode == 1">通风</span>
                     <span v-if="row.workMode == 2">制冷</span>
@@ -134,30 +134,30 @@
                     <span v-if="row.workMode == 4">除湿</span>
                   </template>
                 </el-table-column>
-                <el-table-column sortable prop="current" label="电流" />
-                <el-table-column sortable prop="voltage" label="电压" />
+                <el-table-column  prop="current" label="电流" />
+                <el-table-column  prop="voltage" label="电压" />
                 <el-table-column
-                  sortable
+                  
                   prop="supplyAirTemp"
                   label="送风温度"
                 />
                 <el-table-column
-                  sortable
+                  
                   prop="returnAirTemp"
                   label="回风温度"
                 />
                 <el-table-column
-                  sortable
+                  
                   prop="supplyAirHumidity"
                   label="送风湿度"
                 />
                 <el-table-column
-                  sortable
+                  
                   prop="returnAirHumidity"
                   label="回风湿度"
                 />
                 <el-table-column
-                  sortable
+                  
                   prop="filterMachine"
                   label="过滤器状态"
                 >
@@ -166,14 +166,14 @@
                     <span v-else>关</span>
                   </template>
                 </el-table-column>
-                <el-table-column sortable prop="airMachine" label="风机状态">
+                <el-table-column  prop="airMachine" label="风机状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.airMachine">开</span>
                     <span v-else>关</span>
                   </template>
                 </el-table-column>
                 <el-table-column
-                  sortable
+                  
                   prop="compressMachine"
                   label="压缩机状态"
                 >
@@ -195,30 +195,29 @@
                   roomName.includes('电池')
                 "
               >
-                <el-table-column sortable prop="ua" label="UA" />
-                <el-table-column sortable prop="ub" label="UB" />
-                <el-table-column sortable prop="uc" label="UC" />
-                <el-table-column sortable prop="uab" label="UAB" />
-                <el-table-column sortable prop="ubc" label="UBC" />
-                <el-table-column sortable prop="uac" label="UAC" />
-                <el-table-column sortable prop="ia" label="IA" />
-                <el-table-column sortable prop="ib" label="IB" />
-                <el-table-column sortable prop="ic" label="IC" />
-                <el-table-column sortable prop="frequency" label="频率" />
-                <el-table-column sortable prop="temperature" label="温度" />
-                <el-table-column sortable prop="sync" label="同步状态">
+                <el-table-column  prop="ua" label="UA" />
+                <el-table-column  prop="ub" label="UB" />
+                <el-table-column  prop="uc" label="UC" />
+                <el-table-column  prop="uab" label="UAB" />
+                <el-table-column  prop="ubc" label="UBC" />
+                <el-table-column  prop="uac" label="UAC" />
+                <el-table-column  prop="ia" label="IA" />
+                <el-table-column  prop="ib" label="IB" />
+                <el-table-column  prop="ic" label="IC" />
+                <el-table-column  prop="frequency" label="频率" />
+                <el-table-column  prop="temperature" label="温度" />
+                <el-table-column  prop="sync" label="同步状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.sync == 1">同步</span>
                     <span v-if="row.sync == 2">不同步</span>
                   </template>
                 </el-table-column>
-                <el-table-column sortable prop="powerMode" label="供电类型">
+                <el-table-column  prop="powerMode" label="供电类型">
                   <template slot-scope="{ row }">
                     <span v-if="row.sync == 1">UPS</span>
                     <span v-if="row.sync == 2">旁路供电</span>
                   </template>
                 </el-table-column>
-                <el-table-column sortable prop="outIc" label="OUT_IC" />
               </template>
             </el-table>
           </el-tab-pane>

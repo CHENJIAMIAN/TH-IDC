@@ -53,11 +53,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/BIM2',
-    component: () => import('@/BIM.vue'),
-    hidden: true
-  },
-  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
@@ -102,8 +97,8 @@ export const asyncRoutes = [
   {
     path: '/BIM',
     name: "驾驶舱",
-    component: Layout,
-    redirect: '/BIM2',
+    component: () => import('@/BIM.vue'),
+    // component: Layout,
     meta: {
       title: '驾驶舱',
       icon: 'nested',

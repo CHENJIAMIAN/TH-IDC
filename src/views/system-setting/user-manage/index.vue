@@ -127,7 +127,6 @@
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="100px"
       >
         <el-form-item label="账号" prop="userName">
           <el-input v-model="dialog.forms.userName"></el-input>

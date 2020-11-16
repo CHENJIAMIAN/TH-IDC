@@ -21,8 +21,9 @@
       </el-form>
     </div>
 
+
     <!-- 图片弹窗 -->
-    <img class="preview-img" :src="imgUrl" alt="加载失败" />
+    <img class="preview-img" :src="imgUrl" alt="加载失败" style="height: calc((100vh - 110px) - 11rem);"/>
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible">
