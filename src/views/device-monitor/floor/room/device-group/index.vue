@@ -22,11 +22,22 @@
     <div v-else class="dc-tab">
       <el-tabs stretch v-model="imgActiveName" @tab-click="handleImgTabClick">
         <el-tab-pane label="设备组" name="device">
-          <img class="preview-img" :src="deviceGroupImg" alt="加载失败" />
-          <div>
-            <span>电池组电压</span>
-            <span>电池组电流</span>
-            <span>环境温度</span>
+          <div class="device-group-tab">
+            <img class="preview-img" :src="deviceGroupImg" alt="加载失败" />
+            <div class="card-group">
+              <el-card class="card">
+                <span>电池组电压</span>
+                <span>{{ "无" }}</span>
+              </el-card>
+              <el-card class="card">
+                <span>电池组电流</span>
+                <span>{{ "无" }}</span>
+              </el-card>
+              <el-card class="card">
+                <span>环境温度</span>
+                <span>{{ "无" }}</span>
+              </el-card>
+            </div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="房间" name="room">
@@ -48,12 +59,16 @@
     <div>
       <div class="row2">
         <el-tabs
-          class="btm-el-tabs"
+          :class="roomName.includes('电池') ? 'right-el-tabs' : 'btm-el-tabs'"
           type="border-card"
           v-model="tableActiveName"
           @tab-click="handleTableTabClick"
         >
-          <el-tab-pane label="数据信息" name="data-info">
+          <el-tab-pane
+            label="数据信息"
+            name="data-info"
+            style="width: calc(100vw - 584px)"
+          >
             <!-- 列表 -->
             <el-table
               style="width: 100%"
@@ -65,52 +80,42 @@
             >
               <!-- 8 -->
               <template v-if="roomName.includes('柴油发电')">
-                <el-table-column  prop="onOff" label="开关状态">
+                <el-table-column prop="onOff" label="开关状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.onOff">开</span>
                     <span v-else>关</span>
                   </template>
                 </el-table-column>
-                <el-table-column  prop="ua" label="UA" />
-                <el-table-column  prop="ub" label="UB" />
-                <el-table-column  prop="uc" label="UC" />
-                <el-table-column  prop="uab" label="UAB" />
-                <el-table-column  prop="ubc" label="UBC" />
-                <el-table-column  prop="uac" label="UAC" />
-                <el-table-column  prop="ia" label="IA" />
-                <el-table-column  prop="ib" label="IB" />
-                <el-table-column  prop="ic" label="IC" />
-                <el-table-column  prop="rotateSpeed" label="转速" />
-                <el-table-column  prop="waterTemp" label="水温" />
+                <el-table-column prop="ua" label="UA" />
+                <el-table-column prop="ub" label="UB" />
+                <el-table-column prop="uc" label="UC" />
+                <el-table-column prop="uab" label="UAB" />
+                <el-table-column prop="ubc" label="UBC" />
+                <el-table-column prop="uac" label="UAC" />
+                <el-table-column prop="ia" label="IA" />
+                <el-table-column prop="ib" label="IB" />
+                <el-table-column prop="ic" label="IC" />
+                <el-table-column prop="rotateSpeed" label="转速" />
+                <el-table-column prop="waterTemp" label="水温" />
                 <el-table-column
-                  
                   prop="lubricateOilPressure"
                   label="润滑油油压"
                 />
+                <el-table-column prop="lubricateOilTemp" label="润滑油油温" />
                 <el-table-column
-                  
-                  prop="lubricateOilTemp"
-                  label="润滑油油温"
-                />
-                <el-table-column
-                  
                   prop="startBatteryVoltage"
                   label="启动电池电压"
                 />
-                <el-table-column  prop="outputPower" label="输出功率" />
-                <el-table-column
-                  
-                  prop="outputVoltage"
-                  label="输出电压"
-                />
-                <el-table-column  prop="oilLevel" label="液（油）位" />
-                <el-table-column  prop="workState" label="工作状态">
+                <el-table-column prop="outputPower" label="输出功率" />
+                <el-table-column prop="outputVoltage" label="输出电压" />
+                <el-table-column prop="oilLevel" label="液（油）位" />
+                <el-table-column prop="workState" label="工作状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.workState == 1">运行</span>
                     <span v-if="row.workState == 2">停机</span>
                   </template>
                 </el-table-column>
-                <el-table-column  prop="workMode" label="工作方式">
+                <el-table-column prop="workMode" label="工作方式">
                   <template slot-scope="{ row }">
                     <span v-if="row.workMode == 1">自动</span>
                     <span v-if="row.workMode == 2">手动</span>
@@ -120,13 +125,13 @@
 
               <!-- 1 -->
               <template v-if="roomName.includes('精密空调')">
-                <el-table-column  prop="onOff" label="开关状态">
+                <el-table-column prop="onOff" label="开关状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.onOff">开</span>
                     <span v-else>关</span>
                   </template>
                 </el-table-column>
-                <el-table-column  prop="workMode" label="工作模式">
+                <el-table-column prop="workMode" label="工作模式">
                   <template slot-scope="{ row }">
                     <span v-if="row.workMode == 1">通风</span>
                     <span v-if="row.workMode == 2">制冷</span>
@@ -134,49 +139,25 @@
                     <span v-if="row.workMode == 4">除湿</span>
                   </template>
                 </el-table-column>
-                <el-table-column  prop="current" label="电流" />
-                <el-table-column  prop="voltage" label="电压" />
-                <el-table-column
-                  
-                  prop="supplyAirTemp"
-                  label="送风温度"
-                />
-                <el-table-column
-                  
-                  prop="returnAirTemp"
-                  label="回风温度"
-                />
-                <el-table-column
-                  
-                  prop="supplyAirHumidity"
-                  label="送风湿度"
-                />
-                <el-table-column
-                  
-                  prop="returnAirHumidity"
-                  label="回风湿度"
-                />
-                <el-table-column
-                  
-                  prop="filterMachine"
-                  label="过滤器状态"
-                >
+                <el-table-column prop="current" label="电流" />
+                <el-table-column prop="voltage" label="电压" />
+                <el-table-column prop="supplyAirTemp" label="送风温度" />
+                <el-table-column prop="returnAirTemp" label="回风温度" />
+                <el-table-column prop="supplyAirHumidity" label="送风湿度" />
+                <el-table-column prop="returnAirHumidity" label="回风湿度" />
+                <el-table-column prop="filterMachine" label="过滤器状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.filterMachine">开</span>
                     <span v-else>关</span>
                   </template>
                 </el-table-column>
-                <el-table-column  prop="airMachine" label="风机状态">
+                <el-table-column prop="airMachine" label="风机状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.airMachine">开</span>
                     <span v-else>关</span>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  
-                  prop="compressMachine"
-                  label="压缩机状态"
-                >
+                <el-table-column prop="compressMachine" label="压缩机状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.compressMachine">开</span>
                     <span v-else>关</span>
@@ -195,24 +176,24 @@
                   roomName.includes('电池')
                 "
               >
-                <el-table-column  prop="ua" label="UA" />
-                <el-table-column  prop="ub" label="UB" />
-                <el-table-column  prop="uc" label="UC" />
-                <el-table-column  prop="uab" label="UAB" />
-                <el-table-column  prop="ubc" label="UBC" />
-                <el-table-column  prop="uac" label="UAC" />
-                <el-table-column  prop="ia" label="IA" />
-                <el-table-column  prop="ib" label="IB" />
-                <el-table-column  prop="ic" label="IC" />
-                <el-table-column  prop="frequency" label="频率" />
-                <el-table-column  prop="temperature" label="温度" />
-                <el-table-column  prop="sync" label="同步状态">
+                <el-table-column prop="ua" label="UA" />
+                <el-table-column prop="ub" label="UB" />
+                <el-table-column prop="uc" label="UC" />
+                <el-table-column prop="uab" label="UAB" />
+                <el-table-column prop="ubc" label="UBC" />
+                <el-table-column prop="uac" label="UAC" />
+                <el-table-column prop="ia" label="IA" />
+                <el-table-column prop="ib" label="IB" />
+                <el-table-column prop="ic" label="IC" />
+                <el-table-column prop="frequency" label="频率" />
+                <el-table-column prop="temperature" label="温度" />
+                <el-table-column prop="sync" label="同步状态">
                   <template slot-scope="{ row }">
                     <span v-if="row.sync == 1">同步</span>
                     <span v-if="row.sync == 2">不同步</span>
                   </template>
                 </el-table-column>
-                <el-table-column  prop="powerMode" label="供电类型">
+                <el-table-column prop="powerMode" label="供电类型">
                   <template slot-scope="{ row }">
                     <span v-if="row.sync == 1">UPS</span>
                     <span v-if="row.sync == 2">旁路供电</span>
@@ -225,8 +206,8 @@
           <el-tab-pane label="告警记录" name="alert-record">
             <alert-notify />
           </el-tab-pane>
-          <el-tab-pane label="资产信息" name="asset-info"> 
-            <device-manage/>
+          <el-tab-pane label="资产信息" name="asset-info">
+            <device-manage />
           </el-tab-pane>
           <el-tab-pane label="设备控制" name="equipment-control"> </el-tab-pane>
         </el-tabs>
@@ -263,11 +244,12 @@ import {
   roomTypeDeviceGroupListAllRoomType1, // 1. 精密空调房
 } from "@/api/device-monitor.js";
 import alertNotify from "@/views/engineer-config/alert-notify/index.vue";
-import deviceManage from "@/views/resource-manage/device-manage/index.vue"
+import deviceManage from "@/views/resource-manage/device-manage/index.vue";
 export default {
   name: "device-group",
   components: {
-    alertNotify,deviceManage
+    alertNotify,
+    deviceManage,
   },
   data() {
     return {
@@ -373,19 +355,6 @@ export default {
   border: solid #119aca;
 }
 
-::v-deep {
-  .el-table th:first-child {
-    //切掉第一个表头列的一个角
-    // background: linear-gradient(-217deg, transparent 17px, #0838698c 0);
-  }
-  .btm-el-tabs {
-    .el-tabs__content {
-      overflow: auto;
-      height: 180px;
-    }
-  }
-}
-
 .preview-img {
   width: auto;
   height: auto;
@@ -404,5 +373,42 @@ export default {
   color: #119aca;
   font-weight: bold;
   font-size: 2rem;
+}
+
+.device-group-tab {
+  display: grid;
+  grid-template-rows: 1fr 150px;
+  height: calc(100vh - 340px);
+}
+.card-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem;
+}
+
+::v-deep {
+  .el-table th:first-child {
+    //切掉第一个表头列的一个角
+    // background: linear-gradient(-217deg, transparent 17px, #0838698c 0);
+  }
+  .btm-el-tabs {
+    .el-tabs__content {
+      overflow: auto;
+      height: 180px;
+    }
+  }
+  .right-el-tabs {
+    .el-tabs__content {
+      overflow: auto;
+      height: calc(100vh - 300px);
+    }
+  }
+  .card .el-card__body {
+    display: grid;
+    justify-items: center;
+    gap: 2rem;
+  }
 }
 </style>

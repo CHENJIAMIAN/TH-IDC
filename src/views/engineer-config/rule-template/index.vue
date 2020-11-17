@@ -9,7 +9,7 @@
         :model="filterForm"
       >
         <el-form-item prop="name">
-          <el-input v-model="filterForm.name" placeholder="模板名称" />
+          <el-input v-model.trim="filterForm.name" placeholder="模板名称" />
         </el-form-item>
         <el-form-item prop="pointTypeId">
           <el-select

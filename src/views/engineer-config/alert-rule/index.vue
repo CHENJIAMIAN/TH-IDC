@@ -10,10 +10,11 @@
           :model="filterForm"
         >
           <el-form-item prop="name">
-            <el-input v-model="filterForm.name" placeholder="测点类型名称" />
+            <el-input v-model.trim="filterForm.name" placeholder="测点类型名称" />
           </el-form-item>
           <el-form-item prop="deviceTypeId">
             <el-select
+              clearable
               placeholder="设备类型"
               v-model="filterForm.deviceTypeId"
               popper-class="three-column"
@@ -371,12 +372,22 @@ export default {
             ],
             alertOperatorValue: [
               { required: true, trigger: "blur", message: "请输入" },
+              {
+                pattern: /^-?\d+\.?\d*$/,
+                message: "只能输入数字和小数",
+                trigger: "blur",
+              },
             ],
             recoverOperator: [
               { required: true, trigger: "blur", message: "请输入" },
             ],
             recoverOperatorValue: [
               { required: true, trigger: "blur", message: "请输入" },
+              {
+                pattern: /^-?\d+\.?\d*$/,
+                message: "只能输入数字和小数",
+                trigger: "blur",
+              },
             ],
             // alertType: [{ required: true, trigger: "blur", message: "请输入" }],
             // alertLevelId: [
@@ -561,11 +572,11 @@ export default {
   }
   .custom-rule-form {
     .el-form-item--mini.el-form-item {
-      margin-bottom: 5px;
+      margin-bottom: 14px;
     }
   }
 
-  .custom-card{
+  .custom-card {
     .el-card__body {
       padding: 10px;
     }

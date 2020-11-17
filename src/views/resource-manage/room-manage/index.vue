@@ -34,7 +34,7 @@
           </el-select>
         </el-form-item> -->
         <el-form-item prop="name">
-          <el-input v-model="filterForm.name" placeholder="房间名称" />
+          <el-input v-model.trim="filterForm.name" placeholder="房间名称" />
         </el-form-item>
         <el-form-item prop="roomType">
           <el-select
@@ -77,7 +77,7 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -93,7 +93,15 @@
       </el-table-column>
       <el-table-column sortable prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
-               <el-button type="text" size="mini" @click="dialogImgVisible=true;dialogImgUrl=row.imgUrl">查看</el-button>
+          <el-button
+            type="text"
+            size="mini"
+            @click="
+              dialogImgVisible = true;
+              dialogImgUrl = row.imgUrl;
+            "
+            >查看</el-button
+          >
         </template>
       </el-table-column>
       <el-table-column sortable prop="sort" label="排序" />
@@ -124,17 +132,19 @@
       @pagination="getList"
     />
     <!-- 图片弹窗 -->
-    <el-dialog custom-class="dialog-img"   :visible.sync="dialogImgVisible" :show-close="false">
-          <img class="preview-img" :src="dialogImgUrl" alt="加载失败">
+    <el-dialog
+      custom-class="dialog-img"
+      :visible.sync="dialogImgVisible"
+      :show-close="false"
+    >
+      <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
     </el-dialog>
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
@@ -143,10 +153,7 @@
         label-width="100px"
       >
         <el-form-item label="房间编号" prop="roomCode">
-          <el-input
-            :disabled="!!dialog.forms.id"
-            v-model="dialog.forms.roomCode"
-          ></el-input>
+          <el-input v-model="dialog.forms.roomCode"></el-input>
         </el-form-item>
         <el-form-item label="房间名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
@@ -163,9 +170,8 @@
               />
             </el-select>
           </el-form-item>
-            <!-- style="transform: translate(-50px, 0px)" -->
-          <el-form-item
-           label="房间类型" prop="roomType">
+          <!-- style="transform: translate(-50px, 0px)" -->
+          <el-form-item label="房间类型" prop="roomType">
             <el-select v-model="dialog.forms.roomType">
               <el-option
                 v-for="item in roomTypeOpts"
@@ -176,12 +182,10 @@
             </el-select>
           </el-form-item>
           <!-- style="transform: translate(-130px, 0px)" -->
-        <el-form-item
-         label="排序" prop="sort">
-          <el-input v-model="dialog.forms.sort"></el-input>
-        </el-form-item>
+          <el-form-item label="排序" prop="sort">
+            <el-input v-model="dialog.forms.sort"></el-input>
+          </el-form-item>
         </div>
-
 
         <el-form-item label="预览图" prop="imgUrl" v-if="dialog.visible">
           <div class="preview-grid">
@@ -242,11 +246,11 @@ let roomTypeOpts2 = [];
 export default {
   components: { pagination },
   filters: {
-     capitalize: function (value) {
+    capitalize: function (value) {
       if (!value) return "";
       value = value.toString();
       const o = roomTypeOpts2.find((i) => i.id == value);
-      if(!o) return '错误数据,找不到对应类型';
+      if (!o) return "错误数据,找不到对应类型";
       return o.name;
     },
   },
@@ -279,8 +283,8 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-      dialogImgVisible:false,
-      dialogImgUrl:"",
+      dialogImgVisible: false,
+      dialogImgUrl: "",
       dialog: {
         id: "",
         visible: false,
@@ -361,7 +365,8 @@ export default {
       } else {
         this.dialog.forms = { imgUrl: "" }; //让imgUrl变响应式validateField才有效
       }
-      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {
@@ -421,16 +426,16 @@ export default {
   align-self: center;
 }
 
-  ::v-deep{
-.dialog-img{
-  background: #0b2a52;
-  .el-dialog__body{
-    display: grid;
-    padding: 30px 20px 30px;
-  }
-  .el-dialog__header{
-    display: none;
-  }
+::v-deep {
+  .dialog-img {
+    background: #0b2a52;
+    .el-dialog__body {
+      display: grid;
+      padding: 30px 20px 30px;
+    }
+    .el-dialog__header {
+      display: none;
+    }
   }
 }
 </style>

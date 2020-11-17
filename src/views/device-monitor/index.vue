@@ -2,6 +2,7 @@
   <div class="building-index">
     <div class="col1">
       <el-button
+        v-show="sidebar.showSide"
         v-for="i in floorList"
         :key="i.id"
         @click="$router.push(`/device-monitor/floor/${i.id}/${i.name}`)"
@@ -21,6 +22,7 @@
 
 <script>
 import { floorListAll } from "@/api/device-monitor.js";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   data() {
@@ -28,6 +30,11 @@ export default {
       buidingImage: "",
       floorList: [],
     };
+  },
+  computed: {
+    ...mapState({
+      sidebar: (state) => state.app.sidebar,
+    }),
   },
   created() {
     floorListAll().then((r) => {

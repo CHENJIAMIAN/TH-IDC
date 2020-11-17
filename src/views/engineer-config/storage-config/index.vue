@@ -26,17 +26,17 @@
       </el-form>
     </div>
 
-    <div class="content" style="overflow: auto;padding-right: 5px;">
+    <div class="content" style="overflow: auto; padding-right: 5px">
       <el-form
-        ref="forms"
+        ref="forms1"
         :model="forms"
         :rules="rules"
         v-loading="listLoading"
         inline
-        label-width="200px"
+        label-width="120px"
       >
         <!-- <el-card> -->
-        <h3 style="color: #31c6f1;">实时数据存储方式</h3>
+        <h3 style="color: #31c6f1">实时数据存储方式</h3>
         <el-row>
           <el-col :span="16">
             <el-form-item label="实时存储方式" prop="realtime_store_type">
@@ -55,16 +55,11 @@
         <el-card v-if="forms.realtime_store_type == 1">
           <el-col :span="12">
             <el-form-item label="周期存储(分钟)" prop="cyclestore">
-              <el-select v-model="forms.cyclestore" style="width: 100%">
-                <el-option border value="1"></el-option>
-                <el-option border value="5"></el-option>
-                <el-option border value="10"></el-option>
-                <el-option border value="15"></el-option>
-                <el-option border value="20"></el-option>
-              </el-select>
+              <el-input v-model="forms.cyclestore" placeholder="请输入" />
             </el-form-item>
             <el-form-item label="" prop="cyclestore_has">
               <el-checkbox
+                @change="$refs['forms1'].clearValidate()"
                 v-model="forms.cyclestore_has"
                 true-label="1"
                 false-label="0"
@@ -77,6 +72,7 @@
             </el-form-item>
             <el-form-item label="" prop="changerate_has">
               <el-checkbox
+                @change="$refs['forms1'].clearValidate()"
                 v-model="forms.changerate_has"
                 true-label="1"
                 false-label="0"
@@ -89,6 +85,7 @@
             </el-form-item>
             <el-form-item label="" prop="changesize_has">
               <el-checkbox
+                @change="$refs['forms1'].clearValidate()"
                 v-model="forms.changesize_has"
                 true-label="1"
                 false-label="0"
@@ -115,10 +112,19 @@
             </el-form-item>
           </el-col>
         </el-card>
+      </el-form>
+      <el-form
+        ref="forms"
+        :model="forms"
+        :rules="rules"
+        v-loading="listLoading"
+        inline
+        label-width="180px"
+      >
         <!-- </el-card> -->
-        <el-divider  style="margin: 10px 0;"/>
+        <el-divider style="margin: 10px 0" />
         <!-- <el-card> -->
-        <h3 style="color: #31c6f1;">存储时间</h3>
+        <h3 style="color: #31c6f1">存储时间</h3>
         <el-row>
           <el-col :span="12">
             <el-form-item label="全量实时数据(月)" prop="all_realtime_data">
@@ -154,9 +160,9 @@
         </el-row>
         <!-- </el-card> -->
 
-        <el-divider  style="margin: 10px 0;"/>
+        <el-divider style="margin: 10px 0" />
         <!-- <el-card> -->
-        <h3 style="color: #31c6f1;">磁盘</h3>
+        <h3 style="color: #31c6f1">磁盘</h3>
         <el-row>
           <el-col :span="12">
             <el-form-item label="磁盘总容量(GB)" prop="store_all_size">
@@ -176,7 +182,7 @@
               <el-input v-model="forms.store_use_alert" placeholder="请输入" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="磁盘容量告警" prop="store_alert_switch">
               <el-checkbox
                 v-model="forms.store_alert_switch"
@@ -186,7 +192,7 @@
               >
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="数据删除" prop="delete_data_switch">
               <el-checkbox
                 v-model="forms.delete_data_switch"
@@ -290,18 +296,48 @@ export default {
         realtime_store_type: [
           { required: false, trigger: "blur", validator: isBiggerThanZero },
         ],
+
         cyclestore: [
-          { required: true, trigger: "blur", validator: isBiggerThanZero },
+          {
+            required: true,
+            trigger: "blur",
+            validator: (rule, value, callback) => {
+              if (!+this.forms.cyclestore_has) callback();
+              if (value === "" || isNaN(value) || Number(value) < 0) {
+                callback(new Error("请输入非负数字"));
+              } else {
+                callback();
+              }
+            },
+          },
         ],
         changerate: [
           {
             required: true,
             trigger: "blur",
-            validator: isBetween0To100,
+            validator: (rule, value, callback) => {
+              if (!+this.forms.changerate_has) callback();
+              if (value === "" || isNaN(value) || Number(value) < 0) {
+                callback(new Error("请输入非负数字"));
+              } else {
+                callback();
+              }
+            },
           },
         ],
         changesize: [
-          { required: true, trigger: "blur", validator: isBiggerThanZero },
+          {
+            required: true,
+            trigger: "blur",
+            validator: (rule, value, callback) => {
+              if (!+this.forms.changesize_has) callback();
+              if (value === "" || isNaN(value) || Number(value) < 0) {
+                callback(new Error("请输入非负数字"));
+              } else {
+                callback();
+              }
+            },
+          },
         ],
         // cyclestore_has: [
         //   { required: false, trigger: "blur", validator: isBiggerThanZero },

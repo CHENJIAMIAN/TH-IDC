@@ -3,6 +3,7 @@
     <div class="floor-index-self" v-if="!$route.path.includes('/room')">
       <div class="col1">
         <el-button
+          v-show="sidebar.showSide"
           v-for="room in roomList"
           :key="room.id"
           @click="
@@ -30,6 +31,7 @@
 
 <script>
 import { roomListAll } from "@/api/device-monitor.js";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   data() {
@@ -39,6 +41,11 @@ export default {
       floorImage: "",
       roomList: [],
     };
+  },
+  computed: {
+    ...mapState({
+      sidebar: (state) => state.app.sidebar,
+    }),
   },
   created() {
     const { floorId, floorName } = this.$route.params;

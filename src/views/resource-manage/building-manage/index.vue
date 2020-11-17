@@ -119,7 +119,9 @@ export default {
   methods: {
     // 重置
     handleReset() {
-      pointUpdateToRedis();
+      pointUpdateToRedis().then(r=>{
+        this.$message.success("操作成功!");
+      });
     },
     // 附件上传成功
     uploadSuccess(response, file, fileList) {

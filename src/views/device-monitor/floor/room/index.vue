@@ -22,8 +22,9 @@
               placement="bottom-end"
               trigger="hover"
               v-if="deviceGroupList.slice(5).length > 0"
+              v-model="moreBtnsVisible"
             >
-              <div class="btns">
+              <div class="btns-fake">
                 <span
                   class="btn-as-txt"
                   :class="{
@@ -45,7 +46,12 @@
                 slot="reference"
                 width="10"
                 src="@/assets/img/sjx.png"
-                style="transform: rotate(45deg); cursor: pointer"
+                style="cursor: pointer"
+                :style="
+                  moreBtnsVisible
+                    ? 'transform: rotate(225deg)'
+                    : 'transform: rotate(45deg)'
+                "
               />
             </el-popover>
           </template>
@@ -75,6 +81,7 @@ export default {
   name: "room",
   data() {
     return {
+      moreBtnsVisible: false,
       floorId: "",
       floorName: "",
       roomId: "",
@@ -101,7 +108,7 @@ export default {
     this.$route.meta.title = roomName;
 
     deviceGroupListAll({ id: this.roomId }).then((r) => {
-      const {
+      let {
         id,
         name,
         roomCode,
@@ -111,14 +118,18 @@ export default {
         alarmCount,
         deviceGroupList,
       } = r.data;
-      Object.assign(this, {
-        temperature,
-        alarmCount,
-        roomImage,
-        deviceGroupList,
-      });
-
-      if (deviceGroupList.length == 1 || !this.$route.params.deviceGroupName) {
+      if (!deviceGroupList) {
+        deviceGroupList = [];
+        Object.assign(this, {
+          temperature,
+          alarmCount,
+          roomImage,
+          deviceGroupList,
+        });
+      } else if (
+        deviceGroupList.length == 1 ||
+        !this.$route.params.deviceGroupName
+      ) {
         // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
         const deviceGroup = deviceGroupList[0];
         this.$router.push(
@@ -161,6 +172,13 @@ export default {
   grid-auto-flow: column;
   gap: 1rem;
   align-items: center;
+}
+
+.btns-fake {
+  display: grid;
+  gap: 1rem;
+  align-items: center;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .btn-as-txt {

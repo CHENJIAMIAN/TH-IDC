@@ -5,7 +5,7 @@ import Layout from '@/layout'
 export default {
   path: '/engineer-config',
   component: Layout,
-  redirect: '/engineer-config/rule-manage/alert-rule',
+  redirect: '/engineer-config/alert-config',
   name: '工程配置',
   meta: {
     title: '工程配置',

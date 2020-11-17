@@ -10,16 +10,16 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="userName">
-          <el-input v-model="filterForm.userName" placeholder="操作人账号" />
+          <el-input v-model.trim="filterForm.userName" placeholder="操作人账号" />
         </el-form-item>
         <el-form-item prop="realName">
-          <el-input v-model="filterForm.realName" placeholder="操作人姓名" />
+          <el-input v-model.trim="filterForm.realName" placeholder="操作人姓名" />
         </el-form-item>
         <el-form-item prop="moduleName">
-          <el-input v-model="filterForm.moduleName" placeholder="模块名称" />
+          <el-input v-model.trim="filterForm.moduleName" placeholder="模块名称" />
         </el-form-item>
         <el-form-item prop="moduleMethod">
-          <el-input v-model="filterForm.moduleMethod" placeholder="模块方法" />
+          <el-input v-model.trim="filterForm.moduleMethod" placeholder="模块方法" />
         </el-form-item>
         <el-form-item prop="logType">
           <el-select
@@ -34,10 +34,11 @@
 
         <el-form-item prop="startDate_endDate">
           <el-date-picker
+            style="width: 240px"
             v-model="filterForm.startDate_endDate"
-            type="datetimerange"
+            type="daterange"
             placeholder="时间范围"
-            value-format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd"
           />
         </el-form-item>
 
@@ -62,7 +63,7 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -96,7 +97,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button
-            icon="el-icon-edit-outline"
+            icon="el-icon-view"
             type="primary"
             plain
             @click="handleDialog(row)"
@@ -113,56 +114,56 @@
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog :visible.sync="dialog.visible" top="25vh">
+    <el-dialog :visible.sync="dialog.visible" top="25vh" center>
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <span class="title-txt">详情</span>
         <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="100px"
+        label-width="150px"
       >
         <el-form-item label="操作人ID" prop="userId">
-          <el-input disabled v-model="dialog.forms.userId"></el-input>
+          {{ dialog.forms.userId }}
         </el-form-item>
         <el-form-item label="操作人账号" prop="userName">
-          <el-input disabled v-model="dialog.forms.userName"></el-input>
+          {{ dialog.forms.userName }}
         </el-form-item>
         <el-form-item label="操作人姓名" prop="realName">
-          <el-input disabled v-model="dialog.forms.realName"></el-input>
+          {{ dialog.forms.realName }}
         </el-form-item>
         <el-form-item label="模块名称" prop="moduleName">
-          <el-input disabled v-model="dialog.forms.moduleName"></el-input>
+          {{ dialog.forms.moduleName }}
         </el-form-item>
         <el-form-item label="模块方法" prop="moduleMethod">
-          <el-input disabled v-model="dialog.forms.moduleMethod"></el-input>
+          {{ dialog.forms.moduleMethod }}
         </el-form-item>
         <el-form-item label="操作人IP" prop="userIp">
-          <el-input disabled v-model="dialog.forms.userIp"></el-input>
+          {{ dialog.forms.userIp }}
         </el-form-item>
         <el-form-item label="描述" prop="description">
-          <el-input disabled v-model="dialog.forms.description"></el-input>
+          {{ dialog.forms.description }}
         </el-form-item>
         <el-form-item label="日志类型" prop="logType">
-          <el-select disabled v-model="dialog.forms.logType">
-            <el-option label="正常日志" :value="1" />
-            <el-option label="异常日志" :value="2" />
-          </el-select>
+          <template>
+            <div v-if="dialog.forms.logType == 1">正常日志</div>
+            <div v-if="dialog.forms.logType == 2">异常日志</div>
+          </template>
         </el-form-item>
         <el-form-item label="创建时间" prop="createTime">
-          <el-input disabled v-model="dialog.forms.createTime"></el-input>
+          {{ dialog.forms.createTime }}
         </el-form-item>
         <el-form-item label="耗时(毫秒)" prop="takeTime">
-          <el-input disabled v-model="dialog.forms.takeTime"></el-input>
+          {{ dialog.forms.takeTime }}
         </el-form-item>
       </el-form>
-      <div slot="footer" style="text-align: center">
+      <!-- <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"
           >保 存</el-button
         >
-      </div>
+      </div> -->
     </el-dialog>
   </div>
 </template>

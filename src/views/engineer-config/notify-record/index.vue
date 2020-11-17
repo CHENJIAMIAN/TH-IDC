@@ -10,7 +10,18 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="noteLevel">
-          <el-input v-model="filterForm.noteLevel" placeholder="通知等级" />
+          <el-select
+            clearable
+            v-model="filterForm.noteLevel"
+            placeholder="通知等级"
+          >
+            <el-option
+              v-for="item in alertLevelOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item prop="noteMode">
           <el-select
@@ -33,7 +44,10 @@
           />
         </el-form-item>
         <el-form-item prop="sendContent">
-          <el-input v-model="filterForm.sendContent" placeholder="告警内容" />
+          <el-input
+            v-model.trim="filterForm.sendContent"
+            placeholder="告警内容"
+          />
         </el-form-item>
 
         <el-form-item prop="status">
@@ -55,15 +69,12 @@
             @click="handleReset('filterForm')"
             >重置</el-button
           >
-          <!-- <el-button type="primary" size="medium" @click="handleDialog()">
-            <i class="el-icon-plus" />
-          </el-button> -->
         </el-form-item>
       </el-form>
     </div>
 
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -71,7 +82,14 @@
       :data="listData"
     >
       <el-table-column sortable prop="noteId" label="通知ID" />
-      <el-table-column sortable prop="noteLevel" label="通知等级" />
+      <el-table-column sortable prop="noteLevel" label="通知等级">
+        <template slot-scope="{ row }">
+          {{
+            alertLevelOpts.find((i) => i.id == row.noteLevel) &&
+            alertLevelOpts.find((i) => i.id == row.noteLevel).name
+          }}
+        </template>
+      </el-table-column>
       <el-table-column sortable prop="noteMode" label="通知方式">
         <template slot-scope="{ row }">
           {{
@@ -98,62 +116,22 @@
       :limit.sync="filterForm.pageSize"
       @pagination="getList"
     />
-
-    <el-dialog :visible.sync="dialog.visible" top="25vh">
-      <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.type == 1 ? "告警受理" : "告警恢复"
-        }}</span>
-        <img src="@/assets/img/hl.png" />
-      </div>
-      <el-form
-        :model="dialog.forms"
-        :rules="dialog.rules"
-        ref="dialogForm"
-        label-width="100px"
-      >
-        <template v-if="dialog.type == 1">
-          <el-form-item label="状态" prop="status">
-            <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-              <el-radio border :label="1">待受理</el-radio>
-              <el-radio border :label="2">已受理</el-radio>
-              <el-radio border :label="3">取消</el-radio>
-            </el-radio-group>
-          </el-form-item>
-
-          <el-form-item label="受理说明" prop="handlerRemark">
-            <el-input v-model="dialog.forms.handlerRemark"></el-input>
-          </el-form-item>
-        </template>
-
-        <el-form-item label="恢复状态" prop="resumeStatus" v-else>
-          <el-radio-group
-            v-model="dialog.forms.resumeStatus"
-            style="width: 100%"
-          >
-            <el-radio border :label="1">已恢复</el-radio>
-            <el-radio border :label="0">未恢复</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" style="text-align: center">
-        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
-          >保 存</el-button
-        >
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import { noteModeOpts } from "@/views/resource-manage/common.js";
 import pagination from "@/components/Pagination";
-import { alertNotificationSendListByPage } from "@/api/engineer-config.js";
+import {
+  alertNotificationSendListByPage,
+  alertLevelListAll,
+} from "@/api/engineer-config.js";
 export default {
   components: { pagination },
   data() {
     return {
       noteModeOpts,
+      alertLevelOpts: [],
       depOpts: [],
       firstMenuOpts: [],
       secondMenuOpts: [],
@@ -170,64 +148,15 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-
-      dialog: {
-        id: "",
-        visible: false,
-        type: 1, //type 1是受理 2是恢复
-        forms: {},
-        rules: {
-          status: [{ required: true, trigger: "blur", message: "请输入" }],
-          handlerRemark: [
-            { required: true, trigger: "blur", message: "请输入" },
-          ],
-          resumeStatus: [
-            { required: true, trigger: "blur", message: "请输入" },
-          ],
-        },
-      },
     };
   },
-  watch: {
-    async "dialog.forms.firstMenuId"(n, o) {
-      if (!n) return;
-      // 一级变,二级也变
-      this.secondMenuOpts = [];
-      const r = await alertNotificationListAll({ parentId: n, menuType: 2 });
-      this.secondMenuOpts = r.data;
-    },
-  },
+  watch: {},
   created() {
+    alertLevelListAll().then((r) => (this.alertLevelOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
   methods: {
-    dialogSubmit() {
-      this.$refs["dialogForm"].validate((valid, obj) => {
-        if (valid) {
-          if (this.dialog.type == 1) {
-            const { status, id, handlerRemark } = this.dialog.forms;
-            alertNotificationEditStatus({ status, id, handlerRemark }).then(
-              (r) => {
-                this.$message.success("操作成功!");
-                this.$refs["dialogForm"].resetFields();
-                this.dialog.visible = false;
-                this.getList();
-              }
-            );
-          } else if ((this.dialog.forms.type = 2)) {
-            alertNotificationEditResumeStatus(this.dialog.forms).then((r) => {
-              this.$message.success("操作成功!");
-              this.$refs["dialogForm"].resetFields();
-              this.dialog.visible = false;
-              this.getList();
-            });
-          }
-        } else {
-          return false;
-        }
-      });
-    },
     // 查询
     handleQuery() {
       this.listTotal = 0;
@@ -238,14 +167,6 @@ export default {
     handleReset(form) {
       this.$refs[form].resetFields();
       this.handleQuery();
-    },
-    // 查看
-    async handleDialog(row, type) {
-      this.dialog.type = type;
-      this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)), {});
-      console.log(this.dialog.forms);
-      this.dialog.visible = true;
-      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleResumeStatus(id) {

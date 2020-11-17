@@ -15,7 +15,7 @@
             @change="
               () => {
                 $set(filterForm, 'level2Id', null);
-                $set(filterForm, 'level3Id', null);
+                $set(filterForm, 'menuId', null);
               }
             "
           >
@@ -30,7 +30,7 @@
         <el-form-item prop="level2Id">
            <el-select clearable placeholder="模块名称"
               v-model="filterForm.level2Id"
-              @change="$set(filterForm, 'level3Id', null)"
+              @change="$set(filterForm, 'menuId', null)"
            >
             <el-option
               v-for="item in secondMenuOpts"
@@ -40,8 +40,8 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="level3Id">
-          <el-select clearable placeholder="菜单名称" v-model="filterForm.level3Id">
+        <el-form-item prop="menuId">
+          <el-select clearable placeholder="菜单名称" v-model="filterForm.menuId">
             <el-option
               v-for="item in thirdMenuOpts"
               :key="item.id"
@@ -51,7 +51,7 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input v-model="filterForm.name" placeholder="权限名称" />
+          <el-input v-model.trim="filterForm.name" placeholder="权限名称" />
         </el-form-item>
         <el-form-item>
           <el-button
@@ -120,11 +120,6 @@
       @pagination="getList"
     />
 
-    <!-- 
-name	[string]	是	菜单名称 （最大长度64）		
-parentId	[int]	是	父级菜单编号ID		
-menuType	[short]	是	菜单类型  1 一级菜单 2 二级菜单 3 三级菜单 -->
-    <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="20vh">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">{{
@@ -222,7 +217,7 @@ export default {
       filterForm: {
         // 筛选条件
         name: "",
-        level3Id: null,
+        menuId: null,
         level2Id: null,
         level1Id: null,
         pageNo: 1, // 当前页码

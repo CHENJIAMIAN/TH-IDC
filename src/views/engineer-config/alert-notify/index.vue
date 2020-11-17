@@ -7,7 +7,7 @@
         :inline="true"
         size="medium"
         :model="filterForm"
-        style="display: grid; grid-auto-flow: column"
+        style="display: grid; grid-auto-flow: column;overflow-x: auto;overflow-y: hidden;"
       >
         <!-- v-show="!$route.name === 'device-group'" -->
         <el-form-item prop="floorCode">
@@ -74,9 +74,12 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="pointCode">
-          <el-select v-model="filterForm.pointCode">
+          <el-select
+            clearable
+            v-model="filterForm.pointCode"
+            placeholder="测点"
+          >
             <el-option
-              placeholder="测点"
               v-for="item in pointOpts"
               :key="item.id"
               :label="item.name"
@@ -85,7 +88,7 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input v-model="filterForm.name" placeholder="测点名称" />
+          <el-input v-model.trim="filterForm.name" placeholder="测点名称" />
         </el-form-item>
         <!-- <el-form-item prop="noteLevel">
           <el-input v-model="filterForm.noteLevel" placeholder="通知等级" />
@@ -110,7 +113,7 @@
 
         <el-form-item prop="startDate_endDate">
           <el-date-picker
-            style="width:240px;"
+            style="width: 240px"
             v-model="filterForm.startDate_endDate"
             type="daterange"
             placeholder="时间范围"
@@ -217,6 +220,7 @@
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="{ row }">
           <el-button
+            v-if="row.status == 1"
             title="告警受理"
             icon="el-icon-edit-outline"
             type="primary"
@@ -224,6 +228,7 @@
             @click="handleDialog(row, 1)"
           ></el-button>
           <el-button
+            v-if="row.resumeStatus != 1"
             title="恢复状态"
             icon="el-icon-refresh-left"
             type="primary"
@@ -257,7 +262,7 @@
         <template v-if="dialog.type == 1">
           <el-form-item label="状态" prop="status">
             <el-radio-group v-model="dialog.forms.status" style="width: 100%">
-              <el-radio border :label="1">待受理</el-radio>
+              <!-- <el-radio border :label="1">待受理</el-radio> -->
               <el-radio border :label="2">已受理</el-radio>
               <el-radio border :label="3">取消</el-radio>
             </el-radio-group>
@@ -361,8 +366,8 @@ export default {
   },
   watch: {
     "filterForm.startDate_endDate"(n, o) {
-      this.filterForm.startDate = n[0];
-      this.filterForm.endDate = n[1];
+      this.filterForm.startDate = n ? n[0] : null;
+      this.filterForm.endDate = n ? n[1] : null;
     },
     async "dialog.forms.deviceTypeId"(n, o) {
       if (!n) return;

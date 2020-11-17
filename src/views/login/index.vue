@@ -195,8 +195,9 @@ export default {
             .dispatch("user/login", this.loginForm)
             .then(() => {
               this.$router.push({
-                path: this.redirect || "/",
-                query: this.otherQuery
+                path: "/",
+                // path: this.redirect || "/",
+                // query: this.otherQuery
               });
               this.loading = false;
             })
@@ -257,7 +258,7 @@ $cursor: #fff;
 .login-container {
   background: url("../../assets/img/lgbg.png") no-repeat fixed;
   background-size: cover;
-  .el-form-item__content{
+  .el-form-item__content {
     display: grid;
     grid-template-columns: 0 40px auto;
   }

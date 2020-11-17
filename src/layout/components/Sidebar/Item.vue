@@ -19,7 +19,7 @@ export default {
     if (icon) {
       if (icon.includes("img-")) {
         const path = require(`@/assets/img/tb/${icon}.png`);
-        vnodes.push(<img src={path} />);
+        vnodes.push(<img width="20px" src={path} />);
       } else if (icon.includes("el-icon")) {
         vnodes.push(<i class={[icon, "sub-el-icon"]} />);
       } else {

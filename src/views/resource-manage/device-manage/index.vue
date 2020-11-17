@@ -27,7 +27,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="roomCode" >
+        <el-form-item prop="roomCode">
           <el-select
             clearable
             v-model="filterForm.roomCode"
@@ -42,7 +42,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="deviceGroupCode" >
+        <el-form-item prop="deviceGroupCode">
           <el-select
             clearable
             v-model="filterForm.deviceGroupCode"
@@ -57,10 +57,10 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input v-model="filterForm.name" placeholder="设备名称" />
+          <el-input v-model.trim="filterForm.name" placeholder="设备名称" />
         </el-form-item>
         <el-form-item prop="deviceCode">
-          <el-input v-model="filterForm.deviceCode" placeholder="设备编号" />
+          <el-input v-model.trim="filterForm.deviceCode" placeholder="设备编号" />
         </el-form-item>
         <el-form-item prop="deviceType">
           <el-select
@@ -104,7 +104,7 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -162,10 +162,8 @@
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
@@ -174,81 +172,70 @@
         label-width="100px"
       >
         <el-form-item label="设备编号" prop="deviceCode">
-          <el-input
-            :disabled="!!dialog.forms.id"
-            v-model="dialog.forms.deviceCode"
-          ></el-input>
+          <el-input v-model="dialog.forms.deviceCode"></el-input>
         </el-form-item>
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
 
-
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-        <el-form-item label="楼层" prop="floorCode">
-          <el-select
-            v-model="dialog.forms.floorCode"
-            @change="
-              $set(dialog.forms, 'roomCode', '');
-              $set(dialog.forms, 'deviceGroupCode', '');
-            "
-          >
-            <el-option
-              v-for="item in floorOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.floorCode"
-            />
-          </el-select>
-        </el-form-item>
-            <!-- style="transform: translate(-50px, 0px)" -->
-        <el-form-item
-          label="房间"
-          prop="roomCode"
-        >
-          <el-select
-            v-model="dialog.forms.roomCode"
-            @change="$set(dialog.forms, 'deviceGroupCode', '')"
-          >
-            <el-option
-              v-for="item in roomOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.roomCode"
-            />
-          </el-select>
-        </el-form-item>
+          <el-form-item label="楼层" prop="floorCode">
+            <el-select
+              v-model="dialog.forms.floorCode"
+              @change="
+                $set(dialog.forms, 'roomCode', '');
+                $set(dialog.forms, 'deviceGroupCode', '');
+              "
+            >
+              <el-option
+                v-for="item in floorOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.floorCode"
+              />
+            </el-select>
+          </el-form-item>
+          <!-- style="transform: translate(-50px, 0px)" -->
+          <el-form-item label="房间" prop="roomCode">
+            <el-select
+              v-model="dialog.forms.roomCode"
+              @change="$set(dialog.forms, 'deviceGroupCode', '')"
+            >
+              <el-option
+                v-for="item in roomOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.roomCode"
+              />
+            </el-select>
+          </el-form-item>
           <!-- style="transform: translate(-100px, 0px)" -->
-        <el-form-item
-          label="设备组"
-          prop="deviceGroupCode"
-        >
-          <el-select v-model="dialog.forms.deviceGroupCode">
-            <el-option
-              v-for="item in deviceGroupOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.deviceGroupCode"
-            />
-          </el-select>
-        </el-form-item>
+          <el-form-item label="设备组" prop="deviceGroupCode">
+            <el-select v-model="dialog.forms.deviceGroupCode">
+              <el-option
+                v-for="item in deviceGroupOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.deviceGroupCode"
+              />
+            </el-select>
+          </el-form-item>
         </div>
 
-
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-        <el-form-item label="设备类型" prop="deviceType">
-          <el-select
-            v-model="dialog.forms.deviceType"
-            popper-class="three-column"
-          >
-            <el-option
-              v-for="item in deviceTypeOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
+          <el-form-item label="设备类型" prop="deviceType">
+            <el-select
+              v-model="dialog.forms.deviceType"
+              popper-class="three-column"
+            >
+              <el-option
+                v-for="item in deviceTypeOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
         </div>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -262,10 +249,10 @@
     <el-dialog :visible.sync="dialogCD.visible">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">绑定测点</span>
-        <img  src="@/assets/img/hl.png" />
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
-        style="display: grid;justify-content: center;"
+        style="display: grid; justify-content: center"
         :model="dialogCD.forms"
         :rules="dialogCD.rules"
         ref="dialogCDForm"

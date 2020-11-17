@@ -17,47 +17,47 @@
       </el-form>
     </div>
     <!-- <el-card> -->
-      <el-form
-        ref="forms"
-        :model="forms"
-        :rules="rules"
-        v-loading="listLoading"
-        inline
-        label-width="200px"
-      >
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="签名" prop="sms_sign">
-              <el-input v-model="forms.sms_sign" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="模板ID" prop="sms_template_id">
-              <el-input v-model="forms.sms_template_id" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="应用ID" prop="sms_sdk_appid">
-              <el-input v-model="forms.sms_sdk_appid" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="SecretID" prop="sms_secretId">
-              <el-input v-model="forms.sms_secretId" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="SecretKey" prop="sms_secretKey">
-              <el-input v-model="forms.sms_secretKey" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="EndPoint地址" prop="sms_endpoint">
-              <el-input v-model="forms.sms_endpoint" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+    <el-form
+      ref="forms"
+      :model="forms"
+      :rules="rules"
+      v-loading="listLoading"
+      inline
+      label-width="200px"
+    >
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="签名" prop="sms_sign">
+            <el-input v-model="forms.sms_sign" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="模板ID" prop="sms_template_id">
+            <el-input v-model="forms.sms_template_id" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="应用ID" prop="sms_sdk_appid">
+            <el-input v-model="forms.sms_sdk_appid" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="SecretID" prop="sms_secretId">
+            <el-input v-model="forms.sms_secretId" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="SecretKey" prop="sms_secretKey">
+            <el-input v-model="forms.sms_secretKey" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="EndPoint地址" prop="sms_endpoint">
+            <el-input v-model="forms.sms_endpoint" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
     <!-- </el-card> -->
   </div>
 </template>
@@ -68,6 +68,7 @@ import {
   smsconfigGetSmsConfig,
   smsconfigAddOrEdit_sms,
 } from "@/api/engineer-config.js";
+import { valueTypeOpts, isIntNumber } from "@/views/resource-manage/common.js";
 export default {
   components: { pagination },
   data() {
@@ -89,8 +90,16 @@ export default {
       forms: {},
       rules: {
         // 表单验证
-        clanGroundNum: [{ required: true, tiggter: "blur", message: "请输入" }],
-        clanCode: [{ required: true, tiggter: "blur", message: "请输入" }],
+        sms_sign: [{ required: true, tiggter: "blur", message: "请输入" }],
+        sms_template_id: [
+          { required: true, tiggter: "blur", validator: isIntNumber },
+        ],
+        sms_sdk_appid: [
+          { required: true, tiggter: "blur", validator: isIntNumber },
+        ],
+        sms_secretId: [{ required: true, tiggter: "blur", message: "请输入" }],
+        sms_secretKey: [{ required: true, tiggter: "blur", message: "请输入" }],
+        sms_endpoint: [{ required: true, tiggter: "blur", message: "请输入" }],
       },
 
       dialog: {

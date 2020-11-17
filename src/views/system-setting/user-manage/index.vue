@@ -10,13 +10,13 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="userName">
-          <el-input v-model="filterForm.userName" placeholder="账号" />
+          <el-input v-model.trim="filterForm.userName" placeholder="账号" />
         </el-form-item>
         <el-form-item prop="realName">
-          <el-input v-model="filterForm.realName" placeholder="姓名" />
+          <el-input v-model.trim="filterForm.realName" placeholder="姓名" />
         </el-form-item>
         <el-form-item prop="phone">
-          <el-input v-model="filterForm.phone" placeholder="电话" />
+          <el-input v-model.trim="filterForm.phone" placeholder="电话" />
         </el-form-item>
         <el-form-item prop="departmentId">
           <el-select

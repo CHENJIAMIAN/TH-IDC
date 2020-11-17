@@ -76,10 +76,10 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input v-model="filterForm.name" placeholder="测点名称" />
+          <el-input v-model.trim="filterForm.name" placeholder="测点名称" />
         </el-form-item>
         <el-form-item prop="pointCode">
-          <el-input v-model="filterForm.pointCode" placeholder="测点编号" />
+          <el-input v-model.trim="filterForm.pointCode" placeholder="测点编号" />
         </el-form-item>
         <el-form-item prop="pointType">
           <el-select
@@ -186,10 +186,7 @@
         label-width="80px"
       >
         <el-form-item label="测点编号" prop="pointCode">
-          <el-input
-            :disabled="!!dialog.forms.id"
-            v-model="dialog.forms.pointCode"
-          ></el-input>
+          <el-input v-model="dialog.forms.pointCode"></el-input>
         </el-form-item>
         <el-form-item label="测点名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>

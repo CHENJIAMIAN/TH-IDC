@@ -8,19 +8,29 @@
         size="medium"
         :model="filterForm"
       >
+        <el-form-item prop="searchName">
+          <el-input v-model.trim="filterForm.searchName" placeholder="名称" />
+        </el-form-item>
+        <el-form-item prop="menuType">
+          <el-select clearable v-model="filterForm.menuType">
+            <el-option label="子系统" :value="1"></el-option>
+            <el-option label="模块" :value="2"></el-option>
+            <el-option label="菜单" :value="3"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
-          <!-- <el-button
+          <el-button
             type="primary"
             icon="el-icon-search"
             @click="handleQuery"
-          ></el-button>-->
-          <!-- <el-button
+          ></el-button>
+          <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
             >重置</el-button
-          > -->
+          >
           <el-button type="primary" size="medium" @click="handleDialog()">
             <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
             <i class="el-icon-plus" />
@@ -31,7 +41,7 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -75,17 +85,10 @@
       @pagination="getList"
     />
 
-    <!-- 
-name	[string]	是	菜单名称 （最大长度64）		
-parentId	[int]	是	父级菜单编号ID		
-menuType	[short]	是	菜单类型  1 子系统 2 模块 3 菜单 -->
-    <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="25vh">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
@@ -97,7 +100,11 @@ menuType	[short]	是	菜单类型  1 子系统 2 模块 3 菜单 -->
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
         <el-form-item label="菜单类型" prop="menuType">
-          <el-radio-group v-model="dialog.forms.menuType" style="width: 100%" :disabled="!!dialog.forms.id">
+          <el-radio-group
+            v-model="dialog.forms.menuType"
+            style="width: 100%"
+            :disabled="!!dialog.forms.id"
+          >
             <el-radio border :label="1">子系统</el-radio>
             <el-radio border :label="2">模块</el-radio>
             <el-radio border :label="3">菜单</el-radio>
@@ -164,6 +171,8 @@ export default {
       secondMenuOpts: [],
       filterForm: {
         // 筛选条件
+        searchName: "",
+        menuType: null,
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
@@ -178,11 +187,15 @@ export default {
         rules: {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           menuType: [{ required: true, trigger: "change", message: "请输入" }],
-                    firstMenuId: [{ required: true, trigger: "change", message: "请输入" }],
+          firstMenuId: [
+            { required: true, trigger: "change", message: "请输入" },
+          ],
           secondMenuId: [
             { required: true, trigger: "change", message: "请输入" },
           ],
-          thirdMenuId: [{ required: true, trigger: "change", message: "请输入" }],
+          thirdMenuId: [
+            { required: true, trigger: "change", message: "请输入" },
+          ],
         },
       },
     };
@@ -294,7 +307,8 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

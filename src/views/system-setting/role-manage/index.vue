@@ -8,19 +8,22 @@
         size="medium"
         :model="filterForm"
       >
+        <el-form-item prop="searchName">
+          <el-input v-model.trim="filterForm.searchName" placeholder="名称" />
+        </el-form-item>
         <el-form-item>
-          <!-- <el-button
+          <el-button
             type="primary"
             icon="el-icon-search"
             @click="handleQuery"
-          ></el-button>-->
-          <!-- <el-button
+          ></el-button>
+          <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
             >重置</el-button
-          > -->
+          >
           <el-button type="primary" size="medium" @click="handleDialog()">
             <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
             <i class="el-icon-plus" />
@@ -30,7 +33,7 @@
     </div>
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -209,6 +212,7 @@ export default {
     return {
       filterForm: {
         // 筛选条件
+        searchName: "",
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },

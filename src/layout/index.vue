@@ -22,15 +22,18 @@
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     </div>
     <!-- 次级路由，从路由$route获取 -->
-    <i
-      title="切换菜单显示"
-      class="el-icon-s-unfold side-toggler"
-      @click="$store.commit('app/TOGGLE_SIDE')"
-    ></i>
-    <div class="side" v-show="this.sidebar.showSide">
-      <sidebar v-show="!isCollapse" />
+    <div class="side" v-show="sidebar.showSide">
+      <!-- side包含一个背景 -->
+      <!-- sidebar的根据router生成的多级菜单 -->
+      <sidebar v-show="sidebar.opened" />
     </div>
     <div class="main-container">
+      <i
+        v-show="!$route.path.includes('/room')"
+        title="切换菜单显示"
+        class="el-icon-s-unfold side-toggler"
+        @click="$store.commit('app/TOGGLE_SIDE')"
+      ></i>
       <app-main />
       <!-- <right-panel v-if="showSettings">
         <settings />
@@ -63,9 +66,6 @@ export default {
       needTagsView: (state) => state.settings.tagsView,
       fixedHeader: (state) => state.settings.fixedHeader,
     }),
-    isCollapse() {
-      return !this.sidebar.opened;
-    },
     classObj() {
       return {
         hideSide: !this.sidebar.showSide,
@@ -113,9 +113,9 @@ export default {
   }
 
   .side-toggler {
-    position: fixed;
-    top: calc(#{$headhei} + 5em - 71px);
-    left: 12px;
+    position: absolute;
+    top: 50%;
+    left: -1px;
     cursor: pointer;
     color: #31c6f1;
     z-index: 1;

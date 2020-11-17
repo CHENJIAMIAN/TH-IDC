@@ -17,40 +17,37 @@
       </el-form>
     </div>
     <!-- <el-card> -->
-      <el-form
-        ref="forms"
-        :model="forms"
-        :rules="rules"
-        v-loading="listLoading"
-        inline
-        label-width="200px"
-      >
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="应用ID" prop="sound_appid">
-              <el-input v-model="forms.sound_appid" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="模板ID" prop="sound_template_id">
-              <el-input
-                v-model="forms.sound_template_id"
-                placeholder="请输入"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="AppKey" prop="sound_appkey">
-              <el-input v-model="forms.sound_appkey" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="语音请求地址" prop="sound_url">
-              <el-input v-model="forms.sound_url" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+    <el-form
+      ref="forms"
+      :model="forms"
+      :rules="rules"
+      v-loading="listLoading"
+      inline
+      label-width="200px"
+    >
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="应用ID" prop="sound_appid">
+            <el-input v-model="forms.sound_appid" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="模板ID" prop="sound_template_id">
+            <el-input v-model="forms.sound_template_id" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="AppKey" prop="sound_appkey">
+            <el-input v-model="forms.sound_appkey" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="语音请求地址" prop="sound_url">
+            <el-input v-model="forms.sound_url" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
     <!-- </el-card> -->
   </div>
 </template>
@@ -82,8 +79,12 @@ export default {
       forms: {},
       rules: {
         // 表单验证
-        clanGroundNum: [{ required: true, tiggter: "blur", message: "请输入" }],
-        clanCode: [{ required: true, tiggter: "blur", message: "请输入" }],
+        sound_appid: [{ required: true, tiggter: "blur", message: "请输入" }],
+        sound_template_id: [
+          { required: true, tiggter: "blur", message: "请输入" },
+        ],
+        sound_appkey: [{ required: true, tiggter: "blur", message: "请输入" }],
+        sound_url: [{ required: true, tiggter: "blur", message: "请输入" }],
       },
 
       dialog: {

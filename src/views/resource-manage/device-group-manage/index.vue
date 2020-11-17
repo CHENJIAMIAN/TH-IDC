@@ -41,7 +41,7 @@
           />
         </el-form-item>
         <el-form-item prop="name">
-          <el-input v-model="filterForm.name" placeholder="设备组名称" />
+          <el-input v-model.trim="filterForm.name" placeholder="设备组名称" />
         </el-form-item>
         <el-form-item prop="deviceType">
           <el-select
@@ -251,10 +251,7 @@
         label-width="100px"
       >
         <el-form-item label="设备组编号" prop="deviceGroupCode">
-          <el-input
-            :disabled="!!dialog.forms.id"
-            v-model="dialog.forms.deviceGroupCode"
-          ></el-input>
+          <el-input v-model="dialog.forms.deviceGroupCode"></el-input>
         </el-form-item>
         <el-form-item label="设备组名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
@@ -709,7 +706,7 @@ export default {
       });
       this.listDataCDBind = r1.data;
       this.listDataCDNotBind = r2.data;
-      this.imgMarkerIdDivMaps = [];//初始化
+      this.imgMarkerIdDivMaps = []; //初始化
       this.dialogImg.visible = true;
       this.dialogImg.forms.deviceGroupId = row.id;
       this.dialogImg.forms.imgUrl = row.imgUrl;

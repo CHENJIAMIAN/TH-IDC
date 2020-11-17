@@ -1,6 +1,9 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
+.el-breadcrumb__inner.is-link:hover, .el-breadcrumb__inner a:hover {
+  color: #e3923e;
+}
 .el-tabs__nav-wrap::after {
   background-color: #1370a4;
 }
@@ -17,7 +20,7 @@
   color: gray;
 }
 .el-card.is-always-shadow {
-  box-shadow: 0px 1px 5px 4px rgb(0 31 79);
+  box-shadow: 0px 1px 5px 4px #001f4f;
 }
 .el-card {
   border: 1px solid #00f7ff94;
@@ -77,7 +80,7 @@
   background: #ffffff47;
 }
 .el-loading-mask {
-  background-color: rgb(255 255 255 / 15%);
+  background-color: #ffffff26;
 }
 
 .el-table {
