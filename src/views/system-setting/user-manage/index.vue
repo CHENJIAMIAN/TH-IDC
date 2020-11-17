@@ -163,7 +163,7 @@
           <el-checkbox-group
             class="rooms-el-checkbox-group"
            v-model="dialog.forms.roleIdArray">
-              <el-checkbox 
+              <el-checkbox
                 v-for="item in roleOpts"
                 :key="item.id"
                 :label="item.id"
@@ -264,7 +264,7 @@ export default {
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
-          let callAPI = null;          
+          let callAPI = null;
           if (this.dialog.forms.id) {
             // 没有编辑密码的
             this.dialog.forms.password = null;
@@ -341,7 +341,7 @@ export default {
 <style lang="scss" scoped>
 .user-manage {
   display: grid;
-  grid-template-rows: 60px auto 70px;
+  grid-template-rows: 60px auto 55px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: 100%;
 }

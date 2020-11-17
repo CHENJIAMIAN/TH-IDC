@@ -535,7 +535,7 @@ export default {
   height: 100%;
   .page1 {
     display: grid;
-    grid-template-rows: 60px auto 70px;
+    grid-template-rows: 60px auto 55px;
     height: 100%;
   }
   .page2 {
