@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container role-manage">
+  <div class="role-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form

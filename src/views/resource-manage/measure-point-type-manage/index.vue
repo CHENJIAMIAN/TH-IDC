@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container room-manage">
+  <div class="room-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form

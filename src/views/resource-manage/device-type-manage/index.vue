@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container department-manage">
+  <div class="department-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container auth-manage">
+  <div class="auth-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form
