@@ -610,8 +610,8 @@ export default {
       this.$refs["dialogForm"].validateField("imgUrl");
     },
     dialogImgSubmit() {
-      /* pointList	[array]	是	采集的测点位置数据		
-                pointId	[int]	是	测点id		
+      /* pointList	[array]	是	采集的测点位置数据
+                pointId	[int]	是	测点id
                location [string]	是	位置信息
         */
       this.dialogImg.forms.pointList = this.listDataCDBind.map((i) => {
@@ -849,6 +849,7 @@ export default {
   max-height: 100%;
   justify-self: center;
   align-self: center;
+  border-radius:5px;
 }
 
 ::v-deep {

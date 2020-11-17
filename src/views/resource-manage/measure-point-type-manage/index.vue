@@ -72,7 +72,7 @@
       <el-table-column sortable prop="columnName" label="字段名" />
 
 
-      
+
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -351,6 +351,7 @@ export default {
   max-height: 100%;
   justify-self: center;
   align-self: center;
+  border-radius:5px;
 }
 
   ::v-deep{

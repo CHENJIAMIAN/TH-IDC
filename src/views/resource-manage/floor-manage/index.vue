@@ -317,6 +317,7 @@ export default {
   max-height: 100%;
   justify-self: center;
   align-self: center;
+  border-radius:5px;
 }
 
 ::v-deep {

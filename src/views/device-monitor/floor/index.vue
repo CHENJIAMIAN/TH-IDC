@@ -101,5 +101,6 @@ export default {
   justify-self: center;
   align-self: center;
   overflow: auto;
+  border-radius:5px;
 }
 </style>
