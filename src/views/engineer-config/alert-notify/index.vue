@@ -7,7 +7,12 @@
         :inline="true"
         size="medium"
         :model="filterForm"
-        style="display: grid; grid-auto-flow: column;overflow-x: auto;overflow-y: hidden;"
+        style="
+          display: grid;
+          grid-auto-flow: column;
+          overflow-x: auto;
+          overflow-y: hidden;
+        "
       >
         <!-- v-show="!$route.name === 'device-group'" -->
         <el-form-item prop="floorCode">
@@ -73,7 +78,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="pointCode">
+        <!-- <el-form-item prop="pointCode">
           <el-select
             clearable
             v-model="filterForm.pointCode"
@@ -86,13 +91,24 @@
               :value="item.id"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item prop="name">
           <el-input v-model.trim="filterForm.name" placeholder="测点名称" />
         </el-form-item>
-        <!-- <el-form-item prop="noteLevel">
-          <el-input v-model="filterForm.noteLevel" placeholder="通知等级" />
-        </el-form-item> -->
+        <el-form-item prop="noteLevel">
+          <el-select
+            clearable
+            v-model="filterForm.noteLevel"
+            placeholder="通知等级"
+          >
+            <el-option
+              v-for="item in alertLevelOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item prop="status">
           <el-select clearable v-model="filterForm.status" placeholder="状态">
             <el-option label="待处理" :value="1" />
@@ -312,11 +328,13 @@ import {
   alertNotificationEditResumeStatus,
   alertNotificationEditStatus,
   alertNotificationListByPage,
+  alertLevelListAll,
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination },
   data() {
     return {
+      alertLevelOpts: [],
       pointOpts: [],
       floorOpts: [],
       roomOpts: [],
@@ -412,6 +430,7 @@ export default {
     // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
     deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
     pointTypeListAll().then((r) => (this.pointAllTypeOpts = r.data));
+    alertLevelListAll().then((r) => (this.alertLevelOpts = r.data));
     // if(this.$route.name === "device-group") this.filterForm.deviceGroupCode =  this.$route.query.deviceGroupCode;
     this.handleQuery();
   },

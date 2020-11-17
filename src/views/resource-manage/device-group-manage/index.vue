@@ -36,7 +36,7 @@
         </el-form-item>
         <el-form-item prop="deviceGroupCode">
           <el-input
-            v-model="filterForm.deviceGroupCode"
+            v-model.trim="filterForm.deviceGroupCode"
             placeholder="设备组编号"
           />
         </el-form-item>

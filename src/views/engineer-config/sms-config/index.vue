@@ -92,11 +92,9 @@ export default {
         // 表单验证
         sms_sign: [{ required: true, tiggter: "blur", message: "请输入" }],
         sms_template_id: [
-          { required: true, tiggter: "blur", validator: isIntNumber },
+          { required: true, tiggter: "blur", message: "请输入" },
         ],
-        sms_sdk_appid: [
-          { required: true, tiggter: "blur", validator: isIntNumber },
-        ],
+        sms_sdk_appid: [{ required: true, tiggter: "blur", message: "请输入" }],
         sms_secretId: [{ required: true, tiggter: "blur", message: "请输入" }],
         sms_secretKey: [{ required: true, tiggter: "blur", message: "请输入" }],
         sms_endpoint: [{ required: true, tiggter: "blur", message: "请输入" }],

@@ -149,7 +149,7 @@ export default {
       align-items: center;
 
       img:hover{
-        filter: brightness(1.2);
+        filter: hue-rotate(206deg);
       }
 
       .user {
@@ -186,7 +186,7 @@ export default {
   .name {
     transform: translate(0px, -5px);
     &:hover{
-      filter: brightness(1.2);
+      filter: hue-rotate(206deg);
     }
   }
 }

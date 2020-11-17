@@ -58,6 +58,7 @@ import {
   phoneSoundConfigGetSoundConfig,
   phoneSoundConfigAddOrEdit_sound,
 } from "@/api/engineer-config.js";
+import { valueTypeOpts, isIntNumber } from "@/views/resource-manage/common.js";
 export default {
   components: { pagination },
   data() {
@@ -79,9 +80,11 @@ export default {
       forms: {},
       rules: {
         // 表单验证
-        sound_appid: [{ required: true, tiggter: "blur", message: "请输入" }],
+        sound_appid: [
+          { required: true, tiggter: "blur", validator: isIntNumber },
+        ],
         sound_template_id: [
-          { required: true, tiggter: "blur", message: "请输入" },
+          { required: true, tiggter: "blur", validator: isIntNumber },
         ],
         sound_appkey: [{ required: true, tiggter: "blur", message: "请输入" }],
         sound_url: [{ required: true, tiggter: "blur", message: "请输入" }],

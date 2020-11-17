@@ -10,16 +10,28 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item prop="userName">
-          <el-input v-model.trim="filterForm.userName" placeholder="操作人账号" />
+          <el-input
+            v-model.trim="filterForm.userName"
+            placeholder="操作人账号"
+          />
         </el-form-item>
         <el-form-item prop="realName">
-          <el-input v-model.trim="filterForm.realName" placeholder="操作人姓名" />
+          <el-input
+            v-model.trim="filterForm.realName"
+            placeholder="操作人姓名"
+          />
         </el-form-item>
         <el-form-item prop="moduleName">
-          <el-input v-model.trim="filterForm.moduleName" placeholder="模块名称" />
+          <el-input
+            v-model.trim="filterForm.moduleName"
+            placeholder="模块名称"
+          />
         </el-form-item>
         <el-form-item prop="moduleMethod">
-          <el-input v-model.trim="filterForm.moduleMethod" placeholder="模块方法" />
+          <el-input
+            v-model.trim="filterForm.moduleMethod"
+            placeholder="模块方法"
+          />
         </el-form-item>
         <el-form-item prop="logType">
           <el-select
@@ -205,8 +217,8 @@ export default {
   },
   watch: {
     "filterForm.startDate_endDate"(n, o) {
-      this.filterForm.startTime = n[0];
-      this.filterForm.endTime = n[1];
+      this.filterForm.startTime = n ? n[0] : null;
+      this.filterForm.endTime = n ? n[1] : null;
     },
   },
   created() {
