@@ -572,7 +572,7 @@ export default {
   }
   .custom-rule-form {
     .el-form-item--mini.el-form-item {
-      margin-bottom: 14px;
+      margin-bottom: 5px;
     }
   }
 
