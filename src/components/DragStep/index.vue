@@ -1,8 +1,5 @@
 <template>
   <div class="board-column">
-    <div class="board-column-header">
-      {{ headerText }}
-    </div>
     <draggable
       :list="list"
       v-bind="$attrs"
@@ -10,14 +7,18 @@
       class="board-column-content"
       :set-data="setData"
     >
-      <div
-        v-for="(element, index) in list"
-        :key="element.id"
-        class="board-item"
-      >
-        {{ element.name }} {{ element.id }}
+      <template v-for="(element, index) in list">
+        <div
+          :key="element.id + Math.random()"
+          @click="list.splice(index, 1)"
+          title="点击移除"
+          class="board-item"
+        >
+          {{ element.name }}
+          <!-- {{ element.id }} -->
+        </div>
         {{ index === list.length - 1 ? "" : "➡" }}
-      </div>
+      </template>
     </draggable>
   </div>
 </template>
@@ -26,15 +27,11 @@
 import draggable from "vuedraggable";
 
 export default {
-  name: "DragKanbanDemo",
+  name: "DragStep",
   components: {
     draggable,
   },
   props: {
-    headerText: {
-      type: String,
-      default: "Header",
-    },
     options: {
       type: Object,
       default() {
@@ -61,7 +58,6 @@ export default {
 .board-column {
   height: auto;
   overflow: hidden;
-  background: #f0f0f0;
   border-radius: 3px;
   display: grid;
   grid-auto-flow: column;
@@ -79,22 +75,19 @@ export default {
   .board-column-content {
     height: auto;
     overflow: hidden;
-    border: 10px solid transparent;
-    min-height: 60px;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
     align-items: center;
     flex-direction: row;
+    flex-wrap: wrap;
 
     .board-item {
       cursor: pointer;
-      margin: 5px 0;
-      background-color: #fff;
-      text-align: left;
-      line-height: 54px;
-      padding: 5px 10px;
-      box-sizing: border-box;
+      border-color: rgba(45, 180, 221, 0.96);
+      border: 1px solid;
+      padding: 0px 10px;
+      border-radius: 5px;
     }
   }
 }
