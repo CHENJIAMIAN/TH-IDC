@@ -6,7 +6,7 @@
     <el-dialog append-to-body :visible.sync="dialog.visible">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">用户信息</span>
-        <img  src="@/assets/img/hl.png" />
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
@@ -49,7 +49,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="账号状态" prop="status">
-          <el-radio-group class="radio-status" v-model="dialog.forms.status" style="width: 100%">
+          <el-radio-group
+            class="radio-status"
+            v-model="dialog.forms.status"
+            style="width: 100%"
+          >
             <el-radio border :label="1">启用</el-radio>
             <el-radio border :label="0">禁用</el-radio>
           </el-radio-group>
@@ -81,12 +85,19 @@ export default {
       dialog: {
         id: "",
         visible: false,
-        forms: {status:1},
+        forms: { status: 1 },
         rules: {
           userName: [{ required: true, trigger: "blur", message: "请输入" }],
           password: [{ required: true, trigger: "blur", message: "请输入" }],
           realName: [{ required: true, trigger: "blur", message: "请输入" }],
-          phone: [{ required: true, trigger: "blur", message: "请输入" }],
+          phone: [
+            { required: true, trigger: "blur", message: "请输入" },
+            {
+              pattern: /^1[3456789]\d{9}$/,
+              message: "手机号格式错误",
+              trigger: "blur",
+            },
+          ],
           departmentId: [
             { required: true, trigger: "change", message: "请输入" },
           ],

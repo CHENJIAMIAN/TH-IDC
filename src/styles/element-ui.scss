@@ -1,7 +1,33 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
-.el-breadcrumb__inner.is-link:hover, .el-breadcrumb__inner a:hover {
+.el-input .el-input__inner {
+  &::placeholder {
+    color: gray;
+  }
+
+  &::-webkit-input-placeholder {
+    /* WebKit browsers 适配谷歌 */
+    color: gray;
+  }
+
+  &:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 适配火狐 */
+    color: gray;
+  }
+
+  &::-moz-placeholder {
+    /* Mozilla Firefox 19+ 适配火狐 */
+    color: gray;
+  }
+
+  &:-ms-input-placeholder {
+    /* Internet Explorer 10+  适配ie*/
+    color: gray;
+  }
+}
+.el-breadcrumb__inner.is-link:hover,
+.el-breadcrumb__inner a:hover {
   color: #e3923e;
 }
 .el-tabs__nav-wrap::after {
@@ -10,7 +36,7 @@
 .el-tabs__content {
   overflow: auto;
 }
-.el-tree{
+.el-tree {
   background: transparent;
 }
 .radio-status > .el-radio:nth-child(1) .el-radio__label {

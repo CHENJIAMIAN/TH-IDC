@@ -153,7 +153,9 @@
         label-width="100px"
       >
         <el-form-item label="房间编号" prop="roomCode">
-          <el-input v-model="dialog.forms.roomCode"></el-input>
+          <el-input 
+            :disabled="!!dialog.forms.id"
+          v-model="dialog.forms.roomCode"></el-input>
         </el-form-item>
         <el-form-item label="房间名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>

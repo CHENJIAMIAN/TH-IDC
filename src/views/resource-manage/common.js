@@ -26,6 +26,9 @@ export const imgTypeOpts = [
 ];
 
 export const isIntNumber = (rule, value, callback) => {
+    if (!rule.required && (value === undefined || value === "")) {
+        callback()
+    }
     if (value === "" || !Number.isInteger(+value) || +value < 0) {
         callback(new Error('请输入整数值'));
     } else {

@@ -28,8 +28,8 @@ export function roomTypeDeviceGroupListAllRoomType1(data){return request({url:'/
 
 
 
-
-
+// 获取房间里面设备组采集到的数据接口
+export function deviceGroupTypeGetData(data){return request({url:'/admin/devicemonitor/deviceGroupType/getData',method:'post',data})}
 
 
 

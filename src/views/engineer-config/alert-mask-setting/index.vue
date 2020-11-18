@@ -416,7 +416,6 @@ export default {
   created() {
     spaceFloorListAll().then((r) => (this.floorOpts = r.data));
     deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
-    pointTypeListAll().then((r) => (this.pointTypeOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
@@ -424,6 +423,7 @@ export default {
     handleRoomChange(n) {
       pointListAll({ roomCode: n }).then((r) => (this.pointOpts = r.data));
       deviceListAll({ roomCode: n }).then((r) => (this.deviceOpts = r.data));
+      pointTypeListAll({ roomCode: n }).then((r) => (this.pointTypeOpts = r.data));
       deviceGroupListAll({ roomCode: n }).then(
         (r) => (this.deviceGroupOpts = r.data)
       );

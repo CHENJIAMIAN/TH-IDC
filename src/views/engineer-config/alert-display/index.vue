@@ -26,75 +26,78 @@
       </el-form>
     </div>
     <!-- <el-card> -->
-      <el-form
-        ref="forms"
-        :model="forms"
-        :rules="rules"
-        v-loading="listLoading"
-        inline
-        label-width="200px"
+    <el-form
+      ref="forms"
+      :model="forms"
+      :rules="rules"
+      v-loading="listLoading"
+      inline
+      label-width="200px"
+    >
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="实时告警显示条数" prop="realtimeCount">
+            <el-input v-model="forms.realtimeCount" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="实时告警最低级别" prop="realtimeLowlevelShow">
+            <el-input
+              v-model="forms.realtimeLowlevelShow"
+              placeholder="请输入"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item
+            label="实时告警确认后是否还显示"
+            prop="realtimeIsConfirmShow"
+          >
+            <el-checkbox
+              v-model="forms.realtimeIsConfirmShow"
+              :true-label="1"
+              :false-label="2"
+            ></el-checkbox>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-      >
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="实时告警显示条数" prop="realtimeCount">
-              <el-input v-model="forms.realtimeCount" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="实时告警最低级别" prop="realtimeLowlevelShow">
-              <el-input
-                v-model="forms.realtimeLowlevelShow"
-                placeholder="请输入"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item
-              label="实时告警确认后是否还显示"
-              prop="realtimeIsConfirmShow"
-            >
-              <el-checkbox
-                v-model="forms.realtimeIsConfirmShow"
-                :true-label="1"
-                :false-label="2"
-              ></el-checkbox>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="空间告警最低级别" prop="spaceLowlevelShow">
-              <el-input
-                v-model="forms.spaceLowlevelShow"
-                placeholder="请输入"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item
-              label="空间告警确认后是否还显示"
-              prop="spaceIsConfirmShow"
-            >
-              <el-checkbox
-                v-model="forms.spaceIsConfirmShow"
-                :true-label="1"
-                :false-label="2"
-              ></el-checkbox>
-            </el-form-item>
-          </el-col>
+      <el-divider style="margin: 10px 0" />
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="空间告警最低级别" prop="spaceLowlevelShow">
+            <el-input v-model="forms.spaceLowlevelShow" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item
+            label="空间告警确认后是否还显示"
+            prop="spaceIsConfirmShow"
+          >
+            <el-checkbox
+              v-model="forms.spaceIsConfirmShow"
+              :true-label="1"
+              :false-label="2"
+            ></el-checkbox>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-          <el-col :span="12">
-            <el-form-item label="告警间隔(分)" prop="alertTimeGap">
-              <el-input v-model="forms.alertTimeGap" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
+      <el-divider style="margin: 10px 0" />
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="告警间隔(分)" prop="alertTimeGap">
+            <el-input v-model="forms.alertTimeGap" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
 
-          <el-col :span="12">
-            <el-form-item label="失败重发间隔(分)" prop="alertFailTimeGap">
-              <el-input v-model="forms.alertFailTimeGap" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+        <el-col :span="12">
+          <el-form-item label="失败重发间隔(分)" prop="alertFailTimeGap">
+            <el-input v-model="forms.alertFailTimeGap" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
     <!-- </el-card> -->
   </div>
 </template>

@@ -33,13 +33,9 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="status">
-          <el-select
-            clearable
-            v-model="filterForm.status"
-            placeholder="状态"
-          >
-            <el-option   text-color="#55fb55"   label="启用"       :value="1"            />
-            <el-option   text-color="gray"   label="禁用"       :value="0"            />
+          <el-select clearable v-model="filterForm.status" placeholder="状态">
+            <el-option text-color="#55fb55" label="启用" :value="1" />
+            <el-option text-color="gray" label="禁用" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -69,7 +65,7 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -87,7 +83,7 @@
       <el-table-column sortable prop="status" label="状态">
         <template slot-scope="{ row }">
           <span style="color: #55fb55" v-if="row.status == 1">启用</span>
-          <span style="color: gray"    v-else>禁用</span>
+          <span style="color: gray" v-else>禁用</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="240">
@@ -118,15 +114,14 @@
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="5vh">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
+        label-width="60px"
       >
         <el-form-item label="账号" prop="userName">
           <el-input v-model="dialog.forms.userName"></el-input>
@@ -136,63 +131,66 @@
         </el-form-item>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-        <el-form-item label="姓名" prop="realName">
-          <el-input v-model="dialog.forms.realName"></el-input>
-        </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="dialog.forms.phone"></el-input>
-        </el-form-item>
+          <el-form-item label="姓名" prop="realName">
+            <el-input v-model="dialog.forms.realName"></el-input>
+          </el-form-item>
+          <el-form-item label="电话" prop="phone">
+            <el-input v-model="dialog.forms.phone"></el-input>
+          </el-form-item>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="dialog.forms.email"></el-input>
-        </el-form-item>
-        <el-form-item label="微信" prop="wechat">
-          <el-input v-model="dialog.forms.wechat"></el-input>
-        </el-form-item>
-        <el-form-item label="钉钉" prop="dingtalk">
-          <el-input v-model="dialog.forms.dingtalk"></el-input>
-        </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="dialog.forms.email"></el-input>
+          </el-form-item>
+          <el-form-item label="微信" prop="wechat">
+            <el-input v-model="dialog.forms.wechat"></el-input>
+          </el-form-item>
+          <el-form-item label="钉钉" prop="dingtalk">
+            <el-input v-model="dialog.forms.dingtalk"></el-input>
+          </el-form-item>
         </div>
 
         <el-form-item label="描述" prop="remarks">
-          <el-input  type="textarea" v-model="dialog.forms.remarks"></el-input>
+          <el-input type="textarea" v-model="dialog.forms.remarks"></el-input>
         </el-form-item>
         <el-form-item class="rooms-form-item" label="角色" prop="roleIdArray">
           <el-checkbox-group
             class="rooms-el-checkbox-group"
-           v-model="dialog.forms.roleIdArray">
-              <el-checkbox 
-                v-for="item in roleOpts"
-                :key="item.id"
-                :label="item.id"
-                 border
-              >{{item.name}}</el-checkbox>
-        </el-checkbox-group>
+            v-model="dialog.forms.roleIdArray"
+          >
+            <el-checkbox
+              v-for="item in roleOpts"
+              :key="item.id"
+              :label="item.id"
+              border
+              >{{ item.name }}</el-checkbox
+            >
+          </el-checkbox-group>
         </el-form-item>
-
 
         <div style="display: grid; grid-template-columns: 1fr 1fr">
-        <el-form-item label="部门" prop="departmentId">
-          <el-select v-model="dialog.forms.departmentId">
-            <el-option
-              v-for="item in depOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-radio-group class="radio-status" v-model="dialog.forms.status" style="width: 100%">
-            <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
-            <el-radio border :label="0" style="color: gray"    >禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
+          <el-form-item label="部门" prop="departmentId">
+            <el-select v-model="dialog.forms.departmentId">
+              <el-option
+                v-for="item in depOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="状态" prop="status">
+            <el-radio-group
+              class="radio-status"
+              v-model="dialog.forms.status"
+              style="width: 100%"
+            >
+              <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
+              <el-radio border :label="0" style="color: gray">禁用</el-radio>
+            </el-radio-group>
+          </el-form-item>
         </div>
-
-
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"
@@ -244,7 +242,14 @@ export default {
           userName: [{ required: true, trigger: "blur", message: "请输入" }],
           password: [{ required: true, trigger: "blur", message: "请输入" }],
           realName: [{ required: true, trigger: "blur", message: "请输入" }],
-          phone: [{ required: true, trigger: "blur", message: "请输入" }],
+          phone: [
+            { required: true, trigger: "blur", message: "请输入" },
+            {
+              pattern: /^1[3456789]\d{9}$/,
+              message: "手机号格式错误",
+              trigger: "blur",
+            },
+          ],
           departmentId: [
             { required: true, trigger: "change", message: "请输入" },
           ],
@@ -264,7 +269,7 @@ export default {
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
-          let callAPI = null;          
+          let callAPI = null;
           if (this.dialog.forms.id) {
             // 没有编辑密码的
             this.dialog.forms.password = null;
@@ -298,15 +303,20 @@ export default {
     async handleDialog(row) {
       if (row) {
         // 编辑
-        const r=await sysUserQueryById({id:row.id})
-        this.dialog.forms=r.data;
-        this.$set(this.dialog.forms,"roleIdArray",r.data.roleList.filter(i=>i.has=='1').map(i=>i.id))
+        const r = await sysUserQueryById({ id: row.id });
+        this.dialog.forms = r.data;
+        this.$set(
+          this.dialog.forms,
+          "roleIdArray",
+          r.data.roleList.filter((i) => i.has == "1").map((i) => i.id)
+        );
         // this.dialog.forms = JSON.parse(JSON.stringify(row));
       } else {
-        this.dialog.forms = {status:1};
-        this.$set(this.dialog.forms,"roleIdArray",[])
+        this.dialog.forms = { status: 1 };
+        this.$set(this.dialog.forms, "roleIdArray", []);
       }
-      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {

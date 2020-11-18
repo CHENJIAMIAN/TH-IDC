@@ -394,10 +394,10 @@ export default {
             //   { required: true, trigger: "blur", message: "请输入" },
             // ],
             filterTime: [
-              { required: !true, trigger: "blur", validator: isIntNumber },
+              { required: false, trigger: "blur", validator: isIntNumber },
             ],
             continueTime: [
-              { required: !true, trigger: "blur", validator: isIntNumber },
+              { required: false, trigger: "blur", validator: isIntNumber },
             ],
             alertContent: [
               { required: true, trigger: "blur", message: "请输入" },

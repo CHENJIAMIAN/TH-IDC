@@ -6,69 +6,74 @@
     <draggable
       :list="list"
       v-bind="$attrs"
+      v-on="$listeners"
       class="board-column-content"
       :set-data="setData"
     >
-      <div v-for="element in list" :key="element.id" class="board-item">
+      <div
+        v-for="(element, index) in list"
+        :key="element.id"
+        class="board-item"
+      >
         {{ element.name }} {{ element.id }}
+        {{ index === list.length - 1 ? "" : "➡" }}
       </div>
     </draggable>
   </div>
 </template>
 
 <script>
-import draggable from 'vuedraggable'
+import draggable from "vuedraggable";
 
 export default {
-  name: 'DragKanbanDemo',
+  name: "DragKanbanDemo",
   components: {
-    draggable
+    draggable,
   },
   props: {
     headerText: {
       type: String,
-      default: 'Header'
+      default: "Header",
     },
     options: {
       type: Object,
       default() {
-        return {}
-      }
+        return {};
+      },
     },
     list: {
       type: Array,
       default() {
-        return []
-      }
-    }
+        return [];
+      },
+    },
   },
   methods: {
     setData(dataTransfer) {
       // to avoid Firefox bug
       // Detail see : https://github.com/RubaXa/Sortable/issues/1012
-      dataTransfer.setData('Text', '')
-    }
-  }
-}
+      dataTransfer.setData("Text", "");
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .board-column {
-  min-width: 300px;
-  min-height: 100px;
   height: auto;
   overflow: hidden;
   background: #f0f0f0;
   border-radius: 3px;
+  display: grid;
+  grid-auto-flow: column;
 
   .board-column-header {
-    height: 50px;
-    line-height: 50px;
     overflow: hidden;
     padding: 0 20px;
     text-align: center;
     background: #333;
     color: #fff;
     border-radius: 3px 3px 0 0;
+    line-height: 90px;
   }
 
   .board-column-content {
@@ -80,18 +85,16 @@ export default {
     justify-content: flex-start;
     flex-direction: column;
     align-items: center;
+    flex-direction: row;
 
     .board-item {
       cursor: pointer;
-      width: 100%;
-      height: 64px;
       margin: 5px 0;
       background-color: #fff;
       text-align: left;
       line-height: 54px;
       padding: 5px 10px;
       box-sizing: border-box;
-      box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.2);
     }
   }
 }

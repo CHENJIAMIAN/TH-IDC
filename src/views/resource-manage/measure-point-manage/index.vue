@@ -186,7 +186,9 @@
         label-width="80px"
       >
         <el-form-item label="测点编号" prop="pointCode">
-          <el-input v-model="dialog.forms.pointCode"></el-input>
+          <el-input 
+            :disabled="!!dialog.forms.id"
+          v-model="dialog.forms.pointCode"></el-input>
         </el-form-item>
         <el-form-item label="测点名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>

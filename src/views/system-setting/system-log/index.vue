@@ -135,39 +135,40 @@
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
+        class="log-form"
         label-width="150px"
       >
-        <el-form-item label="操作人ID" prop="userId">
+        <el-form-item label="操作人ID : " prop="userId">
           {{ dialog.forms.userId }}
         </el-form-item>
-        <el-form-item label="操作人账号" prop="userName">
+        <el-form-item label="操作人账号 : " prop="userName">
           {{ dialog.forms.userName }}
         </el-form-item>
-        <el-form-item label="操作人姓名" prop="realName">
+        <el-form-item label="操作人姓名 : " prop="realName">
           {{ dialog.forms.realName }}
         </el-form-item>
-        <el-form-item label="模块名称" prop="moduleName">
+        <el-form-item label="模块名称 : " prop="moduleName">
           {{ dialog.forms.moduleName }}
         </el-form-item>
-        <el-form-item label="模块方法" prop="moduleMethod">
+        <el-form-item label="模块方法 : " prop="moduleMethod">
           {{ dialog.forms.moduleMethod }}
         </el-form-item>
-        <el-form-item label="操作人IP" prop="userIp">
+        <el-form-item label="操作人IP : " prop="userIp">
           {{ dialog.forms.userIp }}
         </el-form-item>
-        <el-form-item label="描述" prop="description">
+        <el-form-item label="描述 : " prop="description">
           {{ dialog.forms.description }}
         </el-form-item>
-        <el-form-item label="日志类型" prop="logType">
+        <el-form-item label="日志类型 : " prop="logType">
           <template>
             <div v-if="dialog.forms.logType == 1">正常日志</div>
             <div v-if="dialog.forms.logType == 2">异常日志</div>
           </template>
         </el-form-item>
-        <el-form-item label="创建时间" prop="createTime">
+        <el-form-item label="创建时间 : " prop="createTime">
           {{ dialog.forms.createTime }}
         </el-form-item>
-        <el-form-item label="耗时(毫秒)" prop="takeTime">
+        <el-form-item label="耗时(毫秒) : " prop="takeTime">
           {{ dialog.forms.takeTime }}
         </el-form-item>
       </el-form>
@@ -297,5 +298,13 @@ export default {
 .head {
   display: grid;
   justify-content: end;
+}
+
+::v-deep {
+  .log-form {
+    .el-form-item {
+      margin-bottom: 10px;
+    }
+  }
 }
 </style>

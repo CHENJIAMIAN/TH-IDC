@@ -181,7 +181,7 @@
         <template slot-scope="{ row }">
           <div>测点编号:{{ row.pointCode || "无" }}</div>
           <div>测点名称:{{ row.pointName || "无" }}</div>
-        </template>
+        </template>ch
       </el-table-column>
       <el-table-column label="数值">
         <template slot-scope="{ row }">
@@ -191,7 +191,13 @@
       </el-table-column>
       <el-table-column label="通知">
         <template slot-scope="{ row }">
-          <div>通知等级:{{ row.noteLevel || "无" }}</div>
+          <div>
+            通知等级:
+            {{
+              alertLevelOpts.find((i) => i.id == row.noteLevel) &&
+              alertLevelOpts.find((i) => i.id == row.noteLevel).name
+            }}
+          </div>
           <div>通知内容:{{ row.noteContent || "无" }}</div>
         </template>
       </el-table-column>

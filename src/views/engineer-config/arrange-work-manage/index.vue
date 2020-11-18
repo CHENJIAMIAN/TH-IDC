@@ -77,7 +77,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="状态" width="150" align="center">
+      <el-table-column label="状态" width="100" align="center">
         <template slot-scope="{ row }">
           <el-switch
             @change="handleStatusChange($event, row)"
@@ -87,7 +87,7 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="150">
+      <el-table-column label="操作" align="center" width="100">
         <template slot-scope="{ row }">
           <el-button
             icon="el-icon-delete"
@@ -310,7 +310,7 @@ export default {
 <style lang="scss" scoped>
 .user-manage {
   display: grid;
-  grid-template-rows: 60px auto 70px;
+  grid-template-rows: 60px auto;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: 100%;
 }

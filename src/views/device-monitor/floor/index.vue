@@ -80,6 +80,7 @@ export default {
     overflow: auto;
     padding-right: 5px;
     justify-content: space-evenly;
+    gap: 1rem;
 
     ::v-deep {
       .el-button + .el-button {

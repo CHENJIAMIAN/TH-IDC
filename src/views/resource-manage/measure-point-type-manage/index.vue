@@ -114,13 +114,13 @@
         :model="dialog.forms"
         :rules="dialog.rules"
         ref="dialogForm"
-        label-width="150px"
+        label-width="120px"
       >
         <el-form-item label="测点类型名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+        <div style="display: grid; grid-template-columns: 1fr 1fr">
         <el-form-item label="设备类型" prop="deviceTypeId">
           <el-select v-model="dialog.forms.deviceTypeId"
             popper-class="three-column"
@@ -145,7 +145,7 @@
         </el-form-item>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+        <div style="display: grid; grid-template-columns: 1fr 1fr">
         <el-form-item label="单位" prop="units">
           <el-input v-model="dialog.forms.units"></el-input>
         </el-form-item>

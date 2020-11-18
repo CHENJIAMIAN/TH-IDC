@@ -100,7 +100,10 @@
         label-width="150px"
       >
         <el-form-item label="楼层编号" prop="floorCode">
-          <el-input v-model="dialog.forms.floorCode"></el-input>
+          <el-input
+            :disabled="!!dialog.forms.id"
+            v-model="dialog.forms.floorCode"
+          ></el-input>
         </el-form-item>
         <el-form-item label="楼层名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>

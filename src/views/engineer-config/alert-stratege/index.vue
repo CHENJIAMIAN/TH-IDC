@@ -1,6 +1,14 @@
 <template>
   <div class="components-container board">
     <Kanban
+      :key="3"
+      :list="list3"
+      :group="group"
+      class="kanban done"
+      header-text="选项"
+      @end="sdfsdf"
+    />
+    <Kanban
       :key="1"
       :list="list1"
       :group="group"
@@ -14,20 +22,12 @@
       class="kanban working"
       header-text="Working"
     />
-    <Kanban
-      :key="3"
-      :list="list3"
-      :group="group"
-      class="kanban done"
-      header-text="Done"
-    />
-    <el-button @click="list3 = deepClone(noteModeOpts)">恢复默认3</el-button>
   </div>
 </template>
 <script>
 import Kanban from "@/components/Kanban";
 import { isIntNumber, noteModeOpts } from "@/views/resource-manage/common.js";
-import {deepClone} from "@/utils"
+import { deepClone } from "@/utils";
 export default {
   name: "DragKanbanDemo",
   components: {
@@ -64,6 +64,11 @@ export default {
       ],
     };
   },
+  watch: {
+    sdfsdf() {
+      this.list3 = deepClone(noteModeOpts);
+    },
+  },
 };
 </script>
 <style lang="scss">
@@ -71,8 +76,9 @@ export default {
   margin-left: 20px;
   display: flex;
   justify-content: space-around;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
+  gap: 2rem;
   color: black;
 }
 .kanban {

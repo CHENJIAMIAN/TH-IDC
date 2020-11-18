@@ -172,7 +172,9 @@
         label-width="100px"
       >
         <el-form-item label="设备编号" prop="deviceCode">
-          <el-input v-model="dialog.forms.deviceCode"></el-input>
+          <el-input 
+            :disabled="!!dialog.forms.id"
+          v-model="dialog.forms.deviceCode"></el-input>
         </el-form-item>
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
