@@ -77,10 +77,11 @@ export default {
 .preview-img {
   width: auto;
   height: auto;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 90%;
+  max-height: 90%;
   justify-self: center;
   align-self: center;
   overflow: auto;
+  border-radius:10px;
 }
 </style>

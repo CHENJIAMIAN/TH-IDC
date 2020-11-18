@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container auth-manage">
+  <div class="auth-manage">
     <!-- 筛选条件 -->
     <div class="head">
       <el-form
@@ -267,7 +267,7 @@ export default {
 <style lang="scss" scoped>
 .auth-manage {
   display: grid;
-  grid-template-rows: 60px auto 70px;
+  grid-template-rows: 60px auto 55px;
   // background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: calc(100vh - 260px);
 }

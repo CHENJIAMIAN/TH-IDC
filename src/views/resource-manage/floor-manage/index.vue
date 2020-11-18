@@ -298,7 +298,7 @@ export default {
 <style lang="scss" scoped>
 .floor-manage {
   display: grid;
-  grid-template-rows: 60px auto 70px;
+  grid-template-rows: 60px auto 55px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: 100%;
 }
@@ -320,6 +320,7 @@ export default {
   max-height: 100%;
   justify-self: center;
   align-self: center;
+  border-radius:5px;
 }
 
 ::v-deep {

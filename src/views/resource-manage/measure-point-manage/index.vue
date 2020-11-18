@@ -456,13 +456,13 @@ export default {
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
         this.dialog.forms = { roomCode: "", deviceGroupCode: "" };
-        /* 
+        /*
           this.dialog.forms ={ roomCode: ""}; 下拉选择才有反应???
           下拉选择时会触发  this.$emit('input', value); 进而触发ast生成的代码: callback: function($$v) { _vm.$set(_vm.dialog.forms, "roomCode", $$v)},
                 为什么? 因为渲染时 createComponent->是v-model的话会触发transformModel->on[event] = data.model.callback  'input'事件的接受器就是callback
           而之前运行了 dialog.forms.roomCode = ''; 它不是响应式的,
           而 _vm.$set在dialog.forms.roomCode已存在的时候,会直接返回(不存在就会调用defineReactive$$1(ob.value, key, val)去定义响应式的变量)
-          所以dialog.forms.roomCode虽然确实被改变了,但是不过它不是响应式的,所以视图没有更新   
+          所以dialog.forms.roomCode虽然确实被改变了,但是不过它不是响应式的,所以视图没有更新
         */
       }
       this.dialog.visible = true;
@@ -501,7 +501,7 @@ export default {
 <style lang="scss" scoped>
 .measure-point-manage {
   display: grid;
-  grid-template-rows: 60px auto 70px;
+  grid-template-rows: 60px auto 55px;
   background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: 100%;
 }
