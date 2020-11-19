@@ -217,6 +217,25 @@
           </el-select>
         </el-form-item>
 
+        <!-- 用来筛选备类类型的,单选 -->
+        <el-form-item
+          label="设备类型"
+          prop="deviceTypes"
+          v-show="dialog.forms.maskType == 3"
+        >
+          <el-select
+            v-model="dialog.forms.deviceTypes2"
+            popper-class="three-column"
+            @change="handleDeviceTypeChange"
+          >
+            <el-option
+              v-for="item in deviceTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item
           label="测点类型"
           prop="pointTypes"
@@ -423,9 +442,14 @@ export default {
     handleRoomChange(n) {
       pointListAll({ roomCode: n }).then((r) => (this.pointOpts = r.data));
       deviceListAll({ roomCode: n }).then((r) => (this.deviceOpts = r.data));
-      pointTypeListAll({ roomCode: n }).then((r) => (this.pointTypeOpts = r.data));
       deviceGroupListAll({ roomCode: n }).then(
         (r) => (this.deviceGroupOpts = r.data)
+      );
+    },
+    handleDeviceTypeChange(n) {
+      this.dialog.forms.pointTypes = [];
+      pointTypeListAll({ deviceTypeId: n }).then(
+        (r) => (this.pointTypeOpts = r.data)
       );
     },
     dialogSubmit() {
@@ -469,17 +493,17 @@ export default {
         const r = await alertMaskQueryById({ id: row.id });
         this.dialog.forms = r.data;
         this.floorOpts = r.data.spaceFloorList;
-        this.dialog.forms.floorCode = r.data.spaceFloorList.find(
-          (i) => i.has
-        ).floorCode;
+        const floor = r.data.spaceFloorList.find((i) => i.has);
+        if (floor) this.dialog.forms.floorCode = floor.floorCode;
 
         this.roomOpts = r.data.spaceRoomList;
-        this.dialog.forms.roomCode = r.data.spaceRoomList.find(
-          (i) => i.has
-        ).roomCode;
+        const room = r.data.spaceRoomList.find((i) => i.has);
+        if (room) this.dialog.forms.roomCode = room.roomCode;
 
-        this.deviceTypeOpts = r.data.deviceTypes;
-        this.dialog.forms.deviceTypes =
+        if (r.data.deviceTypes) this.deviceTypeOpts = r.data.deviceTypes;
+        else deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
+
+        this.dialog.forms.deviceTypes = this.dialog.forms.deviceTypes2 =
           r.data.deviceTypes &&
           r.data.deviceTypes.filter((i) => i.has).map((i) => i.id);
 

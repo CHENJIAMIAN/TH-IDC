@@ -7,18 +7,16 @@
       class="board-column-content"
       :set-data="setData"
     >
-      <template v-for="(element, index) in list">
-        <div
-          :key="element.id + Math.random()"
-          @click="list.splice(index, 1)"
-          title="点击移除"
-          class="board-item"
-        >
-          {{ element.name }}
-          <!-- {{ element.id }} -->
-        </div>
-        {{ index === list.length - 1 ? "" : "➡" }}
-      </template>
+      <div
+        v-for="(element, index) in list"
+        :key="index + Math.random()"
+        @click="list.splice(index, 1)"
+        title="点击移除"
+      >
+        <span class="board-item">{{ element.name }}</span>
+        <!-- {{ element.id }} -->
+        <span style="color: #31c6f1;">{{ index === list.length - 1 ? "" : "➡" }}</span>
+      </div>
     </draggable>
   </div>
 </template>
@@ -46,6 +44,9 @@ export default {
     },
   },
   methods: {
+    log: function (evt) {
+      window.console.log(evt);
+    },
     setData(dataTransfer) {
       // to avoid Firefox bug
       // Detail see : https://github.com/RubaXa/Sortable/issues/1012
@@ -84,10 +85,11 @@ export default {
 
     .board-item {
       cursor: pointer;
-      border-color: rgba(45, 180, 221, 0.96);
       border: 1px solid;
       padding: 0px 10px;
       border-radius: 5px;
+      border-color: #31c6f1;
+      color: #31c6f1;
     }
   }
 }

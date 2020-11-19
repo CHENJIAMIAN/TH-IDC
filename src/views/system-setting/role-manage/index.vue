@@ -47,15 +47,15 @@
       <el-table-column label="操作" align="center" width="280">
         <template slot-scope="{ row }">
           <el-button
-            title="分配房间"
-            icon="el-icon-circle-plus-outline"
+            title="绑定房间"
+            icon="el-icon-bdfj"
             type="primary"
             plain
             @click="handleFJDialog(row)"
           ></el-button>
           <el-button
-            title="分配权限"
-            icon="el-icon-circle-plus"
+            title="绑定权限"
+            icon="el-icon-bdqx"
             type="primary"
             plain
             @click="handleQXDialog(row)"
@@ -436,6 +436,22 @@ export default {
         margin-right: 30px;
       }
     }
+  }
+
+  .el-icon-bdfj {
+    background: url("../../../assets/img/bdfj.png");
+    width: 14px;
+    height: 12px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .el-icon-bdqx {
+    background: url("../../../assets/img/bdqx.png");
+    width: 14px;
+    height: 12px;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 }
 </style>

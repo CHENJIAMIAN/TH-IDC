@@ -116,6 +116,12 @@
             <el-option label="取消" :value="3" />
           </el-select>
         </el-form-item>
+        <el-form-item prop="isRead">
+          <el-select v-model="filterForm.isRead" placeholder="是否已读">
+            <el-option label="未读" :value="0" />
+            <el-option label="已读" :value="1" />
+          </el-select>
+        </el-form-item>
         <!-- <el-form-item prop="resumeStatus">
           <el-select
             clearable
@@ -169,19 +175,19 @@
       border
       :data="listData"
     >
-      <el-table-column label="位置" width="200">
+      <el-table-column label="位置" width="250">
         <template slot-scope="{ row }">
-          <div>楼层编号:{{ row.floorCode || "无" }}</div>
-          <div>房间编号:{{ row.roomCode || "无" }}</div>
-          <div>设备组编号:{{ row.deviceGroupCode || "无" }}</div>
-          <div>设备编号:{{ row.deviceCode || "无" }}</div>
+          <div>楼层编号:{{ row.floorName || "无" }}</div>
+          <div>房间编号:{{ row.roomName || "无" }}</div>
+          <div>设备组编号:{{ row.deviceGroupName || "无" }}</div>
+          <div>设备编号:{{ row.deviceName || "无" }}</div>
         </template>
       </el-table-column>
       <el-table-column label="测点" width="200">
         <template slot-scope="{ row }">
           <div>测点编号:{{ row.pointCode || "无" }}</div>
-          <div>测点名称:{{ row.pointName || "无" }}</div>
-        </template>ch
+          <div>测点名称:{{ row.pointName || "无" }}</div> </template
+        >ch
       </el-table-column>
       <el-table-column label="数值">
         <template slot-scope="{ row }">
@@ -239,7 +245,7 @@
       </el-table-column>
       <el-table-column prop="resumeTime" label="恢复时间" /> -->
 
-      <el-table-column label="操作" align="center" width="200">
+      <el-table-column label="操作" align="center" width="250">
         <template slot-scope="{ row }">
           <el-button
             v-if="row.status == 1"
@@ -256,6 +262,12 @@
             type="primary"
             plain
             @click="handleDialog(row, 2)"
+          ></el-button>
+          <el-button
+            icon="el-icon-view"
+            type="primary"
+            plain
+            @click="handleDetailDialog(row)"
           ></el-button>
         </template>
       </el-table-column>
@@ -311,6 +323,102 @@
         >
       </div>
     </el-dialog>
+
+    <!-- 详情弹窗 -->
+    <el-dialog :visible.sync="detailDialog.visible" top="25vh" center>
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">详情</span>
+        <img src="@/assets/img/hl.png" />
+      </div>
+      <el-form
+        :model="detailDialog.forms"
+        :rules="detailDialog.rules"
+        ref="detailDialogForm"
+        class="log-form"
+        label-width="150px"
+      >
+        <el-form-item label="楼层编号 : " prop="floorCode">
+          {{ detailDialog.forms.floorCode || "无" }}
+        </el-form-item>
+        <el-form-item label="房间编号 : " prop="roomCode">
+          {{ detailDialog.forms.roomCode || "无" }}
+        </el-form-item>
+        <el-form-item label="设备组编号 : " prop="deviceGroupCode">
+          {{ detailDialog.forms.deviceGroupCode || "无" }}
+        </el-form-item>
+        <el-form-item label="设备编号 : " prop="deviceCode">
+          {{ detailDialog.forms.deviceCode || "无" }}
+        </el-form-item>
+        <el-form-item label="测点编号 : " prop="pointCode">
+          {{ detailDialog.forms.pointCode || "无" }}
+        </el-form-item>
+        <el-form-item label="测点名称 : " prop="pointName">
+          {{ detailDialog.forms.pointName || "无" }}
+        </el-form-item>
+        <el-form-item label="触发值 : " prop="triggerValue">
+          {{ detailDialog.forms.triggerValue || "无" }}
+        </el-form-item>
+        <el-form-item label="当前值 : " prop="currentValue">
+          {{ detailDialog.forms.currentValue || "无" }}
+        </el-form-item>
+        <el-form-item label="通知等级id : " prop="noteLevel">
+          {{ detailDialog.forms.noteLevel || "无" }}
+        </el-form-item>
+        <el-form-item label="通知内容 : " prop="noteContent">
+          {{ detailDialog.forms.noteContent || "无" }}
+        </el-form-item>
+        <el-form-item label="状态 : " prop="status">
+          <template>
+            <div v-if="detailDialog.forms.status == 1">待处理</div>
+            <div v-if="detailDialog.forms.status == 2">已受理</div>
+            <div v-if="detailDialog.forms.status == 3">取消</div>
+          </template>
+        </el-form-item>
+        <el-form-item label="创建时间 : " prop="createTime">
+          {{ detailDialog.forms.createTime || "无" }}
+        </el-form-item>
+        <el-form-item label="受理时间 : " prop="handlerTime">
+          {{ detailDialog.forms.handlerTime || "无" }}
+        </el-form-item>
+        <el-form-item label="受理人ID : " prop="handlerUserId">
+          {{ detailDialog.forms.handlerUserId || "无" }}
+        </el-form-item>
+        <el-form-item label="受理备注 : " prop="handlerRemark">
+          {{ detailDialog.forms.handlerRemark || "无" }}
+        </el-form-item>
+        <el-form-item label="恢复状态 : " prop="resumeStatus">
+          <template>
+            <div v-if="detailDialog.forms.resumeStatus == 1">已经恢复</div>
+            <div v-else>未恢复</div>
+          </template>
+        </el-form-item>
+        <el-form-item label="恢复时间 : " prop="resumeTime">
+          {{ detailDialog.forms.resumeTime || "无" }}
+        </el-form-item>
+        <el-form-item label="受理人 : " prop="handlerUserName">
+          {{ detailDialog.forms.handlerUserName || "无" }}
+        </el-form-item>
+        <el-form-item label="楼层名称 : " prop="floorName">
+          {{ detailDialog.forms.floorName || "无" }}
+        </el-form-item>
+        <el-form-item label="房间名称 : " prop="roomName">
+          {{ detailDialog.forms.roomName || "无" }}
+        </el-form-item>
+        <el-form-item label="设备组名称 : " prop="deviceGroupName">
+          {{ detailDialog.forms.deviceGroupName || "无" }}
+        </el-form-item>
+        <el-form-item label="设备名称 : " prop="deviceName">
+          {{ detailDialog.forms.deviceName || "无" }}
+        </el-form-item>
+
+        <!-- <el-form-item label="日志类型 : " prop="logType">
+          <template>
+            <div v-if="detailDialog.forms.logType == 1">正常日志</div>
+            <div v-if="detailDialog.forms.logType == 2">异常日志</div>
+          </template>
+        </el-form-item> -->
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -330,11 +438,11 @@ import {
   pointAdd,
 } from "@/api/resource-manage.js";
 import {
-  // 没用到
   alertNotificationEditResumeStatus,
   alertNotificationEditStatus,
   alertNotificationListByPage,
   alertLevelListAll,
+  alertNotificationQueryById,
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination },
@@ -363,6 +471,7 @@ export default {
         resumeStatus: null,
         startDate: null,
         endDate: null,
+        isRead: 0,
         startDate_endDate: [],
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
@@ -384,6 +493,15 @@ export default {
           resumeStatus: [
             { required: true, trigger: "blur", message: "请输入" },
           ],
+        },
+      },
+
+      detailDialog: {
+        id: "",
+        visible: false,
+        forms: {},
+        rules: {
+          // name: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
     };
@@ -442,6 +560,16 @@ export default {
   },
   mounted() {},
   methods: {
+    async handleDetailDialog(row) {
+      if (row) {
+        // 编辑
+        const r = await alertNotificationQueryById({ id: row.id });
+        this.detailDialog.forms = r.data;
+      } else {
+        this.detailDialog.forms = {};
+      }
+      this.detailDialog.visible = true;
+    },
     handleRoomChange(n) {
       this.$set(this.filterForm, "deviceGroupCode", "");
       this.$set(this.filterForm, "deviceCode", "");
@@ -537,5 +665,13 @@ export default {
 .head {
   display: grid;
   justify-content: end;
+}
+
+::v-deep {
+  .log-form {
+    .el-form-item {
+      margin-bottom: 10px;
+    }
+  }
 }
 </style>

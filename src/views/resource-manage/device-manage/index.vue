@@ -60,7 +60,10 @@
           <el-input v-model.trim="filterForm.name" placeholder="设备名称" />
         </el-form-item>
         <el-form-item prop="deviceCode">
-          <el-input v-model.trim="filterForm.deviceCode" placeholder="设备编号" />
+          <el-input
+            v-model.trim="filterForm.deviceCode"
+            placeholder="设备编号"
+          />
         </el-form-item>
         <el-form-item prop="deviceType">
           <el-select
@@ -131,7 +134,7 @@
         <template slot-scope="{ row }">
           <el-button
             title="绑定测点"
-            icon="el-icon-circle-plus-outline"
+            icon="el-icon-bdcd"
             type="primary"
             plain
             @click="handleCDDialog(row)"
@@ -172,9 +175,10 @@
         label-width="100px"
       >
         <el-form-item label="设备编号" prop="deviceCode">
-          <el-input 
+          <el-input
             :disabled="!!dialog.forms.id"
-          v-model="dialog.forms.deviceCode"></el-input>
+            v-model="dialog.forms.deviceCode"
+          ></el-input>
         </el-form-item>
         <el-form-item label="设备名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
@@ -516,5 +520,16 @@ export default {
 .head {
   display: grid;
   justify-content: end;
+}
+
+::v-deep {
+  .el-icon-bdcd {
+    background: url("../../../assets/img/bdcd.png");
+    width: 14px;
+    height: 12px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: -5px;
+  }
 }
 </style>

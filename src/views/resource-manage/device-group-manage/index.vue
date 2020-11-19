@@ -24,7 +24,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="roomCode" v-show="filterForm.floorCode">
+        <el-form-item prop="roomCode">
           <el-select clearable v-model="filterForm.roomCode" placeholder="房间">
             <el-option
               v-for="item in roomOpts"
@@ -115,7 +115,7 @@
         <template slot-scope="{ row }">
           <el-button
             title="绑定设备"
-            icon="el-icon-circle-plus"
+            icon="el-icon-bdsb"
             type="primary"
             plain
             @click="handleSBDialog(row)"
@@ -251,9 +251,10 @@
         label-width="100px"
       >
         <el-form-item label="设备组编号" prop="deviceGroupCode">
-          <el-input 
+          <el-input
             :disabled="!!dialog.forms.id"
-          v-model="dialog.forms.deviceGroupCode"></el-input>
+            v-model="dialog.forms.deviceGroupCode"
+          ></el-input>
         </el-form-item>
         <el-form-item label="设备组名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
@@ -851,7 +852,7 @@ export default {
   max-height: 100%;
   justify-self: center;
   align-self: center;
-  border-radius:5px;
+  border-radius: 5px;
 }
 
 ::v-deep {
@@ -919,6 +920,14 @@ export default {
       height: 170px;
       overflow: auto;
     }
+  }
+
+  .el-icon-bdsb {
+    background: url("../../../assets/img/bdsb.png");
+    width: 14px;
+    height: 12px;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 }
 </style>

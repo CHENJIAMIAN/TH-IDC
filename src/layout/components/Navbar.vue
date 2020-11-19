@@ -21,7 +21,9 @@
       <!-- </template> -->
 
       <div class="avatar-wrapper">
-        <a title="消息"><img src="@/assets/img/xx.png" /></a>
+        <el-badge :value="notifyCount" class="item" :hidden="notifyCount < 1">
+          <a title="消息"><img src="@/assets/img/xx.png" /></a>
+        </el-badge>
         <el-dropdown
           class="avatar-container right-menu-item hover-effect"
           trigger="click"
@@ -52,6 +54,8 @@ import { mapGetters } from "vuex";
 import ChangePassword from "@/components/ChangePassword.vue";
 import UserInfo from "@/components/UserInfo.vue";
 import Cookies from "js-cookie";
+
+import { alertNotificationGetAllCount } from "@/api/engineer-config.js";
 export default {
   components: {
     ChangePassword,
@@ -59,6 +63,7 @@ export default {
   },
   data() {
     return {
+      notifyCount: "",
       realName: "",
     };
   },
@@ -66,6 +71,9 @@ export default {
     ...mapGetters(["sidebar", "avatar", "device"]),
   },
   created() {
+    alertNotificationGetAllCount().then(
+      (r) => (this.notifyCount = r.data.count)
+    );
     this.realName = Cookies.get("realName");
   },
   methods: {
@@ -90,11 +98,13 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 50px;
   overflow: hidden;
   -webkit-box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   float: right;
+  top: 10px;
+  position: absolute;
+  right: 0;
 
   .hamburger-container {
     line-height: 46px;
@@ -142,13 +152,13 @@ export default {
     }
 
     .avatar-wrapper {
-      margin-top: 5px;
+      margin-top: 10px;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       justify-items: center;
       align-items: center;
 
-      img:hover{
+      img:hover {
         filter: hue-rotate(206deg);
       }
 
@@ -185,7 +195,7 @@ export default {
   color: #37d3ff;
   .name {
     transform: translate(0px, -5px);
-    &:hover{
+    &:hover {
       filter: hue-rotate(206deg);
     }
   }

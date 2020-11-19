@@ -172,11 +172,6 @@
           {{ dialog.forms.takeTime }}
         </el-form-item>
       </el-form>
-      <!-- <div slot="footer" style="text-align: center">
-        <el-button style="width: 200px" type="primary" @click="dialogSubmit"
-          >保 存</el-button
-        >
-      </div> -->
     </el-dialog>
   </div>
 </template>

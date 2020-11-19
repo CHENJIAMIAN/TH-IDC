@@ -81,6 +81,11 @@ export function alertNotificationEditResumeStatus(data) { return request({ url: 
 export function alertNotificationEditStatus(data) { return request({ url: '/admin/alert/alertNotification/editStatus', method: 'post', data }) }
 //分页查看告警通知
 export function alertNotificationListByPage(data) { return request({ url: '/admin/alert/alertNotification/listByPage', method: 'post', data }) }
+// 获取所有未读告警数
+export function alertNotificationGetAllCount(data) { return request({ url: '/admin/alert/alertNotification/getAllCount', method: 'post', data }) }
+// 查看告警通知详情
+export function alertNotificationQueryById(data) { return request({ url: '/admin/alert/alertNotification/queryById', method: 'post', data }) }
+
 
 // 分页查看
 export function alertRuleTemplateListByPage(data) { return request({ url: '/admin/alert/alertRuleTemplate/listByPage', method: 'post', data }) }
@@ -133,7 +138,6 @@ export function alertStrategyDelete(data) { return request({ url: '/admin/alert/
 export function alertStrategyListAll(data) { return request({ url: '/admin/alert/alertStrategy/listAll', method: 'post', data }) }
 // 获取告警策略列表 带分页
 export function alertStrategyListByPage(data) { return request({ url: '/admin/alert/alertStrategy/listByPage', method: 'post', data }) }
-
 
 
 

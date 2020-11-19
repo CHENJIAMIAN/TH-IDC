@@ -10,7 +10,10 @@
           :model="filterForm"
         >
           <el-form-item prop="name">
-            <el-input v-model.trim="filterForm.name" placeholder="测点类型名称" />
+            <el-input
+              v-model.trim="filterForm.name"
+              placeholder="测点类型名称"
+            />
           </el-form-item>
           <el-form-item prop="deviceTypeId">
             <el-select
@@ -99,13 +102,28 @@
               style="pointer-events: none"
               size="mini"
             >
-              <div style="display: flex; justify-content: space-around">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-around;
+                  margin-bottom: -20px;
+                "
+              >
                 <el-form-item label="测点类型名称" prop="name">
-                  <el-input v-model="cdForm.forms.name"></el-input>
+                  <!-- <el-input v-model="cdForm.forms.name"></el-input> -->
+                  {{ cdForm.forms.name }}
                 </el-form-item>
 
                 <el-form-item label="设备类型" prop="deviceTypeId">
-                  <el-select
+                  {{
+                    deviceTypeOpts.find(
+                      (i) => i.id == cdForm.forms.deviceTypeId
+                    ) &&
+                    deviceTypeOpts.find(
+                      (i) => i.id == cdForm.forms.deviceTypeId
+                    ).name
+                  }}
+                  <!-- <el-select
                     v-model="cdForm.forms.deviceTypeId"
                     popper-class="three-column"
                   >
@@ -115,24 +133,32 @@
                       :label="item.name"
                       :value="item.id"
                     />
-                  </el-select>
+                  </el-select> -->
                 </el-form-item>
+
                 <el-form-item label="值类型" prop="valueType">
-                  <el-select v-model="cdForm.forms.valueType">
+                  {{
+                    valueTypeOpts.find((i) => i.id == cdForm.forms.valueType) &&
+                    valueTypeOpts.find((i) => i.id == cdForm.forms.valueType)
+                      .name
+                  }}
+                  <!-- <el-select v-model="cdForm.forms.valueType">
                     <el-option
                       v-for="item in valueTypeOpts"
                       :key="item.id"
                       :label="item.name"
                       :value="item.id"
                     />
-                  </el-select>
+                  </el-select> -->
                 </el-form-item>
 
                 <el-form-item label="单位" prop="units">
-                  <el-input v-model="cdForm.forms.units"></el-input>
+                  <!-- <el-input v-model="cdForm.forms.units"></el-input> -->
+                  {{ cdForm.forms.units || "无" }}
                 </el-form-item>
                 <el-form-item label="字段名" prop="columnName">
-                  <el-input v-model="cdForm.forms.columnName"></el-input>
+                  <!-- <el-input v-model="cdForm.forms.columnName"></el-input> -->
+                  {{ cdForm.forms.columnName || "无" }}
                 </el-form-item>
               </div>
             </el-form>
@@ -274,6 +300,7 @@
               >
               <el-button
                 type="primary"
+                :disabled="cdForm.forms.alertRuleList[index].diabledSave"
                 size="mini"
                 @click="
                   dialogSubmitRule(cdForm.forms.alertRuleList[index].id, index)
@@ -287,7 +314,9 @@
             icon="el-icon-plus"
             type="primary"
             size="medium"
-            @click="cdForm.forms.alertRuleList.push({ status: 1 })"
+            @click="
+              cdForm.forms.alertRuleList.push({ status: 1, diabledSave: false })
+            "
           >
             添加规则
           </el-button>
@@ -295,9 +324,6 @@
       </div>
 
       <div style="text-align: center; transform: translate(0px, 10px)">
-        <!-- <el-button style="width: 200px" type="primary" @click="dialogSubmit"
-          >保 存</el-button
-        > -->
         <el-button style="width: 200px" @click="handleClose">关闭</el-button>
       </div>
     </div>
@@ -355,7 +381,7 @@ export default {
 
       cdForm: {
         forms: {
-          alertRuleList: [{ status: 1 }],
+          alertRuleList: [{ status: 1, diabledSave: false }],
         },
         rules: {},
         ruleForm: {
@@ -390,9 +416,9 @@ export default {
               },
             ],
             // alertType: [{ required: true, trigger: "blur", message: "请输入" }],
-            // alertLevelId: [
-            //   { required: true, trigger: "blur", message: "请输入" },
-            // ],
+            alertLevelId: [
+              { required: true, trigger: "blur", message: "请输入" },
+            ],
             filterTime: [
               { required: false, trigger: "blur", validator: isIntNumber },
             ],
@@ -427,6 +453,10 @@ export default {
       this.$refs[`ruleForm${index}`][0].validate((valid, obj) => {
         if (valid) {
           let callAPI = null;
+          const rule = this.cdForm.forms.alertRuleList[index];
+          this.$set(rule, "diabledSave", true);
+          if (rule.filterTime === "") delete rule.filterTime;
+          if (rule.continueTime === "") delete rule.continueTime;
           if (id) {
             delete this.cdForm.forms.alertRuleList[index].createTime;
             callAPI = alertRuleEdit;
@@ -436,33 +466,17 @@ export default {
           this.cdForm.forms.alertRuleList[
             index
           ].pointTypeId = this.cdForm.forms.id;
-          callAPI(this.cdForm.forms.alertRuleList[index]).then((res) => {
-            this.$message.success("操作成功!");
-            // this.dialogVisible = false;
-            // this.$refs["dialogForm"].resetFields();
-            // this.getList();
-          });
-        } else {
-          return false;
-        }
-      });
-    },
-    dialogSubmit() {
-      return;
-      this.$refs["dialogForm"].validate((valid, obj) => {
-        if (valid) {
-          let callAPI = null;
-          if (this.cdForm.forms.alertRuleList[index].id) {
-            callAPI = alertRuleEdit;
-          } else {
-            callAPI = alertRuleAdd;
-          }
-          callAPI(this.cdForm.ruleForm.forms).then((res) => {
-            this.$message.success("操作成功!");
-            this.$refs["dialogForm"].resetFields();
-            this.dialogVisible = false;
-            this.getList();
-          });
+          callAPI(this.cdForm.forms.alertRuleList[index])
+            .then((res) => {
+              rule.diabledSave =false;
+              this.$message.success("操作成功!");
+              // this.dialogVisible = false;
+              // this.$refs["dialogForm"].resetFields();
+              // this.getList();
+            })
+            .catch((e) => {
+              rule.diabledSave =false;
+            });
         } else {
           return false;
         }
@@ -488,7 +502,9 @@ export default {
         alertRuleListByPointTypeId({ id: row.id }).then((r) => {
           this.cdForm.forms = r.data;
           if (this.cdForm.forms.alertRuleList.length < 1) {
-            this.cdForm.forms.alertRuleList = [{}]; //默认显示一个
+            this.cdForm.forms.alertRuleList = [
+              { status: 1, diabledSave: false },
+            ]; //默认显示一个
           }
         });
       }
@@ -572,7 +588,7 @@ export default {
   }
   .custom-rule-form {
     .el-form-item--mini.el-form-item {
-      margin-bottom: 5px;
+      margin-bottom: 13px;
     }
   }
 

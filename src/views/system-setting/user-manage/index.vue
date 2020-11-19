@@ -124,7 +124,10 @@
         label-width="60px"
       >
         <el-form-item label="账号" prop="userName">
-          <el-input v-model="dialog.forms.userName"></el-input>
+          <el-input
+            :disabled="!!dialog.forms.id"
+            v-model="dialog.forms.userName"
+          ></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password" v-if="!dialog.forms.id">
           <el-input v-model="dialog.forms.password"></el-input>
