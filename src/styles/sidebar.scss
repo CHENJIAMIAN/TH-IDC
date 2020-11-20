@@ -3,6 +3,7 @@
 #app {
   .main-container {
     margin-left: $sideBarWidth;
+    transition: margin-left 0.28s;
     position: relative;
     height: calc(100% - #{$headhei});
   }

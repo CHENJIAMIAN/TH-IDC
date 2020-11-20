@@ -28,12 +28,13 @@
       <sidebar v-show="sidebar.opened" />
     </div>
     <div class="main-container">
-      <i
-        v-show="!$route.path.includes('/room')"
+      <img
+        :src="sidebar.showSide ?  require('@/assets/img/shou.png'):require('@/assets/img/fang.png')"
+        v-show="!$route.path.includes('/room/')"
         title="切换菜单显示"
-        class="el-icon-s-unfold side-toggler"
+        class="side-toggler"
         @click="$store.commit('app/TOGGLE_SIDE')"
-      ></i>
+      ></img>
       <app-main />
       <!-- <right-panel v-if="showSettings">
         <settings />
@@ -119,6 +120,7 @@ export default {
     cursor: pointer;
     color: #31c6f1;
     z-index: 1;
+    width: 1rem;
   }
 
   .side {

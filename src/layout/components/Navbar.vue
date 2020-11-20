@@ -22,7 +22,9 @@
 
       <div class="avatar-wrapper">
         <el-badge :value="notifyCount" class="item" :hidden="notifyCount < 1">
-          <a title="消息"><img src="@/assets/img/xx.png" /></a>
+          <a title="告警通知" @click="drawer = true"
+            ><img src="@/assets/img/xx.png"
+          /></a>
         </el-badge>
         <el-dropdown
           class="avatar-container right-menu-item hover-effect"
@@ -46,6 +48,10 @@
         /></a>
       </div>
     </div>
+
+    <el-drawer title="告警通知" :visible.sync="drawer" direction="btt"  size="90%">
+      <alert-notify />
+    </el-drawer>
   </div>
 </template>
 
@@ -54,15 +60,17 @@ import { mapGetters } from "vuex";
 import ChangePassword from "@/components/ChangePassword.vue";
 import UserInfo from "@/components/UserInfo.vue";
 import Cookies from "js-cookie";
-
+import alertNotify from "@/views/engineer-config/alert-notify/index";
 import { alertNotificationGetAllCount } from "@/api/engineer-config.js";
 export default {
   components: {
     ChangePassword,
     UserInfo,
+    alertNotify,
   },
   data() {
     return {
+      drawer: false,
       notifyCount: "",
       realName: "",
     };

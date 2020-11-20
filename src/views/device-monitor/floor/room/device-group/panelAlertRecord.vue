@@ -1,175 +1,7 @@
 <template>
-  <div class="app-container menu-manage">
-    <!-- 筛选条件 -->
-    <div class="head">
-      <el-form
-        ref="filterForm"
-        :inline="true"
-        size="medium"
-        :model="filterForm"
-        style="
-          display: grid;
-          grid-auto-flow: column;
-          overflow-x: auto;
-          overflow-y: hidden;
-        "
-      >
-        <!-- v-show="!$route.name === 'device-group'" -->
-        <el-form-item prop="floorCode">
-          <el-select
-            clearable
-            v-model="filterForm.floorCode"
-            @change="
-              $set(filterForm, 'roomCode', '');
-              $set(filterForm, 'deviceGroupCode', '');
-              $set(filterForm, 'deviceCode', '');
-            "
-            placeholder="楼层"
-          >
-            <el-option
-              v-for="item in floorOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.floorCode"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="roomCode">
-          <el-select
-            clearable
-            v-model="filterForm.roomCode"
-            @change="handleRoomChange"
-            placeholder="房间"
-          >
-            <el-option
-              v-for="item in roomOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.roomCode"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="deviceGroupCode">
-          <el-select
-            clearable
-            v-model="filterForm.deviceGroupCode"
-            placeholder="设备组"
-            @change="$set(filterForm, 'deviceCode', '')"
-          >
-            <el-option
-              v-for="item in deviceGroupOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.deviceGroupCode"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="deviceCode">
-          <el-select
-            clearable
-            v-model="filterForm.deviceCode"
-            placeholder="设备"
-          >
-            <el-option
-              v-for="item in deviceOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.deviceCode"
-            />
-          </el-select>
-        </el-form-item>
-        <!-- <el-form-item prop="pointCode">
-          <el-select
-            clearable
-            v-model="filterForm.pointCode"
-            placeholder="测点"
-          >
-            <el-option
-              v-for="item in pointOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item> -->
-        <el-form-item prop="name">
-          <el-input v-model.trim="filterForm.name" placeholder="测点名称" />
-        </el-form-item>
-        <el-form-item prop="noteLevel">
-          <el-select
-            clearable
-            v-model="filterForm.noteLevel"
-            placeholder="通知等级"
-          >
-            <el-option
-              v-for="item in alertLevelOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="status">
-          <el-select clearable v-model="filterForm.status" placeholder="状态">
-            <el-option label="待处理" :value="1" />
-            <el-option label="已受理" :value="2" />
-            <el-option label="取消" :value="3" />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="isRead">
-          <el-select v-model="filterForm.isRead" placeholder="是否已读">
-            <el-option label="未读" :value="0" />
-            <el-option label="已读" :value="1" />
-          </el-select>
-        </el-form-item>
-        <!-- <el-form-item prop="resumeStatus">
-          <el-select
-            clearable
-            v-model="filterForm.resumeStatus"
-            placeholder="恢复状态"
-          >
-            <el-option label="已经恢复" :value="1" />
-            <el-option label="未恢复" :value="2" />
-          </el-select>
-        </el-form-item> -->
-
-        <el-form-item prop="startDate_endDate">
-          <el-date-picker
-            style="width: 240px"
-            v-model="filterForm.startDate_endDate"
-            type="daterange"
-            placeholder="时间范围"
-            value-format="yyyy-MM-dd"
-          />
-        </el-form-item>
-
-        <el-form-item>
-          <el-button
-            type="primary"
-            icon="el-icon-search"
-            @click="handleQuery"
-          ></el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            icon="el-icon-refresh"
-            plain
-            @click="handleReset('filterForm')"
-            >重置</el-button
-          >
-        </el-form-item>
-        <!-- <el-form-item>
-          <el-button type="primary" size="medium" @click="handleDialog()">
-            <i class="el-icon-plus" />
-          </el-button>
-        </el-form-item> -->
-      </el-form>
-    </div>
-
+  <div class="menu-manage">
     <el-table
       style="width: 100%"
-      height="100%"
       stripe
       v-loading="listLoading"
       border
@@ -220,7 +52,7 @@
         width="170"
         align="center"
       />
-      <el-table-column label="受理信息">
+      <el-table-column label="受理信息" width="150">
         <template slot-scope="{ row }">
           <div>受理人:{{ row.handlerUserName || "无" }}</div>
           <div>受理时间:{{ row.handlerTime || "无" }}</div>
@@ -245,7 +77,7 @@
       </el-table-column>
       <el-table-column prop="resumeTime" label="恢复时间" /> -->
 
-      <el-table-column label="操作" align="center" width="250">
+      <el-table-column label="操作" align="center" width="220">
         <template slot-scope="{ row }">
           <el-button
             v-if="row.status == 1"
@@ -446,6 +278,12 @@ import {
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination },
+  props: {
+    deviceGroupCode: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       alertLevelOpts: [],
@@ -507,6 +345,13 @@ export default {
     };
   },
   watch: {
+    deviceGroupCode: {
+      immediate: true,
+      handler(n) {
+        // this.filterForm.deviceGroupCode = n;
+        this.handleQuery();
+      },
+    },
     "filterForm.startDate_endDate"(n, o) {
       this.filterForm.startDate = n ? n[0] : null;
       this.filterForm.endDate = n ? n[1] : null;
@@ -549,14 +394,12 @@ export default {
     },
   },
   created() {
-    spaceFloorListAll().then((r) => (this.floorOpts = r.data));
+    // spaceFloorListAll().then((r) => (this.floorOpts = r.data));
     // spaceRoomListAll().then((r) => (this.roomOpts = r.data));
     // deviceGroupListAll().then((r) => (this.deviceGroupOpts = r.data));
-    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
-    pointTypeListAll().then((r) => (this.pointAllTypeOpts = r.data));
+    // deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
+    // pointTypeListAll().then((r) => (this.pointAllTypeOpts = r.data));
     alertLevelListAll().then((r) => (this.alertLevelOpts = r.data));
-    // if(this.$route.name === "device-group") this.filterForm.deviceGroupCode =  this.$route.query.deviceGroupCode;
-    this.handleQuery();
   },
   mounted() {},
   methods: {
@@ -658,8 +501,7 @@ export default {
 <style lang="scss" scoped>
 .menu-manage {
   display: grid;
-  grid-template-rows: 60px auto 55px;
-  // background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
+  grid-template-rows: auto 55px;
   height: 100%;
 }
 .head {

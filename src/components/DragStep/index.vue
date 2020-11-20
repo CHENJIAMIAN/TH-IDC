@@ -15,7 +15,9 @@
       >
         <span class="board-item">{{ element.name }}</span>
         <!-- {{ element.id }} -->
-        <span style="color: #31c6f1;">{{ index === list.length - 1 ? "" : "➡" }}</span>
+        <span style="color: #31c6f1" v-if="hasArrow">{{
+          index === list.length - 1 ? "" : "➡"
+        }}</span>
       </div>
     </draggable>
   </div>
@@ -30,6 +32,10 @@ export default {
     draggable,
   },
   props: {
+    hasArrow: {
+      type: Boolean,
+      default: false,
+    },
     options: {
       type: Object,
       default() {
@@ -62,6 +68,7 @@ export default {
   border-radius: 3px;
   display: grid;
   grid-auto-flow: column;
+      height: 100%;
 
   .board-column-header {
     overflow: hidden;
@@ -82,6 +89,8 @@ export default {
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
+    font-size: 1.2rem;
+        height: 100%;
 
     .board-item {
       cursor: pointer;

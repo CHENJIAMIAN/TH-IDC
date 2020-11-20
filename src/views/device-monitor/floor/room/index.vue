@@ -114,15 +114,11 @@ export default {
         roomCode,
         roomImage,
         roomType,
-        temperature,
-        alarmCount,
         deviceGroupList,
       } = r.data;
       if (!deviceGroupList) {
         deviceGroupList = [];
         Object.assign(this, {
-          temperature,
-          alarmCount,
           roomImage,
           deviceGroupList,
         });
@@ -132,8 +128,9 @@ export default {
       ) {
         // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
         const deviceGroup = deviceGroupList[0];
+        // deviceGroupName包含#号,需要用encodeURIComponent编码一下
         this.$router.push(
-          `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${deviceGroup.deviceGroupCode}`
+          `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${encodeURIComponent(deviceGroup.name)}?roomImage=${roomImage}&deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${deviceGroup.deviceGroupCode}`
         );
       }
     });

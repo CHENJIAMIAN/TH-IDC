@@ -2,7 +2,7 @@
   <div class="app-container auth-manage">
     <!-- 筛选条件 -->
     <div class="page1" v-if="!dialog.visible">
-      <div class="head">
+      <!-- <div class="head">
         <el-form
           ref="filterForm"
           :inline="true"
@@ -11,22 +11,21 @@
           style="display: grid; grid-auto-flow: column"
         >
           <el-form-item>
-            <!-- <el-button
+            <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
             >重置</el-button
-          > -->
+          >
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="medium" @click="handleDialog()">
-              <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
               <i class="el-icon-plus" />
             </el-button>
           </el-form-item>
         </el-form>
-      </div>
+      </div> -->
 
       <!-- 列表 -->
       <el-table
@@ -105,12 +104,6 @@
               plain
               @click="handleDialog(row)"
             ></el-button>
-            <el-button
-              icon="el-icon-delete"
-              type="primary"
-              plain
-              @click="handleDel(row.id)"
-            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -131,96 +124,84 @@
           ref="dialogForm"
           label-width="100px"
         >
-          <el-form-item label="告警等级" prop="levelId">
-            <el-select filterable v-model="dialog.forms.levelId">
-              <el-option
-                v-for="item in alertLevelOpts"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
+          <div style="text-align: center">
+            <el-form-item
+              style="display: inline-block"
+              label="告警等级"
+              prop="levelId"
+            >
+              <el-select disabled filterable v-model="dialog.forms.levelId">
+                <el-option
+                  v-for="item in alertLevelOpts"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </div>
+
+          <div class="drag-content">
+            <div class="left">
+              <el-form-item label="步骤1" prop="step1">
+                <DragStep
+                  hasArrow
+                  v-if="dialog.visible"
+                  :key="1"
+                  :list="dialog.forms.step1"
+                  group="mission"
+                  x
+                  class="kanban todo"
+                />
+              </el-form-item>
+              <el-form-item label="步骤2" prop="step2">
+                <DragStep
+                  hasArrow
+                  v-if="dialog.visible"
+                  :key="2"
+                  :list="dialog.forms.step2"
+                  group="mission"
+                  class="kanban"
+                />
+              </el-form-item>
+              <el-form-item label="步骤3" prop="step3">
+                <DragStep
+                  hasArrow
+                  v-if="dialog.visible"
+                  :key="3"
+                  :list="dialog.forms.step3"
+                  group="mission"
+                  class="kanban done"
+                />
+              </el-form-item>
+              <el-form-item label="步骤4" prop="step4">
+                <DragStep
+                  hasArrow
+                  v-if="dialog.visible"
+                  :key="4"
+                  :list="dialog.forms.step4"
+                  group="mission"
+                  class="kanban working"
+                />
+              </el-form-item>
+            </div>
+            <div class="right">
+              <div
+                class="el-form-item__label"
+                style="text-align: center; font-size: 1.2rem; font-weight: bold"
+              >
+                可选项(拖动)
+              </div>
+              <DragStep
+                v-if="dialog.visible"
+                :key="0"
+                :list="step0"
+                group="mission"
+                class="kanban todo"
+                @end="step0 = deepClone(noteModeOpts)"
               />
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label="可选项(拖动)" prop="step1">
-            <DragStep
-              v-if="dialog.visible"
-              :key="0"
-              :list="step0"
-              group="mission"
-              class="kanban todo"
-              @end="step0 = deepClone(noteModeOpts)"
-            />
-          </el-form-item>
-
-          <el-form-item label="步骤1" prop="step1">
-            <!-- <el-select multiple v-model="dialog.forms.step1">
-            <el-option
-              v-for="item in noteModeOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select> -->
-            <DragStep
-              v-if="dialog.visible"
-              :key="1"
-              :list="dialog.forms.step1"
-              group="mission"
-              class="kanban todo"
-            />
-          </el-form-item>
-          <el-form-item label="步骤2" prop="step2">
-            <!-- <el-select multiple v-model="dialog.forms.step2">
-            <el-option
-              v-for="item in noteModeOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select> -->
-            <DragStep
-              v-if="dialog.visible"
-              :key="2"
-              :list="dialog.forms.step2"
-              group="mission"
-              class="kanban"
-            />
-          </el-form-item>
-          <el-form-item label="步骤3" prop="step3">
-            <!-- <el-select multiple v-model="dialog.forms.step3">
-            <el-option
-              v-for="item in noteModeOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select> -->
-            <DragStep
-              v-if="dialog.visible"
-              :key="3"
-              :list="dialog.forms.step3"
-              group="mission"
-              class="kanban done"
-            />
-          </el-form-item>
-          <el-form-item label="步骤4" prop="step4">
-            <!-- <el-select multiple v-model="dialog.forms.step4">
-            <el-option
-              v-for="item in noteModeOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select> -->
-            <DragStep
-              v-if="dialog.visible"
-              :key="4"
-              :list="dialog.forms.step4"
-              group="mission"
-              class="kanban working"
-            />
-          </el-form-item>
+            </div>
+          </div>
         </el-form>
       </div>
       <div style="text-align: center; transform: translate(0px, 10px)">
@@ -239,12 +220,10 @@ import { isIntNumber, noteModeOpts } from "@/views/resource-manage/common.js";
 import { deepClone } from "@/utils";
 import pagination from "@/components/Pagination";
 import {
-  alertStrategyQueryById,
-  alertStrategyListByPage,
-  alertStrategyDelete,
-  alertStrategyEdit,
-  alertStrategyAdd,
   alertLevelListAll,
+  alertStrategyQueryByLevelId,
+  alertStrategyAddOrEdit,
+  alertStrategyListByPage,
 } from "@/api/engineer-config.js";
 export default {
   components: { pagination, DragStep },
@@ -308,13 +287,7 @@ export default {
           this.dialog.forms.step3 = this.dialog.forms.step3.map((i) => i.id);
           this.dialog.forms.step4 = this.dialog.forms.step4.map((i) => i.id);
 
-          let callAPI = null;
-          if (this.dialog.forms.id) {
-            callAPI = alertStrategyEdit;
-          } else {
-            callAPI = alertStrategyAdd;
-          }
-          callAPI(this.dialog.forms)
+          alertStrategyAddOrEdit(this.dialog.forms)
             .then((res) => {
               this.$message.success("操作成功!");
               this.$refs["dialogForm"].resetFields();
@@ -347,8 +320,9 @@ export default {
     async handleDialog(row) {
       // dialog显示时获取一级菜单列表
       if (row) {
+        const r = await alertStrategyQueryByLevelId({ levelId: row.levelId });
         // 编辑
-        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
+        this.dialog.forms = r.data;
         const { step1, step2, step3, step4 } = this.dialog.forms;
         const step11 = step1.map((i) => noteModeOpts.find((ii) => ii.id === i));
         const step22 = step2.map((i) => noteModeOpts.find((ii) => ii.id === i));
@@ -401,22 +375,47 @@ export default {
 
   .page1 {
     display: grid;
-    grid-template-rows: 60px auto 55px;
+    grid-template-rows: auto 55px;
     height: 100%;
   }
   .page2 {
     display: grid;
     grid-template-rows: auto 60px;
-    align-items: center;
     height: 100%;
     &-form {
-      margin-right: 50%;
-      transform: translate(70%, 0px);
     }
   }
 }
 .head {
   display: grid;
   justify-content: end;
+}
+
+::v-deep .el-form {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 60px;
+}
+.drag-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  .left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    ::v-deep .el-form-item__label {
+      font-size: 1.2rem;
+    }
+  }
+  .right {
+    display: flex;
+    flex-direction: column;
+    ::v-deep .board-column-content {
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: space-around;
+    }
+  }
 }
 </style>

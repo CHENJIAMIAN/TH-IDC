@@ -1,6 +1,14 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
+#el-drawer__title > span {
+  outline: 0;
+}
+
+.el-drawer__header {
+  color: #31c6f1;
+}
+
 .el-input .el-input__inner {
   &::placeholder {
     color: gray;

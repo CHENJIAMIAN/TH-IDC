@@ -31,7 +31,7 @@ export default {
       const rect = body.getBoundingClientRect()
       return rect.width - 1 < WIDTH
     },
-    $_resizeHandler() {
+    $_resizeHandler(e) {
       if (!document.hidden) {
         const isMobile = this.$_isMobile()
         store.dispatch('app/toggleDevice', isMobile ? 'mobile' : 'desktop')

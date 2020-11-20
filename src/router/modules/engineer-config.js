@@ -65,12 +65,13 @@ dingding-config
       name: 'rule-manage',
       meta: { title: '规则管理', icon: 'img-gz' },
       children: [
-        {
-          path: 'alert-notify',
-          component: () => import('@/views/engineer-config/alert-notify/index'),
-          name: 'alert-notify',
-          meta: { title: '告警通知', icon: 'img-gjj' }
-        },
+        // {
+        //   path: 'alert-notify',
+        //   component: () => import('@/views/engineer-config/alert-notify/index'),
+        //   name: 'alert-notify',
+        //   hidden: true,
+        //   meta: { title: '告警通知', icon: 'img-gjj' }
+        // },
         {
           path: 'alert-stratege',
           component: () => import('@/views/engineer-config/alert-stratege/index.vue'),

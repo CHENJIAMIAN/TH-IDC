@@ -74,12 +74,9 @@ export default {
     width: 200px;
     bottom: 60px;
     left: 60px;
-
-    display: flex;
-    flex-direction: column;
+    display: grid;
     overflow: auto;
     padding-right: 5px;
-    justify-content: space-evenly;
     gap: 1rem;
 
     ::v-deep {
@@ -102,6 +99,6 @@ export default {
   justify-self: center;
   align-self: center;
   overflow: auto;
-  border-radius:5px;
+  border-radius: 5px;
 }
 </style>

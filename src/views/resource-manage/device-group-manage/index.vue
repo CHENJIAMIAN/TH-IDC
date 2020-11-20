@@ -150,7 +150,7 @@
       @pagination="getList"
     />
     <!-- 图片弹窗 -->
-    <el-dialog :visible.sync="dialogImg.visible" class="dialog-img">
+    <el-dialog :visible.sync="dialogImg.visible" class="dialog-img" width="80%">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">图片采点</span>
         <img src="@/assets/img/hl.png" />
