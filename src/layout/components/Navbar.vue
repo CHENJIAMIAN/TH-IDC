@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <el-drawer title="告警通知" :visible.sync="drawer" direction="btt"  size="90%">
+    <el-drawer title="告警通知" :visible.sync="drawer" direction="btt"  size="80%">
       <alert-notify />
     </el-drawer>
   </div>

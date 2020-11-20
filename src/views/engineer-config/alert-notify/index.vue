@@ -471,7 +471,7 @@ export default {
         resumeStatus: null,
         startDate: null,
         endDate: null,
-        isRead: 0,
+        isRead: null,
         startDate_endDate: [],
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
@@ -660,7 +660,8 @@ export default {
   display: grid;
   grid-template-rows: 60px auto 55px;
   // background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
-  height: 100%;
+  // height: 100%;
+  height: calc(80vh - 70px);
 }
 .head {
   display: grid;

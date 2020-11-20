@@ -617,11 +617,18 @@ export default {
                 pointId	[int]	是	测点id
                location [string]	是	位置信息
         */
-      this.dialogImg.forms.pointList = this.listDataCDBind.map((i) => {
-        i.pointId = i.id;
-        delete i.id;
-        return i;
-      });
+      if (this.listDataCDBind.some((i) => i.imgType === "" || i.imgType===undefined)) {
+        this.$message.error("请为每个绑定测点选择图片类型");
+        return;
+      }
+      this.dialogImg.forms.pointList = this.listDataCDBind;
+      this.dialogImg.forms.pointList = this.dialogImg.forms.pointList.map(
+        (i) => {
+          i.pointId = i.id;
+          delete i.id;
+          return i;
+        }
+      );
       const { deviceGroupId, pointList } = this.dialogImg.forms;
       deviceGroupPointLocationAdd({ deviceGroupId, pointList }).then((res) => {
         this.$message.success("操作成功!");
@@ -729,6 +736,7 @@ export default {
           const div = document.createElement("div");
           div.title = i.name;
           div.className = "marker";
+
           div.onclick = () => {
             // 点击标记时移除标记,取消绑定
             this.$refs["preiviewImgContainer"].removeChild(div);
@@ -740,6 +748,14 @@ export default {
             const row = this.listDataCDBind.find((ii) => ii.id == i.id);
             this.removeToNotBindPointLocation(row);
           };
+
+          console.log(
+            "location",
+            location,
+            ProportionHeightInImg,
+            ProportionWidthInImg
+          );
+          console.log("currWidth,currHeight", currWidth, currHeight);
           let x = currWidth * ProportionWidthInImg;
           let y = currHeight * ProportionHeightInImg;
           div.style.left = x + "px";

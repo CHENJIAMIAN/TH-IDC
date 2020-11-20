@@ -20,44 +20,53 @@
         <el-form-item label="密码" prop="password" v-if="!dialog.forms.id">
           <el-input disabled v-model="dialog.forms.password"></el-input>
         </el-form-item>
-        <el-form-item label="用户名称" prop="realName">
-          <el-input v-model="dialog.forms.realName"></el-input>
-        </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="dialog.forms.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="dialog.forms.email"></el-input>
-        </el-form-item>
-        <el-form-item label="微信" prop="wechat">
-          <el-input v-model="dialog.forms.wechat"></el-input>
-        </el-form-item>
-        <el-form-item label="钉钉" prop="dingtalk">
-          <el-input v-model="dialog.forms.dingtalk"></el-input>
-        </el-form-item>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+          <el-form-item label="用户名称" prop="realName">
+            <el-input v-model="dialog.forms.realName"></el-input>
+          </el-form-item>
+          <el-form-item label="电话" prop="phone">
+            <el-input v-model="dialog.forms.phone"></el-input>
+          </el-form-item>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="dialog.forms.email"></el-input>
+          </el-form-item>
+          <el-form-item label="微信" prop="wechat">
+            <el-input v-model="dialog.forms.wechat"></el-input>
+          </el-form-item>
+          <el-form-item label="钉钉" prop="dingtalk">
+            <el-input v-model="dialog.forms.dingtalk"></el-input>
+          </el-form-item>
+        </div>
+
         <el-form-item label="描述" prop="remarks">
-          <el-input v-model="dialog.forms.remarks"></el-input>
+          <el-input type="textarea" v-model="dialog.forms.remarks"></el-input>
         </el-form-item>
-        <el-form-item label="部门ID" prop="departmentId">
-          <el-select v-model="dialog.forms.departmentId">
-            <el-option
-              v-for="item in depOpts"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="账号状态" prop="status">
-          <el-radio-group
-            class="radio-status"
-            v-model="dialog.forms.status"
-            style="width: 100%"
-          >
-            <el-radio border :label="1">启用</el-radio>
-            <el-radio border :label="0">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
+        <div style="display: grid; grid-template-columns: 1fr 1fr">
+          <el-form-item label="部门" prop="departmentId">
+            <el-select v-model="dialog.forms.departmentId">
+              <el-option
+                v-for="item in depOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="状态" prop="status">
+            <el-radio-group
+              class="radio-status"
+              v-model="dialog.forms.status"
+              style="width: 100%"
+            >
+              <el-radio border :label="1">启用</el-radio>
+              <el-radio border :label="0">禁用</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" style="text-align: center">
         <el-button style="width: 200px" type="primary" @click="dialogSubmit"

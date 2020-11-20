@@ -146,6 +146,7 @@
               <el-form-item label="步骤1" prop="step1">
                 <DragStep
                   hasArrow
+                  deleteable
                   v-if="dialog.visible"
                   :key="1"
                   :list="dialog.forms.step1"
@@ -157,6 +158,7 @@
               <el-form-item label="步骤2" prop="step2">
                 <DragStep
                   hasArrow
+                  deleteable
                   v-if="dialog.visible"
                   :key="2"
                   :list="dialog.forms.step2"
@@ -167,6 +169,7 @@
               <el-form-item label="步骤3" prop="step3">
                 <DragStep
                   hasArrow
+                  deleteable
                   v-if="dialog.visible"
                   :key="3"
                   :list="dialog.forms.step3"
@@ -177,6 +180,7 @@
               <el-form-item label="步骤4" prop="step4">
                 <DragStep
                   hasArrow
+                  deleteable
                   v-if="dialog.visible"
                   :key="4"
                   :list="dialog.forms.step4"
@@ -263,7 +267,10 @@ export default {
           levelId: [
             { required: true, trigger: "blur", validator: isIntNumber },
           ],
-          name: [{ required: true, trigger: "blur", message: "请输入" }],
+          step1: [{ required: true, trigger: "blur", message: "未设置" }],
+          step2: [{ required: true, trigger: "blur", message: "未设置" }],
+          step3: [{ required: true, trigger: "blur", message: "未设置" }],
+          step4: [{ required: true, trigger: "blur", message: "未设置" }],
         },
       },
     };
@@ -287,19 +294,10 @@ export default {
           this.dialog.forms.step3 = this.dialog.forms.step3.map((i) => i.id);
           this.dialog.forms.step4 = this.dialog.forms.step4.map((i) => i.id);
 
-          alertStrategyAddOrEdit(this.dialog.forms)
-            .then((res) => {
-              this.$message.success("操作成功!");
-              this.$refs["dialogForm"].resetFields();
-              this.dialog.visible = false;
-              this.getList();
-            })
-            .catch((e) => {
-              // 为防止异常,step1又被替换了,会异常
-              this.$refs["dialogForm"].resetFields();
-              this.dialog.visible = false;
-              this.getList();
-            });
+          alertStrategyAddOrEdit(this.dialog.forms).then((res) => {
+            this.$message.success("操作成功!");
+            this.handleDialog({ levelId: this.dialog.forms.levelId });
+          });
         } else {
           return false;
         }

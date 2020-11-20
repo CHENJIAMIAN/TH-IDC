@@ -219,6 +219,9 @@ export default {
   position: absolute;
   right: 1rem;
   bottom: 0.5rem;
+  .el-button-custom {
+    width: 150px;
+  }
 
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
   // .tags-view-wrapper {

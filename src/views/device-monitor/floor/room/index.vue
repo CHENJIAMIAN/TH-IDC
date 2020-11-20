@@ -3,6 +3,8 @@
     <div class="room-index-self">
       <div class="row1">
         <div class="btns">
+          <!-- {{ deviceGroupList.length }}
+          {{ showBtns }} -->
           <template v-if="showBtns">
             <el-button
               class="el-button-custom"
@@ -93,13 +95,23 @@ export default {
     };
   },
   computed: {
+    /* 
+    1 IT机房           无设备组 布局
+    2 UPS配电室       有设备组 布局
+    3 低压配电室       有设备组 布局
+    4 变压器房         有设备组 布局
+    5 柴油发电机       无设备组 布局
+    6 电池房           电池房   布局
+    7 精密空调房  
+    8 高压配电房       有设备组 布局
+    */
     showBtns() {
-      return (
+      const b =
         this.roomName.includes("UPS配电") ||
         this.roomName.includes("低压配电") ||
         this.roomName.includes("高压配电") ||
-        this.roomName.includes("变压器")
-      );
+        this.roomName.includes("变压器");
+      return b;
     },
   },
   created() {
@@ -108,29 +120,24 @@ export default {
     this.$route.meta.title = roomName;
 
     deviceGroupListAll({ id: this.roomId }).then((r) => {
-      let {
-        id,
-        name,
-        roomCode,
+      let { id, name, roomCode, roomImage, roomType, deviceGroupList } = r.data;
+      if (!deviceGroupList) deviceGroupList = [];
+      Object.assign(this, {
         roomImage,
-        roomType,
         deviceGroupList,
-      } = r.data;
-      if (!deviceGroupList) {
-        deviceGroupList = [];
-        Object.assign(this, {
-          roomImage,
-          deviceGroupList,
-        });
-      } else if (
-        deviceGroupList.length == 1 ||
-        !this.$route.params.deviceGroupName
-      ) {
+      });
+      if (deviceGroupList.length == 1 || !this.$route.params.deviceGroupName) {
         // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
         const deviceGroup = deviceGroupList[0];
         // deviceGroupName包含#号,需要用encodeURIComponent编码一下
         this.$router.push(
-          `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${encodeURIComponent(deviceGroup.name)}?roomImage=${roomImage}&deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${deviceGroup.deviceGroupCode}`
+          `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${
+            deviceGroup.id
+          }/${encodeURIComponent(
+            deviceGroup.name
+          )}?roomImage=${roomImage}&deviceGroupImg=${
+            deviceGroup.imgUrl
+          }&deviceGroupCode=${deviceGroup.deviceGroupCode}`
         );
       }
     });
@@ -205,7 +212,7 @@ export default {
   justify-self: center;
   align-self: center;
   overflow: auto;
-  border-radius:5px;
+  border-radius: 5px;
 }
 
 .img-container {

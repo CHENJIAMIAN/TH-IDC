@@ -10,7 +10,7 @@
       <div
         v-for="(element, index) in list"
         :key="index + Math.random()"
-        @click="list.splice(index, 1)"
+        @click="deleteable && list.splice(index, 1)"
         title="点击移除"
       >
         <span class="board-item">{{ element.name }}</span>
@@ -32,6 +32,10 @@ export default {
     draggable,
   },
   props: {
+    deleteable: {
+      type: Boolean,
+      default: false,
+    },
     hasArrow: {
       type: Boolean,
       default: false,
