@@ -396,7 +396,7 @@ export default {
 }
 .drag-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   justify-content: center;
   .left {
     display: flex;

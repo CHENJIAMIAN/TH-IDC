@@ -285,6 +285,25 @@
           </el-select>
         </el-form-item>
 
+        <!-- 用来筛选测点的,单选 -->
+        <el-form-item
+          label="设备"
+          prop="devices"
+          v-show="dialog.forms.maskType == 6"
+        >
+          <el-select
+            v-model="dialog.forms.devices2"
+            popper-class="three-column"
+            @change="handleDeviceChange"
+          >
+            <el-option
+              v-for="item in deviceOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.deviceCode"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item
           label="测点"
           prop="points"
@@ -446,6 +465,15 @@ export default {
         (r) => (this.deviceGroupOpts = r.data)
       );
     },
+    handleDeviceChange(n) {
+      this.dialog.forms.points = [];
+      pointListAll({
+        roomCode: this.dialog.forms.roomCode,
+        deviceCode: n,
+      }).then((r) => {
+        this.pointOpts = r.data;
+      });
+    },
     handleDeviceTypeChange(n) {
       this.dialog.forms.pointTypes = [];
       pointTypeListAll({ deviceTypeId: n }).then(
@@ -503,7 +531,7 @@ export default {
         if (r.data.deviceTypes) this.deviceTypeOpts = r.data.deviceTypes;
         else deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
 
-        this.dialog.forms.deviceTypes = this.dialog.forms.deviceTypes2 =
+        this.dialog.forms.deviceTypes =
           r.data.deviceTypes &&
           r.data.deviceTypes.filter((i) => i.has).map((i) => i.id);
 

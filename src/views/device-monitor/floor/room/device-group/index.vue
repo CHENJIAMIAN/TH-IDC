@@ -2,29 +2,64 @@
   <div
     class="device-group-index"
     :style="
-      roomName.includes('电池')
-        ? 'grid-template-columns: 500px auto;'
+      isDcLayout
+        ? 'grid-template-columns: 40% auto;'
         : 'grid-template-rows: 1fr 220px;'
     "
   >
+    <!-- 图片 -->
     <div
       class="row1"
       :style="{ gap: showRoomImg ? '20px' : 'initial' }"
-      v-if="!roomName.includes('电池')"
+      v-if="!isDcLayout"
     >
       <div class="row1-col1">
-        <img class="preview-img" :src="deviceGroupImg" alt="加载失败" />
+        <img
+          style="cursor: pointer"
+          @click="
+            dialogImgVisible = true;
+            dialogImgUrl = deviceGroupImg;
+          "
+          class="preview-img"
+          :src="deviceGroupImg"
+          alt="加载失败"
+        />
       </div>
       <div class="row1-col2" v-if="showRoomImg">
-        <img class="preview-img" :src="roomImage" alt="加载失败" />
+        <img
+          style="cursor: pointer"
+          @click="
+            dialogImgVisible = true;
+            dialogImgUrl = roomImage;
+          "
+          class="preview-img"
+          :src="roomImage"
+          alt="加载失败"
+        />
       </div>
     </div>
     <div v-else class="dc-tab">
       <el-tabs stretch v-model="imgActiveName" @tab-click="handleImgTabClick">
         <el-tab-pane label="设备组" name="device">
-          <div class="device-group-tab">
-            <img class="preview-img" :src="deviceGroupImg" alt="加载失败" />
-            <div class="card-group">
+          <div
+            class="device-group-tab"
+            :style="{
+              'grid-template-rows': roomName.includes('电池')
+                ? '1fr 150px'
+                : '1fr',
+            }"
+          >
+            <img
+              style="cursor: pointer"
+              @click="
+                dialogImgVisible = true;
+                dialogImgUrl = deviceGroupImg;
+              "
+              class="preview-img"
+              :src="deviceGroupImg"
+              alt="加载失败"
+            />
+            <div class="card-group" v-if="roomName.includes('电池')">
               <el-card class="card">
                 <span>电池组电压</span>
                 <span>{{ "无" }}</span>
@@ -41,8 +76,17 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="房间" name="room">
-          <div style="display: grid;height: calc(100vh - 340px);">
-            <img class="preview-img" :src="roomImage" alt="加载失败" />
+          <div style="display: grid; height: calc(100vh - 340px)">
+            <img
+              style="cursor: pointer"
+              @click="
+                dialogImgVisible = true;
+                dialogImgUrl = roomImage;
+              "
+              class="preview-img"
+              :src="roomImage"
+              alt="加载失败"
+            />
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -57,11 +101,11 @@
         style="right: 1rem;r"
       />
     </div>
-
+    <!-- 表格 -->
     <div>
       <div class="row2">
         <el-tabs
-          :class="roomName.includes('电池') ? 'right-el-tabs' : 'btm-el-tabs'"
+          :class="isDcLayout ? 'right-el-tabs' : 'btm-el-tabs'"
           type="border-card"
           v-model="tableActiveName"
           @tab-click="handleTableTabClick"
@@ -264,6 +308,16 @@
         </el-tabs>
       </div>
     </div>
+
+    <!-- 图片弹窗 -->
+    <el-dialog
+      width="80%"
+      custom-class="dialog-img"
+      :visible.sync="dialogImgVisible"
+      :show-close="false"
+    >
+      <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
+    </el-dialog>
   </div>
 </template>
 
@@ -305,29 +359,39 @@ export default {
       roomImage: "",
       deviceGroupId: "",
       deviceGroupName: "",
-      deviceGroupCode: "",
       temperature: "",
       alarmCount: "",
       deviceGroupList: [],
       //
       deviceGroupImg: "",
+      deviceGroupCode: "",
       //
       listLoading: false,
       listData: [],
+      //
+      dialogImgVisible: false,
+      dialogImgUrl: "",
     };
   },
+  watch:{
+  },
   computed: {
-    showRoomImg() {
+    isDcLayout() {
       return (
+        this.roomName.includes("电池") ||
+        this.roomName.includes("高压配电") ||
         this.roomName.includes("UPS配电") ||
         this.roomName.includes("低压配电") ||
-        this.roomName.includes("高压配电") ||
         this.roomName.includes("变压器") ||
         this.roomName.includes("电池")
       );
     },
+    showRoomImg() {
+      return this.roomName.includes("空调");
+    },
   },
   created() {
+    console.log('device-group',this._uid);
     const {
       floorId,
       floorName,
@@ -344,11 +408,13 @@ export default {
       deviceGroupId,
       deviceGroupName,
     });
-    this.deviceGroupImg = this.$route.query.deviceGroupImg;
-    this.roomImage = this.$route.query.roomImage;
-    this.deviceGroupCode = this.$route.query.deviceGroupCode;
-
+    const { roomImage, currentDeviceGroup } = this.$parent;
+    this.roomImage = roomImage || this.$route.query.roomImage;
+    this.deviceGroupImg = currentDeviceGroup.imgUrl || this.$route.query.deviceGroupImg;
+    this.deviceGroupCode = currentDeviceGroup.deviceGroupCode || this.$route.query.deviceGroupCode;
+    //
     this.$route.meta.title = deviceGroupName;
+    // 下一次会显示上一次设置的名字，怎么解决？
 
     this.getList();
   },
@@ -443,7 +509,6 @@ export default {
 
 .device-group-tab {
   display: grid;
-  grid-template-rows: 1fr 150px;
   height: calc(100vh - 340px);
 }
 .card-group {
@@ -475,6 +540,17 @@ export default {
     display: grid;
     justify-items: center;
     gap: 2rem;
+  }
+  .dialog-img {
+    height: 80%;
+    background: #0b2a52;
+    .el-dialog__body {
+      display: grid;
+      padding: 30px 20px 30px;
+    }
+    .el-dialog__header {
+      display: none;
+    }
   }
 }
 </style>

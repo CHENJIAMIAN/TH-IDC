@@ -117,7 +117,11 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="isRead">
-          <el-select v-model="filterForm.isRead" placeholder="是否已读">
+          <el-select
+            clearable
+            v-model="filterForm.isRead"
+            placeholder="是否已读"
+          >
             <el-option label="未读" :value="0" />
             <el-option label="已读" :value="1" />
           </el-select>
@@ -214,6 +218,12 @@
           <div v-if="row.status == 3">取消</div>
         </template>
       </el-table-column>
+      <el-table-column prop="isRead" label="是否已读" width="100">
+        <template slot-scope="{ row }">
+          <div v-if="row.isRead == 0">未读</div>
+          <div v-if="row.isRead == 1">已读</div>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="createTime"
         label="告警时间"
@@ -280,7 +290,7 @@
       @pagination="getList"
     />
 
-    <el-dialog :visible.sync="dialog.visible" top="25vh">
+    <el-dialog append-to-body :visible.sync="dialog.visible" top="25vh">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">{{
           dialog.type == 1 ? "告警受理" : "告警恢复"
@@ -325,7 +335,7 @@
     </el-dialog>
 
     <!-- 详情弹窗 -->
-    <el-dialog :visible.sync="detailDialog.visible" top="25vh" center>
+    <el-dialog append-to-body :visible.sync="detailDialog.visible" top="25vh" center>
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">详情</span>
         <img src="@/assets/img/hl.png" />

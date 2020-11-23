@@ -11,35 +11,27 @@
               :class="{
                 active: deviceGroup.name == $route.params.deviceGroupName,
               }"
-              v-for="deviceGroup in deviceGroupList.slice(0, 5)"
+              v-for="deviceGroup in deviceGroupList.slice(0, 4)"
               :key="deviceGroup.id"
-              @click="
-                $router.push(
-                  `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${deviceGroup.deviceGroupCode}`
-                )
-              "
+              @click="routeToDeviceGroup(deviceGroup)"
               >{{ deviceGroup.name }}</el-button
             >
             <el-popover
               placement="bottom-end"
               trigger="hover"
-              v-if="deviceGroupList.slice(5).length > 0"
+              v-if="deviceGroupList.slice(4).length > 0"
               v-model="moreBtnsVisible"
             >
-              <div class="btns-fake">
+              <div class="btns-fake" :style="btnsFakeStye">
                 <span
                   class="btn-as-txt"
                   :class="{
                     'active-txt':
                       deviceGroup.name == $route.params.deviceGroupName,
                   }"
-                  v-for="deviceGroup in deviceGroupList.slice(5)"
+                  v-for="deviceGroup in deviceGroupList.slice(4)"
                   :key="deviceGroup.id"
-                  @click="
-                    $router.push(
-                      `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${deviceGroup.id}/${deviceGroup.name}?deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${deviceGroup.deviceGroupCode}`
-                    )
-                  "
+                  @click="routeToDeviceGroup(deviceGroup)"
                   >{{ deviceGroup.name }}</span
                 >
               </div>
@@ -92,6 +84,7 @@ export default {
       temperature: "",
       alarmCount: "",
       deviceGroupList: [],
+      currentDeviceGroup: {},
     };
   },
   computed: {
@@ -101,49 +94,69 @@ export default {
     3 低压配电室       有设备组 布局
     4 变压器房         有设备组 布局
     5 柴油发电机       无设备组 布局
-    6 电池房           电池房   布局
+    6 电池房           有设备组   布局
     7 精密空调房  
     8 高压配电房       有设备组 布局
     */
     showBtns() {
-      const b =
+      return (
+        this.roomName.includes("电池") ||
+        this.roomName.includes("高压配电") ||
         this.roomName.includes("UPS配电") ||
         this.roomName.includes("低压配电") ||
-        this.roomName.includes("高压配电") ||
-        this.roomName.includes("变压器");
-      return b;
+        this.roomName.includes("变压器") ||
+        this.roomName.includes("电池")
+      );
+    },
+    btnsFakeStye() {
+      const length = this.deviceGroupList.slice(4).length;
+      let r = "1fr ";
+      if (length > 4) r = "1fr 1fr 1fr 1fr";
+      else for (let i = 0; i < length - 1; i++) r += "1fr ";
+      return { "grid-template-columns": r };
     },
   },
-  created() {
+  async created() {
+    console.log("room", this._uid);
     const { floorId, floorName, roomId, roomName } = this.$route.params;
     Object.assign(this, { floorId, floorName, roomId, roomName });
     this.$route.meta.title = roomName;
 
-    deviceGroupListAll({ id: this.roomId }).then((r) => {
-      let { id, name, roomCode, roomImage, roomType, deviceGroupList } = r.data;
-      if (!deviceGroupList) deviceGroupList = [];
-      Object.assign(this, {
-        roomImage,
-        deviceGroupList,
-      });
-      if (deviceGroupList.length == 1 || !this.$route.params.deviceGroupName) {
-        // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
-        const deviceGroup = deviceGroupList[0];
-        // deviceGroupName包含#号,需要用encodeURIComponent编码一下
-        this.$router.push(
-          `/device-monitor/floor/${floorId}/${floorName}/room/${roomId}/${roomName}/device-group/${
-            deviceGroup.id
-          }/${encodeURIComponent(
-            deviceGroup.name
-          )}?roomImage=${roomImage}&deviceGroupImg=${
-            deviceGroup.imgUrl
-          }&deviceGroupCode=${deviceGroup.deviceGroupCode}`
-        );
-      }
+    const r = await deviceGroupListAll({ id: this.roomId });
+    let { id, name, roomCode, roomImage, roomType, deviceGroupList } = r.data;
+    if (!deviceGroupList) deviceGroupList = [];
+    Object.assign(this, {
+      roomImage,
+      deviceGroupList,
     });
+    if(deviceGroupList.length === 0) return;
+    if (deviceGroupList.length == 1 || !this.$route.params.deviceGroupName) {
+      // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
+      const deviceGroup = deviceGroupList[0];
+      // deviceGroupName包含#号,需要用encodeURIComponent编码一下
+      this.routeToDeviceGroup(deviceGroup);
+    }
+  },
+  methods: {
+    routeToDeviceGroup(deviceGroup) {
+      // 名称包含# 必须用encodeURIComponent编码一下
+      this.$router.push(
+        `/device-monitor/floor/${this.floorId}/${this.floorName}/room/${
+          this.roomId
+        }/${encodeURIComponent(this.roomName)}/device-group/${
+          deviceGroup.id
+        }/${encodeURIComponent(deviceGroup.name)}?roomImage=${
+          this.roomImage
+        }&deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${
+          deviceGroup.deviceGroupCode
+        }`
+      );
+      this.currentDeviceGroup = deviceGroup;
+    },
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .room-index {
   height: 100%;
@@ -182,7 +195,6 @@ export default {
   display: grid;
   gap: 1rem;
   align-items: center;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .btn-as-txt {

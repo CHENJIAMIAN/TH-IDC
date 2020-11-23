@@ -8,14 +8,22 @@
         size="medium"
         :model="filterForm"
       >
+        <el-form-item prop="searchName">
+          <el-input v-model.trim="filterForm.searchName" placeholder="名称" />
+        </el-form-item>
         <el-form-item>
-          <!-- <el-button
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            @click="handleQuery"
+          ></el-button>
+          <el-button
             type="primary"
             icon="el-icon-refresh"
             plain
             @click="handleReset('filterForm')"
             >重置</el-button
-          > -->
+          >
           <el-button type="primary" size="medium" @click="handleDialog()">
             <!-- 不能写未handleDialog否则第一个参数会自动传鼠标事件 -->
             <i class="el-icon-plus" />
@@ -26,7 +34,7 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -34,6 +42,7 @@
       :data="listData"
     >
       <el-table-column sortable prop="name" label="房间类型名称" />
+      <el-table-column sortable prop="abbr" label="简称" />
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
@@ -62,10 +71,8 @@
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible" top="25vh">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">{{
-          dialog.forms.id ? "编辑" : "新增"
-        }}</span>
-        <img  src="@/assets/img/hl.png" />
+        <span class="title-txt">{{ dialog.forms.id ? "编辑" : "新增" }}</span>
+        <img src="@/assets/img/hl.png" />
       </div>
       <el-form
         :model="dialog.forms"
@@ -75,6 +82,9 @@
       >
         <el-form-item label="房间类型名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
+        </el-form-item>
+        <el-form-item label="简称" prop="abbr">
+          <el-input v-model="dialog.forms.abbr"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" style="text-align: center">
@@ -89,13 +99,13 @@
 <script>
 import pagination from "@/components/Pagination";
 import {
- spaceRoomTypeDelete,
- spaceRoomTypeEdit,
- spaceRoomTypeAdd,
- spaceRoomTypeListByPage,
+  spaceRoomTypeDelete,
+  spaceRoomTypeEdit,
+  spaceRoomTypeAdd,
+  spaceRoomTypeListByPage,
   // 未用到
- spaceRoomTypeListAll,
- spaceRoomTypeQueryById,
+  spaceRoomTypeListAll,
+  spaceRoomTypeQueryById,
 } from "@/api/resource-manage.js";
 export default {
   components: { pagination },
@@ -103,6 +113,7 @@ export default {
     return {
       filterForm: {
         // 筛选条件
+        searchName: "",
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
@@ -130,9 +141,9 @@ export default {
         if (valid) {
           let callAPI = null;
           if (this.dialog.forms.id) {
-            callAPI =spaceRoomTypeEdit;
+            callAPI = spaceRoomTypeEdit;
           } else {
-            callAPI =spaceRoomTypeAdd;
+            callAPI = spaceRoomTypeAdd;
           }
           callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
@@ -164,7 +175,8 @@ export default {
       } else {
         this.dialog.forms = {};
       }
-      this.dialog.visible = true;      this.$nextTick(_=>this.$refs["dialogForm"].clearValidate());
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     // 删除
     handleDel(id) {
@@ -174,7 +186,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-         spaceRoomTypeDelete({
+          spaceRoomTypeDelete({
             id: id,
           }).then((res) => {
             this.getList();
@@ -186,7 +198,7 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-     spaceRoomTypeListByPage(this.filterForm).then((res) => {
+      spaceRoomTypeListByPage(this.filterForm).then((res) => {
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;

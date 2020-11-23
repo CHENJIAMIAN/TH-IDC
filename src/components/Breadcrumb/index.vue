@@ -1,14 +1,14 @@
 <template>
   <el-breadcrumb class="app-breadcrumb" separator="">
-      <el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
-        <!-- <span
+    <el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
+      <!-- <span
           v-if="item.redirect === 'noRedirect' || index == levelList.length - 1"
           class="no-redirect"
           >{{ item.meta.title }}</span
-        > --> 
-        <!-- v-else  -->
-        <a @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
-      </el-breadcrumb-item>
+        > -->
+      <!-- v-else  -->
+      <a @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+    </el-breadcrumb-item>
   </el-breadcrumb>
 </template>
 
@@ -18,7 +18,7 @@ import pathToRegexp from "path-to-regexp";
 export default {
   data() {
     return {
-      levelList: null
+      levelList: null,
     };
   },
   watch: {
@@ -28,7 +28,7 @@ export default {
         return;
       }
       this.getBreadcrumb();
-    }
+    },
   },
   created() {
     this.getBreadcrumb();
@@ -37,7 +37,7 @@ export default {
     getBreadcrumb() {
       //仅显示带有meta.title的路线
       let matched = this.$route.matched.filter(
-        item => item.meta && item.meta.title
+        (item) => item.meta && item.meta.title
       );
       const first = matched[0];
 
@@ -48,7 +48,7 @@ export default {
       // }
 
       this.levelList = matched.filter(
-        item => item.meta && item.meta.title && item.meta.breadcrumb !== false
+        (item) => item.meta && item.meta.title && item.meta.breadcrumb !== false
       );
     },
     isDashboard(route) {
@@ -73,9 +73,11 @@ export default {
         this.$router.push(redirect);
         return;
       }
+      // 解决设备监控页面,闪烁残留上一个设备组名称的问题,会造成刚进去面包屑没有最后一个,为什么?
+      if (this.$route.name === "device-group") this.$route.meta.title = "";
       this.$router.push(this.pathCompile(path));
-    }
-  }
+    },
+  },
 };
 </script>
 

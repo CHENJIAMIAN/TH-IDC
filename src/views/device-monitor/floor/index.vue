@@ -8,7 +8,7 @@
           :key="room.id"
           @click="
             $router.push(
-              `/device-monitor/floor/${floorId}/${floorName}/room/${room.id}/${room.name}`
+              `/device-monitor/floor/${floorId}/${floorName}/room/${room.id}/${encodeURIComponent(room.name)}`
             )
           "
           >{{ room.name }}</el-button
@@ -48,6 +48,7 @@ export default {
     }),
   },
   created() {
+    console.log('floor',this._uid);
     const { floorId, floorName } = this.$route.params;
     Object.assign(this, { floorId, floorName });
     this.$route.meta.title = floorName;
