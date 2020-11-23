@@ -124,18 +124,21 @@ export default {
 
     const r = await deviceGroupListAll({ id: this.roomId });
     let { id, name, roomCode, roomImage, roomType, deviceGroupList } = r.data;
-    if (!deviceGroupList) deviceGroupList = [];
+    if (!deviceGroupList) {
+      this.$message('该房间未配置设备组')
+      deviceGroupList = [];
+    }
     Object.assign(this, {
       roomImage,
       deviceGroupList,
     });
-    if(deviceGroupList.length === 0) return;
-    if (deviceGroupList.length == 1 || !this.$route.params.deviceGroupName) {
-      // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
-      const deviceGroup = deviceGroupList[0];
-      // deviceGroupName包含#号,需要用encodeURIComponent编码一下
-      this.routeToDeviceGroup(deviceGroup);
-    }
+    if (deviceGroupList.length !== 0)
+      if (deviceGroupList.length == 1 || !this.$route.params.deviceGroupName) {
+        // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
+        const deviceGroup = deviceGroupList[0];
+        // deviceGroupName包含#号,需要用encodeURIComponent编码一下
+        this.routeToDeviceGroup(deviceGroup);
+      }
   },
   methods: {
     routeToDeviceGroup(deviceGroup) {
