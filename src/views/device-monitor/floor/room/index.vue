@@ -5,11 +5,12 @@
         <div class="btns">
           <!-- {{ deviceGroupList.length }}
           {{ showBtns }} -->
-          <template v-if="showBtns">
+          <template v-if="showBtns && !isOnlyOneDeviceGroup">
             <el-button
               class="el-button-custom"
               :class="{
-                active: deviceGroup.name == $route.params.deviceGroupName,
+                active:
+                  deviceGroup.name == $route.params.deviceGroupName.trim(),
               }"
               v-for="deviceGroup in deviceGroupList.slice(0, 4)"
               :key="deviceGroup.id"
@@ -84,7 +85,6 @@ export default {
       temperature: "",
       alarmCount: "",
       deviceGroupList: [],
-      currentDeviceGroup: {},
     };
   },
   computed: {
@@ -93,20 +93,16 @@ export default {
     2 UPS配电室       有设备组 布局
     3 低压配电室       有设备组 布局
     4 变压器房         有设备组 布局
-    5 柴油发电机       无设备组 布局
+    5 柴油发电机       有设备组 布局
     6 电池房           有设备组   布局
     7 精密空调房  
     8 高压配电房       有设备组 布局
     */
+    isOnlyOneDeviceGroup() {
+      return this.roomName.includes("IDC");
+    },
     showBtns() {
-      return (
-        this.roomName.includes("电池") ||
-        this.roomName.includes("高压配电") ||
-        this.roomName.includes("UPS配电") ||
-        this.roomName.includes("低压配电") ||
-        this.roomName.includes("变压器") ||
-        this.roomName.includes("电池")
-      );
+      return !this.roomName.includes("空调");
     },
     btnsFakeStye() {
       const length = this.deviceGroupList.slice(4).length;
@@ -125,7 +121,7 @@ export default {
     const r = await deviceGroupListAll({ id: this.roomId });
     let { id, name, roomCode, roomImage, roomType, deviceGroupList } = r.data;
     if (!deviceGroupList) {
-      this.$message('该房间未配置设备组')
+      this.$message("该房间未配置设备组");
       deviceGroupList = [];
     }
     Object.assign(this, {
@@ -143,18 +139,23 @@ export default {
   methods: {
     routeToDeviceGroup(deviceGroup) {
       // 名称包含# 必须用encodeURIComponent编码一下
+      this.$store.commit("app/SET_CURRENT_DEVICEGROUP", {
+        roomImage: this.roomImage,
+        deviceGroup,
+      });
       this.$router.push(
         `/device-monitor/floor/${this.floorId}/${this.floorName}/room/${
           this.roomId
         }/${encodeURIComponent(this.roomName)}/device-group/${
           deviceGroup.id
-        }/${encodeURIComponent(deviceGroup.name)}?roomImage=${
-          this.roomImage
-        }&deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${
-          deviceGroup.deviceGroupCode
-        }`
+        }/${encodeURIComponent(deviceGroup.name)}
+        `
+        // ?roomImage=${
+        //   this.roomImage
+        // }&deviceGroupImg=${deviceGroup.imgUrl}&deviceGroupCode=${
+        //   deviceGroup.deviceGroupCode
+        // }
       );
-      this.currentDeviceGroup = deviceGroup;
     },
   },
 };
@@ -204,9 +205,12 @@ export default {
   border: none;
   color: white;
   font-size: 1.1rem;
-  width: 150px;
+  width: 200px;
   text-align: center;
   cursor: pointer;
+  &:hover {
+    color: #e39f40;
+  }
 }
 .active {
   color: #e39f40;

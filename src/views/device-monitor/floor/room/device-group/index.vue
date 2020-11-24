@@ -10,7 +10,7 @@
     <!-- 图片 -->
     <div
       class="row1"
-      :style="{ gap: showRoomImg ? '20px' : 'initial' }"
+      :style="{ gap: !isDcLayout ? '20px' : 'initial' }"
       v-if="!isDcLayout"
     >
       <div class="row1-col1">
@@ -25,7 +25,7 @@
           alt="加载失败"
         />
       </div>
-      <div class="row1-col2" v-if="showRoomImg">
+      <div class="row1-col2" v-if="!isDcLayout">
         <img
           style="cursor: pointer"
           @click="
@@ -75,7 +75,7 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="房间" name="room">
+        <el-tab-pane label="房间" name="room" v-if="!isOnlyOneDeviceGroup">
           <div style="display: grid; height: calc(100vh - 340px)">
             <img
               style="cursor: pointer"
@@ -323,18 +323,7 @@
 
 
 <script>
-/*
-2. UPS配电房    有设备组 布局
-3.低压配电房    有设备组 布局
-4. 高压配电房   有设备组 布局
-6. 变压器房     有设备组 布局
-1. 精密空调房   无设备组 布局
-7. IDC机房      无设备组 布局
-8.柴油发电机    无设备组 布局
-5. 电池房       电池房   布局
-
-都有表格数据， 表格数据对应房间接口
-*/
+import { mapState, mapGetters } from "vuex";
 import {
   deviceGroupListAll,
   deviceGroupTypeGetData,
@@ -356,15 +345,14 @@ export default {
       floorName: "",
       roomId: "",
       roomName: "",
-      roomImage: "",
       deviceGroupId: "",
       deviceGroupName: "",
       temperature: "",
       alarmCount: "",
       deviceGroupList: [],
       //
-      deviceGroupImg: "",
-      deviceGroupCode: "",
+      // deviceGroupImg: "",
+      // deviceGroupCode: "",
       //
       listLoading: false,
       listData: [],
@@ -373,25 +361,22 @@ export default {
       dialogImgUrl: "",
     };
   },
-  watch:{
-  },
+  watch: {},
   computed: {
-    isDcLayout() {
-      return (
-        this.roomName.includes("电池") ||
-        this.roomName.includes("高压配电") ||
-        this.roomName.includes("UPS配电") ||
-        this.roomName.includes("低压配电") ||
-        this.roomName.includes("变压器") ||
-        this.roomName.includes("电池")
-      );
+    ...mapState({
+      roomImage: (state) => state.app.roomImage,
+      deviceGroupImg: (state) => state.app.currentDeviceGroup.imgUrl,
+      deviceGroupCode: (state) => state.app.currentDeviceGroup.deviceGroupCode,
+    }),
+    isOnlyOneDeviceGroup() {
+      return this.roomName.includes("IDC");
     },
-    showRoomImg() {
-      return this.roomName.includes("空调");
+    isDcLayout() {
+      return !this.roomName.includes("空调");
     },
   },
   created() {
-    console.log('device-group',this._uid);
+    console.log("device-group", this._uid);
     const {
       floorId,
       floorName,
@@ -408,10 +393,8 @@ export default {
       deviceGroupId,
       deviceGroupName,
     });
-    const { roomImage, currentDeviceGroup } = this.$parent;
-    this.roomImage = roomImage || this.$route.query.roomImage;
-    this.deviceGroupImg = currentDeviceGroup.imgUrl || this.$route.query.deviceGroupImg;
-    this.deviceGroupCode = currentDeviceGroup.deviceGroupCode || this.$route.query.deviceGroupCode;
+    // this.deviceGroupImg = this.currentDeviceGroup.imgUrl; //|| this.$route.query.deviceGroupImg;
+    // this.deviceGroupCode = this.currentDeviceGroup.deviceGroupCode; //|| this.$route.query.deviceGroupCode;
     //
     this.$route.meta.title = deviceGroupName;
     // 下一次会显示上一次设置的名字，怎么解决？

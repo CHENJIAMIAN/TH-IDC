@@ -2,15 +2,25 @@ import Cookies from 'js-cookie'
 
 const state = {
   sidebar: {
-    showSide:false,
+    showSide: false,
     opened: true,//Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
   device: 'desktop',
-  size: Cookies.get('size') || 'medium'
+  size: Cookies.get('size') || 'medium',
+  // 
+  roomImage: "",
+  currentDeviceGroup: {
+    deviceGroupImg: "",
+    deviceGroupCode: "",
+  },
 }
 
 const mutations = {
+  SET_CURRENT_DEVICEGROUP: (state, { roomImage, deviceGroup }) => {
+    state.roomImage = roomImage;
+    state.currentDeviceGroup = deviceGroup;
+  },
   TOGGLE_SIDEBAR: state => {
     state.sidebar.opened = !state.sidebar.opened
     state.sidebar.withoutAnimation = false
