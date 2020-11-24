@@ -124,12 +124,14 @@
       <el-table-column label="操作" align="center" width="280">
         <template slot-scope="{ row }">
           <el-button
+            title = "编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
             @click="handleDialog(row)"
           ></el-button>
           <el-button
+            title="删除"
             icon="el-icon-delete"
             type="primary"
             plain

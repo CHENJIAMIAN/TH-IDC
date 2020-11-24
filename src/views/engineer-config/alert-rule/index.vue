@@ -57,7 +57,7 @@
       >
         <el-table-column sortable prop="name" label="测点类型名称" />
         <!-- <el-table-column sortable prop="deviceTypeId" label="设备类型ID" /> -->
-        <el-table-column sortable prop="units" label="单位" />
+        <el-table-column sortable prop="units" label="单位" width="80"/>
         <el-table-column sortable prop="valueType" label="值类型">
           <template slot-scope="{ row }">
             {{
@@ -70,10 +70,11 @@
         <el-table-column sortable prop="deviceTypeName" label="设备类型名称" />
         <el-table-column sortable prop="count" label="告警规则条数" />
 
-        <el-table-column label="操作" align="center" width="240">
+        <el-table-column label="操作" align="center" width="100">
           <template slot-scope="{ row }">
             <el-button
-              icon="el-icon-edit-outline"
+              title = "编辑"
+            icon="el-icon-edit-outline"
               type="primary"
               plain
               @click="handleDialog(row)"

@@ -109,6 +109,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button
+            title="详情"
             icon="el-icon-view"
             type="primary"
             plain

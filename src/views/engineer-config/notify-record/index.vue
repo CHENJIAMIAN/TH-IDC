@@ -99,7 +99,7 @@
         </template>
       </el-table-column>
       <el-table-column sortable prop="toUser" label="接收者用户ID" />
-      <el-table-column sortable prop="userName" label="接收者用户名称" />
+      <el-table-column sortable prop="userName" label="接收者用户名称" width="160"/>
       <el-table-column sortable prop="sendTarget" label="目标邮箱/号码" />
       <el-table-column sortable prop="sendContent" label="告警内容" />
       <el-table-column sortable prop="status" label="状态">

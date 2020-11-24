@@ -61,12 +61,14 @@
             @click="handleQXDialog(row)"
           ></el-button>
           <el-button
+            title = "编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
             @click="handleDialog(row)"
           ></el-button>
           <el-button
+            title="删除"
             icon="el-icon-delete"
             type="primary"
             plain

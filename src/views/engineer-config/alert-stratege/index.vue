@@ -36,8 +36,8 @@
         border
         :data="listData"
       >
-        <el-table-column prop="levelId" label="告警等级" />
-        <el-table-column prop="levelName" label="告警等级名称">
+        <el-table-column prop="levelId" label="告警等级"  width="120" align="center"/>
+        <el-table-column prop="levelName" label="告警等级名称" width="120" align="center">
           <template slot-scope="{ row }">
             <div>
               {{ row.levelName || "无" }}
@@ -45,7 +45,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="step1" label="步骤1">
+        <el-table-column prop="step1" label="步骤1"  align="center">
           <template slot-scope="{ row }">
             <div v-for="item in row.step1" :key="item + Math.random()">
               <div>
@@ -57,7 +57,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="step2" label="步骤2">
+        <el-table-column prop="step2" label="步骤2" align="center">
           <template slot-scope="{ row }">
             <div v-for="item in row.step2" :key="item + Math.random()">
               <div>
@@ -70,7 +70,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="step3" label="步骤3">
+        <el-table-column prop="step3" label="步骤3" align="center">
           <template slot-scope="{ row }">
             <div v-for="item in row.step3" :key="item + Math.random()">
               <div>
@@ -83,7 +83,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="step4" label="步骤4">
+        <el-table-column prop="step4" label="步骤4" align="center">
           <template slot-scope="{ row }">
             <div v-for="item in row.step4" :key="item + Math.random()">
               <div>
@@ -96,10 +96,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" width="240">
+        <el-table-column label="操作" align="center" width="161">
           <template slot-scope="{ row }">
             <el-button
-              icon="el-icon-edit-outline"
+              title = "编辑"
+            icon="el-icon-edit-outline"
               type="primary"
               plain
               @click="handleDialog(row)"

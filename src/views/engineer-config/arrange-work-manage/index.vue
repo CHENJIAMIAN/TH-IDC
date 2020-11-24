@@ -25,7 +25,7 @@
     <!-- 列表 -->
     <el-table
       class="arrange-work-table"
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -36,43 +36,57 @@
       <el-table-column prop="id" label="编号" align="center" />
       <el-table-column prop="week1List" label="星期一" align="center">
         <template slot-scope="{ row, column, $index }">
-          <div v-if="row.week1List.length < 1" style="color: #a7a7a7">待排班</div>
+          <div v-if="row.week1List.length < 1" style="color: #a7a7a7">
+            待排班
+          </div>
           <div v-for="i in row.week1List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="week2List" label="星期二" align="center">
         <template slot-scope="{ row, column, $index }">
-          <div v-if="row.week2List.length < 1" style="color: #a7a7a7">待排班</div>
+          <div v-if="row.week2List.length < 1" style="color: #a7a7a7">
+            待排班
+          </div>
           <div v-for="i in row.week2List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="week3List" label="星期三" align="center">
         <template slot-scope="{ row, column, $index }">
-          <div v-if="row.week3List.length < 1" style="color: #a7a7a7">待排班</div>
+          <div v-if="row.week3List.length < 1" style="color: #a7a7a7">
+            待排班
+          </div>
           <div v-for="i in row.week3List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="week4List" label="星期四" align="center">
         <template slot-scope="{ row, column, $index }">
-          <div v-if="row.week4List.length < 1" style="color: #a7a7a7">待排班</div>
+          <div v-if="row.week4List.length < 1" style="color: #a7a7a7">
+            待排班
+          </div>
           <div v-for="i in row.week4List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="week5List" label="星期五" align="center">
         <template slot-scope="{ row, column, $index }">
-          <div v-if="row.week5List.length < 1" style="color: #a7a7a7">待排班</div>
+          <div v-if="row.week5List.length < 1" style="color: #a7a7a7">
+            待排班
+          </div>
           <div v-for="i in row.week5List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="week6List" label="星期六" align="center">
         <template slot-scope="{ row, column, $index }">
-          <div v-if="row.week6List.length < 1" style="color: #a7a7a7">待排班</div>
+          <div v-if="row.week6List.length < 1" style="color: #a7a7a7">
+            待排班
+          </div>
           <div v-for="i in row.week6List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="week7List" label="星期日" align="center">
         <template slot-scope="{ row, column, $index }">
-          <div v-if="row.week7List.length < 1" style="color: #a7a7a7">待排班</div>
+          <div v-if="row.week7List.length < 1" style="color: #a7a7a7">
+            待排班
+          </div>
           <div v-for="i in row.week7List" :key="i.id">{{ i.name }}</div>
         </template>
       </el-table-column>
@@ -90,6 +104,7 @@
       <el-table-column label="操作" align="center" width="100">
         <template slot-scope="{ row }">
           <el-button
+            title="删除"
             icon="el-icon-delete"
             type="primary"
             plain
@@ -106,7 +121,7 @@
         <img src="@/assets/img/hl.png" />
       </div>
       <el-form
-        style="display: grid;justify-content: center;"
+        style="display: grid; justify-content: center"
         :model="dialogRY.forms"
         :rules="dialogRY.rules"
         ref="dialogRYForm"
@@ -328,6 +343,16 @@ export default {
 
   .week-day {
     cursor: pointer;
+  }
+
+  td:hover {
+    background: #0d708c !important;
+  }
+  .el-table--enable-row-hover .el-table__body tr:hover > td {
+    background-color: unset;
+  }
+  .el-table--striped .el-table__body tr.el-table__row--striped:hover td {
+    background: #0838698c;
   }
 }
 </style>

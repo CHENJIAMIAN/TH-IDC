@@ -21,9 +21,17 @@
       </el-form>
     </div>
 
-
-    <!-- 图片弹窗 -->
-    <img class="preview-img" :src="imgUrl" alt="加载失败" style="height: calc((100vh - 110px) - 11rem);"/>
+    <!-- 图片 -->
+    <img
+      class="preview-img"
+      :src="imgUrl"
+      alt="加载失败"
+      style="cursor: pointer; height: calc((100vh - 110px) - 11rem)"
+      @click="
+        dialogImgVisible = true;
+        dialogImgUrl = imgUrl;
+      "
+    />
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible">
@@ -72,6 +80,16 @@
         >
       </div>
     </el-dialog>
+
+    <!-- 图片弹窗 -->
+    <el-dialog
+      width="80%"
+      custom-class="dialog-img"
+      :visible.sync="dialogImgVisible"
+      :show-close="false"
+    >
+      <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
+    </el-dialog>
   </div>
 </template>
 
@@ -110,6 +128,9 @@ export default {
           cValue: [{ required: true, message: "请上传图片" }],
         },
       },
+      //
+      dialogImgVisible: false,
+      dialogImgUrl: "",
     };
   },
   created() {
@@ -119,7 +140,7 @@ export default {
   methods: {
     // 重置
     handleReset() {
-      pointUpdateToRedis().then(r=>{
+      pointUpdateToRedis().then((r) => {
         this.$message.success("操作成功!");
       });
     },
@@ -193,11 +214,12 @@ export default {
   justify-self: center;
   align-self: center;
   overflow: auto;
-  border-radius:10px;
+  border-radius: 10px;
 }
 
 ::v-deep {
   .dialog-img {
+    height: 80%;
     background: #0b2a52;
     .el-dialog__body {
       display: grid;

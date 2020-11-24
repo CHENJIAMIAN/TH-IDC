@@ -95,15 +95,17 @@
       <el-table-column sortable prop="level3Name" label="所属菜单名称" />
       <!-- <el-table-column sortable prop="level2Id" label="所属子系统id" /> -->
       <!-- <el-table-column sortable prop="level1Id" label="所属模块id" /> -->
-      <el-table-column label="操作" align="center" width="240">
+      <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
           <el-button
+            title = "编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
             @click="handleDialog(row)"
           ></el-button>
           <el-button
+            title="删除"
             icon="el-icon-delete"
             type="primary"
             plain

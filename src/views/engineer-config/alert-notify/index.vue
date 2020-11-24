@@ -274,6 +274,7 @@
             @click="handleDialog(row, 2)"
           ></el-button>
           <el-button
+            title="详情"
             icon="el-icon-view"
             type="primary"
             plain

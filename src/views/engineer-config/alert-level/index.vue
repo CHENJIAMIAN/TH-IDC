@@ -29,15 +29,15 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
       border
       :data="listData"
     >
-      <el-table-column  prop="level" label="级别"/>
-        <!-- <template slot-scope="{ row }">
+      <el-table-column prop="level" label="级别" />
+      <!-- <template slot-scope="{ row }">
           <div>
             {{
               levelOpts.find((i) => i.id == row.level) &&
@@ -47,14 +47,14 @@
         </template>
       </el-table-column> -->
 
-      <el-table-column  prop="name" label="自定义名称" />
-      <el-table-column  prop="noteType" label="通知方式">
+      <el-table-column prop="name" label="自定义名称" />
+      <el-table-column prop="noteType" label="通知方式">
         <template slot-scope="{ row }">
           <span v-if="row.noteType == 1">语音</span>
           <span v-else>文字</span>
         </template>
       </el-table-column>
-      <el-table-column  prop="noteContent" label="通知内容">
+      <el-table-column prop="noteContent" label="通知内容">
         <template slot-scope="{ row }">
           <div v-for="item in row.noteContent" :key="item">
             {{
@@ -65,23 +65,25 @@
         </template>
       </el-table-column>
 
-      <el-table-column  prop="status" label="状态">
+      <el-table-column prop="status" label="状态">
         <template slot-scope="{ row }">
           <span style="color: #55fb55" v-if="row.status == 1">启用</span>
           <span style="color: gray" v-else>禁用</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" width="240">
+      <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
           <el-button
+            title="编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
             @click="handleDialog(row)"
           ></el-button>
           <el-button
-            v-if="!(row.level>0 && row.level<6)"
+            v-if="!(row.level > 0 && row.level < 6)"
+            title="删除"
             icon="el-icon-delete"
             type="primary"
             plain
@@ -110,7 +112,10 @@
         label-width="100px"
       >
         <el-form-item label="级别" prop="level">
-          <el-input v-model="dialog.forms.level"></el-input>
+          <el-input
+            :disabled="dialog.forms.level < 6 && dialog.forms.level > 0"
+            v-model="dialog.forms.level"
+          ></el-input>
           <!-- <el-select
             filterable
             allow-create
@@ -127,7 +132,10 @@
         </el-form-item>
 
         <el-form-item label="名称" prop="name">
-          <el-input v-model="dialog.forms.name"></el-input>
+          <el-input
+            :disabled="dialog.forms.level < 6 && dialog.forms.level > 0"
+            v-model="dialog.forms.name"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="通知方式" prop="noteType">
@@ -153,7 +161,11 @@
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
-          <el-radio-group class="radio-status" v-model="dialog.forms.status" style="width: 100%">
+          <el-radio-group
+            class="radio-status"
+            v-model="dialog.forms.status"
+            style="width: 100%"
+          >
             <el-radio border :label="1" style="color: #55fb55">启用</el-radio>
             <el-radio border :label="0" style="color: gray">禁用</el-radio>
           </el-radio-group>
@@ -191,10 +203,10 @@ export default {
         { id: 5, name: "预警" },
       ],
       noteContentOpts: [
-        { id: '1', name: "时间" },
-        { id: '2', name: "位置" },
-        { id: '3', name: "内容" },
-        { id: '4', name: "告警值" },//后台返回的id是用string的
+        { id: "1", name: "时间" },
+        { id: "2", name: "位置" },
+        { id: "3", name: "内容" },
+        { id: "4", name: "告警值" }, //后台返回的id是用string的
       ],
       secondMenuOpts: [],
       thirdMenuOpts: [],
@@ -236,6 +248,7 @@ export default {
           } else {
             callAPI = alertLevelAdd;
           }
+          this.dialog.forms.level = +this.dialog.forms.level;
           callAPI(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
             this.$refs["dialogForm"].resetFields();
@@ -265,7 +278,7 @@ export default {
         // 编辑
         this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
       } else {
-        this.dialog.forms = {status:1};
+        this.dialog.forms = { status: 1 };
         this.$set(this.dialog.forms, "noteContent", []);
       }
       this.dialog.visible = true;
@@ -307,7 +320,6 @@ export default {
   grid-template-rows: 60px auto 55px;
   // background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: calc(100vh - 260px);
-
 }
 .head {
   display: grid;

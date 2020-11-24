@@ -1,6 +1,10 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
+
+.el-message-box {
+  background-color: #0d305c;
+}
 .el-drawer {
   background: #0b2a52;
 }
@@ -138,8 +142,13 @@
   background: #0838698c;
   border: none;
 }
+// 斑马纹
 .el-table--striped .el-table__body tr.el-table__row--striped td {
   background: #0838698c;
+}
+// 覆盖上面的,不然斑马hover没效果
+.el-table--enable-row-hover .el-table__body tr:hover > td {
+  background-color: #0d708c;
 }
 
 .el-form-item__label,

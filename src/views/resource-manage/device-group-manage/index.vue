@@ -128,12 +128,14 @@
             @click="handleCDDialog(row)"
           ></el-button> -->
           <el-button
+            title="编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
             @click="handleDialog(row)"
           ></el-button>
           <el-button
+            title="删除"
             icon="el-icon-delete"
             type="primary"
             plain
@@ -221,6 +223,7 @@
             <el-table-column label="操作" align="center">
               <template slot-scope="{ row }">
                 <el-button
+                  title="删除"
                   icon="el-icon-delete"
                   type="primary"
                   plain
@@ -617,7 +620,11 @@ export default {
                 pointId	[int]	是	测点id
                location [string]	是	位置信息
         */
-      if (this.listDataCDBind.some((i) => i.imgType === "" || i.imgType===undefined)) {
+      if (
+        this.listDataCDBind.some(
+          (i) => i.imgType === "" || i.imgType === undefined
+        )
+      ) {
         this.$message.error("请为每个绑定测点选择图片类型");
         return;
       }
@@ -874,9 +881,10 @@ export default {
 ::v-deep {
   .dialog-img {
     .el-dialog {
-      padding-bottom: 3rem;
+      // padding-bottom: 3rem;
     }
     .content {
+      padding: 1rem;
       .grid {
         display: grid;
         grid-template-columns: 3fr 1fr;

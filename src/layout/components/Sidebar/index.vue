@@ -2,6 +2,7 @@
   <div :class="{ 'has-logo': showLogo }">
     <logo v-if="showLogo" :collapse="false" />
     <!-- <el-scrollbar wrap-class="scrollbar-wrapper"> -->
+      <!-- 多级菜单默认是折叠的,要设置默认展开菜单 -->
       <el-menu
         :default-active="activeMenu"
         :collapse="false"
