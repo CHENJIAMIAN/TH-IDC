@@ -413,6 +413,9 @@ export default {
     // console.log('created',this.$route,this.$route.meta.title)
 
     this.getList();
+    setInterval(() => {
+      this.getList();
+    }, 6*1000);
   },
   methods: {
     handleImgTabClick(tab, event) {
@@ -422,7 +425,7 @@ export default {
     getList() {
       this.listLoading = true;
       deviceGroupTypeGetData({ id: this.deviceGroupId }).then((res) => {
-        console.log("GetData", res.data);
+        // console.log("GetData", res.data);
         const {
           deviceGroupId,
           deviceType,
@@ -436,6 +439,7 @@ export default {
         this.$parent.alarmCount = alarmCount;
 
         this.listData = list;
+        // console.log(list.filter(i=>i.onOff==0).map(i=>i.deviceCode));
         this.listLoading = false;
       });
     },
