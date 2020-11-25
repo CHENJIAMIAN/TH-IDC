@@ -36,17 +36,17 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="smtp" label="邮箱服务器" />
-      <el-table-column sortable prop="auth" label="是否验证">
+      <el-table-column prop="smtp" label="邮箱服务器" />
+      <el-table-column prop="auth" label="是否验证">
         <template slot-scope="{ row }">
           <span v-if="row.auth == 1">验证</span>
           <span v-else>不验证</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="email" label="邮箱地址" />
-      <el-table-column sortable prop="username" label="邮箱用户名" />
+      <el-table-column prop="email" label="邮箱地址" />
+      <el-table-column prop="username" label="邮箱用户名" />
       <!-- <el-table-column sortable prop="password" label="密码" /> -->
-      <el-table-column sortable prop="remark" label="描述" />
+      <el-table-column prop="remark" label="描述" />
       <el-table-column label="状态" width="150" align="center">
         <template slot-scope="{ row }">
           <el-switch

@@ -49,15 +49,15 @@
       :data="listData"
     >
       <el-table-column sortable prop="name" label="菜单名称" />
-      <el-table-column sortable prop="menuType" label="菜单类型">
+      <el-table-column prop="menuType" label="菜单类型">
         <template slot-scope="{ row }">
           <span v-if="row.menuType == 1">子系统</span>
           <span v-else-if="row.menuType == 2">模块</span>
           <span v-else-if="row.menuType == 3">菜单</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="createTime" label="创建时间" />
-      <el-table-column sortable prop="createUserName" label="创建人" />
+      <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column prop="createUserName" label="创建人" />
       <!-- <el-table-column sortable prop="updateTime" label="修改时间" /> -->
 
       <el-table-column label="操作" align="center" width="161">

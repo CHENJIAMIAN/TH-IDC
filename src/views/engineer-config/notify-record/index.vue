@@ -81,8 +81,8 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="noteId" label="通知ID" />
-      <el-table-column sortable prop="noteLevel" label="通知等级">
+      <el-table-column prop="noteId" label="通知ID" />
+      <el-table-column prop="noteLevel" label="通知等级">
         <template slot-scope="{ row }">
           {{
             alertLevelOpts.find((i) => i.id == row.noteLevel) &&
@@ -98,11 +98,11 @@
           }}
         </template>
       </el-table-column>
-      <el-table-column sortable prop="toUser" label="接收者用户ID" />
-      <el-table-column sortable prop="userName" label="接收者用户名称" width="160"/>
-      <el-table-column sortable prop="sendTarget" label="目标邮箱/号码" />
-      <el-table-column sortable prop="sendContent" label="告警内容" />
-      <el-table-column sortable prop="status" label="状态">
+      <el-table-column prop="toUser" label="接收者用户ID" />
+      <el-table-column prop="userName" label="接收者用户名称" width="160"/>
+      <el-table-column prop="sendTarget" label="目标邮箱/号码" />
+      <el-table-column prop="sendContent" label="告警内容" />
+      <el-table-column prop="status" label="状态">
         <template slot-scope="{ row }">
           <span style="color: #55fb55" v-if="row.status == 1">成功</span>
           <span style="color: gray" v-else>失败</span>

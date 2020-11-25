@@ -84,9 +84,9 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="roomCode" label="房间编号" />
-      <el-table-column sortable prop="name" label="房间名称" />
-      <el-table-column sortable prop="roomType" label="房间类型">
+      <el-table-column prop="roomCode" label="房间编号" />
+      <el-table-column prop="name" label="房间名称" />
+      <el-table-column prop="roomType" label="房间类型">
         <template slot-scope="{ row }">
           <span>{{ row.roomType | capitalize }}</span>
         </template>
@@ -105,7 +105,7 @@
         </template>
       </el-table-column>
       <el-table-column sortable prop="sort" label="排序" />
-      <el-table-column sortable prop="floorName" label="楼层名称" />
+      <el-table-column prop="floorName" label="楼层名称" />
       <!-- <el-table-column sortable prop="floorCode" label="楼层编号" /> -->
       <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
@@ -155,7 +155,7 @@
         label-width="100px"
       >
         <el-form-item label="房间编号" prop="roomCode">
-          <el-input 
+          <el-input
             :disabled="!!dialog.forms.id"
           v-model="dialog.forms.roomCode"></el-input>
         </el-form-item>

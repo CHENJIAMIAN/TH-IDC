@@ -82,18 +82,18 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="userName" label="操作人账号" />
-      <el-table-column sortable prop="realName" label="操作人" />
-      <el-table-column sortable prop="moduleName" label="模块名称" />
+      <el-table-column prop="userName" label="操作人账号" />
+      <el-table-column prop="realName" label="操作人" />
+      <el-table-column prop="moduleName" label="模块名称" />
       <el-table-column
         sortable
         prop="moduleMethod"
         label="模块方法"
         width="250"
       />
-      <el-table-column sortable prop="userIp" label="操作人IP" />
-      <el-table-column sortable prop="description" label="描述" />
-      <el-table-column sortable prop="logType" label="日志类型">
+      <el-table-column prop="userIp" label="操作人IP" />
+      <el-table-column prop="description" label="描述" />
+      <el-table-column prop="logType" label="日志类型">
         <template slot-scope="{ row }">
           <span v-if="row.logType == 1">正常日志</span>
           <span v-else-if="row.logType == 2">异常日志</span>
@@ -105,7 +105,7 @@
         label="创建时间"
         width="180"
       />
-      <el-table-column sortable prop="takeTime" label="耗时(毫秒)" />
+      <el-table-column prop="takeTime" label="耗时(毫秒)" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{ row }">
           <el-button

@@ -38,9 +38,9 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="floorCode" label="楼层编号" />
-      <el-table-column sortable prop="name" label="楼层名称" />
-      <el-table-column sortable prop="imgUrl" label="预览图">
+      <el-table-column prop="floorCode" label="楼层编号" />
+      <el-table-column prop="name" label="楼层名称" />
+      <el-table-column prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
           <el-button
             type="text"
