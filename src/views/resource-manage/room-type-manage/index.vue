@@ -41,8 +41,8 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="name" label="房间类型名称" />
-      <el-table-column sortable prop="abbr" label="简称" />
+      <el-table-column prop="name" label="房间类型名称" />
+      <el-table-column prop="abbr" label="简称" />
       <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
           <el-button

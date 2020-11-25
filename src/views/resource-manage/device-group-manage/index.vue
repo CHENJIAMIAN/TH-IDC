@@ -92,9 +92,9 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="deviceGroupCode" label="设备组编号" />
-      <el-table-column sortable prop="name" label="设备组名称" />
-      <el-table-column sortable prop="deviceType" label="设备组类型">
+      <el-table-column prop="deviceGroupCode" label="设备组编号" />
+      <el-table-column prop="name" label="设备组名称" />
+      <el-table-column prop="deviceType" label="设备组类型">
         <template slot-scope="{ row }">
           <span>{{
             deviceTypeOpts.find((i) => i.id === row.deviceType) &&
@@ -102,14 +102,14 @@
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="imgUrl" label="预览图">
+      <el-table-column prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
           <el-button type="text" size="mini" @click="handleImgDialog(row)"
             >编辑</el-button
           >
         </template>
       </el-table-column>
-      <el-table-column sortable prop="roomName" label="房间名称" />
+      <el-table-column prop="roomName" label="房间名称" />
       <!-- <el-table-column sortable prop="roomCode" label="房间编号" /> -->
       <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">

@@ -55,10 +55,10 @@
         border
         :data="listData"
       >
-        <el-table-column sortable prop="name" label="测点类型名称" />
+        <el-table-column prop="name" label="测点类型名称" />
         <!-- <el-table-column sortable prop="deviceTypeId" label="设备类型ID" /> -->
-        <el-table-column sortable prop="units" label="单位" width="80"/>
-        <el-table-column sortable prop="valueType" label="值类型">
+        <el-table-column prop="units" label="单位" width="80"/>
+        <el-table-column prop="valueType" label="值类型">
           <template slot-scope="{ row }">
             {{
               valueTypeOpts.find((i) => i.id == row.valueType) &&
@@ -66,9 +66,9 @@
             }}
           </template>
         </el-table-column>
-        <el-table-column sortable prop="columnName" label="字段名" />
-        <el-table-column sortable prop="deviceTypeName" label="设备类型名称" />
-        <el-table-column sortable prop="count" label="告警规则条数" />
+        <el-table-column prop="columnName" label="字段名" />
+        <el-table-column prop="deviceTypeName" label="设备类型名称" />
+        <el-table-column prop="count" label="告警规则条数" />
 
         <el-table-column label="操作" align="center" width="120">
           <template slot-scope="{ row }">

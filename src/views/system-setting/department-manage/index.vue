@@ -42,8 +42,8 @@
       :data="listData"
     >
       <el-table-column sortable prop="name" label="部门名称" />
-      <el-table-column sortable prop="createTime" label="创建时间" />
-      <el-table-column sortable prop="createUserName" label="创建人" />
+      <el-table-column  prop="createTime" label="创建时间" />
+      <el-table-column  prop="createUserName" label="创建人" />
       <!-- <el-table-column sortable prop="updateTime" label="修改时间" /> -->
       <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">

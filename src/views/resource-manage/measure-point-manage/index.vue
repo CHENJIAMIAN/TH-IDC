@@ -130,9 +130,9 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="pointCode" label="测点编号" />
-      <el-table-column sortable prop="name" label="测点名称" />
-      <el-table-column sortable prop="pointType" label="测点类型">
+      <el-table-column prop="pointCode" label="测点编号" />
+      <el-table-column prop="name" label="测点名称" />
+      <el-table-column prop="pointType" label="测点类型">
         <template slot-scope="{ row }">
           <span>{{
             pointAllTypeOpts.find((i) => i.id === row.pointType) &&
@@ -140,13 +140,13 @@
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="deviceName" label="设备名称" />
+      <el-table-column prop="deviceName" label="设备名称" />
       <!-- <el-table-column sortable prop="deviceCode" label="设备编号" /> -->
-      <el-table-column sortable prop="deviceGroupName" label="设备组名称" />
+      <el-table-column prop="deviceGroupName" label="设备组名称" />
       <!-- <el-table-column sortable prop="deviceGroupCode" label="设备组编号" /> -->
-      <el-table-column sortable prop="roomName" label="房间名称" />
+      <el-table-column prop="roomName" label="房间名称" />
       <!-- <el-table-column sortable prop="roomCode" label="房间编号" /> -->
-      <el-table-column sortable prop="floorName" label="楼层名称" />
+      <el-table-column prop="floorName" label="楼层名称" />
       <!-- <el-table-column sortable prop="floorCode" label="楼层编号" /> -->
       <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
@@ -188,7 +188,7 @@
         label-width="80px"
       >
         <el-form-item label="测点编号" prop="pointCode">
-          <el-input 
+          <el-input
             :disabled="!!dialog.forms.id"
           v-model="dialog.forms.pointCode"></el-input>
         </el-form-item>

@@ -41,8 +41,8 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="name" label="设备类型名称" />
-      <el-table-column sortable prop="tableName" label="表名" />
+      <el-table-column prop="name" label="设备类型名称" />
+      <el-table-column prop="tableName" label="表名" />
       <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
           <el-button

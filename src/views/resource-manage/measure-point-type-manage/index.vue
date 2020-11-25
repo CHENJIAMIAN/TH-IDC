@@ -61,15 +61,15 @@
       border
       :data="listData"
     >
-      <el-table-column sortable prop="name" label="测点类型名称" />
-      <el-table-column sortable prop="deviceTypeName" label="设备类型名称" />
-      <el-table-column sortable prop="units" label="单位" />
-      <el-table-column sortable prop="valueType" label="值类型" >
+      <el-table-column prop="name" label="测点类型名称" />
+      <el-table-column prop="deviceTypeName" label="设备类型名称" />
+      <el-table-column prop="units" label="单位" />
+      <el-table-column prop="valueType" label="值类型" >
           <template slot-scope="{ row }">
           <span>{{ row.valueType | capitalize }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="columnName" label="字段名" />
+      <el-table-column prop="columnName" label="字段名" />
 
 
 

@@ -75,12 +75,12 @@
     >
       <el-table-column sortable prop="userName" label="账号" />
       <el-table-column sortable prop="realName" label="姓名" />
-      <el-table-column sortable prop="roleNameList" label="角色" />
-      <el-table-column sortable prop="departmentName" label="部门" />
-      <el-table-column sortable prop="phone" label="电话" />
-      <el-table-column sortable prop="email" label="邮箱" />
-      <el-table-column sortable prop="wechat" label="微信" />
-      <el-table-column sortable prop="status" label="状态">
+      <el-table-column prop="roleNameList" label="角色" />
+      <el-table-column prop="departmentName" label="部门" />
+      <el-table-column prop="phone" label="电话" />
+      <el-table-column prop="email" label="邮箱" />
+      <el-table-column prop="wechat" label="微信" />
+      <el-table-column prop="status" label="状态">
         <template slot-scope="{ row }">
           <span style="color: #55fb55" v-if="row.status == 1">启用</span>
           <span style="color: gray" v-else>禁用</span>
