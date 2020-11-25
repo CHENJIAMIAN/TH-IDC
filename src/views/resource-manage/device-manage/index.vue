@@ -130,7 +130,7 @@
       <!-- <el-table-column sortable prop="roomCode" label="房间编号" /> -->
       <el-table-column sortable prop="floorName" label="楼层名称" />
       <!-- <el-table-column sortable prop="floorCode" label="楼层编号" /> -->
-      <el-table-column label="操作" align="center" width="161">
+      <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
             title="绑定测点"

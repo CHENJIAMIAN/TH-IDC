@@ -70,7 +70,7 @@
         <el-table-column sortable prop="deviceTypeName" label="设备类型名称" />
         <el-table-column sortable prop="count" label="告警规则条数" />
 
-        <el-table-column label="操作" align="center" width="100">
+        <el-table-column label="操作" align="center" width="120">
           <template slot-scope="{ row }">
             <el-button
               title = "编辑"

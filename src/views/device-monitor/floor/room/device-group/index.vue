@@ -3,11 +3,13 @@
     class="device-group-index"
     :style="
       isDcLayout
-        ? 'grid-template-columns: 40% auto;'
+        ? isHideLeft ?  'grid-template-columns: auto;': 'grid-template-columns: 40% auto;'
         : 'grid-template-rows: 1fr 220px;'
     "
   >
-    <!-- 图片 -->
+
+
+    <!-- 图片 if else-->
     <div
       class="row1"
       :style="{ gap: !isDcLayout ? '20px' : 'initial' }"
@@ -38,7 +40,7 @@
         />
       </div>
     </div>
-    <div v-else class="dc-tab">
+    <div v-else class="dc-tab" v-show="!isHideLeft">
       <el-tabs stretch v-model="imgActiveName" @tab-click="handleImgTabClick">
         <el-tab-pane label="设备组" name="device">
           <div
@@ -102,7 +104,14 @@
       />
     </div>
     <!-- 表格 -->
-    <div>
+    <div style="position:relative;">
+      <img
+        :src="!isHideLeft ?  require('@/assets/img/shou.png'):require('@/assets/img/fang.png')"
+        v-show="isDcLayout"
+        title="切换图片显示"
+        class="side-toggler"
+        @click="isHideLeft=!isHideLeft"
+      ></img>
       <div class="row2">
         <el-tabs
           :class="isDcLayout ? 'right-el-tabs' : 'btm-el-tabs'"
@@ -314,7 +323,6 @@
       width="80%"
       custom-class="dialog-img"
       :visible.sync="dialogImgVisible"
-      :show-close="false"
     >
       <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
     </el-dialog>
@@ -338,6 +346,7 @@ export default {
   },
   data() {
     return {
+      isHideLeft: false,
       deviceType: NaN,
       imgActiveName: "device",
       tableActiveName: "data-info",
@@ -502,6 +511,16 @@ export default {
   padding: 1rem;
 }
 
+.side-toggler {
+  position: absolute;
+  left: -18px;
+  cursor: pointer;
+  color: #31c6f1;
+  z-index: 1;
+  width: 1rem;
+  top: 1px;
+}
+
 ::v-deep {
   .el-table th:first-child {
     //切掉第一个表头列的一个角
@@ -532,7 +551,7 @@ export default {
       padding: 30px 20px 30px;
     }
     .el-dialog__header {
-      display: none;
+      // display: none;
     }
   }
 }

@@ -2,11 +2,12 @@
   <div class="room-index">
     <div class="room-index-self">
       <div class="row1">
-        <div class="btns">
+        <div class="btns" ref="btnsOut">
           <!-- {{ deviceGroupList.length }}
           {{ showBtns }} -->
           <template v-if="showBtns && !isOnlyOneDeviceGroup">
             <el-button
+              @hook:updated="btnsOutUpdated"
               class="el-button-custom"
               :class="{
                 active:
@@ -18,6 +19,7 @@
               >{{ deviceGroup.name }}</el-button
             >
             <el-popover
+              :width="popoverWidth"
               placement="bottom-end"
               trigger="hover"
               v-if="deviceGroupList.slice(4).length > 0"
@@ -28,7 +30,7 @@
                   class="btn-as-txt"
                   :class="{
                     'active-txt':
-                      deviceGroup.name == $route.params.deviceGroupName,
+                      deviceGroup.name == $route.params.deviceGroupName.trim(),
                   }"
                   v-for="deviceGroup in deviceGroupList.slice(4)"
                   :key="deviceGroup.id"
@@ -85,6 +87,7 @@ export default {
       temperature: "",
       alarmCount: "",
       deviceGroupList: [],
+      popoverWidth: "",
     };
   },
   computed: {
@@ -136,7 +139,17 @@ export default {
         this.routeToDeviceGroup(deviceGroup);
       }
   },
+  mounted() {},
   methods: {
+    // 让popover宽度跟按钮们的宽度一致
+    btnsOutUpdated() {
+      // console.log("btnsOutUpdated");
+      const width=getComputedStyle(this.$refs.btnsOut).width.slice(
+        0,
+        -2
+      );
+      this.popoverWidth = +width + 3;
+    },
     routeToDeviceGroup(deviceGroup) {
       // 名称包含# 必须用encodeURIComponent编码一下
       this.$store.commit("app/SET_CURRENT_DEVICEGROUP", {
@@ -193,6 +206,7 @@ export default {
   grid-auto-flow: column;
   gap: 1rem;
   align-items: center;
+  justify-content: start;
 }
 
 .btns-fake {
@@ -205,7 +219,7 @@ export default {
   border: none;
   color: white;
   font-size: 1.1rem;
-  width: 200px;
+  width: 203px;
   text-align: center;
   cursor: pointer;
   &:hover {

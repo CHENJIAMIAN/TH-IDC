@@ -111,7 +111,7 @@
       </el-table-column>
       <el-table-column sortable prop="roomName" label="房间名称" />
       <!-- <el-table-column sortable prop="roomCode" label="房间编号" /> -->
-      <el-table-column label="操作" align="center" width="280">
+      <el-table-column label="操作" align="center" width="240">
         <template slot-scope="{ row }">
           <el-button
             title="绑定设备"
@@ -900,6 +900,7 @@ export default {
           justify-content: center;
           align-items: center;
           overflow: auto;
+          padding: 3px;
           .marker {
             position: absolute;
             width: 10px;

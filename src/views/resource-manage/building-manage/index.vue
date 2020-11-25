@@ -86,7 +86,6 @@
       width="80%"
       custom-class="dialog-img"
       :visible.sync="dialogImgVisible"
-      :show-close="false"
     >
       <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
     </el-dialog>
@@ -226,7 +225,7 @@ export default {
       padding: 30px 20px 30px;
     }
     .el-dialog__header {
-      display: none;
+      // display: none;
     }
   }
 }

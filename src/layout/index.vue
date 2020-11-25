@@ -22,12 +22,22 @@
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     </div>
     <!-- 次级路由，从路由$route获取 -->
-    <div class="side" v-show="sidebar.showSide">
+    <div class="side" :style="
+          sidebar.showSide ? 'opacity:1;transition: all 1s ease-out;':'opacity:0;'
+    ">
+    <!-- 解决菜单从隐藏到显示，感觉怪怪的，被右边的盖着在上面出来似的，应该同步出来。所有的菜单都是这 -->
       <!-- side包含一个背景 -->
       <!-- sidebar的根据router生成的多级菜单 -->
       <sidebar v-show="sidebar.opened" />
     </div>
-    <div class="main-container">
+    <div class="main-container" 
+    :style="{
+          transition: $route.path.includes('/device-monitor/') 
+          ?
+          ''
+          :
+          'margin-left 0.28s'
+      }">
       <img
         :src="sidebar.showSide ?  require('@/assets/img/shou.png'):require('@/assets/img/fang.png')"
         v-show="!$route.path.includes('/room/')"
@@ -136,7 +146,7 @@ export default {
     border-image-outset: 35px 37px 37px 35px;
     border-image-repeat: stretch stretch;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: hidden;    
   }
 }
 
