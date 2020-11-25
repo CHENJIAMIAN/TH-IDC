@@ -413,9 +413,14 @@ export default {
     // console.log('created',this.$route,this.$route.meta.title)
 
     this.getList();
-    setInterval(() => {
+    const interval = setInterval(() => {
+      // console.log(this._uid, "getList");
       this.getList();
-    }, 6*1000);
+    }, 6 * 1000);
+    this.$on("hook:beforeDestroy", (_) => {
+      // console.log("clearInterval");
+      clearInterval(interval);
+    });
   },
   methods: {
     handleImgTabClick(tab, event) {
@@ -557,7 +562,7 @@ export default {
       right: 1rem;
       top: 1rem;
     }
-    .spin{
+    .spin {
       animation: spin 1s linear infinite;
     }
   }
