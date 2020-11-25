@@ -2,13 +2,20 @@
   <div class="floor-index">
     <div class="floor-index-self" v-if="!$route.path.includes('/room')">
       <div class="col1">
+        <!-- v-show="sidebar.showSide" -->
         <el-button
-          v-show="sidebar.showSide"
+          :style="
+            sidebar.showSide
+              ? 'opacity:1;transition: all 1s ease-out;'
+              : 'opacity:0;'
+          "
           v-for="room in roomList"
           :key="room.id"
           @click="
             $router.push(
-              `/device-monitor/floor/${floorId}/${floorName}/room/${room.id}/${encodeURIComponent(room.name)}`
+              `/device-monitor/floor/${floorId}/${floorName}/room/${
+                room.id
+              }/${encodeURIComponent(room.name)}`
             )
           "
           >{{ room.name }}</el-button
@@ -48,7 +55,7 @@ export default {
     }),
   },
   created() {
-    console.log('floor',this._uid);
+    console.log("floor", this._uid);
     const { floorId, floorName } = this.$route.params;
     Object.assign(this, { floorId, floorName });
     this.$route.meta.title = floorName;

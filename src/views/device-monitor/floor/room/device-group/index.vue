@@ -16,7 +16,7 @@
       v-if="!isDcLayout"
     >
       <div class="row1-col1">
-        <img
+        <!-- <img
           style="cursor: pointer"
           @click="
             dialogImgVisible = true;
@@ -25,9 +25,15 @@
           class="preview-img"
           :src="deviceGroupImg"
           alt="加载失败"
-        />
+        /> -->
+        <div class="kts">
+          <div class="kt" v-for="kt in listData" :key="kt.deviceCode">
+            <img :src="kt.onOff ? require('@/assets/img/kt1.png'):require('@/assets/img/kt2.png')" class="img-kt"/>
+            <img :src="kt.onOff ? require('@/assets/img/fs1.png'):require('@/assets/img/fs2.png')" class="img-fs"/>
+          </div>
+        </div>
       </div>
-      <div class="row1-col2" v-if="!isDcLayout">
+      <!-- <div class="row1-col2" v-if="!isDcLayout">
         <img
           style="cursor: pointer"
           @click="
@@ -38,7 +44,7 @@
           :src="roomImage"
           alt="加载失败"
         />
-      </div>
+      </div> -->
     </div>
     <div v-else class="dc-tab" v-show="!isHideLeft">
       <el-tabs stretch v-model="imgActiveName" @tab-click="handleImgTabClick">
@@ -402,11 +408,9 @@ export default {
       deviceGroupId,
       deviceGroupName,
     });
-    // this.deviceGroupImg = this.currentDeviceGroup.imgUrl; //|| this.$route.query.deviceGroupImg;
-    // this.deviceGroupCode = this.currentDeviceGroup.deviceGroupCode; //|| this.$route.query.deviceGroupCode;
-    //
-    this.$route.meta.title = deviceGroupName;
     // 下一次会显示上一次设置的名字，怎么解决？
+    this.$route.meta.title = deviceGroupName.trim();
+    // console.log('created',this.$route,this.$route.meta.title)
 
     this.getList();
   },
@@ -427,13 +431,7 @@ export default {
           list,
         } = res.data;
         this.deviceType = deviceType;
-        /* 
-        deviceGroupId	        [int]	是	设备组id		
-        deviceType	        [int]	是	15种设备类型,对应15种不同数据结构的list项
-        temperature	        [string]	是	房间温度		
-        alarmCount	        [int]	是	房间告警数		
-        list              [array]	是	数据列表，有15种数据返回，请参考 数据返回说明目录下的文档，对应deviceType的值有不同的返回不同的结果	
-        */
+        // list              [array]	是	数据列表，有15种数据返回，请参考 数据返回说明目录下的文档，对应deviceType的值有不同的返回不同的结果
         this.$parent.temperature = temperature;
         this.$parent.alarmCount = alarmCount;
 
@@ -458,6 +456,7 @@ export default {
       border: solid #119aca;
       // 图片多大都不会撑开
       height: calc(100vh - 460px);
+      padding: 2rem;
     }
     &-col2 {
       display: grid;
@@ -518,7 +517,44 @@ export default {
   color: #31c6f1;
   z-index: 1;
   width: 1rem;
-  top: 1px;
+  top: 50%;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.kts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  overflow: auto;
+
+  .kt {
+    position: relative;
+    width: 222px;
+    height: 100px;
+    img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .img-kt {
+    }
+    .img-fs {
+      width: 20%;
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      animation: spin 1s linear infinite;
+    }
+  }
 }
 
 ::v-deep {

@@ -32,7 +32,7 @@
     </div>
     <div class="main-container" 
     :style="{
-          transition: $route.path.includes('/device-monitor/') 
+          transition: $route.path.includes('/room/') 
           ?
           ''
           :
@@ -140,6 +140,7 @@ export default {
     bottom: 60px;
     width: 200px;
     border-style: solid;
+
     border-image-source: url(../assets/img/sideborder.png);
     border-image-slice: 47 92 47 87;
     border-image-width: 47px 92px 47px 90px;

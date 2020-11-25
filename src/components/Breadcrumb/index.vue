@@ -1,5 +1,5 @@
 <template>
-  <el-breadcrumb class="app-breadcrumb" separator="">
+  <el-breadcrumb class="app-breadcrumb" separator="" ref="sdfdsf">
     <el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
       <!-- <span
           v-if="item.redirect === 'noRedirect' || index == levelList.length - 1"
@@ -32,6 +32,9 @@ export default {
   },
   created() {
     this.getBreadcrumb();
+  },
+  mounted(){
+    window.sdfdsf = this.$refs.sdfdsf;
   },
   methods: {
     getBreadcrumb() {
@@ -74,7 +77,7 @@ export default {
         return;
       }
       // 解决设备监控页面,闪烁残留上一个设备组名称的问题,会造成刚进去面包屑没有最后一个,为什么?
-      if (this.$route.name === "device-group") this.$route.meta.title = "";
+      // if (this.$route.path.includes("/device-group")) this.$route.meta.title = "";
       this.$router.push(this.pathCompile(path));
     },
   },

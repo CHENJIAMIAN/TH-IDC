@@ -1,8 +1,13 @@
 <template>
   <div class="building-index">
     <div class="col1">
+      <!-- v-show="sidebar.showSide" -->
       <el-button
-        v-show="sidebar.showSide"
+        :style="
+          sidebar.showSide
+            ? 'opacity:1;transition: all 1s ease-out;'
+            : 'opacity:0;'
+        "
         v-for="i in floorList"
         :key="i.id"
         @click="$router.push(`/device-monitor/floor/${i.id}/${i.name}`)"
@@ -82,6 +87,6 @@ export default {
   justify-self: center;
   align-self: center;
   overflow: auto;
-  border-radius:10px;
+  border-radius: 10px;
 }
 </style>

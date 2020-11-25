@@ -30,10 +30,10 @@ router.beforeEach(async (to, from, next) => {
       // 控制开不开sidebar
       store.commit("app/OPEN_SIDE");
       if (to.path.includes("/device-monitor")) {
+        store.dispatch("app/closeSideBar", { withoutAnimation: false });
         if (to.path.includes("/room")) {
           store.commit("app/CLOSE_SIDE");
         }
-        store.dispatch("app/closeSideBar", { withoutAnimation: false });
         next();
       } else {
         store.dispatch("app/openSideBar", { withoutAnimation: false });

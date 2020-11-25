@@ -10,8 +10,7 @@
               @hook:updated="btnsOutUpdated"
               class="el-button-custom"
               :class="{
-                active:
-                  deviceGroup.name == $route.params.deviceGroupName.trim(),
+                active: deviceGroup.name == activeDeviceGroupName,
               }"
               v-for="deviceGroup in deviceGroupList.slice(0, 4)"
               :key="deviceGroup.id"
@@ -29,8 +28,7 @@
                 <span
                   class="btn-as-txt"
                   :class="{
-                    'active-txt':
-                      deviceGroup.name == $route.params.deviceGroupName.trim(),
+                    'active-txt': deviceGroup.name == activeDeviceGroupName,
                   }"
                   v-for="deviceGroup in deviceGroupList.slice(4)"
                   :key="deviceGroup.id"
@@ -101,6 +99,10 @@ export default {
     7 精密空调房  
     8 高压配电房       有设备组 布局
     */
+    activeDeviceGroupName() {
+      if (!this.$route.params.deviceGroupName) return "";
+      return this.$route.params.deviceGroupName.trim();
+    },
     isOnlyOneDeviceGroup() {
       return this.roomName.includes("IDC");
     },
@@ -144,10 +146,7 @@ export default {
     // 让popover宽度跟按钮们的宽度一致
     btnsOutUpdated() {
       // console.log("btnsOutUpdated");
-      const width=getComputedStyle(this.$refs.btnsOut).width.slice(
-        0,
-        -2
-      );
+      const width = getComputedStyle(this.$refs.btnsOut).width.slice(0, -2);
       this.popoverWidth = +width + 3;
     },
     routeToDeviceGroup(deviceGroup) {
