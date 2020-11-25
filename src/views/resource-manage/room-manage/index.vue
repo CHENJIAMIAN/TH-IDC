@@ -91,7 +91,7 @@
           <span>{{ row.roomType | capitalize }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="imgUrl" label="预览图">
+      <el-table-column prop="imgUrl" label="预览图">
         <template slot-scope="{ row }">
           <el-button
             type="text"
