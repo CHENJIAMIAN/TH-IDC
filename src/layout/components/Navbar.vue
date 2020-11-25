@@ -49,7 +49,12 @@
       </div>
     </div>
 
-    <el-drawer title="告警通知" :visible.sync="drawer" direction="btt"  size="80%">
+    <el-drawer
+      title="告警通知"
+      :visible.sync="drawer"
+      direction="btt"
+      size="80%"
+    >
       <alert-notify />
     </el-drawer>
   </div>
@@ -82,6 +87,11 @@ export default {
     alertNotificationGetAllCount().then(
       (r) => (this.notifyCount = r.data.count)
     );
+    setInterval(() => {
+      alertNotificationGetAllCount().then(
+        (r) => (this.notifyCount = r.data.count)
+      );
+    }, 6 * 1000);
     this.realName = Cookies.get("realName");
   },
   methods: {
