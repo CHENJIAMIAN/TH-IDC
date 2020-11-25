@@ -29,7 +29,7 @@
         <div class="kts">
           <div class="kt" v-for="kt in listData" :key="kt.deviceCode">
             <img :src="kt.onOff ? require('@/assets/img/kt1.png'):require('@/assets/img/kt2.png')" class="img-kt"/>
-            <img :src="kt.onOff ? require('@/assets/img/fs1.png'):require('@/assets/img/fs2.png')" class="img-fs"/>
+            <img :src="kt.onOff ? require('@/assets/img/fs1.png'):require('@/assets/img/fs2.png')" class="img-fs" :class="kt.onOff && 'spin'"/>
           </div>
         </div>
       </div>
@@ -552,6 +552,8 @@ export default {
       position: absolute;
       right: 1rem;
       top: 1rem;
+    }
+    .spin{
       animation: spin 1s linear infinite;
     }
   }
