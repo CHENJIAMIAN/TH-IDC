@@ -15,6 +15,8 @@ export function deviceGroupTypeGetData(data){return request({url:'/admin/devicem
 
 
 
+// 获取备采集到的数据接口	
+export function deviceType3DGetData(data){return request({url:'/admin/devicemonitor/deviceType3D/getData',method:'post',data})}
 
 
 

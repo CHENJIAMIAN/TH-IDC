@@ -1,14 +1,15 @@
 <template>
   <div class="floor-index">
     <div class="floor-index-self" v-if="!$route.path.includes('/room')">
-      <div class="col1">
-        <!-- v-show="sidebar.showSide" -->
-        <el-button
+      <div class="col1"
           :style="
             sidebar.showSide
               ? 'opacity:1;transition: all 1s ease-out;'
               : 'opacity:0;'
           "
+      >
+        <!-- v-show="sidebar.showSide" -->
+        <el-button
           v-for="room in roomList"
           :key="room.id"
           @click="
@@ -68,9 +69,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~@/styles/variables.scss";
+
 .floor-index {
   display: grid;
-  height: 100%;
+  height: calc(100% + 20px);
+  margin-top: -10px;
 }
 .floor-index-self {
   height: 100%;
@@ -81,7 +85,7 @@ export default {
     top: calc(110px + 5em);
     width: 200px;
     bottom: 60px;
-    left: 60px;
+    left: $sideBarWidth - 240px;
     display: grid;
     overflow: auto;
     padding-right: 5px;

@@ -12,8 +12,8 @@
     <!-- 图片 if else-->
     <div
       class="row1"
-      :style="{ gap: !isDcLayout ? '20px' : 'initial' }"
-      v-if="!isDcLayout"
+      :style="{ gap: isKtLayout ? '20px' : 'initial' }"
+      v-if="isKtLayout"
     >
       <div class="row1-col1">
         <!-- <img
@@ -26,14 +26,64 @@
           :src="deviceGroupImg"
           alt="加载失败"
         /> -->
+        <!-- 空调 -->
         <div class="kts">
           <div class="kt" v-for="kt in listData" :key="kt.deviceCode">
-            <img :src="kt.onOff ? require('@/assets/img/kt1.png'):require('@/assets/img/kt2.png')" class="img-kt"/>
-            <img :src="kt.onOff ? require('@/assets/img/fs1.png'):require('@/assets/img/fs2.png')" class="img-fs" :class="kt.onOff && 'spin'"/>
+            <el-popover
+            transition=""
+            :close-delay="0"
+            placement="right-start"
+            trigger="hover"
+              >
+                  <el-form class="kt-pop-form" :model="kt">
+                    <el-form-item label="开关状态">
+                      {{ kt.onOff ? "开" : "关" }}
+                    </el-form-item>
+                    <el-form-item label="工作模式">
+                      <span v-if="kt.workMode == 1">通风</span>
+                      <span v-if="kt.workMode == 2">制冷</span>
+                      <span v-if="kt.workMode == 3">加热</span>
+                      <span v-if="kt.workMode == 4">除湿</span>
+                    </el-form-item>
+                    <el-form-item label="电流">
+                      {{ kt.current }}
+                    </el-form-item>
+                    <el-form-item label="电压">
+                      {{ kt.voltage }}
+                    </el-form-item>
+                    <el-form-item label="送风温度">
+                      {{ kt.supplyAirTemp }}
+                    </el-form-item>
+                    <el-form-item label="回风温度">
+                      {{ kt.returnAirTemp }}
+                    </el-form-item>
+                    <el-form-item label="送风湿度">
+                      {{ kt.supplyAirHumidity }}
+                    </el-form-item>
+                    <el-form-item label="回风湿度">
+                      {{ kt.returnAirHumidity }}
+                    </el-form-item>
+                    <el-form-item label="过滤器状态">
+                      {{ kt.filterMachine ? "开" : "关" }}
+                    </el-form-item>
+                    <el-form-item label="风机状态">
+                      <span v-if="kt.airMachine == 0">关</span>
+                      <span v-if="kt.airMachine == 1">开</span>
+                    </el-form-item>
+                    <el-form-item label="压缩机状态">
+                      <span v-if="kt.compressMachine == 0">关</span>
+                      <span v-if="kt.compressMachine == 1">开</span>
+                    </el-form-item>
+                  </el-form>
+            <template slot="reference" >
+              <img :src="kt.onOff ? require('@/assets/img/kt1.png'):require('@/assets/img/kt2.png')" class="img-kt"/>
+              <img :src="kt.onOff ? require('@/assets/img/fs1.png'):require('@/assets/img/fs2.png')" class="img-fs" :class="kt.onOff && 'spin'"/>
+            </template>
+            </el-popover>
           </div>
         </div>
       </div>
-      <!-- <div class="row1-col2" v-if="!isDcLayout">
+      <!-- <div class="row1-col2" v-if="isKtLayout">
         <img
           style="cursor: pointer"
           @click="
@@ -70,15 +120,15 @@
             <div class="card-group" v-if="roomName.includes('电池')">
               <el-card class="card">
                 <span>电池组电压</span>
-                <span>{{ "无" }}</span>
+                <span>{{ dc.voltageSum || "无"}}</span>
               </el-card>
               <el-card class="card">
-                <span>电池组电流</span>
-                <span>{{ "无" }}</span>
+                <span>电池组充放电电流</span>
+                <span>{{ dc.currentSum || "无"}}</span>
               </el-card>
               <el-card class="card">
-                <span>环境温度</span>
-                <span>{{ "无" }}</span>
+                <span>电池组平均温度</span>
+                <span>{{ dc.temperatureAverage || "无" }}</span>
               </el-card>
             </div>
           </div>
@@ -110,7 +160,11 @@
       />
     </div>
     <!-- 表格 -->
-    <div style="position:relative;">
+    <div class="right-tables" :style="{        
+        'margin-left': !isHideLeft&&!isKtLayout ? '40%' : '0',
+         'width': !isHideLeft&&!isKtLayout ?'60%' : '100%',
+          position:!isKtLayout&&'absolute'
+      }">
       <img
         :src="!isHideLeft ?  require('@/assets/img/shou.png'):require('@/assets/img/fang.png')"
         v-show="isDcLayout"
@@ -136,6 +190,7 @@
                 border
                 :data="listData"
               >
+                <el-table-column prop="deviceCode" label="设备编号" width="100"/>
                 <template v-if="[3, 7, 13].includes(deviceType)">
                   <el-table-column prop="temperature" label="温度" />
                 </template>
@@ -153,7 +208,7 @@
                   <el-table-column prop="electricalDegree" label="电度" />
                 </template>
                 <template v-if="[1, 2, 4, 6, 11, 12].includes(deviceType)">
-                  <el-table-column prop="onOff" label="开关状态">
+                  <el-table-column prop="onOff" label="开关状态" width="90">
                     <template slot-scope="{ row }">
                       <div v-if="row.onOff">开</div>
                       <div v-else>关</div>
@@ -374,6 +429,12 @@ export default {
       //
       dialogImgVisible: false,
       dialogImgUrl: "",
+      // 电池的三个变量
+      dc: {
+        voltageSum: "",
+        currentSum: "",
+        temperatureAverage: "",
+      },
     };
   },
   watch: {},
@@ -385,6 +446,9 @@ export default {
     }),
     isOnlyOneDeviceGroup() {
       return this.roomName.includes("IDC");
+    },
+    isKtLayout() {
+      return this.roomName.includes("空调");
     },
     isDcLayout() {
       return !this.roomName.includes("空调");
@@ -436,9 +500,15 @@ export default {
           deviceType,
           temperature,
           alarmCount,
+          voltageSum,
+          currentSum,
+          temperatureAverage,
           list,
         } = res.data;
         this.deviceType = deviceType;
+        this.dc.voltageSum = voltageSum;
+        this.dc.currentSum = currentSum;
+        this.dc.temperatureAverage = temperatureAverage;
         // list              [array]	是	数据列表，有15种数据返回，请参考 数据返回说明目录下的文档，对应deviceType的值有不同的返回不同的结果
         this.$parent.temperature = temperature;
         this.$parent.alarmCount = alarmCount;
@@ -456,6 +526,7 @@ export default {
   display: grid;
   height: 100%;
   gap: 20px;
+  position: relative;
 
   .row1 {
     display: grid;
@@ -484,6 +555,13 @@ export default {
 .dc-tab {
   position: relative;
   border: solid #119aca;
+  position: absolute;
+  width: calc(40% - 20px);
+  height: 100%;
+}
+.right-tables {
+  transition: all 0.8s;
+  height: 100%;
 }
 
 .preview-img {
@@ -509,7 +587,7 @@ export default {
 
 .device-group-tab {
   display: grid;
-  height: calc(100vh - 340px);
+  height: calc(100vh - 300px);
 }
 .card-group {
   display: grid;
@@ -595,11 +673,19 @@ export default {
     background: #0b2a52;
     .el-dialog__body {
       display: grid;
-      padding: 30px 20px 30px;
+      padding: 0 20px 30px 30px;
+      margin-top: -20px;
     }
     .el-dialog__header {
       // display: none;
     }
+  }
+}
+</style>
+<style lang="scss">
+.kt-pop-form {
+  .el-form-item {
+    margin-bottom: 0;
   }
 }
 </style>

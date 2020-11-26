@@ -581,13 +581,6 @@ export default {
 }
 
 ::v-deep {
-  .dialog-img {
-    background: #0b2a52;
-    .el-dialog__body {
-    }
-    .el-dialog__header {
-    }
-  }
   .custom-rule-form {
     .el-form-item--mini.el-form-item {
       margin-bottom: 13px;

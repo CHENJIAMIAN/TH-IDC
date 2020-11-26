@@ -99,10 +99,7 @@
       :limit.sync="filterForm.pageSize"
       @pagination="getList"
     />
-    <!-- 图片弹窗 -->
-    <el-dialog custom-class="dialog-img"   :visible.sync="dialogImgVisible" :show-close="false">
-          <img class="preview-img" :src="dialogImgUrl" alt="加载失败">
-    </el-dialog>
+
 
     <!-- 详情弹窗 -->
     <el-dialog :visible.sync="dialog.visible">
@@ -218,7 +215,6 @@ export default {
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
-      dialogImgVisible:false,
       dialogImgUrl:"",
       dialog: {
         id: "",
@@ -356,16 +352,4 @@ export default {
   border-radius:5px;
 }
 
-  ::v-deep{
-.dialog-img{
-  background: #0b2a52;
-  .el-dialog__body{
-    display: grid;
-    padding: 30px 20px 30px;
-  }
-  .el-dialog__header{
-    display: none;
-  }
-  }
-}
 </style>

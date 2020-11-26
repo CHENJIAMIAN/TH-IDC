@@ -136,7 +136,7 @@ export default {
   .side {
     position: fixed;
     top: calc(#{$headhei} + 5em);
-    left: 60px;
+    left: $sideBarWidth - 240px;
     bottom: 60px;
     width: 200px;
     border-style: solid;

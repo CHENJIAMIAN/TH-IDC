@@ -45,6 +45,7 @@ export function spaceFloorDelete(data) { return request({ url: '/admin/space/spa
 export function spaceFloorEdit(data) { return request({ url: '/admin/space/spaceFloor/edit', method: 'post', data }) }
 //新增楼层接口
 export function spaceFloorAdd(data) { return request({ url: '/admin/space/spaceFloor/add', method: 'post', data }) }
+
 // 更新测点数据到缓存redis
 export function pointUpdateToRedis(data) { return request({ url: '/admin/device/point/updateToRedis', method: 'post', data }) }
 // 获取所有测点列表
@@ -59,6 +60,7 @@ export function pointDelete(data) { return request({ url: '/admin/device/point/d
 export function pointEdit(data) { return request({ url: '/admin/device/point/edit', method: 'post', data }) }
 // 新增测点接口 
 export function pointAdd(data) { return request({ url: '/admin/device/point/add', method: 'post', data }) }
+
 // 获取某个房间的所有设备组列表接口	
 export function deviceGroupListAll(data) { return request({ url: '/admin/device/deviceGroup/listAll', method: 'post', data }) }
 // 获取某一房间的所有设备列表接口
@@ -133,3 +135,5 @@ export function pointTypeAdd(data){return request({url:'/admin/spacetype/pointTy
 
 
 
+// 获取某设备下的所有测点列表接口
+export function pointGetPointByDeivceCode(data){return request({url:'/admin/device/point/getPointByDeivceCode',method:'post',data})}

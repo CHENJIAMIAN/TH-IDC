@@ -82,11 +82,7 @@
     </el-dialog>
 
     <!-- 图片弹窗 -->
-    <el-dialog
-      width="80%"
-      custom-class="dialog-img"
-      :visible.sync="dialogImgVisible"
-    >
+    <el-dialog custom-class="dialog-img" :visible.sync="dialogImgVisible">
       <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
     </el-dialog>
   </div>
@@ -218,11 +214,11 @@ export default {
 
 ::v-deep {
   .dialog-img {
-    height: 80%;
     background: #0b2a52;
     .el-dialog__body {
       display: grid;
-      padding: 30px 20px 30px;
+      padding: 0 20px 30px 30px;
+      margin-top: -20px;
     }
     .el-dialog__header {
       // display: none;

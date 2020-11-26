@@ -57,7 +57,7 @@
       <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
           <el-button
-            title = "编辑"
+            title="编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
@@ -81,10 +81,7 @@
       @pagination="getList"
     />
     <!-- 图片弹窗 -->
-    <el-dialog
-      custom-class="dialog-img"
-      :visible.sync="dialogImgVisible"
-    >
+    <el-dialog custom-class="dialog-img" :visible.sync="dialogImgVisible">
       <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
     </el-dialog>
 
@@ -321,7 +318,7 @@ export default {
   max-height: 100%;
   justify-self: center;
   align-self: center;
-  border-radius:5px;
+  border-radius: 5px;
 }
 
 ::v-deep {
@@ -329,7 +326,8 @@ export default {
     background: #0b2a52;
     .el-dialog__body {
       display: grid;
-      padding: 30px 20px 30px;
+      padding: 0 20px 30px 30px;
+      margin-top: -20px;
     }
     .el-dialog__header {
       // display: none;
