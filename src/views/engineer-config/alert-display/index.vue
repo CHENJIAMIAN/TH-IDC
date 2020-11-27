@@ -174,6 +174,7 @@ export default {
     },
     // 重置
     handleReset(form) {
+      document.activeElement.blur();
       this.$confirm("是否恢复默认设置 ? ", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",

@@ -141,6 +141,7 @@
       </el-table-column>
     </el-table>
     <pagination
+      style="margin-top: -10px;"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
@@ -513,6 +514,7 @@ export default {
     },
     // 重置
     handleReset(form) {
+      document.activeElement.blur();
       this.$refs[form].resetFields();
       this.handleQuery();
     },
@@ -594,7 +596,7 @@ export default {
 <style lang="scss" scoped>
 .role-manage {
   display: grid;
-  grid-template-rows: 60px auto 55px;
+  grid-template-rows: 60px auto 25px;
   // background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   height: calc(100vh - 260px);
 }

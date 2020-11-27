@@ -456,11 +456,6 @@ export default {
       this.filterForm.pageNo = 1;
       this.getList();
     },
-    // 重置
-    handleReset(form) {
-      this.$refs[form].resetFields();
-      this.handleQuery();
-    },
     // 查看
     async handleDialog(row, type) {
       this.dialog.type = type;

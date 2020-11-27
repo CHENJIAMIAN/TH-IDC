@@ -8,13 +8,6 @@
         style="display: grid; grid-auto-flow: column"
       >
         <el-form-item>
-          <!-- <el-button
-            type="primary"
-            icon="el-icon-refresh"
-            plain
-            @click="handleReset()"
-            >重置</el-button
-          > -->
           <el-button type="primary" size="medium" @click="handleAdd">
             <i class="el-icon-plus" />
           </el-button>
@@ -278,10 +271,6 @@ export default {
       arrangeWorkAdd().then((r) => {
         this.getList();
       });
-    },
-    // 重置
-    handleReset(form) {
-      this.handleQuery();
     },
     // 删除
     handleDel(id) {

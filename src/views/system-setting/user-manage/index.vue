@@ -301,6 +301,7 @@ export default {
     },
     // 重置
     handleReset(form) {
+      document.activeElement.blur();
       this.$refs[form].resetFields();
       this.handleQuery();
     },

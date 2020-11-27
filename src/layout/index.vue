@@ -23,7 +23,7 @@
     </div>
     <!-- 次级路由，从路由$route获取 -->
     <div class="side" :style="
-          sidebar.showSide ? 'opacity:1;transition: all 1s ease-out;':'opacity:0;'
+          sidebar.showSide ? 'left: 50px;transition: all 0.28s;':'left: -300px;'
     ">
     <!-- 解决菜单从隐藏到显示，感觉怪怪的，被右边的盖着在上面出来似的，应该同步出来。所有的菜单都是这 -->
       <!-- side包含一个背景 -->
@@ -136,7 +136,7 @@ export default {
   .side {
     position: fixed;
     top: calc(#{$headhei} + 5em);
-    left: $sideBarWidth - 240px;
+    left: 50px;
     bottom: 60px;
     width: 200px;
     border-style: solid;

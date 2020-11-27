@@ -9,15 +9,6 @@
         :model="filterForm"
         style="display: grid; grid-auto-flow: column"
       >
-        <!-- <el-form-item>
-          <el-button
-            type="primary"
-            icon="el-icon-refresh"
-            plain
-            @click="handleReset('filterForm')"
-            >恢复默认值</el-button
-          >
-        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" size="medium" @click="handleSubmit">
             保存
@@ -218,9 +209,86 @@
         :model="dialogCD.forms"
         :rules="dialogCD.rules"
         ref="dialogCDForm"
+        label-width="100px"
       >
+        <!-- "那个房间用下拉，设备编号让它手输，测点类型下拉就行了 -->
+        <!-- roomCode
+      deviceCode
+      pointType -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr">
+          <el-form-item label="楼层" prop="floorCode">
+            <el-select
+              clearable
+              v-model="dialogCD.forms.floorCode"
+              @change="
+                $set(dialogCD.forms, 'roomCode', '');
+                $set(dialogCD.forms, 'deviceGroupCode', '');
+              "
+            >
+              <el-option
+                v-for="item in floorOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.floorCode"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="房间" prop="roomCode" style="justify-self: end;">
+            <el-select clearable v-model="dialogCD.forms.roomCode">
+              <el-option
+                v-for="item in roomOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.roomCode"
+              />
+            </el-select>
+          </el-form-item>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr">
+          <el-form-item label="设备类型" prop="deviceTypeId">
+            <el-select
+              clearable
+              v-model="dialogCD.forms.deviceTypeId"
+              popper-class="three-column"
+              @change="$set(dialogCD.forms, 'pointType', '')"
+            >
+              <el-option
+                v-for="item in deviceTypeOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="测点类型" prop="pointType" style="justify-self: end;">
+            <el-select clearable v-model="dialogCD.forms.pointType">
+              <el-option
+                v-for="item in pointTypeOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr auto">
+        <el-form-item label="设备编号" prop="deviceCode">
+          <el-input v-model="dialogCD.forms.deviceCode"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            @click="handleQueryNotBind"
+          ></el-button>
+        </el-form-item>
+        </div>
+
         <el-form-item label="" prop="">
           <el-transfer
+            v-loading="transferLoading"
             filterable
             :filter-method="
               (query, item) => {
@@ -258,6 +326,14 @@ import {
   storePointListAllNotBindPoint,
   storePointListAllBindPoint,
 } from "@/api/engineer-config.js";
+import {
+  deviceTypeListAll,
+  pointTypeListAll,
+  deviceListAll,
+  deviceGroupListAll,
+  spaceFloorListAll,
+  spaceRoomListAll,
+} from "@/api/resource-manage.js";
 import { isBiggerThanZero } from "@/views/resource-manage/common.js";
 export default {
   components: { pagination },
@@ -275,16 +351,22 @@ export default {
       }
     };
     return {
+      floorOpts: [],
+      roomOpts: [],
+      deviceTypeOpts: [],
+      pointTypeOpts: [],
       depOpts: [],
       firstMenuOpts: [],
       allPointOpts: [],
       secondMenuOpts: [],
       thirdMenuOpts: [],
+      pointTypeOpts: [],
       filterForm: {
         // 筛选条件
         pageNo: 1, // 当前页码
         pageSize: 10, // 每页限制数量
       },
+      transferLoading: true,
       listLoading: true,
       listData: [], // 列表数据
       listTotal: 0, // 列表总条数
@@ -390,8 +472,26 @@ export default {
       },
     };
   },
-  watch: {},
+  watch: {
+    async "dialogCD.forms.deviceTypeId"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.pointTypeOpts = [];
+      const r = await pointTypeListAll({ deviceTypeId: n });
+      this.pointTypeOpts = r.data;
+    },
+    async "dialogCD.forms.floorCode"(n, o) {
+      if (!n) return;
+      // 一级变,二级也变
+      this.roomOpts = [];
+      this.deviceGroupOpts = [];
+      const r = await spaceRoomListAll({ floorCode: n });
+      this.roomOpts = r.data;
+    },
+  },
   async created() {
+    spaceFloorListAll().then((r) => (this.floorOpts = r.data));
+    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
     this.handleQuery();
   },
   mounted() {},
@@ -400,9 +500,12 @@ export default {
       // dialog显示时获取一级菜单列表
       // 编辑
       this.dialogCD.forms = {};
+      this.dialogCD.visible = true;
+      this.transferLoading = true;
       const r1 = await storePointListAllNotBindPoint();
       this.pointNotBindDeviceGroupOpts = r1.data;
       const r2 = await storePointListAllBindPoint();
+      this.transferLoading = false;
       this.pointBindDeviceGroupOpts = r2.data;
       // this.dialogCD.forms.poindIdArray = r2.data.map((i) => i.id);
       this.$set(
@@ -413,7 +516,6 @@ export default {
       this.allPointOpts = this.pointNotBindDeviceGroupOpts.concat(
         this.pointBindDeviceGroupOpts
       );
-      this.dialogCD.visible = true;
       this.$nextTick((_) => this.$refs["dialogCDForm"].clearValidate());
     },
     dialogCDSubmit() {
@@ -448,28 +550,21 @@ export default {
         }
       });
     },
+    async handleQueryNotBind() {
+      this.transferLoading = true;
+      const r1 = await storePointListAllNotBindPoint(this.dialogCD.forms);
+      this.transferLoading = false;
+      this.pointNotBindDeviceGroupOpts = r1.data;
+      this.allPointOpts = this.pointNotBindDeviceGroupOpts.concat(
+        this.pointBindDeviceGroupOpts
+      );
+    },
     // 查询
     handleQuery() {
       this.listTotal = 0;
       this.filterForm.pageNo = 1;
       this.getList();
     },
-    // // 重置
-    // handleReset(form) {
-    //   this.$confirm("是否恢复默认设置 ? ", "提示", {
-    //     confirmButtonText: "确定",
-    //     cancelButtonText: "取消",
-    //     type: "warning",
-    //   })
-    //     .then(() => {
-    //       this.$refs[form].resetFields();
-    //       alertconfigAlertparam_reset().then((r) => {
-    //         this.handleQuery();
-    //       });
-    //     })
-    //     .catch(() => {});
-    // },
-    // 查看
     // 删除
     handleDel(id) {
       this.$confirm("确认删除?", "提示", {

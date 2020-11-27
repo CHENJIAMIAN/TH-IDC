@@ -54,6 +54,7 @@
       :visible.sync="drawer"
       direction="btt"
       size="80%"
+      class="notify-drawer"
     >
       <alert-notify />
     </el-drawer>
@@ -87,11 +88,14 @@ export default {
     alertNotificationGetAllCount().then(
       (r) => (this.notifyCount = r.data.count)
     );
-    setInterval(() => {
+    const interval = setInterval(() => {
       alertNotificationGetAllCount().then(
         (r) => (this.notifyCount = r.data.count)
       );
     }, 6 * 1000);
+    this.$on("hook:beforeDestroy", (_) => {
+      clearInterval(interval);
+    });
     this.realName = Cookies.get("realName");
   },
   methods: {
@@ -215,6 +219,16 @@ export default {
     transform: translate(0px, -5px);
     &:hover {
       filter: hue-rotate(206deg);
+    }
+  }
+}
+
+::v-deep {
+  .notify-drawer {
+    .el-drawer__header {
+      border-bottom: 1px solid;
+      margin-bottom: 0;
+      padding-bottom: 1rem;
     }
   }
 }

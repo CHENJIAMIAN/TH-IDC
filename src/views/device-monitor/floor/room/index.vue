@@ -23,6 +23,7 @@
               trigger="hover"
               v-if="deviceGroupList.slice(4).length > 0"
               v-model="moreBtnsVisible"
+              popper-class="untransparent"
             >
               <div class="btns-fake" :style="btnsFakeStye">
                 <span

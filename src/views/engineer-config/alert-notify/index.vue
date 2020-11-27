@@ -220,7 +220,7 @@
       </el-table-column>
       <el-table-column prop="isRead" label="是否已读" width="100">
         <template slot-scope="{ row }">
-          <div v-if="row.isRead == 0">未读</div>
+          <div v-if="row.isRead == 0" style="color: orangered">未读</div>
           <div v-if="row.isRead == 1">已读</div>
         </template>
       </el-table-column>
@@ -336,7 +336,12 @@
     </el-dialog>
 
     <!-- 详情弹窗 -->
-    <el-dialog append-to-body :visible.sync="detailDialog.visible" top="25vh" center>
+    <el-dialog
+      append-to-body
+      :visible.sync="detailDialog.visible"
+      top="25vh"
+      center
+    >
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">详情</span>
         <img src="@/assets/img/hl.png" />
@@ -348,6 +353,15 @@
         class="log-form"
         label-width="150px"
       >
+        <el-form-item label="房间名称 : " prop="roomName">
+          {{ detailDialog.forms.roomName || "无" }}
+        </el-form-item>
+        <el-form-item label="设备组名称 : " prop="deviceGroupName">
+          {{ detailDialog.forms.deviceGroupName || "无" }}
+        </el-form-item>
+        <el-form-item label="设备名称 : " prop="deviceName">
+          {{ detailDialog.forms.deviceName || "无" }}
+        </el-form-item>
         <el-form-item label="楼层编号 : " prop="floorCode">
           {{ detailDialog.forms.floorCode || "无" }}
         </el-form-item>
@@ -411,15 +425,6 @@
         </el-form-item>
         <el-form-item label="楼层名称 : " prop="floorName">
           {{ detailDialog.forms.floorName || "无" }}
-        </el-form-item>
-        <el-form-item label="房间名称 : " prop="roomName">
-          {{ detailDialog.forms.roomName || "无" }}
-        </el-form-item>
-        <el-form-item label="设备组名称 : " prop="deviceGroupName">
-          {{ detailDialog.forms.deviceGroupName || "无" }}
-        </el-form-item>
-        <el-form-item label="设备名称 : " prop="deviceName">
-          {{ detailDialog.forms.deviceName || "无" }}
         </el-form-item>
 
         <!-- <el-form-item label="日志类型 : " prop="logType">
@@ -625,6 +630,7 @@ export default {
     },
     // 重置
     handleReset(form) {
+      document.activeElement.blur();
       this.$refs[form].resetFields();
       this.handleQuery();
     },
@@ -681,6 +687,7 @@ export default {
 
 ::v-deep {
   .log-form {
+    margin-top: -30px;
     .el-form-item {
       margin-bottom: 10px;
     }

@@ -135,6 +135,7 @@ export default {
   methods: {
     // 重置
     handleReset() {
+      document.activeElement.blur();
       pointUpdateToRedis().then((r) => {
         this.$message.success("操作成功!");
       });

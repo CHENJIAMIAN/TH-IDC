@@ -346,11 +346,6 @@ export default {
       this.filterForm.pageNo = 1;
       this.getList();
     },
-    // 重置
-    handleReset(form) {
-      this.$refs[form].resetFields();
-      this.handleQuery();
-    },
     // 查看
     async handleDialog(row) {
       // dialog显示时获取一级菜单列表

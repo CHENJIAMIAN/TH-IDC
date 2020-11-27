@@ -127,7 +127,12 @@
     />
 
     <!-- 详情弹窗 -->
-    <el-dialog :visible.sync="dialog.visible" top="25vh" center>
+    <el-dialog
+      :visible.sync="dialog.visible"
+      top="25vh"
+      center
+      class="log-detail-dialog"
+    >
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">详情</span>
         <img src="@/assets/img/hl.png" />
@@ -251,6 +256,7 @@ export default {
     },
     // 重置
     handleReset(form) {
+      document.activeElement.blur();
       this.$refs[form].resetFields();
       this.handleQuery();
     },
@@ -300,6 +306,12 @@ export default {
   .log-form {
     .el-form-item {
       margin-bottom: 10px;
+    }
+  }
+
+  .log-detail-dialog {
+    .el-dialog__body {
+      margin-top: -30px;
     }
   }
 }

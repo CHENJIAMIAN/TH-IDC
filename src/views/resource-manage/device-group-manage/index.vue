@@ -699,6 +699,7 @@ export default {
     },
     // 重置
     handleReset(form) {
+      document.activeElement.blur();
       this.$refs[form].resetFields();
       this.handleQuery();
     },
@@ -730,46 +731,48 @@ export default {
       // 加载marker
       this.$nextTick((_) => {
         // 在此才能取到图片要素
-        this.listDataCDBind.forEach((i) => {
-          const location = i.location.split(",");
-          if (!location || location.length < 2) return;
-          //获取图片的高度和宽度
-          const myImg = this.$refs["preiviewImg"];
-          const currWidth = myImg.clientWidth;
-          const currHeight = myImg.clientHeight;
-          const ProportionHeightInImg = location[0]; //鼠标所选位置相对于所选图片高度的比例
-          const ProportionWidthInImg = location[1]; //鼠标所选位置相对于所选图片宽度的比例
-          // 还原marker位置
-          const div = document.createElement("div");
-          div.title = i.name;
-          div.className = "marker";
+        const myImg = this.$refs["preiviewImg"];
+        myImg.onload = () => {
+          this.listDataCDBind.forEach((i) => {
+            const location = i.location.split(",");
+            if (!location || location.length < 2) return;
+            //获取图片的高度和宽度
+            const currWidth = myImg.clientWidth;
+            const currHeight = myImg.clientHeight;
+            const ProportionHeightInImg = location[0]; //鼠标所选位置相对于所选图片高度的比例
+            const ProportionWidthInImg = location[1]; //鼠标所选位置相对于所选图片宽度的比例
+            // 还原marker位置
+            const div = document.createElement("div");
+            div.title = i.name;
+            div.className = "marker";
 
-          div.onclick = () => {
-            // 点击标记时移除标记,取消绑定
-            this.$refs["preiviewImgContainer"].removeChild(div);
-            //  移除时也从映射表删除
-            const index2 = this.imgMarkerIdDivMaps.findIndex(
-              (i) => i.div == div
+            div.onclick = () => {
+              // 点击标记时移除标记,取消绑定
+              this.$refs["preiviewImgContainer"].removeChild(div);
+              //  移除时也从映射表删除
+              const index2 = this.imgMarkerIdDivMaps.findIndex(
+                (i) => i.div == div
+              );
+              if (index2 > -1) this.imgMarkerIdDivMaps.splice(index2, 1);
+              const row = this.listDataCDBind.find((ii) => ii.id == i.id);
+              this.removeToNotBindPointLocation(row);
+            };
+
+            console.log(
+              "location",
+              location,
+              ProportionHeightInImg,
+              ProportionWidthInImg
             );
-            if (index2 > -1) this.imgMarkerIdDivMaps.splice(index2, 1);
-            const row = this.listDataCDBind.find((ii) => ii.id == i.id);
-            this.removeToNotBindPointLocation(row);
-          };
-
-          console.log(
-            "location",
-            location,
-            ProportionHeightInImg,
-            ProportionWidthInImg
-          );
-          console.log("currWidth,currHeight", currWidth, currHeight);
-          let x = currWidth * ProportionWidthInImg;
-          let y = currHeight * ProportionHeightInImg;
-          div.style.left = x + "px";
-          div.style.top = y + "px";
-          this.$refs["preiviewImgContainer"].appendChild(div);
-          this.imgMarkerIdDivMaps.push({ id: i.id, div: div });
-        });
+            console.log("currWidth,currHeight", currWidth, currHeight);
+            let x = currWidth * ProportionWidthInImg;
+            let y = currHeight * ProportionHeightInImg;
+            div.style.left = x + "px";
+            div.style.top = y + "px";
+            this.$refs["preiviewImgContainer"].appendChild(div);
+            this.imgMarkerIdDivMaps.push({ id: i.id, div: div });
+          });
+        };
       });
     },
     async handleSBDialog(row) {
@@ -880,6 +883,9 @@ export default {
 
 ::v-deep {
   .dialog-img {
+    .el-dialog__body {
+      margin-top: -30px;
+    }
     .el-dialog {
       // padding-bottom: 3rem;
     }
