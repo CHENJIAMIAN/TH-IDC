@@ -238,6 +238,8 @@ export default {
     handleStatusChange(v, row) {
       arrangeWorkUpdateStatus({ id: row.id, status: v }).then((r) => {
         this.getList();
+      }).catch(e=>{
+        row.status = v===2? 1:2;
       });
     },
     tableCellClassName({ row, column, rowIndex, columnIndex }) {

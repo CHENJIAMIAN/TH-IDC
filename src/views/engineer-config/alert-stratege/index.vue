@@ -298,7 +298,9 @@ export default {
           alertStrategyAddOrEdit(this.dialog.forms).then((res) => {
             this.$message.success("操作成功!");
             this.handleDialog({ levelId: this.dialog.forms.levelId });
-          });
+          }).catch(e=>{
+            this.handleDialog({ levelId: this.dialog.forms.levelId });
+          })
         } else {
           return false;
         }

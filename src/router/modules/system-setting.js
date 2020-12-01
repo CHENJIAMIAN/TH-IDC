@@ -11,7 +11,7 @@ export default {
     title: '系统设置',
     icon: 'img-sz',
     affix: true,
-    onlyShowChild:true
+    onlyShowChild: true
   },
   children: [
     {
@@ -24,31 +24,31 @@ export default {
           path: 'department-manage',
           component: () => import('@/views/system-setting/department-manage/index'),
           name: 'department-manage',
-          meta: { title: '部门管理', icon: 'img-bm' }
+          meta: { title: '部门管理', icon: 'img-bm', auth: [1003]}
         },
         {
           path: 'menu-manage',
           component: () => import('@/views/system-setting/menu-manage/index'),
           name: 'menu-manage',
-          meta: { title: '菜单管理', icon: 'img-mkk' }
+          meta: { title: '菜单管理', icon: 'img-mkk' , auth: [1006]}
         },
         {
           path: 'auth-manage',
           component: () => import('@/views/system-setting/auth-manage/index'),
           name: 'auth-manage',
-          meta: { title: '权限管理', icon: 'img-qx' }
+          meta: { title: '权限管理', icon: 'img-qx' , auth: [1007]}
         },
         {
           path: 'role-manage',
           component: () => import('@/views/system-setting/role-manage/index'),
           name: 'role-manage',
-          meta: { title: '角色管理', icon: 'img-js' }
+          meta: { title: '角色管理', icon: 'img-js', auth: [1005] }
         },
         {
           path: 'user-manage',
           component: () => import('@/views/system-setting/user-manage/index'),
           name: 'user-manage',
-          meta: { title: '用户管理', icon: 'img-yh' }
+          meta: { title: '用户管理', icon: 'img-yh' , auth: [1004]}
         },
       ]
     },
@@ -62,7 +62,7 @@ export default {
           path: 'system-log',
           component: () => import('@/views/system-setting/system-log/index'),
           name: 'system-log',
-          meta: { title: '系统日志', icon: 'img-lm' }
+          meta: { title: '系统日志', icon: 'img-lm' , auth: [1009]}
         },
       ]
     },

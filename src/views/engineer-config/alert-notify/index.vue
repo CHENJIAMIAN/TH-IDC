@@ -386,7 +386,7 @@
         <el-form-item label="当前值 : " prop="currentValue">
           {{ detailDialog.forms.currentValue || "无" }}
         </el-form-item>
-        <el-form-item label="通知等级id : " prop="noteLevel">
+        <el-form-item label="通知等级ID : " prop="noteLevel">
           {{ detailDialog.forms.noteLevel || "无" }}
         </el-form-item>
         <el-form-item label="通知内容 : " prop="noteContent">
@@ -585,6 +585,7 @@ export default {
         this.detailDialog.forms = {};
       }
       this.detailDialog.visible = true;
+      this.handleQuery();
     },
     handleRoomChange(n) {
       this.$set(this.filterForm, "deviceGroupCode", "");
@@ -688,6 +689,8 @@ export default {
 ::v-deep {
   .log-form {
     margin-top: -30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     .el-form-item {
       margin-bottom: 10px;
     }

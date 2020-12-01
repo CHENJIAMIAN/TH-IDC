@@ -470,7 +470,8 @@ export default {
           callAPI(this.cdForm.forms.alertRuleList[index])
             .then((res) => {
               rule.diabledSave =false;
-              this.cdForm.forms.alertRuleList[index].id = res.data.id;
+              if(res.data && res.data.id)
+                this.cdForm.forms.alertRuleList[index].id = res.data.id;
               this.$message.success("操作成功!");
               // this.dialogVisible = false;
               // this.$refs["dialogForm"].resetFields();

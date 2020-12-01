@@ -34,39 +34,38 @@ router.beforeEach(async (to, from, next) => {
         if (to.path.includes("/room")) {
           store.commit("app/CLOSE_SIDE");
         }
-        next();
       } else {
         store.dispatch("app/openSideBar", { withoutAnimation: false });
+      }
+      const auth = store.getters.auth && store.getters.auth.length > 0
+      if (auth) {
         next();
-      }
-      //确定用户是否已通过getInfo获得其权限角色 
-      const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      if (hasRoles) {
-        next()
       } else {
-        try {
-          // get user info
-          //注意：角色必须是对象数组！例如：['admin']或，['developer'，'editor'] 
-          const { roles } = await store.dispatch('user/getInfo')
+        //删除令牌并转到登录页面以重新登录 
+        await store.dispatch('user/resetToken')
+        next(`/login?redirect=${to.path}`)
+        NProgress.done()
+        // try {
+        //   //根据角色生成可访问的路线图 
+        //   const accessRoutes = await store.dispatch('permission/generateRoutes', auth)
 
-          //根据角色生成可访问的路线图 
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+        //   //动态添加可访问的路由 
+        //   router.addRoutes(accessRoutes)
 
-          //动态添加可访问的路由 
-          router.addRoutes(accessRoutes)
-
-          //hack方法以确保addRoutes是完整的
-          //设置replace：true，因此导航不会留下历史记录
-          next({ ...to, replace: true })
-        } catch (error) {
-          debugger
-          //删除令牌并转到登录页面以重新登录 
-          await store.dispatch('user/resetToken')
-          Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
-          NProgress.done()
-        }
+        //   //hack方法以确保addRoutes是完整的
+        //   //设置replace：true，因此导航不会留下历史记录
+        //   next({ ...to, replace: true })
+        // } catch (error) {
+        //   debugger
+        //   //删除令牌并转到登录页面以重新登录 
+        //   await store.dispatch('user/resetToken')
+        //   Message.error(error || 'Has Error')
+        //   next(`/login?redirect=${to.path}`)
+        //   NProgress.done()
+        // }
       }
+
+
     }
   } else {
     /* has no token*/

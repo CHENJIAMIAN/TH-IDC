@@ -5,13 +5,13 @@
       type="border-card"
       @tab-click="handleTabClick"
     >
-      <el-tab-pane label="房间类型" name="room-type-manage">
+      <el-tab-pane label="房间类型" name="room-type-manage"  v-auth="1037" lazy>
         <room-type-manage />
       </el-tab-pane>
-      <el-tab-pane label="设备类型" name="device-type-manage">
+      <el-tab-pane label="设备类型" name="device-type-manage" v-auth="1038" lazy>
         <device-type-manage />
       </el-tab-pane>
-      <el-tab-pane label="测点类型" name="measure-point-type-manage">
+      <el-tab-pane label="测点类型" name="measure-point-type-manage"  v-auth="1039" lazy>
         <measure-point-type-manage />
       </el-tab-pane>
     </el-tabs>

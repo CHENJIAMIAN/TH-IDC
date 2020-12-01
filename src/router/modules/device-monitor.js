@@ -11,7 +11,8 @@ export default {
   meta: {
     title: '设备监控',
     icon: 'nested',
-    affix: true
+    affix: true,
+    auth: [1013]
   },
   children: [
     {

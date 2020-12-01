@@ -199,7 +199,7 @@
     </div>
 
     <!-- 绑定测点弹窗 -->
-    <el-dialog :visible.sync="dialogCD.visible">
+    <el-dialog :visible.sync="dialogCD.visible" width="60%">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">绑定测点</span>
         <img src="@/assets/img/hl.png" />
@@ -233,7 +233,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="房间" prop="roomCode" style="justify-self: end;">
+          <el-form-item label="房间" prop="roomCode" style="justify-self: end">
             <el-select clearable v-model="dialogCD.forms.roomCode">
               <el-option
                 v-for="item in roomOpts"
@@ -261,7 +261,11 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="测点类型" prop="pointType" style="justify-self: end;">
+          <el-form-item
+            label="测点类型"
+            prop="pointType"
+            style="justify-self: end"
+          >
             <el-select clearable v-model="dialogCD.forms.pointType">
               <el-option
                 v-for="item in pointTypeOpts"
@@ -274,20 +278,21 @@
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr auto">
-        <el-form-item label="设备编号" prop="deviceCode">
-          <el-input v-model="dialogCD.forms.deviceCode"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            icon="el-icon-search"
-            @click="handleQueryNotBind"
-          ></el-button>
-        </el-form-item>
+          <el-form-item label="设备编号" prop="deviceCode">
+            <el-input v-model="dialogCD.forms.deviceCode"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              @click="handleQueryNotBind"
+            ></el-button>
+          </el-form-item>
         </div>
 
-        <el-form-item label="" prop="">
+        <el-form-item label="" prop="" label-width="20px">
           <el-transfer
+            class="custom-transfer"
             v-loading="transferLoading"
             filterable
             :filter-method="
@@ -615,6 +620,17 @@ export default {
   }
   .el-radio:last-of-type {
     margin-right: 30px;
+  }
+}
+
+::v-deep {
+  .custom-transfer {
+    .el-transfer-panel {
+      width: 260px;
+    }
+    .el-transfer__buttons {
+      padding: 0 10px;
+    }
   }
 }
 </style>

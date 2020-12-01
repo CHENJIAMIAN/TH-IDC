@@ -190,6 +190,8 @@ export default {
     handleStatusChange(v, row) {
       configEmailUpdateState({ id: row.id, status: v }).then((r) => {
         this.getList();
+      }).catch(e=>{
+        row.status = v===0? 1:0;
       });
     },
     dialogSubmit() {

@@ -23,6 +23,7 @@
       <div class="avatar-wrapper">
         <el-badge :value="notifyCount" class="item" :hidden="notifyCount < 1">
           <a title="告警通知" @click="drawer = true"
+             v-auth="1026"
             ><img src="@/assets/img/xx.png"
           /></a>
         </el-badge>
@@ -56,7 +57,7 @@
       size="80%"
       class="notify-drawer"
     >
-      <alert-notify />
+      <alert-notify v-if="drawer"/>
     </el-drawer>
   </div>
 </template>

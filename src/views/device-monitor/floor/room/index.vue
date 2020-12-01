@@ -1,5 +1,6 @@
 <template>
   <div class="room-index">
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <div class="room-index-self">
       <div class="row1">
         <div class="btns" ref="btnsOut">
@@ -53,21 +54,25 @@
           </template>
         </div>
 
-        <div class="img-container">
-          <img width="20" src="@/assets/img/wd.png" /><span>
-            {{ temperature }}</span
-          >
-        </div>
-        <div class="img-container">
-          <img width="25" src="@/assets/img/gj.png" /><span
-            >告警 <span style="color: #ea2d2a">{{ alarmCount }}</span> 条</span
-          >
-        </div>
+        <template v-if="hasAuth">
+          <div class="img-container">
+            <img width="20" src="@/assets/img/wd.png" /><span>
+              {{ temperature }}</span
+            >
+          </div>
+          <div class="img-container">
+            <img width="25" src="@/assets/img/gj.png" /><span
+              >告警
+              <span style="color: #ea2d2a">{{ alarmCount }}</span> 条</span
+            >
+          </div>
+        </template>
       </div>
       <router-view />
     </div>
   </div>
 </template>
+
 
 
 <script>
@@ -77,6 +82,7 @@ export default {
   name: "room",
   data() {
     return {
+      hasAuth: true,
       moreBtnsVisible: false,
       floorId: "",
       floorName: "",
@@ -124,23 +130,32 @@ export default {
     Object.assign(this, { floorId, floorName, roomId, roomName });
     this.$route.meta.title = roomName;
 
-    const r = await deviceGroupListAll({ id: this.roomId });
-    let { id, name, roomCode, roomImage, roomType, deviceGroupList } = r.data;
-    if (!deviceGroupList) {
-      this.$message("该房间未配置设备组");
-      deviceGroupList = [];
-    }
-    Object.assign(this, {
-      roomImage,
-      deviceGroupList,
-    });
-    if (deviceGroupList.length !== 0)
-      if (deviceGroupList.length == 1 || !this.$route.params.deviceGroupName) {
-        // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
-        const deviceGroup = deviceGroupList[0];
-        // deviceGroupName包含#号,需要用encodeURIComponent编码一下
-        this.routeToDeviceGroup(deviceGroup);
+    try {
+      const r = await deviceGroupListAll({ id: this.roomId });
+      let { id, name, roomCode, roomImage, roomType, deviceGroupList } = r.data;
+      this.hasAuth = true;
+      if (!deviceGroupList) {
+        this.$message("该房间未配置设备组");
+        deviceGroupList = [];
       }
+      Object.assign(this, {
+        roomImage,
+        deviceGroupList,
+      });
+      if (deviceGroupList.length !== 0)
+        if (
+          deviceGroupList.length == 1 ||
+          !this.$route.params.deviceGroupName
+        ) {
+          // 只有一个,默认就那一个  , 刚进来,没有设备组,自动选一个
+          const deviceGroup = deviceGroupList[0];
+          // deviceGroupName包含#号,需要用encodeURIComponent编码一下
+          this.routeToDeviceGroup(deviceGroup);
+        }
+    } catch (e) {
+      this.hasAuth = false;
+      console.log(e);
+    }
   },
   mounted() {},
   methods: {
@@ -177,6 +192,14 @@ export default {
 <style lang="scss" scoped>
 .room-index {
   height: 100%;
+  .auth-tip {
+    text-align: center;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 50%;
+    color: #06c2f4;
+  }
 }
 .room-index-self {
   display: grid;

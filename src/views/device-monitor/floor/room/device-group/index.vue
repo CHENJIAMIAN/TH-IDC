@@ -121,8 +121,8 @@
         left: isHideLeft ? '-40%' : '0',
       }"
     >
-      <el-tabs stretch v-model="imgActiveName" @tab-click="handleImgTabClick">
-        <el-tab-pane label="设备组" name="device">
+      <el-tabs  type="border-card" stretch v-model="imgActiveName" @tab-click="handleImgTabClick">
+        <el-tab-pane label="设备组" name="device" lazy>
           <div
             class="device-group-tab"
             :style="{
@@ -155,8 +155,8 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="房间" name="room" v-if="!isOnlyOneDeviceGroup">
-          <div style="display: grid; height: calc(100vh - 340px)">
+        <el-tab-pane label="房间" name="room" v-if="!isOnlyOneDeviceGroup" lazy>
+          <div class="device-group-tab">
             <img
               style="cursor: pointer"
               @click="
@@ -208,7 +208,7 @@
           v-model="tableActiveName"
           @tab-click="handleTableTabClick"
         >
-          <el-tab-pane label="数据信息" name="data-info">
+          <el-tab-pane label="数据信息" name="data-info" lazy>
             <!-- 列表 -->
             <div style="display: grid; height: 100%">
               <!-- style="width: calc(100vw - 60px)"-->
@@ -401,16 +401,16 @@
               </el-table>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="参数状态" name="param-status"> </el-tab-pane>
-          <el-tab-pane label="告警记录" name="alert-record">
+          <el-tab-pane label="参数状态" name="param-status" lazy> </el-tab-pane>
+          <el-tab-pane label="告警记录" name="alert-record" lazy>
             <!-- <alert-notify /> -->
             <panel-alert-record :deviceGroupCode="deviceGroupCode" />
           </el-tab-pane>
-          <el-tab-pane label="资产信息" name="asset-info">
+          <el-tab-pane label="资产信息" name="asset-info" lazy>
             <!-- <device-manage /> -->
             <panel-asset-info :deviceGroupCode="deviceGroupCode" />
           </el-tab-pane>
-          <el-tab-pane label="设备控制" name="equipment-control"> </el-tab-pane>
+          <el-tab-pane label="设备控制" name="equipment-control" lazy> </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -496,7 +496,6 @@ export default {
     },
   },
   created() {
-    console.log("device-group", this._uid);
     const {
       floorId,
       floorName,
@@ -594,8 +593,6 @@ export default {
   }
 }
 .dc-tab {
-  position: relative;
-  border: solid #119aca;
   position: absolute;
   width: calc(40% - 20px);
   height: 100%;
@@ -629,7 +626,7 @@ export default {
 
 .device-group-tab {
   display: grid;
-  height: calc(100vh - 300px);
+  height: calc(100vh - 280px);
 }
 .card-group {
   display: grid;
