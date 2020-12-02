@@ -12,7 +12,6 @@ export default {
     title: '设备监控',
     icon: 'nested',
     affix: true,
-    auth: [1013]
   },
   children: [
     {
