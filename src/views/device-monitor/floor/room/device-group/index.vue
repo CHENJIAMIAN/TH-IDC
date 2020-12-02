@@ -121,7 +121,12 @@
         left: isHideLeft ? '-40%' : '0',
       }"
     >
-      <el-tabs  type="border-card" stretch v-model="imgActiveName" @tab-click="handleImgTabClick">
+      <el-tabs
+        type="border-card"
+        stretch
+        v-model="imgActiveName"
+        @tab-click="handleImgTabClick"
+      >
         <el-tab-pane label="设备组" name="device" lazy>
           <div
             class="device-group-tab"
@@ -213,7 +218,13 @@
             <div style="display: grid; height: 100%">
               <!-- style="width: calc(100vw - 60px)"-->
               <!-- 电池是图表 -->
-              <bar-chart v-if="isDcRoom" :listData="listData" height="calc(100vh - 280px)"/>
+              <template v-if="isDcRoom">
+                <bar-chart chartName="温度" typeName="temperature" :listData="listData"/>
+                <bar-chart chartName="充电电流" typeName="chargeCurrent" :listData="listData" />
+                <bar-chart chartName="放电电流" typeName="dischargeCurrent" :listData="listData" />
+                <bar-chart chartName="电压" typeName="voltage" :listData="listData" />
+                <bar-chart chartName="内阻" typeName="internalResistance" :listData="listData" />
+              </template>
               <el-table
                 v-else
                 style="width: 100%"
@@ -410,7 +421,8 @@
             <!-- <device-manage /> -->
             <panel-asset-info :deviceGroupCode="deviceGroupCode" />
           </el-tab-pane>
-          <el-tab-pane label="设备控制" name="equipment-control" lazy> </el-tab-pane>
+          <el-tab-pane label="设备控制" name="equipment-control" lazy>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>

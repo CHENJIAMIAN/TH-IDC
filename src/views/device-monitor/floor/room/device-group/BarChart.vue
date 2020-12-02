@@ -1,5 +1,8 @@
 <template>
-  <div :class="className" :style="{ height: height, width: width }" />
+  <div :style="{ height: `calc(${height} + 4rem)`, width: width }">
+    <h2 style="margin-left: 3rem;">{{ chartName }}</h2>
+    <div ref="chart" :class="className" :style="{ height: height, width: width }"/>
+  </div>
 </template>
 
 <script>
@@ -12,6 +15,13 @@ const animationDuration = 6000;
 export default {
   mixins: [resize],
   props: {
+    chartName: {
+      type: String,
+    },
+    typeName: {
+      type: String,
+      require: true,
+    },
     listData: {
       type: Array,
       default: [],
@@ -57,25 +67,30 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el, "macarons");
+      this.chart = echarts.init(this.$refs.chart, "macarons");
     },
     setOptions() {
       console.log(this.listData);
-      const series = this.listData.map((i) => {
-        return {
-          name: '设备'+i.deviceCode,
+      const seriesData = this.listData.map((i) => i[this.typeName]);
+      const xAxisData = this.listData.map((i) => i.deviceCode)
+      console.log(seriesData);
+      console.log(xAxisData);
+      const series = [
+        {
+          // name: "设备" + i.deviceCode,
+          // stack: "vistors",
           type: "bar",
-          stack: "vistors",
           barWidth: "60%",
-          data: [
-            i.temperature,
-            i.chargeCurrent,
-            i.dischargeCurrent,
-            i.voltage,
-            i.internalResistance,
-          ],
-        };
-      });
+          data: seriesData,
+          // [
+          // i.temperature,
+          // i.chargeCurrent,
+          // i.dischargeCurrent,
+          // i.voltage,
+          // i.internalResistance,
+          // ]
+        },
+      ];
 
       this.chart.setOption({
         tooltip: {
@@ -92,10 +107,24 @@ export default {
           bottom: "3%",
           containLabel: true,
         },
+        // xAxis: {
+        //   type: "category",
+        //   data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        // },
+        // yAxis: {
+        //   type: "value",
+        // },
+        // series: [
+        //   {
+        //     data: [120, 200, 150, 80, 70, 110, 130],
+        //     type: "bar",
+        //   },
+        // ],
         xAxis: [
           {
             type: "category",
-            data: ["温度", "充电电流", "放电电流", "电压", "内阻"],
+            // data: ["温度", "充电电流", "放电电流", "电压", "内阻"],
+            data: xAxisData,
             axisTick: {
               alignWithLabel: true,
             },

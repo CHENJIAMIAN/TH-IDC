@@ -18,7 +18,8 @@ export function deviceGroupTypeGetData(data){return request({url:'/admin/devicem
 // 获取备采集到的数据接口	
 export function deviceType3DGetData(data){return request({url:'/admin/devicemonitor/deviceType3D/getData',method:'post',data})}
 
-
+// 根据设备号与字段名获取历史数据
+export function historyGetData(data){return request({url:'/admin/devicemonitor/History/getData',method:'post',data})}
 
 
 
