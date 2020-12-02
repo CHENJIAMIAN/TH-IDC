@@ -1,7 +1,8 @@
 <template>
   <div class="app-container measure-point-manage">
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1016">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -79,7 +80,10 @@
           <el-input v-model.trim="filterForm.name" placeholder="测点名称" />
         </el-form-item>
         <el-form-item prop="pointCode">
-          <el-input v-model.trim="filterForm.pointCode" placeholder="测点编号" />
+          <el-input
+            v-model.trim="filterForm.pointCode"
+            placeholder="测点编号"
+          />
         </el-form-item>
         <el-form-item prop="pointType">
           <el-select
@@ -123,6 +127,7 @@
 
     <!-- 列表 -->
     <el-table
+      v-auth="1016"
       style="width: 100%"
       height="100%"
       stripe
@@ -151,7 +156,7 @@
       <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
           <el-button
-            title = "编辑"
+            title="编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
@@ -168,6 +173,7 @@
       </el-table-column>
     </el-table>
     <pagination
+      v-auth="1016"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
@@ -190,7 +196,8 @@
         <el-form-item label="测点编号" prop="pointCode">
           <el-input
             :disabled="!!dialog.forms.id"
-          v-model="dialog.forms.pointCode"></el-input>
+            v-model="dialog.forms.pointCode"
+          ></el-input>
         </el-form-item>
         <el-form-item label="测点名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
@@ -300,6 +307,7 @@ export default {
   components: { pagination },
   data() {
     return {
+      hasAuth: false,
       floorOpts: [],
       roomOpts: [],
       deviceGroupOpts: [],
@@ -491,11 +499,16 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      pointListByPage(this.filterForm).then((res) => {
-        this.listData = res.data.list;
-        this.listTotal = res.data.total;
-        this.listLoading = false;
-      });
+      pointListByPage(this.filterForm)
+        .then((res) => {
+          this.hasAuth = true;
+          this.listData = res.data.list;
+          this.listTotal = res.data.total;
+          this.listLoading = false;
+        })
+        .catch((e) => {
+          this.hasAuth = false;
+        });
     },
   },
 };

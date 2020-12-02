@@ -1,13 +1,13 @@
 <template>
   <div class="alert-config">
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-      <el-tab-pane label="邮箱配置" name="mail-config"  v-auth="1049" lazy>
+      <el-tab-pane label="邮箱配置" name="mail-config" lazy>
         <mail-config />
       </el-tab-pane>
-      <el-tab-pane label="短信配置" name="sms-config"   v-auth="1050" lazy>
+      <el-tab-pane label="短信配置" name="sms-config" lazy>
         <sms-config />
       </el-tab-pane>
-      <el-tab-pane label="语音配置" name="voice-config" v-auth="1051" lazy>
+      <el-tab-pane label="语音配置" name="voice-config" lazy>
         <voice-config />
       </el-tab-pane>
       <el-tab-pane label="微信配置" name="wechat-config" lazy> </el-tab-pane>

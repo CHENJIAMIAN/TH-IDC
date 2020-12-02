@@ -1,7 +1,8 @@
 <template>
   <div class="role-manage">
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1028">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -30,6 +31,7 @@
     </div>
     <!-- 列表 -->
     <el-table
+    v-auth="1028"
       style="width: 100%"
       height="100%"
       stripe
@@ -141,6 +143,7 @@
       </el-table-column>
     </el-table>
     <pagination
+    v-auth="1028"
       style="margin-top: -10px;"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
@@ -399,6 +402,7 @@ export default {
   components: { pagination },
   data() {
     return {
+      hasAuth: false,
       teststr: "",
       filterForm: {
         // 筛选条件
@@ -584,9 +588,12 @@ export default {
     getList() {
       this.listLoading = true;
       alertMaskListByPage(this.filterForm).then((res) => {
+        this.hasAuth = true;
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
+      }).catch(e=>{
+        this.hasAuth = false;
       });
     },
   },

@@ -1,7 +1,8 @@
 <template>
   <div class="app-container menu-manage">
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1006">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -41,6 +42,7 @@
 
     <!-- 列表 -->
     <el-table
+      v-auth="1006"
       style="width: 100%"
       height="100%"
       stripe
@@ -63,7 +65,7 @@
       <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
           <el-button
-            title = "编辑"
+            title="编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
@@ -80,6 +82,7 @@
       </el-table-column>
     </el-table>
     <pagination
+      v-auth="1006"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
@@ -168,6 +171,7 @@ export default {
   components: { pagination },
   data() {
     return {
+      hasAuth: false,
       depOpts: [],
       firstMenuOpts: [],
       secondMenuOpts: [],
@@ -333,11 +337,16 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      sysMenuListByPage(this.filterForm).then((res) => {
-        this.listData = res.data.list;
-        this.listTotal = res.data.total;
-        this.listLoading = false;
-      });
+      sysMenuListByPage(this.filterForm)
+        .then((res) => {
+          this.hasAuth = true;
+          this.listData = res.data.list;
+          this.listTotal = res.data.total;
+          this.listLoading = false;
+        })
+        .catch((e) => {
+          this.hasAuth = false;
+        });
     },
   },
 };

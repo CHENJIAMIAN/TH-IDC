@@ -1,7 +1,9 @@
 <template>
   <div class="auth-manage">
+    
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1051" >
       <el-form
         ref="filterForm"
         :inline="true"
@@ -18,6 +20,7 @@
     </div>
     <!-- <el-card> -->
     <el-form
+    v-auth="1051" 
       ref="forms"
       :model="forms"
       :rules="rules"
@@ -63,6 +66,7 @@ export default {
   components: { pagination },
   data() {
     return {
+      hasAuth: false,
       depOpts: [],
       firstMenuOpts: [],
       secondMenuOpts: [],
@@ -163,10 +167,15 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      phoneSoundConfigGetSoundConfig().then((res) => {
-        this.forms = res.data;
-        this.listLoading = false;
-      });
+      phoneSoundConfigGetSoundConfig()
+        .then((res) => {
+          this.hasAuth = true;
+          this.forms = res.data;
+          this.listLoading = false;
+        })
+        .catch((e) => {
+          this.hasAuth = false;
+        });
     },
   },
 };

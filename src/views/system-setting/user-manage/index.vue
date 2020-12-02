@@ -1,7 +1,8 @@
 <template>
   <div class="app-container user-manage">
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1004">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -65,6 +66,7 @@
 
     <!-- 列表 -->
     <el-table
+    v-auth="1004"
       style="width: 100%"
       height="100%"
       stripe
@@ -106,6 +108,7 @@
       </el-table-column>
     </el-table>
     <pagination
+    v-auth="1004"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
@@ -222,7 +225,8 @@ import {
 export default {
   components: { pagination },
   data() {
-    return {
+     return {
+      hasAuth: false,
       depOpts: [],
       roleOpts: [],
       filterForm: {
@@ -345,9 +349,12 @@ export default {
     getList() {
       this.listLoading = true;
       sysUserListByPage(this.filterForm).then((res) => {
+        this.hasAuth = true;
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
+      }).catch(e=>{
+        this.hasAuth = false;
       });
     },
   },

@@ -5,13 +5,13 @@
       type="border-card"
       @tab-click="handleTabClick"
     >
-      <el-tab-pane label="告警等级" name="alert-level" v-auth="1023" lazy>
+      <el-tab-pane label="告警等级" name="alert-level" lazy>
         <alert-level />
       </el-tab-pane>
-      <el-tab-pane label="告警显示" name="alert-display" v-auth="1024" lazy>
+      <el-tab-pane label="告警显示" name="alert-display" lazy>
         <alert-display />
       </el-tab-pane>
-      <el-tab-pane label="屏蔽设置" name="alert-mask-setting" v-auth="1028" lazy>
+      <el-tab-pane label="屏蔽设置" name="alert-mask-setting"  lazy>
         <alert-mask-setting />
       </el-tab-pane>
     </el-tabs>

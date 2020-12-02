@@ -22,8 +22,7 @@
 
       <div class="avatar-wrapper">
         <el-badge :value="notifyCount" class="item" :hidden="notifyCount < 1">
-          <a title="告警通知" @click="drawer = true"
-             v-auth="1026"
+          <a title="告警通知" @click="drawer = true"            
             ><img src="@/assets/img/xx.png"
           /></a>
         </el-badge>

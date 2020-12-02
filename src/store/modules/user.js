@@ -6,7 +6,7 @@ import store from '@/store'
 
 const state = {
   token: getToken(),
-  auth: []
+  auth: undefined
 }
 
 const mutations = {
@@ -29,12 +29,13 @@ const actions = {
         // 登录后会location.href = "/home.html"; 跳转到bim页面,store会丢失,信息要放cookie里
         Cookies.set('realName', realName)
 
+        localStorage.setItem('menuList', JSON.stringify(menuList));
 
+        // 登录成功要获取一次权限去生成动态路由,之后没有权限又要去获取一次权限
         //根据角色生成可访问的路线图 
         const accessRoutes = await store.dispatch('permission/generateRoutes', menuList)
         //动态添加可访问的路由 
         router.addRoutes(accessRoutes)
-
         commit('SET_AUTH', menuList)
         commit('SET_TOKEN', data.token)
         setToken(data.token)

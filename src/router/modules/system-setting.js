@@ -24,31 +24,31 @@ export default {
           path: 'department-manage',
           component: () => import('@/views/system-setting/department-manage/index'),
           name: 'department-manage',
-          meta: { title: '部门管理', icon: 'img-bm', auth: [1003]}
+          meta: { title: '部门管理', icon: 'img-bm'}
         },
         {
           path: 'menu-manage',
           component: () => import('@/views/system-setting/menu-manage/index'),
           name: 'menu-manage',
-          meta: { title: '菜单管理', icon: 'img-mkk' , auth: [1006]}
+          meta: { title: '菜单管理', icon: 'img-mkk'}
         },
         {
           path: 'auth-manage',
           component: () => import('@/views/system-setting/auth-manage/index'),
           name: 'auth-manage',
-          meta: { title: '权限管理', icon: 'img-qx' , auth: [1007]}
+          meta: { title: '权限管理', icon: 'img-qx'}
         },
         {
           path: 'role-manage',
           component: () => import('@/views/system-setting/role-manage/index'),
           name: 'role-manage',
-          meta: { title: '角色管理', icon: 'img-js', auth: [1005] }
+          meta: { title: '角色管理', icon: 'img-js' }
         },
         {
           path: 'user-manage',
           component: () => import('@/views/system-setting/user-manage/index'),
           name: 'user-manage',
-          meta: { title: '用户管理', icon: 'img-yh' , auth: [1004]}
+          meta: { title: '用户管理', icon: 'img-yh'}
         },
       ]
     },
@@ -62,7 +62,7 @@ export default {
           path: 'system-log',
           component: () => import('@/views/system-setting/system-log/index'),
           name: 'system-log',
-          meta: { title: '系统日志', icon: 'img-lm' , auth: [1009]}
+          meta: { title: '系统日志', icon: 'img-lm'}
         },
       ]
     },

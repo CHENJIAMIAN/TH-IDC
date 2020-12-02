@@ -57,7 +57,7 @@ dingding-config
       path: 'storage-config',
       component: () => import('@/views/engineer-config/storage-config/index'),
       name: 'storage-config',
-      meta: { title: '存储配置', icon: 'img-cc', auth: [1047] }
+      meta: { title: '存储配置', icon: 'img-cc' }
     },
     {
       path: 'rule-manage',
@@ -76,31 +76,31 @@ dingding-config
           path: 'alert-stratege',
           component: () => import('@/views/engineer-config/alert-stratege/index.vue'),
           name: 'alert-stratege',
-          meta: { title: '告警策略', icon: 'img-cl', auth: [1052]  }
+          meta: { title: '告警策略', icon: 'img-cl' }
         },
         {
           path: 'notify-record',
           component: () => import('@/views/engineer-config/notify-record/index.vue'),
           name: 'notify-record',
-          meta: { title: '通知记录', icon: 'img-jl', auth: [1053]  }
+          meta: { title: '通知记录', icon: 'img-jl' }
         },
         {
           path: 'arrange-work-manage',
           component: () => import('@/views/engineer-config/arrange-work-manage/index'),
           name: 'arrange-work-manage',
-          meta: { title: '排班管理', icon: 'img-pb', auth: [1040] }
+          meta: { title: '排班管理', icon: 'img-pb' }
         },
         // {
         //   path: 'rule-template',
         //   component: () => import('@/views/engineer-config/rule-template/index'),
         //   name: 'rule-template',
-        //   meta: { title: '规则模板', icon: 'img-' , auth: [1029]}
+        //   meta: { title: '规则模板', icon: 'img-'}
         // },
         {
           path: 'alert-rule',
           component: () => import('@/views/engineer-config/alert-rule/index'),
           name: 'alert-rule',
-          meta: { title: '告警规则', icon: 'img-gzz', auth: [1032]}
+          meta: { title: '告警规则', icon: 'img-gzz'}
         },
       ]
     },

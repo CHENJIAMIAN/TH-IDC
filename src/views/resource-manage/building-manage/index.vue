@@ -1,7 +1,9 @@
 <template>
   <div class="app-container building-manage">
+        
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1034">
       <el-form ref="filterForm" :inline="true" size="medium">
         <el-form-item>
           <el-button
@@ -23,6 +25,7 @@
 
     <!-- 图片 -->
     <img
+    v-auth="1034"
       class="preview-img"
       :src="imgUrl"
       alt="加载失败"
@@ -104,7 +107,8 @@ import { getToken } from "@/utils/auth";
 export default {
   components: { pagination },
   data() {
-    return {
+     return {
+      hasAuth: false,
       // 上传
       uploadedFileUrl: "", // 附件ID数组
       headers: {
@@ -129,7 +133,12 @@ export default {
     };
   },
   created() {
-    configGetBuilding_bg().then((r) => (this.imgUrl = r.data.imgUrl));
+    configGetBuilding_bg().then((r) => {
+        this.hasAuth = true;
+        this.imgUrl = r.data.imgUrl
+    }).catch(e=>{
+        this.hasAuth = false;
+      });
   },
   mounted() {},
   methods: {

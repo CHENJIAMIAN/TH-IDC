@@ -49,37 +49,37 @@ export default {
           path: 'building-manage',
           component: () => import('@/views/resource-manage/building-manage/index'),
           name: 'building-manage',
-          meta: { title: '楼幢管理', icon: 'img-ld',auth: [1034] }
+          meta: { title: '楼幢管理', icon: 'img-ld'}
         },
         {
           path: 'floor-manage',
           component: () => import('@/views/resource-manage/floor-manage/index'),
           name: 'floor-manage',
-          meta: { title: '楼层管理', icon: 'img-lc' , auth: [1012]}
+          meta: { title: '楼层管理', icon: 'img-lc'}
         },
         {
           path: 'room-manage',
           component: () => import('@/views/resource-manage/room-manage/index'),
           name: 'room-manage',
-          meta: { title: '房间管理', icon: 'img-fjj', auth: [1013] }
+          meta: { title: '房间管理', icon: 'img-fjj' }
         },
         {
           path: 'device-group-manage',
           component: () => import('@/views/resource-manage/device-group-manage/index'),
           name: 'device-group-manage',
-          meta: { title: '设备分组', icon: 'img-sb', auth: [1014] }
+          meta: { title: '设备分组', icon: 'img-sb' }
         },
         {
           path: 'device-manage',
           component: () => import('@/views/resource-manage/device-manage/index'),
           name: 'device-manage',
-          meta: { title: '设备管理', icon: 'img-sbb', auth: [1015] }
+          meta: { title: '设备管理', icon: 'img-sbb'}
         },
         {
           path: 'measure-point-manage',
           component: () => import('@/views/resource-manage/measure-point-manage/index'),
           name: 'measure-point-manage',
-          meta: { title: '测点管理', icon: 'img-cdd', auth: [1016] }
+          meta: { title: '测点管理', icon: 'img-cdd' }
         },
       ]
     }

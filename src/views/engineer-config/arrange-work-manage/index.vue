@@ -1,7 +1,9 @@
 <template>
   <div class="app-container user-manage">
+        
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1040">
       <el-form
         :inline="true"
         size="medium"
@@ -17,6 +19,7 @@
 
     <!-- 列表 -->
     <el-table
+    v-auth="1040"
       class="arrange-work-table"
       style="width: 100%"
       height="100%"
@@ -165,7 +168,8 @@ import {
 export default {
   components: { pagination },
   data() {
-    return {
+     return {
+      hasAuth: false,
       userNotBindOpts: [],
       userBindOpts: [],
       listLoading: true,
@@ -295,6 +299,7 @@ export default {
     getList() {
       this.listLoading = true;
       arrangeWorkListAll().then((res) => {
+        this.hasAuth = true;
         this.listData = res.data;
         this.listData.map((i, index) => {
           i.week1IdList = i.week1List.map((i) => i.name);
@@ -307,7 +312,9 @@ export default {
         });
         console.log(this.listData);
         this.listLoading = false;
-      });
+      }).catch(e=>{
+        this.hasAuth = false;
+      });;
     },
   },
 };

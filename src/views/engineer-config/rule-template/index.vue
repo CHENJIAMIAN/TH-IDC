@@ -1,7 +1,9 @@
 <template>
   <div class="app-container department-manage">
+        
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1029">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -54,6 +56,7 @@
       v-loading="listLoading"
       border
       :data="listData"
+      v-auth="1029"
     >
       <el-table-column sortable prop="name" label="模板名称" />
       <!-- <el-table-column sortable prop="deviceTypeId" label="设备类型ID" /> -->
@@ -142,6 +145,7 @@
       </el-table-column>
     </el-table>
     <pagination
+    v-auth="1029"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
@@ -281,7 +285,8 @@ import { pointTypeListAll } from "@/api/resource-manage.js";
 export default {
   components: { pagination },
   data() {
-    return {
+     return {
+      hasAuth: false,
       valueTypeOpts,
       alertLevelOpts: [],
       pointAllTypeOpts: [],
@@ -423,9 +428,12 @@ export default {
     getList() {
       this.listLoading = true;
       alertRuleTemplateListByPage(this.filterForm).then((res) => {
+        this.hasAuth = true;
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
+      }).catch(e=>{
+        this.hasAuth = false;
       });
     },
   },

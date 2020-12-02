@@ -1,6 +1,8 @@
 <template>
   <div class="app-container department-manage">
-    <div class="page1" v-if="!dialogVisible">
+        
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
+    <div class="page1" v-if="!dialogVisible" v-auth="1032">
       <!-- 筛选条件 -->
       <div class="head">
         <el-form
@@ -351,7 +353,8 @@ import {
 export default {
   components: { pagination },
   data() {
-    return {
+     return {
+      hasAuth: false,
       valueTypeOpts,
       dialogVisible: false,
       pointTypeOpts: [],
@@ -540,9 +543,12 @@ export default {
     getList() {
       this.listLoading = true;
       alertRuleListByPage(this.filterForm).then((res) => {
+        this.hasAuth = true;
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
+      }).catch(e=>{
+        this.hasAuth = false;
       });
     },
   },

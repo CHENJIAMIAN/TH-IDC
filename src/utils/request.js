@@ -7,7 +7,7 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 10*1000 // request timeout
+  timeout: 10 * 1000 // request timeout
 })
 
 // request interceptor
@@ -52,19 +52,23 @@ service.interceptors.response.use(
     // 108是登录失效,请重新登录! 
     // 400是请求的数据格式不符! 401是请求的数字签名不匹配! 404是未找到该资源! 500是服务器内部错误! 501是会话服务器内部错误! 503是服务器内部错误，请稍后再试!
     if (res.res !== 0) {
-      res.res !== 108 && Message({//不显示登录失效的错误提示
-        message: res.msg || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
+      if (res.res == 108 || res.res == 201) {
+        console.error(res.msg);
+      } else {
+        Message({//不显示登录失效的108错误提示  201权限不足
+          message: res.msg || 'Error',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.res === 108) {
-        setTimeout(_=>{
+        setTimeout(_ => {
           store.dispatch('user/resetToken').then(() => {
             location.reload()
           })
-        },10*1000)
+        }, 10 * 1000)
         // to re-login
         MessageBox.confirm('您已注销，可以取消以保留在该页面上，或者再次登录', '确认登出', {
           confirmButtonText: '重新登入',

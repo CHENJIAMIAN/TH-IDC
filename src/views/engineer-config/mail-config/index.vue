@@ -1,7 +1,8 @@
 <template>
   <div class="auth-manage">
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1049">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -29,7 +30,8 @@
 
     <!-- 列表 -->
     <el-table
-            style="width: 100%"
+      v-auth="1049"
+      style="width: 100%"
       height="100%"
       stripe
       v-loading="listLoading"
@@ -61,7 +63,7 @@
       <el-table-column label="操作" align="center" width="161">
         <template slot-scope="{ row }">
           <el-button
-            title = "编辑"
+            title="编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
@@ -141,7 +143,7 @@
 import pagination from "@/components/Pagination";
 import {
   configEmailUpdateState,
-   configEmailQueryById,
+  configEmailQueryById,
   configEmailListAll,
   configEmailListByPage,
   configEmailDelete,
@@ -152,6 +154,7 @@ export default {
   components: { pagination },
   data() {
     return {
+      hasAuth: false,
       depOpts: [],
       firstMenuOpts: [],
       secondMenuOpts: [],
@@ -188,11 +191,13 @@ export default {
   mounted() {},
   methods: {
     handleStatusChange(v, row) {
-      configEmailUpdateState({ id: row.id, status: v }).then((r) => {
-        this.getList();
-      }).catch(e=>{
-        row.status = v===0? 1:0;
-      });
+      configEmailUpdateState({ id: row.id, status: v })
+        .then((r) => {
+          this.getList();
+        })
+        .catch((e) => {
+          row.status = v === 0 ? 1 : 0;
+        });
     },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
@@ -230,11 +235,11 @@ export default {
     async handleDialog(row) {
       // dialog显示时获取一级菜单列表
       if (row) {
-        const r = await configEmailQueryById({id:row.id})
+        const r = await configEmailQueryById({ id: row.id });
         // 编辑
         this.dialog.forms = r.data;
       } else {
-        this.dialog.forms = { status: 1 ,auth:2};
+        this.dialog.forms = { status: 1, auth: 2 };
       }
       this.dialog.visible = true;
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
@@ -259,11 +264,16 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      configEmailListAll().then((res) => {
-        this.listData = res.data;
-        // this.listTotal = res.data.total;
-        this.listLoading = false;
-      });
+      configEmailListAll()
+        .then((res) => {
+          this.hasAuth = true;
+          this.listData = res.data;
+          // this.listTotal = res.data.total;
+          this.listLoading = false;
+        })
+        .catch((e) => {
+          this.hasAuth = false;
+        });
     },
   },
 };

@@ -11,19 +11,19 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
-  // start progress bar
+  //开始进度条 
   NProgress.start()
 
-  // set page title
+  //设置页面标题 
   document.title = getPageTitle(to.meta.title)
 
-  // determine whether the user has logged in
+  //确定用户是否已登录 
   const hasToken = getToken()
-
+  
   if (hasToken) {
     // 跳到驾驶舱单页
     if (to.path === '/login') {
-      // if is logged in, redirect to the home page
+      //如果已登录，请重定向到主页 
       next({ path: '/' })
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
@@ -37,44 +37,40 @@ router.beforeEach(async (to, from, next) => {
       } else {
         store.dispatch("app/openSideBar", { withoutAnimation: false });
       }
-      const auth = store.getters.auth && store.getters.auth.length > 0
+      
+      const auth = store.getters.auth && store.getters.auth.length >= 0;
+      console.log(store.getters.auth, to, from);
       if (auth) {
         next();
       } else {
-        //删除令牌并转到登录页面以重新登录 
-        await store.dispatch('user/resetToken')
-        next(`/login?redirect=${to.path}`)
-        NProgress.done()
-        // try {
-        //   //根据角色生成可访问的路线图 
-        //   const accessRoutes = await store.dispatch('permission/generateRoutes', auth)
-
-        //   //动态添加可访问的路由 
-        //   router.addRoutes(accessRoutes)
-
-        //   //hack方法以确保addRoutes是完整的
-        //   //设置replace：true，因此导航不会留下历史记录
-        //   next({ ...to, replace: true })
-        // } catch (error) {
-        //   debugger
-        //   //删除令牌并转到登录页面以重新登录 
-        //   await store.dispatch('user/resetToken')
-        //   Message.error(error || 'Has Error')
-        //   next(`/login?redirect=${to.path}`)
-        //   NProgress.done()
-        // }
+        try {
+          const menuListStr = localStorage.getItem('menuList');
+          const menuList = JSON.parse(menuListStr);
+          store.commit('user/SET_AUTH', menuList)
+          //根据角色生成可访问的路线图 
+          const accessRoutes = await store.dispatch('permission/generateRoutes', menuList)
+          //动态添加可访问的路由 
+          router.addRoutes(accessRoutes)
+          //hack方法以确保addRoutes是完整的
+          //设置replace：true，因此导航不会留下历史记录
+          next({ ...to, replace: true })
+        } catch (error) {
+          debugger
+          //删除令牌并转到登录页面以重新登录 
+          await store.dispatch('user/resetToken')
+          Message.error(error || 'Has Error')
+          next(`/login?redirect=${to.path}`)
+          NProgress.done()
+        }
       }
-
-
     }
   } else {
-    /* has no token*/
-
+    /*没有令牌*/
     if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
+      //在免费的登录白名单中，直接进入 
       next()
     } else {
-      // other pages that do not have permission to access are redirected to the login page.
+      //其他无权访问的页面将重定向到登录页面。 
       next(`/login?redirect=${to.path}`)
       NProgress.done()
     }

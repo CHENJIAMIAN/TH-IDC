@@ -1,7 +1,9 @@
 <template>
   <div class="app-container menu-manage">
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
+
     <!-- 筛选条件 -->
-    <div class="head">
+    <div class="head" v-auth="1026">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -172,6 +174,7 @@
     </div>
 
     <el-table
+      v-auth="1026"
       style="width: 100%"
       height="100%"
       stripe
@@ -284,6 +287,7 @@
       </el-table-column>
     </el-table>
     <pagination
+      v-auth="1026"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
@@ -464,6 +468,7 @@ export default {
   components: { pagination },
   data() {
     return {
+      hasAuth: false,
       alertLevelOpts: [],
       pointOpts: [],
       floorOpts: [],
@@ -663,11 +668,16 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      alertNotificationListByPage(this.filterForm).then((res) => {
-        this.listData = res.data.list;
-        this.listTotal = res.data.total;
-        this.listLoading = false;
-      });
+      alertNotificationListByPage(this.filterForm)
+        .then((res) => {
+          this.hasAuth = true;
+          this.listData = res.data.list;
+          this.listTotal = res.data.total;
+          this.listLoading = false;
+        })
+        .catch((e) => {
+          this.hasAuth = false;
+        });
     },
   },
 };
@@ -680,6 +690,15 @@ export default {
   // background: url(../../../assets/img/mpbg.png) 0 0 / 100% 100% no-repeat;
   // height: 100%;
   height: calc(80vh - 70px);
+
+  .auth-tip {
+    text-align: center;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 60%;
+    color: #06c2f4;
+  }
 }
 .head {
   display: grid;

@@ -1,7 +1,9 @@
 <template>
   <div class="app-container auth-manage">
+        
+    <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="page1" v-if="!dialog.visible">
+    <div class="page1" v-if="!dialog.visible" v-auth="1052">
       <!-- <div class="head">
         <el-form
           ref="filterForm"
@@ -233,7 +235,8 @@ import {
 export default {
   components: { pagination, DragStep },
   data() {
-    return {
+     return {
+      hasAuth: false,
       deepClone,
       noteModeOpts,
       step0: deepClone(noteModeOpts),
@@ -361,10 +364,13 @@ export default {
     getList() {
       this.listLoading = true;
       alertStrategyListByPage(this.filterForm).then((res) => {
+        this.hasAuth = true;
         this.listData = res.data.list;
         this.listTotal = res.data.total;
         this.listLoading = false;
-      });
+      }).catch(e=>{
+        this.hasAuth = false;
+      });;
     },
   },
 };
