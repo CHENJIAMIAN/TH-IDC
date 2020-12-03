@@ -76,6 +76,7 @@
     </div>
 
     <el-table
+            empty-text=" "
     v-auth="1053"
       style="width: 100%"
       height="100%"

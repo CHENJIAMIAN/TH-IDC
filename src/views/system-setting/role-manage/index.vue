@@ -35,6 +35,7 @@
     </div>
     <!-- 列表 -->
     <el-table
+            empty-text=" "
     v-auth="1005"
       style="width: 100%"
       height="100%"

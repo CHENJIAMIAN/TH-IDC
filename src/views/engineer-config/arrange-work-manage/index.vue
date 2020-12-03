@@ -19,6 +19,7 @@
 
     <!-- 列表 -->
     <el-table
+            empty-text=" "
     v-auth="1040"
       class="arrange-work-table"
       style="width: 100%"

@@ -42,6 +42,7 @@
 
     <!-- 列表 -->
     <el-table
+            empty-text=" "
       v-auth="1006"
       style="width: 100%"
       height="100%"

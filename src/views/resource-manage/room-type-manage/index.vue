@@ -35,6 +35,7 @@
 
     <!-- 列表 -->
     <el-table
+            empty-text=" "
     
       style="width: 100%"
       height="100%"

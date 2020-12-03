@@ -8,6 +8,7 @@
       <el-tag type="info">Documentation</el-tag>
     </a>
     <el-table
+            empty-text=" "
       ref="multipleTable"
       v-loading="listLoading"
       :data="list"

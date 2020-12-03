@@ -220,32 +220,38 @@
               <!-- 电池是图表 -->
               <template v-if="isDcRoom">
                 <bar-chart
+                  @clickBar="handleCellDataHistory"
                   chartName="温度"
                   typeName="temperature"
                   :listData="listData"
                 />
                 <bar-chart
+                  @clickBar="handleCellDataHistory"
                   chartName="充电电流"
                   typeName="chargeCurrent"
                   :listData="listData"
                 />
                 <bar-chart
+                  @clickBar="handleCellDataHistory"
                   chartName="放电电流"
                   typeName="dischargeCurrent"
                   :listData="listData"
                 />
                 <bar-chart
+                  @clickBar="handleCellDataHistory"
                   chartName="电压"
                   typeName="voltage"
                   :listData="listData"
                 />
                 <bar-chart
+                  @clickBar="handleCellDataHistory"
                   chartName="内阻"
                   typeName="internalResistance"
                   :listData="listData"
                 />
               </template>
               <el-table
+                empty-text=" "
                 v-else
                 class="arrange-work-table"
                 style="width: 100%"
@@ -469,18 +475,29 @@
         :model="dialogCellDataHistory.forms"
         :rules="dialogCellDataHistory.rules"
         ref="dialogCellDataHistoryForm"
-        label-width="50px"
+        label-width="80px"
       >
-        <el-form-item prop="startDate_endDate">
-          <el-date-picker
-            style="width: 240px"
-            v-model="dialogCellDataHistory.forms.startDate_endDate"
-            type="daterange"
-            placeholder="时间范围"
-            unlink-panels
-            value-format="yyyy-MM-dd"
-          />
-          <!-- <el-date-picker
+        <div
+          style="
+            margin-left: 40px;
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: start;
+            justify-items: start;
+            gap: 1rem;
+            align-items: start;
+          "
+        >
+          <el-form-item prop="startDate_endDate" label="时间范围">
+            <el-date-picker
+              style="width: 240px"
+              v-model="dialogCellDataHistory.forms.startDate_endDate"
+              type="daterange"
+              placeholder="时间范围"
+              unlink-panels
+              value-format="yyyy-MM-dd"
+            />
+            <!-- <el-date-picker
 
             v-model="dialogCellDataHistory.forms.startDate_endDate"
             type="date"
@@ -488,7 +505,14 @@
             :picker-options="dialogCellDataHistory.pickerOptions"
           >
           </el-date-picker> -->
-        </el-form-item>
+          </el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            @click="handleQuery"
+          ></el-button>
+        </div>
+
         <LineChart
           :resData="this.dialogCellDataHistory.resData"
           :typeName="dialogCellDataHistory.forms.key"
@@ -555,6 +579,8 @@ export default {
         visible: false,
         forms: {
           startDate_endDate: [],
+          startTime: null,
+          endTime: null,
         },
         pickerOptions: {
           disabledDate(time) {
@@ -584,25 +610,8 @@ export default {
   },
   watch: {
     "dialogCellDataHistory.forms.startDate_endDate"(n, o) {
-      if (!n || !n.length) return;
-      // const n1 = new Date(n);
-      // const n2 = new Date(n);
       this.dialogCellDataHistory.forms.startTime = n ? n[0] : null;
-      // fecha.format(
-      //   new Date(n1.setDate(n1.getDate())),
-      //   "yyyy-MM-dd"
-      // );
       this.dialogCellDataHistory.forms.endTime = n ? n[1] : null;
-      // fecha.format(
-      //   new Date(n2.setDate(n2.getDate() + 1)),
-      //   "yyyy-MM-dd"
-      // );
-      // console.log(this.dialogCellDataHistory.forms);
-      historyGetData(this.dialogCellDataHistory.forms).then((r) => {
-        const { deviceCode, list } = r.data;
-        this.dialogCellDataHistory.resData = r.data;
-        // console.log("historyGetData", { deviceCode, list });
-      });
     },
   },
   computed: {
@@ -646,19 +655,22 @@ export default {
     // this.$route.meta.title设置比在router.beforeEach设置标题要慢,要重新设一遍
     document.title = getPageTitle(this.$route.meta.title);
 
-    // console.log('created',this.$route,this.$route.meta.title)
-
     this.getList();
     const interval = setInterval(() => {
-      // console.log(this._uid, "getList");
       this.getList();
     }, 6 * 1000);
     this.$on("hook:beforeDestroy", (_) => {
-      // console.log("clearInterval");
       clearInterval(interval);
     });
   },
   methods: {
+    handleQuery() {
+      historyGetData(this.dialogCellDataHistory.forms).then((r) => {
+        const { deviceCode, list } = r.data;
+        this.dialogCellDataHistory.resData = r.data;
+        // console.log("historyGetData", { deviceCode, list });
+      });
+    },
     tableCellClassName({ row, column, rowIndex, columnIndex }) {
       //注意这里是解构
       //利用单元格的 className 的回调方法，给行列索引赋值
@@ -692,13 +704,14 @@ export default {
         this.dialogCellDataHistory.forms,
         {
           deviceCode: row.deviceCode,
-          key: column.label,
+          key: column.property,
         }
       );
       this.dialogCellDataHistory.visible = true;
-      this.$nextTick((_) =>
-        this.$refs["dialogCellDataHistoryForm"].clearValidate()
-      );
+      this.$nextTick((_) => {
+        this.$refs["dialogCellDataHistoryForm"].clearValidate();
+        this.handleQuery();
+      });
     },
     handleImgTabClick(tab, event) {
       // console.log(tab,event); //tab.name

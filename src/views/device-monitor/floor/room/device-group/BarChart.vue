@@ -1,7 +1,11 @@
 <template>
   <div :style="{ height: `calc(${height} + 4rem)`, width: width }">
-    <h2 style="margin-left: 3rem;">{{ chartName }}</h2>
-    <div ref="chart" :class="className" :style="{ height: height, width: width }"/>
+    <h2 style="margin-left: 3rem">{{ chartName }}</h2>
+    <div
+      ref="chart"
+      :class="className"
+      :style="{ height: height, width: width }"
+    />
   </div>
 </template>
 
@@ -68,13 +72,24 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$refs.chart, "macarons");
+      this.chart.on("click", (params) => {
+        // 在用户点击后控制台打印数据的名称
+        this.$emit("clickBar", {
+          row: {
+            deviceCode: params.name,
+          },
+          column: {
+            property: this.typeName,
+          },
+        });
+      });
     },
     setOptions() {
-      console.log(this.listData);
+      // console.log(this.listData);
       const seriesData = this.listData.map((i) => i[this.typeName]);
-      const xAxisData = this.listData.map((i) => i.deviceCode)
-      console.log(seriesData);
-      console.log(xAxisData);
+      const xAxisData = this.listData.map((i) => i.deviceCode);
+      // console.log(seriesData);
+      // console.log(xAxisData);
       const series = [
         {
           // name: "设备" + i.deviceCode,

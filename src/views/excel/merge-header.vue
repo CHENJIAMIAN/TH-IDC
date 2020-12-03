@@ -4,6 +4,7 @@
     <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-document" @click="handleDownload">Export</el-button>
 
     <el-table
+            empty-text=" "
       ref="multipleTable"
       v-loading="listLoading"
       :data="list"

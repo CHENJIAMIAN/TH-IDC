@@ -1,6 +1,7 @@
 <template>
   <div class="menu-manage">
     <el-table
+            empty-text=" "
       style="width: 100%"
       stripe
       v-loading="listLoading"

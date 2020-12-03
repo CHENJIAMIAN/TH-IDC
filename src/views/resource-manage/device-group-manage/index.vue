@@ -87,6 +87,7 @@
 
     <!-- 列表 -->
     <el-table
+            empty-text=" "
     v-auth="1014"
       style="width: 100%"
       height="100%"
@@ -203,6 +204,7 @@
         <div style="margin-top: 12px; margin-bottom: 3px">已绑测点</div>
         <div class="table">
           <el-table
+            empty-text=" "
             class="btm-table"
             style="overflow: auto"
             stripe

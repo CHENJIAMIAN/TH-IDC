@@ -174,6 +174,7 @@
     </div>
 
     <el-table
+            empty-text=" "
       v-auth="1026"
       style="width: 100%"
       height="100%"

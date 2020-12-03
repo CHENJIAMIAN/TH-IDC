@@ -73,8 +73,8 @@ export default {
     setOptions({ deviceCode, list }) {
       const seriesData = list.map((i) => i[this.typeName]);
       const xAxisData = list.map((i) => new Date(i.ts).toLocaleString());
-      console.log(seriesData);
-      console.log(xAxisData);
+      // console.log(seriesData);
+      // console.log(xAxisData);
       const series = [
         {
           // name: "设备" + i.deviceCode,
