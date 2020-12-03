@@ -236,7 +236,7 @@ export default {
   components: { pagination, DragStep },
   data() {
      return {
-      hasAuth: false,
+      hasAuth: true,
       deepClone,
       noteModeOpts,
       step0: deepClone(noteModeOpts),

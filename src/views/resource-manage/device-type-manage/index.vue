@@ -120,7 +120,7 @@ export default {
   components: { pagination },
   data() {
     return {
-      hasAuth: false,
+      hasAuth: true,
       filterForm: {
         // 筛选条件
         name:"",

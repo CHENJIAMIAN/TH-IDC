@@ -512,6 +512,7 @@ import {
 import panelAssetInfo from "./panelAssetInfo.vue";
 import panelAlertRecord from "./panelAlertRecord.vue";
 import BarChart from "./BarChart";
+import getPageTitle from "@/utils/get-page-title";
 export default {
   name: "device-group",
   components: {
@@ -553,7 +554,7 @@ export default {
       dialogCellDataHistory: {
         visible: false,
         forms: {
-          startDate_endDate: "",
+          startDate_endDate: [],
         },
         pickerOptions: {
           disabledDate(time) {
@@ -583,6 +584,7 @@ export default {
   },
   watch: {
     "dialogCellDataHistory.forms.startDate_endDate"(n, o) {
+      if (!n || !n.length) return;
       // const n1 = new Date(n);
       // const n2 = new Date(n);
       this.dialogCellDataHistory.forms.startTime = n ? n[0] : null;
@@ -641,6 +643,9 @@ export default {
     });
     // 下一次会显示上一次设置的名字，怎么解决？
     this.$route.meta.title = deviceGroupName.trim();
+    // this.$route.meta.title设置比在router.beforeEach设置标题要慢,要重新设一遍
+    document.title = getPageTitle(this.$route.meta.title);
+
     // console.log('created',this.$route,this.$route.meta.title)
 
     this.getList();

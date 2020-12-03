@@ -195,7 +195,7 @@ export default {
   },
   data() {
     return {
-      hasAuth: false,
+      hasAuth: true,
       // 上传
       uploadedFileUrl: "", // 附件ID数组
       headers: {

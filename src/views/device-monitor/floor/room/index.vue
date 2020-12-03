@@ -82,7 +82,7 @@ export default {
   name: "room",
   data() {
     return {
-      hasAuth: false,
+      hasAuth: true,
       moreBtnsVisible: false,
       floorId: "",
       floorName: "",

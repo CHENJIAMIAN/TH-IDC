@@ -1,13 +1,14 @@
 <template>
   <div class="building-index">
-    <div class="col1">
-      <!-- v-show="sidebar.showSide" -->
+    <div
+      class="col1"
+      :style="
+        sidebar.showSide
+          ? 'left:50px;transition: all 0.28s;'
+          : 'left:-300px;'
+      "
+    >
       <el-button
-        :style="
-          sidebar.showSide
-            ? 'opacity:1;transition: all 1s ease-out;'
-            : 'opacity:0;'
-        "
         v-for="i in floorList"
         :key="i.id"
         @click="$router.push(`/device-monitor/floor/${i.id}/${i.name}`)"

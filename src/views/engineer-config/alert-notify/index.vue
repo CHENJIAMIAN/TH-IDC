@@ -468,7 +468,7 @@ export default {
   components: { pagination },
   data() {
     return {
-      hasAuth: false,
+      hasAuth: true,
       alertLevelOpts: [],
       pointOpts: [],
       floorOpts: [],

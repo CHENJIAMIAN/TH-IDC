@@ -402,7 +402,7 @@ export default {
   components: { pagination },
   data() {
     return {
-      hasAuth: false,
+      hasAuth: true,
       teststr: "",
       filterForm: {
         // 筛选条件

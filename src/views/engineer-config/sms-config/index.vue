@@ -76,7 +76,7 @@ export default {
   components: { pagination },
   data() {
     return {
-      hasAuth: false,
+      hasAuth: true,
       depOpts: [],
       firstMenuOpts: [],
       secondMenuOpts: [],

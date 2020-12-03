@@ -358,7 +358,7 @@ export default {
       }
     };
      return {
-      hasAuth: false,
+      hasAuth: true,
       floorOpts: [],
       roomOpts: [],
       deviceTypeOpts: [],

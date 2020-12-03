@@ -1,14 +1,12 @@
 <template>
   <div class="floor-index">
     <div class="floor-index-self" v-if="!$route.path.includes('/room')">
-      <div class="col1"
-          :style="
-            sidebar.showSide
-              ? 'opacity:1;transition: all 1s ease-out;'
-              : 'opacity:0;'
-          "
+      <div
+        class="col1"
+        :style="
+          sidebar.showSide ? 'left:50px;transition: all 0.28s;' : 'left:-300px;'
+        "
       >
-        <!-- v-show="sidebar.showSide" -->
         <el-button
           v-for="room in roomList"
           :key="room.id"

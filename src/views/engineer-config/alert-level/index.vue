@@ -198,7 +198,7 @@ export default {
   components: { pagination },
   data() {
     return {
-      hasAuth: false,
+      hasAuth: true,
       depOpts: [],
       levelOpts: [
         { id: 1, name: "紧急" },

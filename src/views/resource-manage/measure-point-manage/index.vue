@@ -307,7 +307,7 @@ export default {
   components: { pagination },
   data() {
     return {
-      hasAuth: false,
+      hasAuth: true,
       floorOpts: [],
       roomOpts: [],
       deviceGroupOpts: [],

@@ -33,7 +33,7 @@ export default {
   created() {
     this.getBreadcrumb();
   },
-  mounted(){
+  mounted() {
     window.sdfdsf = this.$refs.sdfdsf;
   },
   methods: {
@@ -76,8 +76,10 @@ export default {
         this.$router.push(redirect);
         return;
       }
-      // 解决设备监控页面,闪烁残留上一个设备组名称的问题,会造成刚进去面包屑没有最后一个,为什么?
-      // if (this.$route.path.includes("/device-group")) this.$route.meta.title = "";
+      // 解决设备监控页面,闪烁残留上一个设备组名称的问题,会造成刚进去面包屑没有最后一个,为什么? 
+      // 因为src/views/device-monitor/floor/room/device-group/index.vue给this.$route.meta.title 赋值太慢了,赋值时已经生成好了
+      if (this.$route.path.includes("/device-group"))
+        this.$route.meta.title = " ";
       this.$router.push(this.pathCompile(path));
     },
   },
