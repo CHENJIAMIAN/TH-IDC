@@ -219,19 +219,42 @@
               <!-- style="width: calc(100vw - 60px)"-->
               <!-- 电池是图表 -->
               <template v-if="isDcRoom">
-                <bar-chart chartName="温度" typeName="temperature" :listData="listData"/>
-                <bar-chart chartName="充电电流" typeName="chargeCurrent" :listData="listData" />
-                <bar-chart chartName="放电电流" typeName="dischargeCurrent" :listData="listData" />
-                <bar-chart chartName="电压" typeName="voltage" :listData="listData" />
-                <bar-chart chartName="内阻" typeName="internalResistance" :listData="listData" />
+                <bar-chart
+                  chartName="温度"
+                  typeName="temperature"
+                  :listData="listData"
+                />
+                <bar-chart
+                  chartName="充电电流"
+                  typeName="chargeCurrent"
+                  :listData="listData"
+                />
+                <bar-chart
+                  chartName="放电电流"
+                  typeName="dischargeCurrent"
+                  :listData="listData"
+                />
+                <bar-chart
+                  chartName="电压"
+                  typeName="voltage"
+                  :listData="listData"
+                />
+                <bar-chart
+                  chartName="内阻"
+                  typeName="internalResistance"
+                  :listData="listData"
+                />
               </template>
               <el-table
                 v-else
+                class="arrange-work-table"
                 style="width: 100%"
                 stripe
                 v-loading="listLoading"
                 border
                 :data="listData"
+                :cell-class-name="tableCellClassName"
+                @cell-click="cellClick"
               >
                 <el-table-column
                   prop="deviceCode"
@@ -435,15 +458,56 @@
     >
       <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
     </el-dialog>
+
+    <!-- 点击数据cell，显示历史曲线 -->
+    <el-dialog :visible.sync="dialogCellDataHistory.visible" width="80%">
+      <div slot="title" class="el-dialog-title-custom">
+        <div class="title-txt">数据历史</div>
+        <img src="@/assets/img/hl.png" />
+      </div>
+      <el-form
+        :model="dialogCellDataHistory.forms"
+        :rules="dialogCellDataHistory.rules"
+        ref="dialogCellDataHistoryForm"
+        label-width="50px"
+      >
+        <el-form-item prop="startDate_endDate">
+          <el-date-picker
+            style="width: 240px"
+            v-model="dialogCellDataHistory.forms.startDate_endDate"
+            type="daterange"
+            placeholder="时间范围"
+            unlink-panels
+            value-format="yyyy-MM-dd"
+          />
+          <!-- <el-date-picker
+
+            v-model="dialogCellDataHistory.forms.startDate_endDate"
+            type="date"
+            placeholder="选择日期"
+            :picker-options="dialogCellDataHistory.pickerOptions"
+          >
+          </el-date-picker> -->
+        </el-form-item>
+        <LineChart
+          :resData="this.dialogCellDataHistory.resData"
+          :typeName="dialogCellDataHistory.forms.key"
+        />
+      </el-form>
+      <div slot="footer" style="text-align: center"></div>
+    </el-dialog>
   </div>
 </template>
 
 
 <script>
+import LineChart from "@/views/device-monitor/floor/room/device-group/LineChart.vue";
 import { mapState, mapGetters } from "vuex";
+import fecha from "element-ui/src/utils/date";
 import {
   deviceGroupListAll,
   deviceGroupTypeGetData,
+  historyGetData,
 } from "@/api/device-monitor.js";
 import panelAssetInfo from "./panelAssetInfo.vue";
 import panelAlertRecord from "./panelAlertRecord.vue";
@@ -454,6 +518,7 @@ export default {
     panelAssetInfo,
     panelAlertRecord,
     BarChart,
+    LineChart,
   },
   data() {
     return {
@@ -485,9 +550,59 @@ export default {
         currentSum: "",
         temperatureAverage: "",
       },
+      dialogCellDataHistory: {
+        visible: false,
+        forms: {
+          startDate_endDate: "",
+        },
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+          shortcuts: [
+            {
+              text: "今天",
+              onClick(picker) {
+                picker.$emit("pick", new Date());
+              },
+            },
+            {
+              text: "昨天",
+              onClick(picker) {
+                const date = new Date();
+                date.setTime(date.getTime() - 3600 * 1000 * 24);
+                picker.$emit("pick", date);
+              },
+            },
+          ],
+        },
+        resData: [],
+        rules: {},
+      },
     };
   },
-  watch: {},
+  watch: {
+    "dialogCellDataHistory.forms.startDate_endDate"(n, o) {
+      // const n1 = new Date(n);
+      // const n2 = new Date(n);
+      this.dialogCellDataHistory.forms.startTime = n ? n[0] : null;
+      // fecha.format(
+      //   new Date(n1.setDate(n1.getDate())),
+      //   "yyyy-MM-dd"
+      // );
+      this.dialogCellDataHistory.forms.endTime = n ? n[1] : null;
+      // fecha.format(
+      //   new Date(n2.setDate(n2.getDate() + 1)),
+      //   "yyyy-MM-dd"
+      // );
+      // console.log(this.dialogCellDataHistory.forms);
+      historyGetData(this.dialogCellDataHistory.forms).then((r) => {
+        const { deviceCode, list } = r.data;
+        this.dialogCellDataHistory.resData = r.data;
+        // console.log("historyGetData", { deviceCode, list });
+      });
+    },
+  },
   computed: {
     ...mapState({
       roomImage: (state) => state.app.roomImage,
@@ -539,6 +654,47 @@ export default {
     });
   },
   methods: {
+    tableCellClassName({ row, column, rowIndex, columnIndex }) {
+      //注意这里是解构
+      //利用单元格的 className 的回调方法，给行列索引赋值
+      row.index = rowIndex;
+      column.index = columnIndex;
+      if (
+        column.index > 0 &&
+        !column.label.includes("状态") &&
+        !column.label.includes("模式") &&
+        !column.label.includes("方式")
+      )
+        return "week-day";
+    },
+    cellClick(row, column, cell, event) {
+      console.log({ row, column, cell, event });
+      // this.clickedRow = row;
+      // this.clickedColumn = column;
+      if (
+        column.index > 0 &&
+        !column.label.includes("状态") &&
+        !column.label.includes("模式") &&
+        !column.label.includes("方式")
+      )
+        this.handleCellDataHistory({ row, column, cell, event });
+    },
+    async handleCellDataHistory({ row, column, cell, event }) {
+      // dialog显示时获取一级菜单列表
+      // 编辑
+      this.dialogCellDataHistory.forms = this.$options.data().dialogCellDataHistory.forms;
+      this.dialogCellDataHistory.forms = Object.assign(
+        this.dialogCellDataHistory.forms,
+        {
+          deviceCode: row.deviceCode,
+          key: column.label,
+        }
+      );
+      this.dialogCellDataHistory.visible = true;
+      this.$nextTick((_) =>
+        this.$refs["dialogCellDataHistoryForm"].clearValidate()
+      );
+    },
     handleImgTabClick(tab, event) {
       // console.log(tab,event); //tab.name
     },
@@ -730,6 +886,26 @@ export default {
     .el-dialog__header {
       // display: none;
     }
+  }
+
+  .arrange-work-table th.is-leaf,
+  .arrange-work-table tr,
+  .arrange-work-table td {
+    border: 1px solid;
+  }
+
+  .week-day {
+    cursor: pointer;
+  }
+
+  td:hover {
+    background: #0d708c !important;
+  }
+  .el-table--enable-row-hover .el-table__body tr:hover > td {
+    background-color: unset;
+  }
+  .el-table--striped .el-table__body tr.el-table__row--striped:hover td {
+    background: #0838698c;
   }
 }
 </style>

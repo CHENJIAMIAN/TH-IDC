@@ -39,7 +39,7 @@ router.beforeEach(async (to, from, next) => {
       }
       
       const auth = store.getters.auth && store.getters.auth.length >= 0;
-      console.log(store.getters.auth, to, from);
+      // console.log(store.getters.auth, to, from);
       if (auth) {
         next();
       } else {

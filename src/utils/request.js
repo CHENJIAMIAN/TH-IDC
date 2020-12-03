@@ -7,7 +7,7 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 10 * 1000 // request timeout
+  timeout: 30 * 1000 // request timeout
 })
 
 // request interceptor
@@ -62,14 +62,13 @@ service.interceptors.response.use(
         })
       }
 
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.res === 108) {
         setTimeout(_ => {
           store.dispatch('user/resetToken').then(() => {
             location.reload()
           })
         }, 10 * 1000)
-        // to re-login
+        //重新登录 
         MessageBox.confirm('您已注销，可以取消以保留在该页面上，或者再次登录', '确认登出', {
           confirmButtonText: '重新登入',
           cancelButtonText: '取消',
