@@ -1,9 +1,9 @@
 <template>
   <div class="auth-manage">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
-    
+
     <!-- 筛选条件 -->
-    <div class="head"  v-auth="1023">
+    <div class="head" v-auth="1023">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -31,8 +31,8 @@
 
     <!-- 列表 -->
     <el-table
-            empty-text=" "
-     v-auth="1023"
+      empty-text=" "
+      v-auth="1023"
       style="width: 100%"
       height="100%"
       stripe
@@ -97,7 +97,7 @@
       </el-table-column>
     </el-table>
     <pagination
-     v-auth="1023"
+      v-auth="1023"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
@@ -118,7 +118,13 @@
       >
         <el-form-item label="级别" prop="level">
           <el-input
-            :disabled="dialog.forms.level < 6 && dialog.forms.level > 0"
+            :disabled="
+              (dialog.forms.level == 1 && dialog.forms.name == '紧急') ||
+              (dialog.forms.level == 2 && dialog.forms.name == '严重') ||
+              (dialog.forms.level == 3 && dialog.forms.name == '重要') ||
+              (dialog.forms.level == 4 && dialog.forms.name == '次要') ||
+              (dialog.forms.level == 5 && dialog.forms.name == '预警')
+            "
             v-model="dialog.forms.level"
           ></el-input>
           <!-- <el-select
@@ -138,7 +144,13 @@
 
         <el-form-item label="名称" prop="name">
           <el-input
-            :disabled="dialog.forms.level < 6 && dialog.forms.level > 0"
+            :disabled="
+              (dialog.forms.level == 1 && dialog.forms.name == '紧急') ||
+              (dialog.forms.level == 2 && dialog.forms.name == '严重') ||
+              (dialog.forms.level == 3 && dialog.forms.name == '重要') ||
+              (dialog.forms.level == 4 && dialog.forms.name == '次要') ||
+              (dialog.forms.level == 5 && dialog.forms.name == '预警')
+            "
             v-model="dialog.forms.name"
           ></el-input>
         </el-form-item>
@@ -311,14 +323,16 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      alertLevelListByPage(this.filterForm).then((res) => {
-        this.hasAuth = true;
-        this.listData = res.data.list;
-        this.listTotal = res.data.total;
-        this.listLoading = false;
-      }).catch(e=>{
-        this.hasAuth = false;
-      });
+      alertLevelListByPage(this.filterForm)
+        .then((res) => {
+          this.hasAuth = true;
+          this.listData = res.data.list;
+          this.listTotal = res.data.total;
+          this.listLoading = false;
+        })
+        .catch((e) => {
+          this.hasAuth = false;
+        });
     },
   },
 };
