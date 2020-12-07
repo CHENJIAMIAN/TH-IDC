@@ -54,7 +54,6 @@ export default {
     }),
   },
   created() {
-    console.log("floor", this._uid);
     const { floorId, floorName } = this.$route.params;
     Object.assign(this, { floorId, floorName });
     this.$route.meta.title = floorName;

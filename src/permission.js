@@ -11,6 +11,7 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
+  // console.log(to, from)
   //开始进度条 
   NProgress.start()
 
@@ -32,7 +33,8 @@ router.beforeEach(async (to, from, next) => {
       if (to.path.includes("/device-monitor")) {
         store.dispatch("app/closeSideBar", { withoutAnimation: false });
         if (to.path.includes("/room")) {
-          store.commit("app/CLOSE_SIDE");
+          // side关快了, 造成好像挤过来一样
+          // store.commit("app/CLOSE_SIDE");
         }
       } else {
         store.dispatch("app/openSideBar", { withoutAnimation: false });
