@@ -3,7 +3,7 @@
         
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head" v-auth="1040">
+    <div class="head" v-if="hasAuth">
       <el-form
         :inline="true"
         size="medium"
@@ -20,7 +20,7 @@
     <!-- 列表 -->
     <el-table
             empty-text=" "
-    v-auth="1040"
+    v-if="hasAuth"
       class="arrange-work-table"
       style="width: 100%"
       height="100%"

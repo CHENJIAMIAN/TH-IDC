@@ -3,7 +3,7 @@
         
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="page1" v-if="!dialog.visible" v-auth="1052">
+    <div class="page1" v-if="!dialog.visible" v-if="hasAuth">
       <!-- <div class="head">
         <el-form
           ref="filterForm"

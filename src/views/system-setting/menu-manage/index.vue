@@ -2,7 +2,7 @@
   <div class="app-container menu-manage">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head" v-auth="1006">
+    <div class="head" v-if="hasAuth">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -43,7 +43,7 @@
     <!-- 列表 -->
     <el-table
             empty-text=" "
-      v-auth="1006"
+      v-if="hasAuth"
       style="width: 100%"
       height="100%"
       stripe
@@ -83,7 +83,7 @@
       </el-table-column>
     </el-table>
     <pagination
-      v-auth="1006"
+      v-if="hasAuth"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"

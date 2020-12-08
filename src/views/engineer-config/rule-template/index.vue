@@ -3,7 +3,7 @@
         
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head" v-auth="1029">
+    <div class="head" v-if="hasAuth">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -57,7 +57,7 @@
       v-loading="listLoading"
       border
       :data="listData"
-      v-auth="1029"
+      v-if="hasAuth"
     >
       <el-table-column sortable prop="name" label="模板名称" />
       <!-- <el-table-column sortable prop="deviceTypeId" label="设备类型ID" /> -->
@@ -146,7 +146,7 @@
       </el-table-column>
     </el-table>
     <pagination
-    v-auth="1029"
+    v-if="hasAuth"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"

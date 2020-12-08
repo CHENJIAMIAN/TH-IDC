@@ -2,7 +2,7 @@
   <div class="auth-manage">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head" v-auth="1049">
+    <div class="head" v-if="hasAuth">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -31,7 +31,7 @@
     <!-- 列表 -->
     <el-table
             empty-text=" "
-      v-auth="1049"
+      v-if="hasAuth"
       style="width: 100%"
       height="100%"
       stripe

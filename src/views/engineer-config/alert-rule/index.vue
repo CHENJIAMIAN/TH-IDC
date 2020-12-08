@@ -2,7 +2,7 @@
   <div class="app-container department-manage">
         
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
-    <div class="page1" v-if="!dialogVisible" v-auth="1032">
+    <div class="page1" v-if="!dialogVisible" v-if="hasAuth">
       <!-- 筛选条件 -->
       <div class="head">
         <el-form

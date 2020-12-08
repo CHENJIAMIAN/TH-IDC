@@ -3,7 +3,7 @@
     
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head" v-auth="1047">
+    <div class="head" v-if="hasAuth">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -19,7 +19,7 @@
       </el-form>
     </div>
 
-    <div class="content" style="overflow: auto; padding-right: 5px" v-auth="1047">
+    <div class="content" style="overflow: auto; padding-right: 5px" v-if="hasAuth">
       <el-form
         ref="forms1"
         :model="forms"
