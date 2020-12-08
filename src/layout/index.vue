@@ -22,9 +22,10 @@
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     </div>
     <!-- 次级路由，从路由$route获取 -->
-    <div class="side" v-show="!$route.path.includes('/room/')" :style="
-          sidebar.showSide ? 'left: 50px;transition: all 0.28s;':'left: -300px;'
-    ">
+    <div class="side" v-show="!$route.path.includes('/room/')" :style="{
+          'left': sidebar.showSide ? '50px':'-300px',
+          'transition': $route.path.includes('/floor/')  ? '' : 'all 0.28s'
+    }">
     <!-- 解决菜单从隐藏到显示，感觉怪怪的，被右边的盖着在上面出来似的，应该同步出来。所有的菜单都是这 -->
       <!-- side包含一个背景 -->
       <!-- sidebar的根据router生成的多级菜单 -->
@@ -32,7 +33,7 @@
     </div>
     <div class="main-container" 
     :style="{
-          transition: $route.path.includes('/room/') 
+          transition: $route.path.includes('/floor/') 
           ?
           ''
           :
