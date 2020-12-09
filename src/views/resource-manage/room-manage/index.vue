@@ -1,6 +1,5 @@
 <template>
-  <div class="app-container room-manage">
-        
+  <div class="app-container room-manage" v-if="showPage">       
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
     <div class="head" v-if="hasAuth">
@@ -262,6 +261,7 @@ export default {
   },
   data() {
      return {
+      showPage:false,
       hasAuth: true,
       // 上传
       uploadedFileUrl: "", // 附件ID数组
@@ -403,7 +403,9 @@ export default {
         this.listLoading = false;
       }).catch(e=>{
         this.hasAuth = false;
-      });
+      }).finally(_=>{
+        this.showPage = true;
+      });;
     },
   },
 };

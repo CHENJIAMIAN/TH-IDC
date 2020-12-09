@@ -1,8 +1,7 @@
 <template>
-  <div class="app-container department-manage">
-        
+  <div class="app-container department-manage" v-if="showPage">       
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
-    <div class="page1" v-if="!dialogVisible" v-if="hasAuth">
+    <div class="page1" v-if="!dialogVisible && hasAuth" >
       <!-- 筛选条件 -->
       <div class="head">
         <el-form
@@ -95,7 +94,7 @@
       />
     </div>
 
-    <div v-else class="page2">
+    <div v-if="dialogVisible && hasAuth" class="page2">
       <div class="dialog-content">
         <div class="measure-point-info">
           <el-card class="custom-card">
@@ -355,6 +354,7 @@ export default {
   components: { pagination },
   data() {
      return {
+      showPage:false,
       hasAuth: true,
       valueTypeOpts,
       dialogVisible: false,
@@ -550,7 +550,9 @@ export default {
         this.listLoading = false;
       }).catch(e=>{
         this.hasAuth = false;
-      });
+      }).finally(_=>{
+        this.showPage = true;
+      });;
     },
   },
 };

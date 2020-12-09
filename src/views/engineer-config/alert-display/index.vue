@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-manage">
+  <div class="auth-manage" v-if="showPage" >
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
     <div class="head" v-if="hasAuth" >
@@ -28,7 +28,7 @@
     </div>
     <!-- <el-card> -->
     <el-form
-    v-if="hasAuth" 
+      v-if="hasAuth" 
       ref="forms"
       :model="forms"
       :rules="rules"
@@ -116,6 +116,7 @@ export default {
   components: { pagination },
   data() {
     return {
+      showPage:false,
       hasAuth: true,
       depOpts: [],
       firstMenuOpts: [],
@@ -152,7 +153,7 @@ export default {
     };
   },
   watch: {},
-  async created() {
+  created() {
     this.handleQuery();
   },
   mounted() {},
@@ -200,6 +201,8 @@ export default {
         this.listLoading = false;
       }).catch(e=>{
         this.hasAuth = false;
+      }).finally(_=>{
+        this.showPage = true;
       });
     },
   },

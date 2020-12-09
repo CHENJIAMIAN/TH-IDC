@@ -1,6 +1,5 @@
 <template>
-  <div class="app-container role-manage">
-    
+  <div class="app-container role-manage" v-if="showPage">       
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
     <div class="head" v-if="hasAuth">
@@ -217,6 +216,7 @@ export default {
   components: { pagination },
   data() {
      return {
+      showPage:false,
       hasAuth: true,
       filterForm: {
         // 筛选条件
@@ -408,7 +408,9 @@ export default {
         this.listLoading = false;
       }).catch(e=>{
         this.hasAuth = false;
-      });
+      }).finally(_=>{
+        this.showPage = true;
+      });;
     },
   },
 };

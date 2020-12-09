@@ -1,5 +1,5 @@
 <template>
-  <div class="room-index">
+  <div class="room-index" v-if="showPage">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <div class="room-index-self">
       <div class="row1">
@@ -82,6 +82,7 @@ export default {
   name: "room",
   data() {
     return {
+      showPage: false,
       hasAuth: true,
       moreBtnsVisible: false,
       floorId: "",
@@ -160,6 +161,8 @@ export default {
     } catch (e) {
       this.hasAuth = false;
       console.log(e);
+    } finally {
+      this.showPage = true;
     }
   },
   mounted() {},

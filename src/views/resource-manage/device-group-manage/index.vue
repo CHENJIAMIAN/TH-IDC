@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container device-group-manage">
+  <div class="app-container device-group-manage"  v-if="showPage">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
     <div class="head" v-if="hasAuth">
@@ -453,6 +453,7 @@ export default {
   components: { pagination },
   data() {
     return {
+      showPage:false,
       hasAuth: true,
       imgTypeOpts,
       // 上传
@@ -857,6 +858,8 @@ export default {
         })
         .catch((e) => {
           this.hasAuth = false;
+        }).finally(_=>{
+          this.showPage = true;
         });
     },
   },

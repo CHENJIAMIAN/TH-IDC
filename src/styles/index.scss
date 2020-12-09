@@ -280,9 +280,9 @@ aside {
 
 .auth-tip {
   text-align: center;
-  position: fixed;
+  position: absolute;
   left: 50%;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -50%);
   top: 50%;
   color: #06c2f4;
 }

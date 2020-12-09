@@ -1,9 +1,8 @@
 <template>
-  <div class="app-container auth-manage">
-        
+  <div class="app-container auth-manage" v-if="showPage">       
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="page1" v-if="!dialog.visible" v-if="hasAuth">
+    <div class="page1" v-if="!dialog.visible && hasAuth">
       <!-- <div class="head">
         <el-form
           ref="filterForm"
@@ -120,7 +119,7 @@
       />
     </div>
 
-    <div v-else class="page2">
+    <div v-if="dialog.visible && hasAuth" class="page2">
       <div class="page2-form">
         <el-form
           :model="dialog.forms"
@@ -237,6 +236,7 @@ export default {
   components: { pagination, DragStep },
   data() {
      return {
+      showPage:false,
       hasAuth: true,
       deepClone,
       noteModeOpts,
@@ -371,7 +371,9 @@ export default {
         this.listLoading = false;
       }).catch(e=>{
         this.hasAuth = false;
-      });;
+      }).finally(_=>{
+        this.showPage = true;
+      });;;
     },
   },
 };
