@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    动力环境系统信息报表
+    信息报表
   </div>
 </template>
 

@@ -35,7 +35,7 @@ export default {
       path: 'dynamic-environment-system-info',
       component: () => import('@/views/report-manage/dynamic-environment-system-info/index'),
       name: 'dynamic-environment-system-info',
-      meta: { title: '动力环境系统信息报表', icon: 'icon' }
+      meta: { title: '信息报表', icon: 'icon' }
     },
     {
       path: 'energy-consump',
@@ -47,7 +47,7 @@ export default {
       path: 'history-data',
       component: () => import('@/views/report-manage/history-data/index'),
       name: 'history-data',
-      meta: { title: '历史数据报表', icon: 'icon' }
+      meta: { title: '历史数据', icon: 'icon' }
     },
     {
       path: 'system',
@@ -59,7 +59,7 @@ export default {
       path: 'work-order-service',
       component: () => import('@/views/report-manage/work-order-service/index'),
       name: 'work-order-service',
-      meta: { title: '工单服务类报表', icon: 'icon' }
+      meta: { title: '工单报表', icon: 'icon' }
     }
   ]
 }

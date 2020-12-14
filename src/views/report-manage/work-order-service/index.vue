@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    工单服务报表
+    工单报表
   </div>
 </template>
 

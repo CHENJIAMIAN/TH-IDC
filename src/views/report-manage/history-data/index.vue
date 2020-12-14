@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    历史数据报表
+    历史数据
   </div>
 </template>
 
