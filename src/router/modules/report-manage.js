@@ -9,7 +9,7 @@ export default {
   name: '报表管理',
   meta: {
     title: '报表管理',
-    icon: 'nested',
+    icon: 'img-bb',
     affix: true
   },
   children: [
