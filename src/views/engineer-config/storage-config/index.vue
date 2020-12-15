@@ -340,7 +340,7 @@ import {
   spaceFloorListAll,
   spaceRoomListAll,
 } from "@/api/resource-manage.js";
-import { isBiggerThanZero } from "@/views/resource-manage/common.js";
+import { isBiggerThanZero } from "@/common.js";
 export default {
   components: { pagination },
   data() {

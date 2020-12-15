@@ -1,29 +1,30 @@
 <template>
-  <div
-    ref="chart"
-    :class="className"
-    :style="{ height: height, width: width }"
-  ></div>
+  <div :style="{ height: `calc(${height} + 4rem)`, width: width }">
+    <h2 style="margin-left: 3rem">{{ chartName }}</h2>
+    <div
+      ref="chart"
+      :class="className"
+      :style="{ height: height, width: width }"
+    />
+  </div>
 </template>
 
 <script>
 import echarts from "echarts";
 require("echarts/theme/macarons"); // echarts theme
 import resize from "@/mixins/resize";
-import fecha from "element-ui/src/utils/date";
 
 const animationDuration = 6000;
 
 export default {
   mixins: [resize],
   props: {
-    typeName: {
+    chartName: {
       type: String,
-      require: true,
     },
-    resData: {
-      type: [Array, Object],
-      require: true,
+    listData: {
+      type: Array,
+      default: [],
     },
     className: {
       type: String,
@@ -44,12 +45,10 @@ export default {
     };
   },
   watch: {
-    resData: {
+    listData: {
       deep: true,
       handler() {
-        console.log(this.resData);
-        const { deviceCode, list } = this.resData;
-        this.setOptions({ deviceCode, list });
+        this.setOptions();
         this.chart.resize();
       },
     },
@@ -68,21 +67,25 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el, "macarons");
+      this.chart = echarts.init(this.$refs.chart, "macarons");
+      this.chart.on("click", (params) => {
+        // 在用户点击后控制台打印数据的名称
+        this.$emit("clickBar");
+      });
     },
-    setOptions({ deviceCode, list }) {
-      const seriesData = list.map((i) => i[this.typeName]);
-      const xAxisData = list.map((i) => new Date(i.ts).toLocaleString());
+    setOptions() {
+      // console.log(this.listData);
+      const seriesData = this.listData.map((i) => i.num);
+      const xAxisData = this.listData.map((i) => i.floorName);
       // console.log(seriesData);
       // console.log(xAxisData);
       const series = [
         {
           // name: "设备" + i.deviceCode,
           // stack: "vistors",
-          type: "line",
-          smooth: true,
+          type: "bar",
+          barWidth: "60%",
           data: seriesData,
-          // barWidth: "60%",
           // [
           // i.temperature,
           // i.chargeCurrent,

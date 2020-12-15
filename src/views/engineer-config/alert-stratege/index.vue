@@ -223,7 +223,7 @@
 
 <script>
 import DragStep from "@/components/DragStep";
-import { isIntNumber, noteModeOpts } from "@/views/resource-manage/common.js";
+import { isIntNumber, noteModeOpts } from "@/common.js";
 import { deepClone } from "@/utils";
 import pagination from "@/components/Pagination";
 import {

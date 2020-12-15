@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { noteModeOpts } from "@/views/resource-manage/common.js";
+import { noteModeOpts } from "@/common.js";
 import pagination from "@/components/Pagination";
 import {
   alertNotificationSendListByPage,

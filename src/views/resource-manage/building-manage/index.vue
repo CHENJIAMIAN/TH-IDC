@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import { isIntNumber } from "@/views/resource-manage/common.js";
+import { isIntNumber } from "@/common.js";
 import pagination from "@/components/Pagination";
 import {
   pointUpdateToRedis,

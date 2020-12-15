@@ -70,7 +70,7 @@ import {
   smsconfigGetSmsConfig,
   smsconfigAddOrEdit_sms,
 } from "@/api/engineer-config.js";
-import { valueTypeOpts, isIntNumber } from "@/views/resource-manage/common.js";
+import { valueTypeOpts, isIntNumber } from "@/common.js";
 export default {
   components: { pagination },
   data() {

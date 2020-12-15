@@ -447,7 +447,7 @@ import {
 // 上传
 import { uploadUrl } from "@/api/common";
 import { getToken } from "@/utils/auth";
-import { imgTypeOpts } from "@/views/resource-manage/common.js";
+import { imgTypeOpts } from "@/common.js";
 
 export default {
   components: { pagination },

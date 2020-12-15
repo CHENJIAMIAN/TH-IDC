@@ -270,7 +270,7 @@
 import {
   valueTypeOpts,
   isIntNumber,
-} from "@/views/resource-manage/common.js";
+} from "@/common.js";
 import pagination from "@/components/Pagination";
 import {
   alertRuleTemplateDelete,

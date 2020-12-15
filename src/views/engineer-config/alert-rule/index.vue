@@ -334,7 +334,7 @@
 </template>
 
 <script>
-import { valueTypeOpts, isIntNumber } from "@/views/resource-manage/common.js";
+import { valueTypeOpts, isIntNumber } from "@/common.js";
 import pagination from "@/components/Pagination";
 import {
   alertRuleDelete,
