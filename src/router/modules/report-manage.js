@@ -5,7 +5,7 @@ import Layout from '@/layout'
 export default {
   path: '/report-manage',
   component: Layout,
-  redirect: '/report-manage/alert',
+  redirect: '/report-manage/alert/day',
   name: '报表管理',
   meta: {
     title: '报表管理',
@@ -15,9 +15,27 @@ export default {
   children: [
     {
       path: 'alert',
-      component: () => import('@/views/report-manage/alert/index'),
+      component: () => import('@/views/report-manage/index'),
       name: 'alert',
-      meta: { title: '告警报表', icon: 'img-gjbb' }
+      meta: { title: '告警报表', icon: 'img-gjbb' },
+      children: [
+        {
+          path: 'day',
+          component: () => import('@/views/report-manage/alert/day/index'),
+          name: 'day',
+          meta: { title: '日期统计', icon: 'img-gjbb' }
+        }, {
+          path: 'month',
+          component: () => import('@/views/report-manage/alert/month/index'),
+          name: 'month',
+          meta: { title: '月份统计', icon: 'img-gjbb' }
+        }, {
+          path: 'level',
+          component: () => import('@/views/report-manage/alert/level/index'),
+          name: 'level',
+          meta: { title: '级别统计', icon: 'img-gjbb' }
+        },
+      ]
     },
     {
       path: 'history-data',
@@ -57,17 +75,17 @@ export default {
       children: [
         {
           path: 'floor-statistics',
-          component: () => import('@/views/report-manage/floor-statistics/index.vue'),
+          component: () => import('@/views/report-manage/assets-statistics/floor-statistics/index.vue'),
           name: 'floor-statistics',
           meta: { title: '楼层统计', icon: 'img-lctj' }
         }, {
           path: 'classify-statistics',
-          component: () => import('@/views/report-manage/classify-statistics/index.vue'),
+          component: () => import('@/views/report-manage/assets-statistics/classify-statistics/index'),
           name: 'classify-statistics',
           meta: { title: '分类统计', icon: 'img-fl' }
         }, {
           path: 'floor-classify',
-          component: () => import('@/views/report-manage/floor-classify/index'),
+          component: () => import('@/views/report-manage/assets-statistics/floor-classify/index'),
           name: 'floor-classify',
           meta: { title: '楼层分类', icon: 'img-lcfl' }
         },

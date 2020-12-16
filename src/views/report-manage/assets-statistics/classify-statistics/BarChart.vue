@@ -133,8 +133,8 @@ export default {
               alignWithLabel: true,
             },
             axisLabel: {
-              // interval: 0,
-              // rotate:40
+              interval: 0,
+              rotate:20
             },
           },
         ],

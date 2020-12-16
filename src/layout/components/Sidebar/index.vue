@@ -22,6 +22,7 @@
         '/engineer-config/rule-manage/rule-manage',
         '/engineer-config/host-config/host-config',
         '/engineer-config',
+        '/report-manage/alert/alert',
         '/report-manage/assets-statistics/assets-statistics',
         '/report-manage',
       ]"

@@ -132,6 +132,10 @@ export default {
             axisTick: {
               alignWithLabel: true,
             },
+            axisLabel: {
+              // interval: 0,
+              // rotate: 40,
+            },
           },
         ],
         yAxis: [
