@@ -38,6 +38,30 @@ export default {
       ]
     },
     {
+      path: 'assets-statistics',
+      component: () => import('@/views/report-manage/index'),
+      name: 'assets-statistics',
+      meta: { title: '资产报表', icon: 'img-zcbb' },
+      children: [
+        {
+          path: 'floor-statistics',
+          component: () => import('@/views/report-manage/assets-statistics/floor-statistics/index.vue'),
+          name: 'floor-statistics',
+          meta: { title: '楼层统计', icon: 'img-lctj' }
+        }, {
+          path: 'classify-statistics',
+          component: () => import('@/views/report-manage/assets-statistics/classify-statistics/index'),
+          name: 'classify-statistics',
+          meta: { title: '分类统计', icon: 'img-fl' }
+        }, {
+          path: 'floor-classify',
+          component: () => import('@/views/report-manage/assets-statistics/floor-classify/index'),
+          name: 'floor-classify',
+          meta: { title: '楼层分类', icon: 'img-lcfl' }
+        },
+      ],
+    },
+    {
       path: 'history-data',
       component: () => import('@/views/report-manage/history-data/index'),
       name: 'history-data',
@@ -66,30 +90,6 @@ export default {
       component: () => import('@/views/report-manage/energy-consump/index'),
       name: 'energy-consump',
       meta: { title: '能耗报表', icon: 'img-nh' }
-    },
-    {
-      path: 'assets-statistics',
-      component: () => import('@/views/report-manage/index'),
-      name: 'assets-statistics',
-      meta: { title: '资产报表', icon: 'img-zcbb' },
-      children: [
-        {
-          path: 'floor-statistics',
-          component: () => import('@/views/report-manage/assets-statistics/floor-statistics/index.vue'),
-          name: 'floor-statistics',
-          meta: { title: '楼层统计', icon: 'img-lctj' }
-        }, {
-          path: 'classify-statistics',
-          component: () => import('@/views/report-manage/assets-statistics/classify-statistics/index'),
-          name: 'classify-statistics',
-          meta: { title: '分类统计', icon: 'img-fl' }
-        }, {
-          path: 'floor-classify',
-          component: () => import('@/views/report-manage/assets-statistics/floor-classify/index'),
-          name: 'floor-classify',
-          meta: { title: '楼层分类', icon: 'img-lcfl' }
-        },
-      ],
     },
     {
       path: 'work-order-service',
