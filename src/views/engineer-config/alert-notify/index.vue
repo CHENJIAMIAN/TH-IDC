@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container menu-manage"  v-if="showPage">
+  <div class="app-container menu-manage" v-if="showPage">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
 
     <!-- 筛选条件 -->
@@ -164,6 +164,13 @@
             @click="handleReset('filterForm')"
             >重置</el-button
           >
+          <el-button
+            type="primary"
+            icon="el-icon-download"
+            plain
+            @click="handleExport('filterForm')"
+            >导出</el-button
+          >
         </el-form-item>
         <!-- <el-form-item>
           <el-button type="primary" size="medium" @click="handleDialog()">
@@ -174,7 +181,7 @@
     </div>
 
     <el-table
-            empty-text=" "
+      empty-text=" "
       v-if="hasAuth"
       style="width: 100%"
       height="100%"
@@ -464,12 +471,14 @@ import {
   alertNotificationListByPage,
   alertLevelListAll,
   alertNotificationQueryById,
+  alertNotificationExcelOutput,
 } from "@/api/engineer-config.js";
+import { downloadFileByBlobResponse } from "@/utils";
 export default {
   components: { pagination },
   data() {
     return {
-      showPage:false,
+      showPage: false,
       hasAuth: true,
       alertLevelOpts: [],
       pointOpts: [],
@@ -642,6 +651,13 @@ export default {
       this.$refs[form].resetFields();
       this.handleQuery();
     },
+    handleExport(form) {
+      document.activeElement.blur();
+      alertNotificationExcelOutput(this.filterForm).then((r) => {
+        downloadFileByBlobResponse(r);
+      });
+    },
+
     // 查看
     async handleDialog(row, type) {
       this.dialog.type = type;
@@ -679,7 +695,8 @@ export default {
         })
         .catch((e) => {
           this.hasAuth = false;
-        }).finally(_=>{
+        })
+        .finally((_) => {
           this.showPage = true;
         });
     },

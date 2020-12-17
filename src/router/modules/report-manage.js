@@ -5,7 +5,7 @@ import Layout from '@/layout'
 export default {
   path: '/report-manage',
   component: Layout,
-  redirect: '/report-manage/alert/day',
+  redirect: '/report-manage/assets-statistics/floor-statistics',
   name: '报表管理',
   meta: {
     title: '报表管理',
@@ -13,30 +13,6 @@ export default {
     affix: true
   },
   children: [
-    {
-      path: 'alert',
-      component: () => import('@/views/report-manage/index'),
-      name: 'alert',
-      meta: { title: '告警报表', icon: 'img-gjbb' },
-      children: [
-        {
-          path: 'day',
-          component: () => import('@/views/report-manage/alert/day/index'),
-          name: 'day',
-          meta: { title: '日期统计', icon: 'img-gjbb' }
-        }, {
-          path: 'month',
-          component: () => import('@/views/report-manage/alert/month/index'),
-          name: 'month',
-          meta: { title: '月份统计', icon: 'img-gjbb' }
-        }, {
-          path: 'level',
-          component: () => import('@/views/report-manage/alert/level/index'),
-          name: 'level',
-          meta: { title: '级别统计', icon: 'img-gjbb' }
-        },
-      ]
-    },
     {
       path: 'assets-statistics',
       component: () => import('@/views/report-manage/index'),
@@ -60,6 +36,30 @@ export default {
           meta: { title: '楼层分类', icon: 'img-lcfl' }
         },
       ],
+    },
+    {
+      path: 'alert',
+      component: () => import('@/views/report-manage/index'),
+      name: 'alert',
+      meta: { title: '告警报表', icon: 'img-gjbb' },
+      children: [
+        {
+          path: 'day',
+          component: () => import('@/views/report-manage/alert/day/index'),
+          name: 'day',
+          meta: { title: '日期统计', icon: 'img-gjbb' }
+        }, {
+          path: 'month',
+          component: () => import('@/views/report-manage/alert/month/index'),
+          name: 'month',
+          meta: { title: '月份统计', icon: 'img-gjbb' }
+        }, {
+          path: 'level',
+          component: () => import('@/views/report-manage/alert/level/index'),
+          name: 'level',
+          meta: { title: '级别统计', icon: 'img-gjbb' }
+        },
+      ]
     },
     {
       path: 'history-data',

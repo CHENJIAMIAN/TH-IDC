@@ -6,11 +6,15 @@
       v-if="hasAuth"
       style="width: 240px; position: absolute; left: 70px; top: 70px"
       v-model="startDate_endDate"
-      type="daterange"
+      type="monthrange"
       unlink-panels
       placeholder="时间范围"
       value-format="yyyy-MM"
+      range-separator="至"
+      start-placeholder="开始月份"
+      end-placeholder="结束月份"
     />
+
     <line-chart
       v-if="hasAuth"
       chartName="月份统计"

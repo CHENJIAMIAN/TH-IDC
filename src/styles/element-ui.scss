@@ -1,8 +1,6 @@
 // 被'@/styles/index.scss'引用
 //涵盖一些element-ui样式
 
-
-
 .el-tabs__nav.is-stretch {
   transform: translateX(0px) scaleX(1.01) !important;
 }
@@ -70,8 +68,12 @@
   border: 1px solid #00f7ff94;
   background-color: #1236636e;
 }
-.el-date-table td.in-range div {
+.el-date-table td.in-range div,
+.el-month-table td.in-range div {
   background-color: #00f7ff4d;
+}
+.el-month-table td.in-range div:hover {
+  background-color: #00f7ff91;
 }
 .el-date-editor .el-range-input {
   background: #0e305c;
