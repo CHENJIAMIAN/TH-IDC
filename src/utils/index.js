@@ -1,3 +1,5 @@
+import { MessageBox, Message } from 'element-ui'
+
 /**
  * Created by PanJiaChen on 16/11/18.
  */
@@ -358,24 +360,38 @@ export function removeClass(ele, cls) {
 
 // 下载文件
 export function downloadFileByBlobResponse(response, fileName) {
-  //response为axios未经处理的response
-  let blob = new Blob([response.data]);
-  if (!fileName) {
-    const encodedFileName = response.headers["content-disposition"]
-      .split("filename=")
-      .pop();
-    fileName = decodeURI(encodedFileName);
-  }
-  if ("msSaveOrOpenBlob" in navigator) {
-    window.navigator.msSaveOrOpenBlob(blob, fileName);
+  if (response.data.type === "application/json") {
+    // 报错
+    const reader = new FileReader()
+    reader.onload = e => {
+      const res = JSON.parse(e.target.result)
+      Message({
+        message: res.msg || 'Error',
+        type: 'error',
+        duration: 5 * 1000
+      })
+    }
+    reader.readAsText(response.data)
   } else {
-    const elink = document.createElement("a");
-    elink.download = fileName;
-    elink.style.display = "none";
-    elink.href = URL.createObjectURL(blob);
-    document.body.appendChild(elink);
-    elink.click();
-    URL.revokeObjectURL(elink.href);
-    document.body.removeChild(elink);
+    //response为axios未经处理的response
+    let blob = new Blob([response.data]);
+    if (!fileName) {
+      const encodedFileName = response.headers["content-disposition"]
+        .split("filename=")
+        .pop();
+      fileName = decodeURI(encodedFileName);
+    }
+    if ("msSaveOrOpenBlob" in navigator) {
+      window.navigator.msSaveOrOpenBlob(blob, fileName);
+    } else {
+      const elink = document.createElement("a");
+      elink.download = fileName;
+      elink.style.display = "none";
+      elink.href = URL.createObjectURL(blob);
+      document.body.appendChild(elink);
+      elink.click();
+      URL.revokeObjectURL(elink.href);
+      document.body.removeChild(elink);
+    }
   }
 }

@@ -1,6 +1,14 @@
 <template>
   <div class="app-container" v-if="showPage">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
+    <el-button
+      style="justify-self: end; margin-bottom: 1rem"
+      type="primary"
+      icon="el-icon-download"
+      plain
+      @click="handleExport('filterForm')"
+      >导出</el-button
+    >
     <!-- 列表 -->
     <el-table
       v-if="hasAuth"
@@ -36,8 +44,13 @@
 </template>
 
 <script>
-import { assetGetDeviceByFloorAndDeviceType } from "@/api/report-manage.js";
+import {
+  assetGetDeviceByFloorAndDeviceType,
+  assetGetDeviceByFloorAndDeviceTypeExcel,
+} from "@/api/report-manage.js";
 import { deviceTypeListAll } from "@/api/resource-manage.js";
+import { downloadFileByBlobResponse } from "@/utils";
+
 export default {
   components: {},
   data() {
@@ -65,6 +78,14 @@ export default {
       .finally((_) => {
         this.showPage = true;
       });
+  },
+  methods: {
+    handleExport(form) {
+      document.activeElement.blur();
+      assetGetDeviceByFloorAndDeviceTypeExcel().then((r) => {
+        downloadFileByBlobResponse(r);
+      });
+    },
   },
 };
 </script>

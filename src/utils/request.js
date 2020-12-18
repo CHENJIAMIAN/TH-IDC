@@ -46,10 +46,10 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     if (res instanceof Blob) {
+      // response.data.type===  "application/vnd.ms-excel"
       // 下载
       return response;
     }
-
     // if the custom code is not 20000, it is judged as an error.
     // 状态码。0是成功，101是操作失败，102是查询无数据，103是数据已存在，104是请求参数有误，105是账号密码错误 
     // 106是登录失败 

@@ -657,7 +657,6 @@ export default {
         downloadFileByBlobResponse(r);
       });
     },
-
     // 查看
     async handleDialog(row, type) {
       this.dialog.type = type;

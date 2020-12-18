@@ -2,19 +2,27 @@
 <template>
   <div class="app-container">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
-    <el-date-picker
-      v-if="hasAuth"
-      style="width: 240px; position: absolute; left: 70px; top: 70px"
-      v-model="startDate_endDate"
-      type="monthrange"
-      unlink-panels
-      placeholder="时间范围"
-      value-format="yyyy-MM"
-      range-separator="至"
-      start-placeholder="开始月份"
-      end-placeholder="结束月份"
-    />
-
+    <div class="top-bar">
+      <el-date-picker
+        v-if="hasAuth"
+        v-model="startDate_endDate"
+        type="monthrange"
+        unlink-panels
+        placeholder="时间范围"
+        value-format="yyyy-MM"
+      />
+      <!-- 
+        range-separator="至"
+        start-placeholder="开始月份"
+        end-placeholder="结束月份" -->
+      <el-button
+        type="primary"
+        icon="el-icon-download"
+        plain
+        @click="handleExport('filterForm')"
+        >导出</el-button
+      >
+    </div>
     <line-chart
       v-if="hasAuth"
       chartName="月份统计"
@@ -26,8 +34,9 @@
 </template>
 
 <script>
-import { warnQueryByMonth } from "@/api/report-manage.js";
+import { warnQueryByMonth, warnExcelByMonth } from "@/api/report-manage.js";
 import LineChart from "../LineChart";
+import { downloadFileByBlobResponse } from "@/utils";
 
 export default {
   components: {
@@ -69,6 +78,12 @@ export default {
           this.showPage = true;
         });
     },
+    handleExport(form) {
+      document.activeElement.blur();
+      warnExcelByMonth(this.filterForm).then((r) => {
+        downloadFileByBlobResponse(r);
+      });
+    },
   },
 };
 </script>
@@ -80,5 +95,13 @@ export default {
   height: 100%;
   align-items: center;
   position: relative;
+}
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  position: absolute;
+  left: 70px;
+  top: 70px;
 }
 </style>

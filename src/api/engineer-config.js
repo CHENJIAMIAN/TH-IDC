@@ -86,7 +86,7 @@ export function alertNotificationGetAllCount(data) { return request({ url: '/adm
 // 查看告警通知详情
 export function alertNotificationQueryById(data) { return request({ url: '/admin/alert/alertNotification/queryById', method: 'post', data }) }
 // 告警通知导出功能 (加在告警通知页面)
-export function alertNotificationExcelOutput(data) { return request({ url: '/admin/alert/alertNotification/excelOutput', method: 'post', data , responseType: 'blob',}) }
+export function alertNotificationExcelOutput(data) { return request({ url: '/admin/alert/alertNotification/excelOutput', method: 'post', data , responseType: 'blob'}) }
 
 // 分页查看
 export function alertRuleTemplateListByPage(data) { return request({ url: '/admin/alert/alertRuleTemplate/listByPage', method: 'post', data }) }
