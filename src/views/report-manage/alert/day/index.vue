@@ -5,7 +5,7 @@
     <div class="top-bar">
       <el-date-picker
         v-if="hasAuth"
-        style="width:300px;"
+        style="width: 300px"
         v-model="startDate_endDate"
         type="daterange"
         unlink-panels
@@ -92,13 +92,12 @@ export default {
   height: 100%;
   align-items: center;
   position: relative;
+  grid-template-rows: auto 1fr;
 }
 .top-bar {
   display: flex;
   justify-content: space-between;
   width: 400px;
-  position: absolute;
-  left: 70px;
-  top: 70px;
+  margin-left: 50px;
 }
 </style>

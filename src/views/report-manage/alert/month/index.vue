@@ -95,13 +95,12 @@ export default {
   height: 100%;
   align-items: center;
   position: relative;
+  grid-template-rows: auto 1fr;
 }
 .top-bar {
   display: flex;
   justify-content: space-between;
   width: 400px;
-  position: absolute;
-  left: 70px;
-  top: 70px;
+  margin-left: 50px;
 }
 </style>

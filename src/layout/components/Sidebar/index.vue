@@ -11,8 +11,11 @@
       :active-text-color="variables.menuActiveText"
       :collapse-transition="false"
       mode="vertical"
+    >
+        <!-- 
       :default-openeds="[
-        '/system-setting/organization/organization',
+      ]"
+          '/system-setting/organization/organization',
         '/system-setting/system-operation/system-operation',
         '/system-setting',
         '/resource-manage/space-device/space-device',
@@ -24,9 +27,7 @@
         '/engineer-config',
         '/report-manage/alert/alert',
         '/report-manage/assets-statistics/assets-statistics',
-        '/report-manage',
-      ]"
-    >
+        '/report-manage', -->
       <sidebar-item
         v-for="route in filtered_permission_routes"
         :key="route.path"
