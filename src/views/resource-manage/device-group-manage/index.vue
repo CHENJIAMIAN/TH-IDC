@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container device-group-manage"  v-if="showPage">
+  <div class="app-container device-group-manage" v-if="showPage">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
     <div class="head" v-if="hasAuth">
@@ -356,6 +356,7 @@
       >
         <el-form-item label="" prop="">
           <el-transfer
+            class="transfer-cd"
             filterable
             :filter-method="
               (query, item) => {
@@ -395,6 +396,7 @@
       >
         <el-form-item label="" prop="">
           <el-transfer
+            class="transfer-cd"
             filterable
             :filter-method="
               (query, item) => {
@@ -453,7 +455,7 @@ export default {
   components: { pagination },
   data() {
     return {
-      showPage:false,
+      showPage: false,
       hasAuth: true,
       imgTypeOpts,
       // 上传
@@ -858,7 +860,8 @@ export default {
         })
         .catch((e) => {
           this.hasAuth = false;
-        }).finally(_=>{
+        })
+        .finally((_) => {
           this.showPage = true;
         });
     },
@@ -973,6 +976,15 @@ export default {
     height: 12px;
     background-size: contain;
     background-repeat: no-repeat;
+  }
+
+  .transfer-cd {
+    .el-transfer__buttons {
+      padding: 0 5px;
+    }
+    .el-transfer-panel {
+      width: 240px;
+    }
   }
 }
 </style>

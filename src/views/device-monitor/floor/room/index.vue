@@ -8,6 +8,7 @@
           {{ showBtns }} -->
           <template v-if="showBtns && !isOnlyOneDeviceGroup">
             <el-button
+              @hook:mounted="btnsOutUpdated"
               @hook:updated="btnsOutUpdated"
               class="el-button-custom"
               :class="{
@@ -26,7 +27,8 @@
               v-model="moreBtnsVisible"
               popper-class="untransparent"
             >
-              <div class="btns-fake" :style="btnsFakeStye">
+            <!-- :style="btnsFakeStye" -->
+              <div class="btns-fake" >
                 <span
                   class="btn-as-txt"
                   :class="{
@@ -93,7 +95,7 @@ export default {
       temperature: "",
       alarmCount: "",
       deviceGroupList: [],
-      popoverWidth: "",
+      popoverWidth: 300,
     };
   },
   computed: {
@@ -241,9 +243,11 @@ export default {
 }
 
 .btns-fake {
-  display: grid;
+  // display: grid;
   gap: 1rem;
   align-items: center;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .btn-as-txt {

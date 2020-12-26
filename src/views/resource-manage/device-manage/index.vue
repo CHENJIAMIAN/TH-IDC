@@ -1,8 +1,8 @@
 <template>
-  <div class="app-container device-manage"  v-if="showPage">
+  <div class="app-container device-manage" v-if="showPage">
     <h2 class="auth-tip" v-if="!hasAuth">权限不足,请联系管理员</h2>
     <!-- 筛选条件 -->
-    <div class="head"  v-if="hasAuth">
+    <div class="head" v-if="hasAuth">
       <el-form
         ref="filterForm"
         :inline="true"
@@ -108,8 +108,8 @@
 
     <!-- 列表 -->
     <el-table
-            empty-text=" "
-     v-if="hasAuth"
+      empty-text=" "
+      v-if="hasAuth"
       style="width: 100%"
       height="100%"
       stripe
@@ -143,7 +143,7 @@
             @click="handleCDDialog(row)"
           ></el-button>
           <el-button
-            title = "编辑"
+            title="编辑"
             icon="el-icon-edit-outline"
             type="primary"
             plain
@@ -160,7 +160,7 @@
       </el-table-column>
     </el-table>
     <pagination
-     v-if="hasAuth"
+      v-if="hasAuth"
       :hidden="listTotal > 0 ? false : true"
       :total="listTotal"
       :page.sync="filterForm.pageNo"
@@ -271,6 +271,7 @@
       >
         <el-form-item label="" prop="">
           <el-transfer
+            class="transfer-cd"
             filterable
             :filter-method="
               (query, item) => {
@@ -318,8 +319,8 @@ import {
 export default {
   components: { pagination },
   data() {
-     return {
-      showPage:false,
+    return {
+      showPage: false,
       hasAuth: true,
       floorOpts: [],
       deviceGroupOpts: [],
@@ -509,16 +510,19 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true;
-      deviceListByPage(this.filterForm).then((res) => {
-        this.hasAuth = true;
-        this.listData = res.data.list;
-        this.listTotal = res.data.total;
-        this.listLoading = false;
-      }).catch(e=>{
-        this.hasAuth = false;
-      }).finally(_=>{
-        this.showPage = true;
-      });;
+      deviceListByPage(this.filterForm)
+        .then((res) => {
+          this.hasAuth = true;
+          this.listData = res.data.list;
+          this.listTotal = res.data.total;
+          this.listLoading = false;
+        })
+        .catch((e) => {
+          this.hasAuth = false;
+        })
+        .finally((_) => {
+          this.showPage = true;
+        });
     },
   },
 };
@@ -544,6 +548,14 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     background-position-x: -5px;
+  }
+  .transfer-cd {
+    .el-transfer__buttons {
+      padding: 0 5px;
+    }
+    .el-transfer-panel {
+      width: 240px;
+    }
   }
 }
 </style>

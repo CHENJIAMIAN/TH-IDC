@@ -195,6 +195,7 @@
         position: !isTopBottomLayout && 'absolute',
       }"
     >
+    <!-- 收缩图标 -->
       <img
         :src="
           !isHideLeft
@@ -216,7 +217,6 @@
           <el-tab-pane label="数据信息" name="data-info" lazy>
             <!-- 列表 -->
             <div style="display: grid; height: 100%">
-              <!-- style="width: calc(100vw - 60px)"-->
               <!-- 电池是图表 -->
               <template v-if="isDcRoom">
                 <bar-chart
@@ -251,7 +251,6 @@
                 />
               </template>
               <el-table
-                empty-text=" "
                 v-else
                 class="arrange-work-table"
                 style="width: 100%"
@@ -721,6 +720,11 @@ export default {
       this.listLoading = true;
       deviceGroupTypeGetData({ id: this.deviceGroupId }).then((res) => {
         // console.log("GetData", res.data);
+        if(!res.data) {
+        this.listLoading = false;
+        this.deviceType = 5;
+        return;
+        }
         const {
           deviceGroupId,
           deviceType,
@@ -741,7 +745,6 @@ export default {
 
         this.listData = list;
         // console.log(list.filter(i=>i.onOff==0).map(i=>i.deviceCode));
-        this.listLoading = false;
       });
     },
   },
