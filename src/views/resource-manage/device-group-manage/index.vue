@@ -383,7 +383,7 @@
     </el-dialog>
 
     <!-- 绑定设备弹窗 -->
-    <el-dialog :visible.sync="dialogSB.visible">
+    <el-dialog :visible.sync="dialogSB.visible" width="80%">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">绑定设备</span>
         <img src="@/assets/img/hl.png" />
@@ -983,7 +983,7 @@ export default {
       padding: 0 5px;
     }
     .el-transfer-panel {
-      width: 240px;
+      width: 350px;
     }
   }
 }

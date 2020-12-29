@@ -27,8 +27,8 @@
               v-model="moreBtnsVisible"
               popper-class="untransparent"
             >
-            <!-- :style="btnsFakeStye" -->
-              <div class="btns-fake" >
+              <!-- :style="btnsFakeStye" -->
+              <div class="btns-fake">
                 <span
                   class="btn-as-txt"
                   :class="{
@@ -248,14 +248,16 @@ export default {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
+  // justify-content: space-between;
 }
 
 .btn-as-txt {
   border: none;
   color: white;
   font-size: 1.1rem;
-  width: 203px;
   text-align: center;
+  padding: 10px 20px;
+  margin-right: 1rem;
   cursor: pointer;
   &:hover {
     color: #e39f40;

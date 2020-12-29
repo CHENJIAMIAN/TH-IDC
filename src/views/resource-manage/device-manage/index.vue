@@ -258,7 +258,7 @@
     </el-dialog>
 
     <!-- 绑定测点弹窗 -->
-    <el-dialog :visible.sync="dialogCD.visible">
+    <el-dialog :visible.sync="dialogCD.visible" width="80%">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">绑定测点</span>
         <img src="@/assets/img/hl.png" />
@@ -554,7 +554,7 @@ export default {
       padding: 0 5px;
     }
     .el-transfer-panel {
-      width: 240px;
+      width: 350px;
     }
   }
 }
