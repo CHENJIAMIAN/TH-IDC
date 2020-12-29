@@ -744,6 +744,7 @@ export default {
         this.$parent.alarmCount = alarmCount;
 
         this.listData = list;
+        this.listLoading = false;
         // console.log(list.filter(i=>i.onOff==0).map(i=>i.deviceCode));
       });
     },
