@@ -137,8 +137,8 @@
             <img
               style="cursor: pointer"
               @click="
-                dialogImgVisible = true;
                 dialogImgUrl = deviceGroupImg;
+                handleImgDialog();
               "
               class="preview-img"
               :src="deviceGroupImg"
@@ -165,8 +165,8 @@
             <img
               style="cursor: pointer"
               @click="
-                dialogImgVisible = true;
                 dialogImgUrl = roomImage;
+                handleImgDialog();
               "
               class="preview-img"
               :src="roomImage"
@@ -195,7 +195,7 @@
         position: !isTopBottomLayout && 'absolute',
       }"
     >
-    <!-- 收缩图标 -->
+      <!-- 收缩图标 -->
       <img
         :src="
           !isHideLeft
@@ -457,11 +457,22 @@
 
     <!-- 图片弹窗 -->
     <el-dialog
-      width="80%"
+      width="95%"
       custom-class="dialog-img"
       :visible.sync="dialogImgVisible"
     >
-      <img class="preview-img" :src="dialogImgUrl" alt="加载失败" />
+      <div
+        v-if="dialogImgVisible"
+        ref="preiviewImgContainer"
+        style="position: relative"
+      >
+        <img
+          ref="preiviewImg"
+          class="preview-img"
+          :src="dialogImgUrl"
+          alt="加载失败"
+        />
+      </div>
     </el-dialog>
 
     <!-- 点击数据cell，显示历史曲线 -->
@@ -663,6 +674,52 @@ export default {
     });
   },
   methods: {
+    async handleImgDialog() {
+      this.dialogImgVisible = true;
+
+      // 加载marker
+      this.$nextTick((_) => {
+        // 在此才能取到图片要素
+        const myImg = this.$refs["preiviewImg"];
+        myImg.onload = () => {
+          this.listData.forEach((i) => {
+            const { pointLocations } = i;
+            const {
+              id,
+              imgType,
+              location:location2,
+              name,
+              pointCode,
+              value,
+            } = pointLocations;
+            const location = location2.split(",");
+            if (!location || location.length < 2) return;
+            //获取图片的高度和宽度
+            const currWidth = myImg.clientWidth;
+            const currHeight = myImg.clientHeight;
+            const ProportionHeightInImg = location[0]; //鼠标所选位置相对于所选图片高度的比例
+            const ProportionWidthInImg = location[1]; //鼠标所选位置相对于所选图片宽度的比例
+            // 还原marker位置
+            const div = document.createElement("img");
+            div.src = value ? require("@/assets/img/dk.png"):require("@/assets/img/gb.png");
+            div.title = name;
+            div.className = "marker";
+
+            div.onclick = () => {
+              // 点击时修修改该测点的状态
+            };
+
+            let x = currWidth * ProportionWidthInImg;
+            let y = currHeight * ProportionHeightInImg;
+            div.style.left = x + "px";
+            div.style.top = y + "px";
+            this.$refs["preiviewImgContainer"].appendChild(div);
+            this.imgMarkerIdDivMaps.push({ id: i.id, div: div });
+          });
+        };
+      });
+    },
+
     handleQuery() {
       historyGetData(this.dialogCellDataHistory.forms).then((r) => {
         const { deviceCode, list } = r.data;
@@ -720,10 +777,10 @@ export default {
       this.listLoading = true;
       deviceGroupTypeGetData({ id: this.deviceGroupId }).then((res) => {
         // console.log("GetData", res.data);
-        if(!res.data) {
-        this.listLoading = false;
-        this.deviceType = 5;
-        return;
+        if (!res.data) {
+          this.listLoading = false;
+          this.deviceType = 5;
+          return;
         }
         const {
           deviceGroupId,
@@ -735,6 +792,7 @@ export default {
           temperatureAverage,
           list,
         } = res.data;
+
         this.deviceType = deviceType;
         this.dc.voltageSum = voltageSum;
         this.dc.currentSum = currentSum;
@@ -898,7 +956,7 @@ export default {
     gap: 2rem;
   }
   .dialog-img {
-    height: 80%;
+    height: 95%;
     background: #0b2a52;
     .el-dialog__body {
       display: grid;

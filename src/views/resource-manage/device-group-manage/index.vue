@@ -114,7 +114,7 @@
       </el-table-column>
       <el-table-column prop="roomName" label="房间名称" />
       <!-- <el-table-column sortable prop="roomCode" label="房间编号" /> -->
-      <el-table-column label="操作" align="center" width="240">
+      <el-table-column label="操作" align="center" width="280">
         <template slot-scope="{ row }">
           <el-button
             title="绑定设备"
@@ -123,13 +123,13 @@
             plain
             @click="handleSBDialog(row)"
           ></el-button>
-          <!-- <el-button
-            title="绑定测点"
-            icon="el-icon-circle-plus-outline"
+          <el-button
+            title="逻辑设备组绑定实体设备组"
+            icon="el-icon-view"
             type="primary"
             plain
-            @click="handleCDDialog(row)"
-          ></el-button> -->
+            @click="handleLJDialog(row)"
+          ></el-button>
           <el-button
             title="编辑"
             icon="el-icon-edit-outline"
@@ -341,46 +341,6 @@
       </div>
     </el-dialog>
 
-    <!-- 绑定测点弹窗 -->
-    <el-dialog :visible.sync="dialogCD.visible">
-      <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">绑定测点</span>
-        <img src="@/assets/img/hl.png" />
-      </div>
-      <el-form
-        style="display: grid; justify-content: center"
-        :model="dialogCD.forms"
-        :rules="dialogCD.rules"
-        ref="dialogCDForm"
-      >
-        <el-form-item label="" prop="">
-          <el-transfer
-            class="transfer-cd"
-            filterable
-            :filter-method="
-              (query, item) => {
-                return item.name.indexOf(query) > -1;
-              }
-            "
-            :titles="['未绑定', '已绑定']"
-            :props="{
-              key: 'id',
-              label: 'name',
-            }"
-            filter-placeholder="请输入"
-            v-model="dialogCD.forms.pointIdArray"
-            :data="allPointOpts"
-          >
-          </el-transfer>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" style="text-align: center">
-        <el-button style="width: 200px" type="primary" @click="dialogCDSubmit"
-          >保 存</el-button
-        >
-      </div>
-    </el-dialog>
-
     <!-- 绑定设备弹窗 -->
     <el-dialog :visible.sync="dialogSB.visible" width="80%">
       <div slot="title" class="el-dialog-title-custom">
@@ -420,14 +380,52 @@
         >
       </div>
     </el-dialog>
+
+    <!-- 逻辑设备组绑定实体设备组弹窗 -->
+    <el-dialog :visible.sync="dialogLJ.visible" width="80%">
+      <div slot="title" class="el-dialog-title-custom">
+        <span class="title-txt">逻辑设备组绑定实体设备组</span>
+        <img src="@/assets/img/hl.png" />
+      </div>
+      <el-form
+        style="display: grid; justify-content: center"
+        :model="dialogLJ.forms"
+        :rules="dialogLJ.rules"
+        ref="dialogLJForm"
+      >
+        <el-form-item label="" prop="">
+          <el-transfer
+            class="transfer-cd"
+            filterable
+            :filter-method="
+              (query, item) => {
+                return item.name.indexOf(query) > -1;
+              }
+            "
+            :titles="['未绑定', '已绑定']"
+            :props="{
+              key: 'id',
+              label: 'name',
+            }"
+            filter-placeholder="请输入"
+            v-model="dialogLJ.forms.deviceGroupIdArray"
+            :data="allDeviceGroupLJOpts"
+          >
+          </el-transfer>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" style="text-align: center">
+        <el-button style="width: 200px" type="primary" @click="dialogLJSubmit"
+          >保 存</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import pagination from "@/components/Pagination";
 import {
-  deviceGroupListAllBindDeviceGroup,
-  deviceGroupListAllNotBindDeviceGroup,
   deviceGroupAddPointToGroup,
   spaceFloorListAll,
   deviceTypeListAll,
@@ -477,9 +475,15 @@ export default {
       pointBindDeviceGroupOpts: [],
       pointNotBindDeviceGroupOpts: [],
       allPointOpts: [],
+      // 绑定设备
       deviceBindDeviceGroupOpts: [],
       deviceNotBindDeviceGroupOpts: [],
       allDeviceOpts: [],
+      // 绑定逻辑设备组
+      deviceGroupLJBindDeviceGroupOpts: [],
+      deviceGroupLJNotBindDeviceGroupOpts: [],
+      allDeviceGroupLJOpts: [],
+      // 
       firstMenuOpts: [],
       secondMenuOpts: [],
       filterForm: {
@@ -516,12 +520,12 @@ export default {
         forms: {},
         rules: {},
       },
-      dialogCD: {
+      dialogSB: {
         visible: false,
         forms: {},
         rules: {},
       },
-      dialogSB: {
+      dialogLJ: {
         visible: false,
         forms: {},
         rules: {},
@@ -670,20 +674,6 @@ export default {
         }
       });
     },
-    dialogCDSubmit() {
-      this.$refs["dialogCDForm"].validate((valid, obj) => {
-        if (valid) {
-          deviceGroupAddPointToGroup(this.dialogCD.forms).then((res) => {
-            this.$message.success("操作成功!");
-            this.$refs["dialogCDForm"].resetFields();
-            this.dialogCD.visible = false;
-            this.getList();
-          });
-        } else {
-          return false;
-        }
-      });
-    },
     dialogSubmit() {
       this.$refs["dialogForm"].validate((valid, obj) => {
         if (valid) {
@@ -814,27 +804,45 @@ export default {
       this.dialogSB.visible = true;
       this.$nextTick((_) => this.$refs["dialogSBForm"].clearValidate());
     },
-    async handleCDDialog(row) {
+    // 绑定逻辑设备组
+    async handleLJDialog(row) {
       // dialog显示时获取一级菜单列表
       if (row) {
         // 编辑
-        this.dialogCD.forms = { id: row.id };
-        const r1 = await deviceGroupListAllNotBindDeviceGroup({ id: row.id });
-        this.pointNotBindDeviceGroupOpts = r1.data;
-        const r2 = await deviceGroupListAllBindDeviceGroup({ id: row.id });
-        this.pointBindDeviceGroupOpts = r2.data;
-        // this.dialogCD.forms.pointIdArray = r2.data.map((i) => i.id);
+        this.dialogLJ.forms = { id: row.id };
+        const r1 = await deviceGroupListAllNotBindLogicGroup({
+          id: row.id,
+        });
+        this.deviceGroupLJNotBindDeviceGroupOpts = r1.data;
+        const r2 = await deviceGroupListAllBindLogicGroup({
+          id: row.id,
+        });
+        this.deviceGroupLJBindDeviceGroupOpts = r2.data;
         this.$set(
-          this.dialogCD.forms,
-          "pointIdArray",
+          this.dialogLJ.forms,
+          "deviceGroupIdArray",
           r2.data.map((i) => i.id)
         );
-        this.allPointOpts = this.pointNotBindDeviceGroupOpts.concat(
-          this.pointBindDeviceGroupOpts
+        this.allDeviceGroupLJOpts = this.deviceGroupLJNotBindDeviceGroupOpts.concat(
+          this.deviceGroupLJBindDeviceGroupOpts
         );
       }
-      this.dialogCD.visible = true;
-      this.$nextTick((_) => this.$refs["dialogCDForm"].clearValidate());
+      this.dialogLJ.visible = true;
+      this.$nextTick((_) => this.$refs["dialogLJForm"].clearValidate());
+    },
+      dialogLJSubmit() {
+      this.$refs["dialogLJForm"].validate((valid, obj) => {
+        if (valid) {
+          deviceGroupAddDeviceGroupToLogicGroup(this.dialogLJ.forms).then((res) => {
+            this.$message.success("操作成功!");
+            this.$refs["dialogLJForm"].resetFields();
+            this.dialogLJ.visible = false;
+            this.getList();
+          });
+        } else {
+          return false;
+        }
+      });
     },
     // 删除
     handleDel(id) {
