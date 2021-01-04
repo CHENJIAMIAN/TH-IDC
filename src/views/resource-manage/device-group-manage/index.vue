@@ -443,6 +443,9 @@ import {
   deviceGroupPointLocationListAllByBindForDeviceGroup,
   deviceGroupPointLocationListAllByNotBindForDeviceGroup,
   deviceGroupPointLocationAdd,
+  deviceGroupAddDeviceGroupToLogicGroup,
+  deviceGroupListAllNotBindLogicGroup,
+  deviceGroupListAllBindLogicGroup,
 } from "@/api/resource-manage.js";
 
 // 上传
@@ -504,7 +507,7 @@ export default {
             { required: true, trigger: "blur", message: "请输入" },
           ],
           name: [{ required: true, trigger: "blur", message: "请输入" }],
-          imgUrl: [{ required: true, message: "请上传图片" }],
+          // imgUrl: [{ required: true, message: "请上传图片" }],
           deviceType: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },

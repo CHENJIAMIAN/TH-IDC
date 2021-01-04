@@ -137,3 +137,11 @@ export function pointTypeAdd(data){return request({url:'/admin/spacetype/pointTy
 
 // 获取某设备下的所有测点列表接口
 export function pointGetPointByDeivceCode(data){return request({url:'/admin/device/point/getPointByDeivceCode',method:'post',data})}
+
+
+// 逻辑设备组绑定实体设备组接口
+export function deviceGroupAddDeviceGroupToLogicGroup(data){return request({url:'/admin/device/deviceGroup/addDeviceGroupToLogicGroup',method:'post',data})}
+// 未绑定的设备组
+export function deviceGroupListAllNotBindLogicGroup(data){return request({url:'/admin/device/deviceGroup/listAllNotBindLogicGroup',method:'post',data})}
+// 已绑定的设备组
+export function deviceGroupListAllBindLogicGroup(data){return request({url:'/admin/device/deviceGroup/listAllBindLogicGroup',method:'post',data})}
