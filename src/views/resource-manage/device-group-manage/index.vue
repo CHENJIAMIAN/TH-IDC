@@ -156,7 +156,7 @@
       @pagination="getList"
     />
     <!-- 图片弹窗 -->
-    <el-dialog :visible.sync="dialogImg.visible" class="dialog-img" width="80%">
+    <el-dialog :visible.sync="dialogImg.visible" class="dialog-img" width="95%">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">图片采点</span>
         <img src="@/assets/img/hl.png" />
@@ -189,7 +189,6 @@
           <div class="right">
             <div class="radios">
               <el-radio
-                style="width: 190px"
                 v-for="i in listDataCDNotBind"
                 :key="i.id"
                 v-model="dialogImg.forms.selectedNotBind"
@@ -562,7 +561,9 @@ export default {
       const x = e.offsetX || e.layerX,
         y = e.offsetY || e.layerY;
 
-      const div = document.createElement("div");
+      const div = document.createElement("img");
+      div.src = require("@/assets/img/dk.png");
+      // div.src = require('@/assets/img/gb.png');
       div.title = currentValue.name;
       div.className = "marker";
       div.onclick = () => {
@@ -751,7 +752,8 @@ export default {
             const ProportionHeightInImg = location[0]; //鼠标所选位置相对于所选图片高度的比例
             const ProportionWidthInImg = location[1]; //鼠标所选位置相对于所选图片宽度的比例
             // 还原marker位置
-            const div = document.createElement("div");
+            const div = document.createElement("img");
+            div.src = require("@/assets/img/dk.png");
             div.title = i.name;
             div.className = "marker";
 
@@ -926,9 +928,6 @@ export default {
           padding: 3px;
           .marker {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #00f7ff;
             transform: translate(-50%, -50%);
           }
         }
@@ -938,7 +937,7 @@ export default {
             display: grid;
             gap: 10px;
             max-height: 360px;
-            padding-right: 10px;
+            padding-right: 5px;
             overflow: auto;
             .el-radio.is-bordered + .el-radio.is-bordered {
               margin-left: 0;
