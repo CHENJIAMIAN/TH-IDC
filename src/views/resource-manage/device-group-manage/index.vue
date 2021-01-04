@@ -59,6 +59,20 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item prop="groupType">
+          <el-select
+            clearable
+            v-model="filterForm.groupType"
+            placeholder="设备组分类"
+          >
+            <el-option
+              v-for="item in groupTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
@@ -112,11 +126,21 @@
           >
         </template>
       </el-table-column>
+      <el-table-column prop="groupType" label="分类">
+        <template slot-scope="{ row }">
+          <span>{{
+            groupTypeOpts.find((i) => i.id === row.groupType) &&
+            groupTypeOpts.find((i) => i.id === row.groupType).name
+          }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="parentName" label="父级设备组名称" />
       <el-table-column prop="roomName" label="房间名称" />
       <!-- <el-table-column sortable prop="roomCode" label="房间编号" /> -->
       <el-table-column label="操作" align="center" width="280">
         <template slot-scope="{ row }">
           <el-button
+            v-if="row.groupType == 1"
             title="绑定设备"
             icon="el-icon-bdsb"
             type="primary"
@@ -124,8 +148,9 @@
             @click="handleSBDialog(row)"
           ></el-button>
           <el-button
+            v-if="row.groupType == 2"
             title="逻辑设备组绑定实体设备组"
-            icon="el-icon-view"
+            icon="el-icon-guide"
             type="primary"
             plain
             @click="handleLJDialog(row)"
@@ -266,7 +291,7 @@
         <el-form-item label="设备组名称" prop="name">
           <el-input v-model="dialog.forms.name"></el-input>
         </el-form-item>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+        <div style="display: grid; grid-template-columns: 1fr 1fr">
           <el-form-item label="设备组类型" prop="deviceType">
             <el-select
               v-model="dialog.forms.deviceType"
@@ -294,6 +319,8 @@
               />
             </el-select>
           </el-form-item>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr">
           <!-- style="transform: translate(-100px, 0px)" -->
           <el-form-item label="房间" prop="roomCode">
             <el-select v-model="dialog.forms.roomCode">
@@ -302,6 +329,16 @@
                 :key="item.id"
                 :label="item.name"
                 :value="item.roomCode"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="设备组分类" prop="groupType">
+            <el-select v-model="dialog.forms.groupType">
+              <el-option
+                v-for="item in groupTypeOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
               />
             </el-select>
           </el-form-item>
@@ -468,6 +505,10 @@ export default {
       },
       uploadUrl,
       /* --- */
+      groupTypeOpts: [
+        { id: 1, name: "实体设备组" },
+        { id: 2, name: "逻辑设备组" },
+      ],
       floorOpts: [],
       roomOpts: [],
       roomAllOpts: [],
@@ -483,7 +524,7 @@ export default {
       deviceGroupLJBindDeviceGroupOpts: [],
       deviceGroupLJNotBindDeviceGroupOpts: [],
       allDeviceGroupLJOpts: [],
-      // 
+      //
       firstMenuOpts: [],
       secondMenuOpts: [],
       filterForm: {
@@ -513,6 +554,7 @@ export default {
           name: [{ required: true, trigger: "blur", message: "请输入" }],
           // imgUrl: [{ required: true, message: "请上传图片" }],
           deviceType: [{ required: true, trigger: "blur", message: "请输入" }],
+          groupType: [{ required: true, trigger: "blur", message: "请输入" }],
         },
       },
       dialogImg: {
@@ -830,15 +872,17 @@ export default {
       this.dialogLJ.visible = true;
       this.$nextTick((_) => this.$refs["dialogLJForm"].clearValidate());
     },
-      dialogLJSubmit() {
+    dialogLJSubmit() {
       this.$refs["dialogLJForm"].validate((valid, obj) => {
         if (valid) {
-          deviceGroupAddDeviceGroupToLogicGroup(this.dialogLJ.forms).then((res) => {
-            this.$message.success("操作成功!");
-            this.$refs["dialogLJForm"].resetFields();
-            this.dialogLJ.visible = false;
-            this.getList();
-          });
+          deviceGroupAddDeviceGroupToLogicGroup(this.dialogLJ.forms).then(
+            (res) => {
+              this.$message.success("操作成功!");
+              this.$refs["dialogLJForm"].resetFields();
+              this.dialogLJ.visible = false;
+              this.getList();
+            }
+          );
         } else {
           return false;
         }

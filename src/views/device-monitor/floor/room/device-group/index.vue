@@ -571,9 +571,6 @@ export default {
       alarmCount: "",
       deviceGroupList: [],
       //
-      // deviceGroupImg: "",
-      // deviceGroupCode: "",
-      //
       listLoading: false,
       listData: [],
       //
@@ -629,6 +626,7 @@ export default {
       roomImage: (state) => state.app.roomImage,
       deviceGroupImg: (state) => state.app.currentDeviceGroup.imgUrl,
       deviceGroupCode: (state) => state.app.currentDeviceGroup.deviceGroupCode,
+      groupType: (state) => state.app.currentDeviceGroup.groupType,
     }),
     isDcRoom() {
       return this.roomName.includes("电池");
@@ -775,7 +773,7 @@ export default {
     handleTableTabClick(tab, event) {},
     getList() {
       this.listLoading = true;
-      deviceGroupTypeGetData({ id: this.deviceGroupId }).then((res) => {
+      deviceGroupTypeGetData({ id: this.deviceGroupId,groupType:this.groupType }).then((res) => {
         // console.log("GetData", res.data);
         if (!res.data) {
           this.listLoading = false;
