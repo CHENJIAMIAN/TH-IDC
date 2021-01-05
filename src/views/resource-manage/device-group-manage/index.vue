@@ -187,8 +187,29 @@
         <img src="@/assets/img/hl.png" />
       </div>
       <div class="content">
-        <div style="margin-top: 12px; margin-bottom: 3px; text-align: right">
-          未绑测点
+        <div style="    display: grid;
+    grid-template-columns: 30fr 9fr auto;
+    align-items: end;
+    justify-items: center;
+    padding-bottom: 10px;
+    margin-top: -15px;">
+          <!-- div布局占位用 -->
+          <div></div>
+          <div>
+            测点类型
+            <el-select
+              v-model="dialog.forms.pointType"
+              @change="handleImgDialog()"
+            >
+              <el-option
+                v-for="item in pointTypeOpts"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </div>
+          <div>未绑测点</div>
         </div>
         <div class="grid">
           <div class="left">
@@ -463,6 +484,7 @@
 <script>
 import pagination from "@/components/Pagination";
 import {
+  pointTypeListAll,
   deviceGroupAddPointToGroup,
   spaceFloorListAll,
   deviceTypeListAll,
@@ -509,6 +531,7 @@ export default {
         { id: 1, name: "实体设备组" },
         { id: 2, name: "逻辑设备组" },
       ],
+      pointTypeOpts: [],
       floorOpts: [],
       roomOpts: [],
       roomAllOpts: [],
@@ -575,6 +598,8 @@ export default {
       listDataCDBind: [],
       listDataCDNotBind: [],
       imgMarkerIdDivMaps: [],
+      //
+      currentRow: null,
     };
   },
   watch: {
@@ -761,14 +786,26 @@ export default {
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     async handleImgDialog(row) {
+      if (!row) row = this.currentRow;
+      this.currentRow = row;
+      this.pointTypeOpts = [];
+      const r = await pointTypeListAll({ deviceTypeId: row.deviceType });
+      this.pointTypeOpts = r.data;
       const r1 = await deviceGroupPointLocationListAllByBindForDeviceGroup({
         deviceGroupId: row.id,
       });
       const r2 = await deviceGroupPointLocationListAllByNotBindForDeviceGroup({
         deviceGroupId: row.id,
+        pointType: this.dialog.forms.pointType || null,
       });
       this.listDataCDBind = r1.data;
       this.listDataCDNotBind = r2.data;
+      // 移除图片上对应的marker
+      this.imgMarkerIdDivMaps.forEach((o) => {
+        if (!o) return;
+        this.$refs["preiviewImgContainer"].removeChild(o.div);
+      });
+      //
       this.imgMarkerIdDivMaps = []; //初始化
       this.dialogImg.visible = true;
       this.dialogImg.forms.deviceGroupId = row.id;

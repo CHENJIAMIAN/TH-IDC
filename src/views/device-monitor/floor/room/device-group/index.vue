@@ -266,6 +266,14 @@
                   label="设备编号"
                   width="100"
                 />
+                <el-table-column prop="deviceType" label="设备类型">
+                  <template slot-scope="{ row }">
+                    <span>{{
+                      deviceTypeOpts.find((i) => i.id === deviceType) &&
+                      deviceTypeOpts.find((i) => i.id === deviceType).name
+                    }}</span>
+                  </template>
+                </el-table-column>
                 <template v-if="[3, 7, 13].includes(deviceType)">
                   <el-table-column prop="temperature" label="温度" />
                 </template>
@@ -543,6 +551,9 @@ import {
   deviceGroupTypeGetData,
   historyGetData,
 } from "@/api/device-monitor.js";
+import {
+  deviceTypeListAll,
+} from "@/api/resource-manage.js";
 import panelAssetInfo from "./panelAssetInfo.vue";
 import panelAlertRecord from "./panelAlertRecord.vue";
 import BarChart from "./BarChart";
@@ -557,6 +568,7 @@ export default {
   },
   data() {
     return {
+      deviceTypeOpts: [],
       isHideLeft: false,
       deviceType: NaN,
       imgActiveName: "device",
@@ -642,6 +654,8 @@ export default {
     },
   },
   created() {
+    deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
+    
     const {
       floorId,
       floorName,
@@ -685,7 +699,7 @@ export default {
             const {
               id,
               imgType,
-              location:location2,
+              location: location2,
               name,
               pointCode,
               value,
@@ -699,7 +713,9 @@ export default {
             const ProportionWidthInImg = location[1]; //鼠标所选位置相对于所选图片宽度的比例
             // 还原marker位置
             const div = document.createElement("img");
-            div.src = value ? require("@/assets/img/dk.png"):require("@/assets/img/gb.png");
+            div.src = value
+              ? require("@/assets/img/dk.png")
+              : require("@/assets/img/gb.png");
             div.title = name;
             div.className = "marker";
 
@@ -773,7 +789,10 @@ export default {
     handleTableTabClick(tab, event) {},
     getList() {
       this.listLoading = true;
-      deviceGroupTypeGetData({ id: this.deviceGroupId,groupType:this.groupType }).then((res) => {
+      deviceGroupTypeGetData({
+        id: this.deviceGroupId,
+        groupType: this.groupType,
+      }).then((res) => {
         // console.log("GetData", res.data);
         if (!res.data) {
           this.listLoading = false;
