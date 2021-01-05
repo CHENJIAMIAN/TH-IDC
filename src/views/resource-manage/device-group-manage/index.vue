@@ -183,16 +183,20 @@
     <!-- 图片弹窗 -->
     <el-dialog :visible.sync="dialogImg.visible" class="dialog-img" width="95%">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">图片采点</span>
+        <span class="title-txt">图片采点 - {{ dialog.forms.name }}</span>
         <img src="@/assets/img/hl.png" />
       </div>
       <div class="content">
-        <div style="    display: grid;
-    grid-template-columns: 30fr 9fr auto;
-    align-items: end;
-    justify-items: center;
-    padding-bottom: 10px;
-    margin-top: -15px;">
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 30fr 9fr auto;
+            align-items: end;
+            justify-items: center;
+            padding-bottom: 10px;
+            margin-top: -15px;
+          "
+        >
           <!-- div布局占位用 -->
           <div></div>
           <div>
@@ -402,7 +406,7 @@
     <!-- 绑定设备弹窗 -->
     <el-dialog :visible.sync="dialogSB.visible" width="80%">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">绑定设备</span>
+        <span class="title-txt">绑定设备 - {{ dialogSB.forms.name }}</span>
         <img src="@/assets/img/hl.png" />
       </div>
       <el-form
@@ -442,7 +446,9 @@
     <!-- 逻辑设备组绑定实体设备组弹窗 -->
     <el-dialog :visible.sync="dialogLJ.visible" width="80%">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">逻辑设备组绑定实体设备组</span>
+        <span class="title-txt"
+          >逻辑设备组绑定实体设备组 - {{ dialogLJ.forms.name }}</span
+        >
         <img src="@/assets/img/hl.png" />
       </div>
       <el-form
@@ -786,8 +792,11 @@ export default {
       this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     async handleImgDialog(row) {
+      this.listLoading = true;
+      // 测点搜索相当于重新打开,currentRow用于存上一次打开的
       if (!row) row = this.currentRow;
       this.currentRow = row;
+      this.dialog.forms.name = row.name;
       this.pointTypeOpts = [];
       const r = await pointTypeListAll({ deviceTypeId: row.deviceType });
       this.pointTypeOpts = r.data;
@@ -800,21 +809,22 @@ export default {
       });
       this.listDataCDBind = r1.data;
       this.listDataCDNotBind = r2.data;
-      // 移除图片上对应的marker
+      // 只是测点搜索,即重载时,移除图片上对应的marker
       this.imgMarkerIdDivMaps.forEach((o) => {
-        if (!o) return;
+        if (!o || !this.dialogImg.visible) return;
         this.$refs["preiviewImgContainer"].removeChild(o.div);
       });
       //
       this.imgMarkerIdDivMaps = []; //初始化
       this.dialogImg.visible = true;
+      this.listLoading = false;
       this.dialogImg.forms.deviceGroupId = row.id;
       this.dialogImg.forms.imgUrl = row.imgUrl;
       // 加载marker
       this.$nextTick((_) => {
         // 在此才能取到图片要素
         const myImg = this.$refs["preiviewImg"];
-        myImg.onload = () => {
+        const loadMarker = () => {
           this.listDataCDBind.forEach((i) => {
             const location = i.location.split(",");
             if (!location || location.length < 2) return;
@@ -856,13 +866,19 @@ export default {
             this.imgMarkerIdDivMaps.push({ id: i.id, div: div });
           });
         };
+        // 第一次
+        myImg.onload = () => {
+          loadMarker();
+        };
+        // 第2到n次
+        myImg.complete && loadMarker();
       });
     },
     async handleSBDialog(row) {
       // dialog显示时获取一级菜单列表
       if (row) {
         // 编辑
-        this.dialogSB.forms = { id: row.id };
+        this.dialogSB.forms = { id: row.id, name: row.name };
         const r1 = await deviceGroupListAllNotBindDeviceForDeviceGroup({
           id: row.id,
         });
@@ -888,7 +904,7 @@ export default {
       // dialog显示时获取一级菜单列表
       if (row) {
         // 编辑
-        this.dialogLJ.forms = { id: row.id };
+        this.dialogLJ.forms = { id: row.id, name: row.name };
         const r1 = await deviceGroupListAllNotBindLogicGroup({
           id: row.id,
         });

@@ -134,16 +134,19 @@
               'grid-template-rows': isDcRoom ? '1fr 150px' : '1fr',
             }"
           >
-            <img
-              style="cursor: pointer"
-              @click="
-                dialogImgUrl = deviceGroupImg;
-                handleImgDialog();
-              "
-              class="preview-img"
-              :src="deviceGroupImg"
-              alt="加载失败"
-            />
+            <div ref="preiviewImgContainer1" style="position: relative">
+              <img
+                ref="preiviewImg1"
+                style="cursor: pointer"
+                @click="
+                  dialogImgUrl = deviceGroupImg;
+                  handleImgDialog();
+                "
+                class="preview-img"
+                :src="deviceGroupImg"
+                alt="加载失败"
+              />
+            </div>
             <div class="card-group" v-if="isDcRoom">
               <el-card class="card">
                 <span>电池组电压</span>
@@ -468,14 +471,15 @@
       width="95%"
       custom-class="dialog-img"
       :visible.sync="dialogImgVisible"
+      @close="imgMarkerIdDivMaps2 = []"
     >
       <div
         v-if="dialogImgVisible"
-        ref="preiviewImgContainer"
+        ref="preiviewImgContainer2"
         style="position: relative"
       >
         <img
-          ref="preiviewImg"
+          ref="preiviewImg2"
           class="preview-img"
           :src="dialogImgUrl"
           alt="加载失败"
@@ -623,6 +627,9 @@ export default {
         resData: [],
         rules: {},
       },
+      //
+      imgMarkerIdDivMaps1: [],
+      imgMarkerIdDivMaps2: [],
     };
   },
   watch: {
@@ -684,14 +691,28 @@ export default {
     });
   },
   methods: {
-    async handleImgDialog() {
+    handleImgDialog() {
       this.dialogImgVisible = true;
-
+      this.loadOnOffMarker("2");
+    },
+    loadOnOffMarker(type) {
       // 加载marker
       this.$nextTick((_) => {
         // 在此才能取到图片要素
-        const myImg = this.$refs["preiviewImg"];
-        myImg.onload = () => {
+        const myImg = this.$refs[`preiviewImg${type}`];
+        const loadMarker = () => {
+          // 只是测点搜索,即重载时,移除图片上对应的marker
+          (type == "1"
+            ? this.imgMarkerIdDivMaps1
+            : this.imgMarkerIdDivMaps2
+          ).forEach((o) => {
+            if (!o) return;
+            this.$refs[`preiviewImgContainer${type}`].removeChild(o.div);
+          });
+          type == "1"
+            ? (this.imgMarkerIdDivMaps1 = [])
+            : (this.imgMarkerIdDivMaps2 = []); //初始化
+
           this.listData.forEach((i) => {
             const { pointLocations } = i;
             pointLocations.forEach((pointLocation) => {
@@ -717,7 +738,9 @@ export default {
                 : require("@/assets/img/gb.png");
               div.title = name;
               div.className = "marker";
-              div.style = value ?  "transform: translate(-50%, -50%);":"transform: translate(-77%, -50%);";
+              div.style = value
+                ? "transform: translate(-50%, -50%);"
+                : "transform: translate(-77%, -50%);";
 
               div.onclick = () => {
                 // 点击时修修改该测点的状态
@@ -727,10 +750,18 @@ export default {
               let y = currHeight * ProportionHeightInImg;
               div.style.left = x + "px";
               div.style.top = y + "px";
-              this.$refs["preiviewImgContainer"].appendChild(div);
+              this.$refs[`preiviewImgContainer${type}`].appendChild(div);
+              (type == "1"
+                ? this.imgMarkerIdDivMaps1
+                : this.imgMarkerIdDivMaps2
+              ).push({ id, div });
             });
           });
         };
+        myImg.onload = () => {
+          loadMarker();
+        };
+        myImg.complete && loadMarker();
       });
     },
 
@@ -750,6 +781,7 @@ export default {
         column.index > 0 &&
         !column.label.includes("状态") &&
         !column.label.includes("模式") &&
+        !column.label.includes("类型") &&
         !column.label.includes("方式")
       )
         return "week-day";
@@ -762,6 +794,7 @@ export default {
         column.index > 0 &&
         !column.label.includes("状态") &&
         !column.label.includes("模式") &&
+        !column.label.includes("类型") &&
         !column.label.includes("方式")
       )
         this.handleCellDataHistory({ row, column, cell, event });
@@ -820,6 +853,9 @@ export default {
 
         this.listData = list;
         this.listLoading = false;
+        this.dialogImgVisible
+          ? this.loadOnOffMarker("2")
+          : this.loadOnOffMarker("1");
         // console.log(list.filter(i=>i.onOff==0).map(i=>i.deviceCode));
       });
     },
@@ -891,6 +927,7 @@ export default {
 
 .device-group-tab {
   display: grid;
+  align-items: center;
   height: calc(100vh - 280px);
 }
 .card-group {

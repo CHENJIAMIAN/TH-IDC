@@ -260,7 +260,7 @@
     <!-- 绑定测点弹窗 -->
     <el-dialog :visible.sync="dialogCD.visible" width="80%">
       <div slot="title" class="el-dialog-title-custom">
-        <span class="title-txt">绑定测点</span>
+        <span class="title-txt">绑定测点 - {{dialogCD.forms.name}}</span>
         <img src="@/assets/img/hl.png" />
       </div>
       <el-form
@@ -472,7 +472,7 @@ export default {
       // dialog显示时获取一级菜单列表
       if (row) {
         // 编辑
-        this.dialogCD.forms = { id: row.id };
+        this.dialogCD.forms = { id: row.id,name:row.name };
         const r1 = await deviceQueryAllNotBindForDevice({ id: row.id });
         this.pointNotBindDeviceGroupOpts = r1.data;
         const r2 = await deviceQueryAllBindForDevice({ id: row.id });
