@@ -551,9 +551,7 @@ import {
   deviceGroupTypeGetData,
   historyGetData,
 } from "@/api/device-monitor.js";
-import {
-  deviceTypeListAll,
-} from "@/api/resource-manage.js";
+import { deviceTypeListAll } from "@/api/resource-manage.js";
 import panelAssetInfo from "./panelAssetInfo.vue";
 import panelAlertRecord from "./panelAlertRecord.vue";
 import BarChart from "./BarChart";
@@ -655,7 +653,7 @@ export default {
   },
   created() {
     deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
-    
+
     const {
       floorId,
       floorName,
@@ -696,39 +694,41 @@ export default {
         myImg.onload = () => {
           this.listData.forEach((i) => {
             const { pointLocations } = i;
-            const {
-              id,
-              imgType,
-              location: location2,
-              name,
-              pointCode,
-              value,
-            } = pointLocations;
-            const location = location2.split(",");
-            if (!location || location.length < 2) return;
-            //获取图片的高度和宽度
-            const currWidth = myImg.clientWidth;
-            const currHeight = myImg.clientHeight;
-            const ProportionHeightInImg = location[0]; //鼠标所选位置相对于所选图片高度的比例
-            const ProportionWidthInImg = location[1]; //鼠标所选位置相对于所选图片宽度的比例
-            // 还原marker位置
-            const div = document.createElement("img");
-            div.src = value
-              ? require("@/assets/img/dk.png")
-              : require("@/assets/img/gb.png");
-            div.title = name;
-            div.className = "marker";
+            pointLocations.forEach((pointLocation) => {
+              const {
+                id,
+                imgType,
+                location: location2,
+                name,
+                pointCode,
+                value,
+              } = pointLocation;
+              const location = location2.split(",");
+              if (!location || location.length < 2) return;
+              //获取图片的高度和宽度
+              const currWidth = myImg.clientWidth;
+              const currHeight = myImg.clientHeight;
+              const ProportionHeightInImg = location[0]; //鼠标所选位置相对于所选图片高度的比例
+              const ProportionWidthInImg = location[1]; //鼠标所选位置相对于所选图片宽度的比例
+              // 还原marker位置
+              const div = document.createElement("img");
+              div.src = value
+                ? require("@/assets/img/dk.png")
+                : require("@/assets/img/gb.png");
+              div.title = name;
+              div.className = "marker";
+              div.style = value ?  "transform: translate(-50%, -50%);":"transform: translate(-77%, -50%);";
 
-            div.onclick = () => {
-              // 点击时修修改该测点的状态
-            };
+              div.onclick = () => {
+                // 点击时修修改该测点的状态
+              };
 
-            let x = currWidth * ProportionWidthInImg;
-            let y = currHeight * ProportionHeightInImg;
-            div.style.left = x + "px";
-            div.style.top = y + "px";
-            this.$refs["preiviewImgContainer"].appendChild(div);
-            this.imgMarkerIdDivMaps.push({ id: i.id, div: div });
+              let x = currWidth * ProportionWidthInImg;
+              let y = currHeight * ProportionHeightInImg;
+              div.style.left = x + "px";
+              div.style.top = y + "px";
+              this.$refs["preiviewImgContainer"].appendChild(div);
+            });
           });
         };
       });
@@ -951,6 +951,10 @@ export default {
 }
 
 ::v-deep {
+  .marker {
+    position: absolute;
+  }
+
   .el-table th:first-child {
     //切掉第一个表头列的一个角
     // background: linear-gradient(-217deg, transparent 17px, #0838698c 0);
