@@ -290,7 +290,7 @@
                   <el-table-column prop="reactivePower" label="无功功率" />
                   <el-table-column prop="electricalDegree" label="电度" />
                 </template>
-                <template v-if="[1, 2, 4, 6, 11, 12].includes(deviceType)">
+                <template v-if="[1, 2, 4, 5, 6, 11, 12].includes(deviceType)">
                   <el-table-column prop="onOff" label="开关状态" width="90">
                     <template slot-scope="{ row }">
                       <div v-if="row.onOff">开</div>
