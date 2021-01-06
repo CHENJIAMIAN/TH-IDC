@@ -734,13 +734,21 @@ export default {
               // 还原marker位置
               const div = document.createElement("img");
               div.src = value
-                ? require("@/assets/img/dk.png")
-                : require("@/assets/img/gb.png");
+                ? require(`@/assets/img/open${imgType}.png`)
+                : require(`@/assets/img/close${imgType}.png`);
               div.title = name;
               div.className = "marker";
+              let openStyle = '';
+              switch(+imgType){
+                case 1:openStyle="transform: translate(-77%, -50%);";break;
+                case 2:openStyle="transform: translate(-77%, -50%);";break;
+                case 3:openStyle="transform: translate(-50%, -23%);";break;
+                case 4:openStyle="transform: translate(-23%, -50%);";break;
+                case 5:openStyle="transform: translate(-50%, -50%);";break;
+              }
               div.style = value
                 ? "transform: translate(-50%, -50%);"
-                : "transform: translate(-77%, -50%);";
+                : openStyle;
 
               div.onclick = () => {
                 // 点击时修修改该测点的状态

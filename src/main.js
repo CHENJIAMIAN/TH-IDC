@@ -12,6 +12,8 @@ import '@/styles/index.scss' // global css
 
 import App from './App'
 import store from './store'
+// 给BIM IFRAME 跳转登录用
+window.vuestore = store;
 import router from './router'
 import '@/directive/hasAuth'
 

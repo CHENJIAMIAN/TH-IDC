@@ -180,112 +180,102 @@
       :limit.sync="filterForm.pageSize"
       @pagination="getList"
     />
-    <!-- 图片弹窗 -->
+    <!-- 图片采点弹窗 -->
     <el-dialog :visible.sync="dialogImg.visible" class="dialog-img" width="95%">
       <div slot="title" class="el-dialog-title-custom">
         <span class="title-txt">图片采点 - {{ dialog.forms.name }}</span>
         <img src="@/assets/img/hl.png" />
       </div>
-      <div class="content">
-        <div
-          style="
-            display: grid;
-            grid-template-columns: 30fr 9fr auto;
-            align-items: end;
-            justify-items: center;
-            padding-bottom: 10px;
-            margin-top: -15px;
-          "
-        >
-          <!-- div布局占位用 -->
-          <div></div>
-          <div>
-            测点类型
-            <el-select
-              v-model="dialog.forms.pointType"
-              @change="handleImgDialog()"
-            >
-              <el-option
-                v-for="item in pointTypeOpts"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              />
-            </el-select>
-          </div>
-          <div>未绑测点</div>
+      <div class="content-head">
+        <!-- div布局占位用 -->
+        <div></div>
+        <div>
+          图片类型
+          <el-select v-model="dialogImg.imgType">
+            <el-option
+              v-for="item in imgTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </div>
-        <div class="grid">
-          <div class="left">
-            <div
-              v-if="dialogImg.visible"
-              ref="preiviewImgContainer"
-              style="position: relative"
-            >
-              <img
-                :style="{
-                  cursor: dialogImg.forms.selectedNotBind
-                    ? 'crosshair'
-                    : 'unset',
-                }"
-                ref="preiviewImg"
-                class="preview-img"
-                :src="dialogImg.forms.imgUrl"
-                alt="加载失败"
-                @click="addToBindPointLocation"
-              />
-            </div>
-          </div>
-          <div class="right">
-            <div class="radios">
-              <el-radio
-                v-for="i in listDataCDNotBind"
-                :key="i.id"
-                v-model="dialogImg.forms.selectedNotBind"
-                :label="i"
-                border
-                >{{ i.name }}</el-radio
-              >
-            </div>
-          </div>
-        </div>
-        <div style="margin-top: 12px; margin-bottom: 3px">已绑测点</div>
-        <div class="table">
-          <el-table
-            empty-text=" "
-            class="btm-table"
-            style="overflow: auto"
-            stripe
-            border
-            :data="listDataCDBind"
+        <div>
+          测点类型
+          <el-select
+            v-model="dialog.forms.pointType"
+            @change="handleImgDialog()"
           >
-            <el-table-column sortable prop="pointCode" label="测点编号" />
-            <el-table-column sortable prop="name" label="测点名称" />
-            <el-table-column sortable prop="location" label="位置" />
-            <el-table-column sortable prop="imgType" label="图片类型">
-              <template slot-scope="{ row }">
-                <el-select v-model="row.imgType">
-                  <el-option
-                    v-for="item in imgTypeOpts"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  />
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" align="center">
-              <template slot-scope="{ row }">
-                <el-button
-                  title="删除"
-                  icon="el-icon-delete"
-                  type="primary"
-                  plain
-                  @click="removeToNotBindPointLocation(row)"
-                ></el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+            <el-option
+              v-for="item in pointTypeOpts"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </div>
+        <div>未绑测点</div>
+      </div>
+      <div class="grid">
+        <div class="left">
+          <div
+            v-if="dialogImg.visible"
+            ref="preiviewImgContainer"
+            style="position: relative"
+          >
+            <img
+              :style="{
+                cursor: dialogImg.forms.selectedNotBind ? 'crosshair' : 'unset',
+              }"
+              ref="preiviewImg"
+              class="preview-img"
+              :src="dialogImg.forms.imgUrl"
+              alt="加载失败"
+              @click="addToBindPointLocation"
+            />
+          </div>
+        </div>
+        <div class="right">
+          <div class="radios">
+            <el-radio
+              v-for="i in listDataCDNotBind"
+              :key="i.id"
+              v-model="dialogImg.forms.selectedNotBind"
+              :label="i"
+              border
+              >{{ i.name }}</el-radio
+            >
+          </div>
+          <div class="table">
+            <el-table
+              empty-text=" "
+              class="btm-table"
+              style="overflow: auto"
+              stripe
+              border
+              :data="listDataCDBind"
+            >
+              <el-table-column
+                sortable
+                prop="pointCode"
+                label="测点编号"
+                width="150"
+              />
+              <el-table-column sortable prop="name" label="测点名称" />
+              <!-- <el-table-column sortable prop="location" label="位置" /> -->
+              <el-table-column label="操作" align="center" width="80">
+                <template slot-scope="{ row }">
+                  <el-button
+                    title="删除"
+                    icon="el-icon-delete"
+                    type="primary"
+                    plain
+                    @click="removeToNotBindPointLocation(row)"
+                  ></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </div>
       </div>
       <div slot="footer" style="text-align: center">
@@ -633,6 +623,13 @@ export default {
   mounted() {},
   methods: {
     addToBindPointLocation(e) {
+      if (
+        this.dialogImg.imgType === "" ||
+        this.dialogImg.imgType === undefined
+      ) {
+        this.$message.error("请选择绑定测点的图片类型");
+        return;
+      }
       let currentValue = this.dialogImg.forms.selectedNotBind; //JSON.parse(JSON.stringify(this.dialogImg.forms.selectedNotBind));
       this.$set(this.dialogImg.forms, "selectedNotBind", "");
       if (!currentValue) return;
@@ -642,8 +639,8 @@ export default {
         y = e.offsetY || e.layerY;
 
       const div = document.createElement("img");
-      div.src = require("@/assets/img/dk.png");
-      // div.src = require('@/assets/img/gb.png');
+      div.src = require(`@/assets/img/open${this.dialogImg.imgType}.png`);
+      // div.src = require('@/assets/img/closeb.png');
       div.title = currentValue.name;
       div.className = "marker";
       div.onclick = () => {
@@ -707,20 +704,20 @@ export default {
     },
     dialogImgSubmit() {
       /* pointList	[array]	是	采集的测点位置数据
-                pointId	[int]	是	测点id
-               location [string]	是	位置信息
+         pointId	[int]	是	测点id
+         location [string]	是	位置信息
         */
       if (
-        this.listDataCDBind.some(
-          (i) => i.imgType === "" || i.imgType === undefined
-        )
+        this.dialogImg.imgType === "" ||
+        this.dialogImg.imgType === undefined
       ) {
-        this.$message.error("请为每个绑定测点选择图片类型");
+        this.$message.error("请选择绑定测点的图片类型");
         return;
       }
       this.dialogImg.forms.pointList = this.listDataCDBind;
       this.dialogImg.forms.pointList = this.dialogImg.forms.pointList.map(
         (i) => {
+          i.imgType = this.dialogImg.imgType;
           i.pointId = i.id;
           delete i.id;
           return i;
@@ -835,7 +832,7 @@ export default {
             const ProportionWidthInImg = location[1]; //鼠标所选位置相对于所选图片宽度的比例
             // 还原marker位置
             const div = document.createElement("img");
-            div.src = require("@/assets/img/dk.png");
+            div.src = require(`@/assets/img/open${i.imgType}.png`);
             div.title = i.name;
             div.className = "marker";
 
@@ -1012,50 +1009,54 @@ export default {
   .dialog-img {
     .el-dialog__body {
       margin-top: -30px;
+      overflow: hidden;
     }
     .el-dialog {
       // padding-bottom: 3rem;
     }
-    .content {
-      padding: 1rem;
-      .grid {
+    .content-head {
+      display: grid;
+      grid-template-columns: 20fr 9fr 9fr auto;
+      align-items: end;
+      justify-items: center;
+      margin-bottom: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 4fr 350px;
+      border: 1px solid;
+      border-radius: 3px;
+      height: 70vh;
+      .left {
+        border-right: 2px solid;
         display: grid;
-        grid-template-columns: 3fr 1fr;
         justify-content: center;
-        align-items: start;
-        justify-items: center;
-        border: 1px solid;
-        border-radius: 3px;
-        .left {
-          border-right: 2px solid;
-          height: 400px;
-          display: grid;
-          justify-content: center;
-          align-items: center;
-          overflow: auto;
-          padding: 3px;
-          .marker {
-            position: absolute;
-            transform: translate(-50%, -50%);
-          }
-        }
-        .right {
-          margin-top: 1rem;
-          .radios {
-            display: grid;
-            gap: 10px;
-            max-height: 360px;
-            padding-right: 5px;
-            overflow: auto;
-            .el-radio.is-bordered + .el-radio.is-bordered {
-              margin-left: 0;
-            }
-          }
+        align-items: center;
+        overflow: auto;
+        padding: 3px;
+        .marker {
+          position: absolute;
+          transform: translate(-50%, -50%);
         }
       }
-      .table {
-        border: 1px solid;
-        border-radius: 5px;
+      .right {
+        display: grid;
+        grid-template-rows: 35vh 35vh;
+        .radios {
+          display: grid;
+          gap: 10px;
+          overflow: auto;
+          padding: 1rem;
+          margin-bottom: 1rem;
+          .el-radio.is-bordered + .el-radio.is-bordered {
+            margin-left: 0;
+          }
+        }
+        .table {
+          border-top: 2px solid;
+          border-radius: 5px;
+          overflow: auto;
+        }
       }
     }
     // background: #0b2a52;
@@ -1072,8 +1073,9 @@ export default {
 ::v-deep {
   .btm-table {
     .el-table__body-wrapper {
-      height: 170px;
-      overflow: auto;
+      // 会导致宽度无限增长
+      // height: 170px;
+      // overflow: auto;
     }
   }
 
