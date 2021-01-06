@@ -623,15 +623,13 @@ export default {
   mounted() {},
   methods: {
     addToBindPointLocation(e) {
-      if (
-        this.dialogImg.imgType === "" ||
-        this.dialogImg.imgType === undefined
-      ) {
+      const { imgType, forms } = this.dialogImg;
+      if (imgType === "" || imgType === undefined) {
         this.$message.error("请选择绑定测点的图片类型");
         return;
       }
-      let currentValue = this.dialogImg.forms.selectedNotBind; //JSON.parse(JSON.stringify(this.dialogImg.forms.selectedNotBind));
-      this.$set(this.dialogImg.forms, "selectedNotBind", "");
+      let currentValue = forms.selectedNotBind; //JSON.parse(JSON.stringify(this.dialogImg.forms.selectedNotBind));
+      this.$set(forms, "selectedNotBind", "");
       if (!currentValue) return;
       // 获取测点在照片上的相对位置
       e = e || window.event;
@@ -639,10 +637,24 @@ export default {
         y = e.offsetY || e.layerY;
 
       const div = document.createElement("img");
-      div.src = require(`@/assets/img/open${this.dialogImg.imgType}.png`);
+      div.src = require(`@/assets/img/open${imgType}.png`);
       // div.src = require('@/assets/img/closeb.png');
       div.title = currentValue.name;
       div.className = "marker";
+      let openStyle = "";
+      switch (+imgType) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+          openStyle = "transform: translate(-50%, -50%);";
+          break;
+        case 5:
+          openStyle = "transform: translate(-50%, -50%);";
+          break;
+      }
+      div.style = openStyle;
+
       div.onclick = () => {
         // 点击标记时移除标记,取消绑定
         this.$refs["preiviewImgContainer"].removeChild(div);
@@ -665,6 +677,7 @@ export default {
       const ProportionWidthInImg = y / currHeight; //鼠标所选位置相对于所选图片宽度的比例
       currentValue.location =
         ProportionWidthInImg + "," + ProportionHeightInImg;
+      currentValue.imgType = this.dialogImg.imgType;
       // 添加到表
       this.listDataCDBind.push(currentValue);
       // 从radio列表移除
@@ -707,17 +720,9 @@ export default {
          pointId	[int]	是	测点id
          location [string]	是	位置信息
         */
-      if (
-        this.dialogImg.imgType === "" ||
-        this.dialogImg.imgType === undefined
-      ) {
-        this.$message.error("请选择绑定测点的图片类型");
-        return;
-      }
       this.dialogImg.forms.pointList = this.listDataCDBind;
       this.dialogImg.forms.pointList = this.dialogImg.forms.pointList.map(
         (i) => {
-          i.imgType = this.dialogImg.imgType;
           i.pointId = i.id;
           delete i.id;
           return i;
@@ -835,6 +840,19 @@ export default {
             div.src = require(`@/assets/img/open${i.imgType}.png`);
             div.title = i.name;
             div.className = "marker";
+            let openStyle = "";
+            switch (+i.imgType) {
+              case 1:
+              case 2:
+              case 3:
+              case 4:
+                openStyle = "transform: translate(-50%, -50%);";
+                break;
+              case 5:
+                openStyle = "transform: translate(-50%, -50%);";
+                break;
+            }
+            div.style = openStyle;
 
             div.onclick = () => {
               // 点击标记时移除标记,取消绑定
@@ -1036,7 +1054,6 @@ export default {
         padding: 3px;
         .marker {
           position: absolute;
-          transform: translate(-50%, -50%);
         }
       }
       .right {
