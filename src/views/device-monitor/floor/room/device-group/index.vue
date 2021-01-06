@@ -297,7 +297,7 @@
                   <el-table-column prop="onOff" label="开关状态" width="90">
                     <template slot-scope="{ row }">
                       <div v-if="row.onOff">开</div>
-                      <div v-else>关</div>
+                      <div v-else style="color:red;">关</div>
                     </template>
                   </el-table-column>
                 </template>
