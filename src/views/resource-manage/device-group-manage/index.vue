@@ -699,104 +699,20 @@ export default {
       const index2 = this.imgMarkerIdDivMaps.indexOf(o);
       if (index2 > -1) this.imgMarkerIdDivMaps.splice(index2, 1);
     },
-
-    // 附件上传成功
-    uploadSuccess(response, file, fileList) {
-      if (response.res === 0) {
-        this.dialog.forms.imgUrl = response.data.filePath;
-        this.$message.success("上传成功!");
-      } else {
-        this.$message.error(response.msg);
-      }
-      this.$refs["dialogForm"].validateField("imgUrl");
-    },
-    // 附件删除
-    fileRemove(file, fileList) {
-      this.dialog.forms.imgUrl = "";
-      this.$refs["dialogForm"].validateField("imgUrl");
-    },
-    dialogImgSubmit() {
-      /* pointList	[array]	是	采集的测点位置数据
-         pointId	[int]	是	测点id
-         location [string]	是	位置信息
-        */
-      this.dialogImg.forms.pointList = this.listDataCDBind;
-      this.dialogImg.forms.pointList = this.dialogImg.forms.pointList.map(
-        (i) => {
-          i.pointId = i.id;
-          delete i.id;
-          return i;
-        }
-      );
-      const { deviceGroupId, pointList } = this.dialogImg.forms;
-      deviceGroupPointLocationAdd({ deviceGroupId, pointList }).then((res) => {
-        this.$message.success("操作成功!");
-        this.dialogImg.visible = false;
-        this.getList();
-      });
-    },
-    dialogSBSubmit() {
-      this.$refs["dialogSBForm"].validate((valid, obj) => {
-        if (valid) {
-          deviceGroupAddDeviceToGroup(this.dialogSB.forms).then((res) => {
-            this.$message.success("操作成功!");
-            this.$refs["dialogSBForm"].resetFields();
-            this.dialogSB.visible = false;
-            this.getList();
-          });
-        } else {
-          return false;
-        }
-      });
-    },
-    dialogSubmit() {
-      this.$refs["dialogForm"].validate((valid, obj) => {
-        if (valid) {
-          let callAPI = null;
-          if (this.dialog.forms.id) {
-            callAPI = deviceGroupEdit;
-          } else {
-            callAPI = deviceGroupAdd;
-          }
-          callAPI(this.dialog.forms).then((res) => {
-            this.$message.success("操作成功!");
-            this.$refs["dialogForm"].resetFields();
-            this.dialog.visible = false;
-            this.getList();
-          });
-        } else {
-          return false;
-        }
-      });
-    },
-    // 查询
-    handleQuery() {
-      this.listTotal = 0;
-      this.filterForm.pageNo = 1;
-      this.getList();
-    },
-    // 重置
-    handleReset(form) {
-      document.activeElement.blur();
-      this.$refs[form].resetFields();
-      this.handleQuery();
-    },
-    // 查看
-    async handleDialog(row) {
-      // dialog显示时获取一级菜单列表
-      if (row) {
-        // 编辑
-        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
-      } else {
-        this.dialog.forms = { imgUrl: "", roomCode: "" }; //让imgUrl变响应式validateField才有效
-      }
-      this.dialog.visible = true;
-      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
-    },
     async handleImgDialog(row) {
       this.listLoading = true;
       // 测点搜索相当于重新打开,currentRow用于存上一次打开的
-      if (!row) row = this.currentRow;
+      if (!row) {
+        row = this.currentRow;
+        const r2 = await deviceGroupPointLocationListAllByNotBindForDeviceGroup(
+          {
+            deviceGroupId: row.id,
+            pointType: this.dialog.forms.pointType || null,
+          }
+        );
+        this.listDataCDNotBind = r2.data;
+        return;
+      }
       this.currentRow = row;
       this.dialog.forms.name = row.name;
       this.pointTypeOpts = [];
@@ -805,18 +721,18 @@ export default {
       const r1 = await deviceGroupPointLocationListAllByBindForDeviceGroup({
         deviceGroupId: row.id,
       });
+      this.listDataCDBind = r1.data;
       const r2 = await deviceGroupPointLocationListAllByNotBindForDeviceGroup({
         deviceGroupId: row.id,
         pointType: this.dialog.forms.pointType || null,
       });
-      this.listDataCDBind = r1.data;
       this.listDataCDNotBind = r2.data;
-      // 只是测点搜索,即重载时,移除图片上对应的marker
-      this.imgMarkerIdDivMaps.forEach((o) => {
-        if (!o || !this.dialogImg.visible) return;
-        this.$refs["preiviewImgContainer"].removeChild(o.div);
-      });
-      //
+      // // 只是测点搜索,即重载时,移除图片上对应的marker
+      // this.imgMarkerIdDivMaps.forEach((o) => {
+      //   if (!o || !this.dialogImg.visible) return;
+      //   this.$refs["preiviewImgContainer"].removeChild(o.div);
+      // });
+      // //
       this.imgMarkerIdDivMaps = []; //初始化
       this.dialogImg.visible = true;
       this.listLoading = false;
@@ -939,6 +855,99 @@ export default {
       }
       this.dialogLJ.visible = true;
       this.$nextTick((_) => this.$refs["dialogLJForm"].clearValidate());
+    },
+    // 附件上传成功
+    uploadSuccess(response, file, fileList) {
+      if (response.res === 0) {
+        this.dialog.forms.imgUrl = response.data.filePath;
+        this.$message.success("上传成功!");
+      } else {
+        this.$message.error(response.msg);
+      }
+      this.$refs["dialogForm"].validateField("imgUrl");
+    },
+    // 附件删除
+    fileRemove(file, fileList) {
+      this.dialog.forms.imgUrl = "";
+      this.$refs["dialogForm"].validateField("imgUrl");
+    },
+    dialogImgSubmit() {
+      /* pointList	[array]	是	采集的测点位置数据
+         pointId	[int]	是	测点id
+         location [string]	是	位置信息
+        */
+      this.dialogImg.forms.pointList = this.listDataCDBind;
+      this.dialogImg.forms.pointList = this.dialogImg.forms.pointList.map(
+        (i) => {
+          i.pointId = i.id;
+          delete i.id;
+          return i;
+        }
+      );
+      const { deviceGroupId, pointList } = this.dialogImg.forms;
+      deviceGroupPointLocationAdd({ deviceGroupId, pointList }).then((res) => {
+        this.$message.success("操作成功!");
+        this.dialogImg.visible = false;
+        this.getList();
+      });
+    },
+    dialogSBSubmit() {
+      this.$refs["dialogSBForm"].validate((valid, obj) => {
+        if (valid) {
+          deviceGroupAddDeviceToGroup(this.dialogSB.forms).then((res) => {
+            this.$message.success("操作成功!");
+            this.$refs["dialogSBForm"].resetFields();
+            this.dialogSB.visible = false;
+            this.getList();
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+    dialogSubmit() {
+      this.$refs["dialogForm"].validate((valid, obj) => {
+        if (valid) {
+          let callAPI = null;
+          if (this.dialog.forms.id) {
+            callAPI = deviceGroupEdit;
+          } else {
+            callAPI = deviceGroupAdd;
+          }
+          callAPI(this.dialog.forms).then((res) => {
+            this.$message.success("操作成功!");
+            this.$refs["dialogForm"].resetFields();
+            this.dialog.visible = false;
+            this.getList();
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+    // 查询
+    handleQuery() {
+      this.listTotal = 0;
+      this.filterForm.pageNo = 1;
+      this.getList();
+    },
+    // 重置
+    handleReset(form) {
+      document.activeElement.blur();
+      this.$refs[form].resetFields();
+      this.handleQuery();
+    },
+    // 查看
+    async handleDialog(row) {
+      // dialog显示时获取一级菜单列表
+      if (row) {
+        // 编辑
+        this.dialog.forms = Object.assign(JSON.parse(JSON.stringify(row)));
+      } else {
+        this.dialog.forms = { imgUrl: "", roomCode: "" }; //让imgUrl变响应式validateField才有效
+      }
+      this.dialog.visible = true;
+      this.$nextTick((_) => this.$refs["dialogForm"].clearValidate());
     },
     dialogLJSubmit() {
       this.$refs["dialogLJForm"].validate((valid, obj) => {
