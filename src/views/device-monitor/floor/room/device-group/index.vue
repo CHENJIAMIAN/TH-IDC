@@ -13,107 +13,90 @@
   >
     <!-- 图片 if else-->
     <!-- 上布局 -->
-    <div class="row1" v-if="isTopBottomLayout" v-show="!isHideTop">
-      <div class="row1-col1">
-        <!-- <img
-          style="cursor: pointer"
-          @click="
-            dialogImgVisible = true;
-            dialogImgUrl = deviceGroupImg;
-          "
-          class="preview-img"
-          :src="deviceGroupImg"
-          alt="加载失败"
-        /> -->
-        <!-- 空调 -->
-        <div class="kts">
-          <div class="kt" v-for="kt in listData" :key="kt.deviceCode">
-            <el-popover
-              transition=""
-              :close-delay="0"
-              placement="right-start"
-              trigger="hover"
-              width="160"
-              popper-class="untransparent"
-            >
-              <el-form class="kt-pop-form" :model="kt">
-                <el-form-item label="设备编号">
-                  {{ kt.deviceCode }}
-                </el-form-item>
-                <el-form-item label="开关状态">
-                  {{ kt.onOff ? "开" : "关" }}
-                </el-form-item>
-                <el-form-item label="工作模式">
-                  <span v-if="kt.workMode == 1">通风</span>
-                  <span v-if="kt.workMode == 2">制冷</span>
-                  <span v-if="kt.workMode == 3">加热</span>
-                  <span v-if="kt.workMode == 4">除湿</span>
-                </el-form-item>
-                <el-form-item label="电流">
-                  {{ kt.current }}
-                </el-form-item>
-                <el-form-item label="电压">
-                  {{ kt.voltage }}
-                </el-form-item>
-                <el-form-item label="送风温度">
-                  {{ kt.supplyAirTemp }}
-                </el-form-item>
-                <el-form-item label="回风温度">
-                  {{ kt.returnAirTemp }}
-                </el-form-item>
-                <el-form-item label="送风湿度">
-                  {{ kt.supplyAirHumidity }}
-                </el-form-item>
-                <el-form-item label="回风湿度">
-                  {{ kt.returnAirHumidity }}
-                </el-form-item>
-                <el-form-item label="过滤器状态">
-                  {{ kt.filterMachine ? "开" : "关" }}
-                </el-form-item>
-                <el-form-item label="风机状态">
-                  <span v-if="kt.airMachine == 0">关</span>
-                  <span v-if="kt.airMachine == 1">开</span>
-                </el-form-item>
-                <el-form-item label="压缩机状态">
-                  <span v-if="kt.compressMachine == 0">关</span>
-                  <span v-if="kt.compressMachine == 1">开</span>
-                </el-form-item>
-              </el-form>
-              <template slot="reference">
-                <img
-                  :src="
-                    kt.onOff
-                      ? require('@/assets/img/kt1.png')
-                      : require('@/assets/img/kt2.png')
-                  "
-                  class="img-kt"
-                />
-                <img
-                  :src="
-                    kt.onOff
-                      ? require('@/assets/img/fs1.png')
-                      : require('@/assets/img/fs2.png')
-                  "
-                  class="img-fs"
-                  :class="kt.onOff && 'spin'"
-                />
-              </template>
-            </el-popover>
-          </div>
+    <div
+      class="row1"
+      :style="{
+        position: isTopBottomLayout && 'absolute',
+        top: isTopBottomLayout && (!isHideTop ? '0' : '-570px'),
+      }"
+      v-if="isTopBottomLayout"
+    >
+      <!-- 空调 -->
+      <div class="kts">
+        <div class="kt" v-for="kt in listData" :key="kt.deviceCode">
+          <el-popover
+            transition=""
+            :close-delay="0"
+            placement="right-start"
+            trigger="hover"
+            width="160"
+            popper-class="untransparent"
+          >
+            <el-form class="kt-pop-form" :model="kt">
+              <el-form-item label="设备编号">
+                {{ kt.deviceCode }}
+              </el-form-item>
+              <el-form-item label="开关状态">
+                {{ kt.onOff ? "开" : "关" }}
+              </el-form-item>
+              <el-form-item label="工作模式">
+                <span v-if="kt.workMode == 1">通风</span>
+                <span v-if="kt.workMode == 2">制冷</span>
+                <span v-if="kt.workMode == 3">加热</span>
+                <span v-if="kt.workMode == 4">除湿</span>
+              </el-form-item>
+              <el-form-item label="电流">
+                {{ kt.current }}
+              </el-form-item>
+              <el-form-item label="电压">
+                {{ kt.voltage }}
+              </el-form-item>
+              <el-form-item label="送风温度">
+                {{ kt.supplyAirTemp }}
+              </el-form-item>
+              <el-form-item label="回风温度">
+                {{ kt.returnAirTemp }}
+              </el-form-item>
+              <el-form-item label="送风湿度">
+                {{ kt.supplyAirHumidity }}
+              </el-form-item>
+              <el-form-item label="回风湿度">
+                {{ kt.returnAirHumidity }}
+              </el-form-item>
+              <el-form-item label="过滤器状态">
+                {{ kt.filterMachine ? "开" : "关" }}
+              </el-form-item>
+              <el-form-item label="风机状态">
+                <span v-if="kt.airMachine == 0">关</span>
+                <span v-if="kt.airMachine == 1">开</span>
+              </el-form-item>
+              <el-form-item label="压缩机状态">
+                <span v-if="kt.compressMachine == 0">关</span>
+                <span v-if="kt.compressMachine == 1">开</span>
+              </el-form-item>
+            </el-form>
+            <template slot="reference">
+              <img
+                :src="
+                  kt.onOff
+                    ? require('@/assets/img/kt1.png')
+                    : require('@/assets/img/kt2.png')
+                "
+                class="img-kt"
+              />
+              <img
+                :src="
+                  kt.onOff
+                    ? require('@/assets/img/fs1.png')
+                    : require('@/assets/img/fs2.png')
+                "
+                class="img-fs"
+                :class="kt.onOff && 'spin'"
+              />
+            </template>
+          </el-popover>
         </div>
       </div>
-      <!-- <div class="row1-col2" v-if="isTopBottomLayout">
-        <img
-          style="cursor: pointer"
-          @click="
-            dialogImgVisible = true;
-            dialogImgUrl = roomImage;
-          "
-          class="preview-img"
-          :src="roomImage"
-          alt="加载失败"
-        />
-      </div> -->
     </div>
     <!-- 左布局 -->
     <div
@@ -197,7 +180,8 @@
       :style="{
         'margin-left': !isHideLeft && !isTopBottomLayout ? '40%' : '0',
         width: !isHideLeft && !isTopBottomLayout ? '60%' : '100%',
-        position: !isTopBottomLayout ? 'absolute' : 'relative',
+        position: 'absolute',
+        top: isTopBottomLayout && (isHideTop ? '0' : 'calc(40vh + 22px)'),
       }"
     >
       <!-- 收缩图标 -->
@@ -220,8 +204,12 @@
             isLeftRightLayout
               ? 'right-el-tabs'
               : !isHideTop
-              ? 'btm1-el-tabs'
-              : 'btm2-el-tabs'
+              ? !isHideTopDelay
+                ? 'btm1-el-tabs'
+                : 'btm2-el-tabs'
+              : isHideTopDelay
+              ? 'btm2-el-tabs'
+              : 'btm1-el-tabs'
           "
           type="border-card"
           v-model="tableActiveName"
@@ -583,6 +571,7 @@ export default {
       deviceTypeOpts: [],
       isHideLeft: false,
       isHideTop: false,
+      isHideTopDelay: false,
       deviceType: NaN,
       imgActiveName: "device",
       tableActiveName: "data-info",
@@ -647,6 +636,16 @@ export default {
     "dialogCellDataHistory.forms.startDate_endDate"(n, o) {
       this.dialogCellDataHistory.forms.startTime = n ? n[0] : null;
       this.dialogCellDataHistory.forms.endTime = n ? n[1] : null;
+    },
+    isHideTop(n, o) {
+      if (n) {
+        this.isHideTopDelay = n;
+      } else {
+        // 为了让动画el-tab的高度在动画结束时才改变
+        setTimeout(() => {
+          this.isHideTopDelay = n;
+        }, 700);
+      }
     },
   },
   computed: {
@@ -912,21 +911,13 @@ export default {
   position: relative;
 
   .row1 {
+    transition: all 0.78s;
     display: grid;
     grid-template-columns: 40fr auto;
-    &-col1 {
-      display: grid;
-      border: solid #119aca;
-      // 图片多大都不会撑开
-      height: calc(100vh - 460px);
-      padding: 2rem;
-    }
-    &-col2 {
-      display: grid;
-      border: solid #119aca;
-      // 图片多大都不会撑开
-      height: calc(100vh - 460px);
-    }
+    border: solid #119aca;
+    // 图片多大都不会撑开
+    padding: 2rem;
+    height: 40vh;
   }
   .row2 {
     display: grid;
@@ -943,7 +934,6 @@ export default {
 }
 .right-tables {
   transition: all 0.8s;
-  height: 100%;
 }
 
 .preview-img {
@@ -1058,7 +1048,7 @@ export default {
   .btm1-el-tabs {
     .el-tabs__content {
       overflow: auto;
-      height: 180px;
+      height: calc(100vh - 40vh - 275px);
     }
   }
   .right-el-tabs {
