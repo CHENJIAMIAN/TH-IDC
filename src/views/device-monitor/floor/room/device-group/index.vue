@@ -6,12 +6,14 @@
         ? isHideLeft
           ? 'grid-template-columns: auto;'
           : 'grid-template-columns: 40% auto;'
-        : 'grid-template-rows: 1fr 220px;'
+        : isHideTop
+        ? 'grid-template-rows: 1fr 220px;'
+        : 'grid-template-rows: unset;'
     "
   >
     <!-- 图片 if else-->
     <!-- 上布局 -->
-    <div class="row1" v-if="isTopBottomLayout">
+    <div class="row1" v-if="isTopBottomLayout" v-show="!isHideTop">
       <div class="row1-col1">
         <!-- <img
           style="cursor: pointer"
@@ -195,24 +197,32 @@
       :style="{
         'margin-left': !isHideLeft && !isTopBottomLayout ? '40%' : '0',
         width: !isHideLeft && !isTopBottomLayout ? '60%' : '100%',
-        position: !isTopBottomLayout && 'absolute',
+        position: !isTopBottomLayout ? 'absolute' : 'relative',
       }"
     >
       <!-- 收缩图标 -->
       <img
-        :src="
-          !isHideLeft
-            ? require('@/assets/img/shou.png')
-            : require('@/assets/img/fang.png')
-        "
-        v-show="isLeftRightLayout"
+        :src="togglerImgSrc"
+        v-show="isLeftRightLayout || isTopBottomLayout"
         title="切换图片显示"
-        class="side-toggler"
-        @click="isHideLeft = !isHideLeft"
+        :class="{
+          'side-toggler1': isLeftRightLayout,
+          'side-toggler2': isTopBottomLayout,
+        }"
+        @click="
+          isLeftRightLayout && (isHideLeft = !isHideLeft);
+          isTopBottomLayout && (isHideTop = !isHideTop);
+        "
       />
       <div class="row2">
         <el-tabs
-          :class="isLeftRightLayout ? 'right-el-tabs' : 'btm-el-tabs'"
+          :class="
+            isLeftRightLayout
+              ? 'right-el-tabs'
+              : !isHideTop
+              ? 'btm1-el-tabs'
+              : 'btm2-el-tabs'
+          "
           type="border-card"
           v-model="tableActiveName"
           @tab-click="handleTableTabClick"
@@ -297,7 +307,7 @@
                   <el-table-column prop="onOff" label="开关状态" width="90">
                     <template slot-scope="{ row }">
                       <div v-if="row.onOff">开</div>
-                      <div v-else style="color:red;">关</div>
+                      <div v-else style="color: red">关</div>
                     </template>
                   </el-table-column>
                 </template>
@@ -572,6 +582,7 @@ export default {
     return {
       deviceTypeOpts: [],
       isHideLeft: false,
+      isHideTop: false,
       deviceType: NaN,
       imgActiveName: "device",
       tableActiveName: "data-info",
@@ -657,6 +668,18 @@ export default {
     isLeftRightLayout() {
       return !this.roomName.includes("空调");
     },
+    togglerImgSrc() {
+      let src = "";
+      if (this.isLeftRightLayout)
+        !this.isHideLeft
+          ? (src = require("@/assets/img/shou.png"))
+          : (src = require("@/assets/img/fang.png"));
+      if (this.isTopBottomLayout)
+        !this.isHideTop
+          ? (src = require("@/assets/img/shou.png"))
+          : (src = require("@/assets/img/fang.png"));
+      return src;
+    },
   },
   created() {
     deviceTypeListAll().then((r) => (this.deviceTypeOpts = r.data));
@@ -700,6 +723,7 @@ export default {
       this.$nextTick((_) => {
         // 在此才能取到图片要素
         const myImg = this.$refs[`preiviewImg${type}`];
+        if (!myImg) return;
         const loadMarker = () => {
           // 只是测点搜索,即重载时,移除图片上对应的marker
           (type == "1"
@@ -738,13 +762,23 @@ export default {
                 : require(`@/assets/img/close${imgType}.png`);
               div.title = name;
               div.className = "marker";
-              let openStyle = '';
-              switch(+imgType){
-                case 1:openStyle="transform: translate(-77%, -50%);";break;
-                case 2:openStyle="transform: translate(-77%, -50%);";break;
-                case 3:openStyle="transform: translate(-50%, -23%);";break;
-                case 4:openStyle="transform: translate(-23%, -50%);";break;
-                case 5:openStyle="transform: translate(-50%, -50%);";break;
+              let openStyle = "";
+              switch (+imgType) {
+                case 1:
+                  openStyle = "transform: translate(-77%, -50%);";
+                  break;
+                case 2:
+                  openStyle = "transform: translate(-77%, -50%);";
+                  break;
+                case 3:
+                  openStyle = "transform: translate(-50%, -23%);";
+                  break;
+                case 4:
+                  openStyle = "transform: translate(-23%, -50%);";
+                  break;
+                case 5:
+                  openStyle = "transform: translate(-50%, -50%);";
+                  break;
               }
               div.style = value
                 ? "transform: translate(-50%, -50%);"
@@ -946,7 +980,7 @@ export default {
   padding: 1rem;
 }
 
-.side-toggler {
+.side-toggler1 {
   position: absolute;
   left: -18px;
   cursor: pointer;
@@ -954,6 +988,16 @@ export default {
   z-index: 1;
   width: 1rem;
   top: 50%;
+}
+.side-toggler2 {
+  position: absolute;
+  top: -18px;
+  cursor: pointer;
+  color: #31c6f1;
+  z-index: 1;
+  width: 1rem;
+  left: 50%;
+  transform: rotate(90deg);
 }
 
 @keyframes spin {
@@ -1004,7 +1048,14 @@ export default {
     //切掉第一个表头列的一个角
     // background: linear-gradient(-217deg, transparent 17px, #0838698c 0);
   }
-  .btm-el-tabs {
+
+  .btm2-el-tabs {
+    .el-tabs__content {
+      height: calc(100vh - 255px);
+    }
+  }
+
+  .btm1-el-tabs {
     .el-tabs__content {
       overflow: auto;
       height: 180px;
