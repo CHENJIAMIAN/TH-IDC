@@ -20,7 +20,7 @@ router.beforeEach(async (to, from, next) => {
 
   //确定用户是否已登录 
   const hasToken = getToken()
-  
+
   if (hasToken) {
     // 跳到驾驶舱单页
     if (to.path === '/login') {
@@ -29,17 +29,17 @@ router.beforeEach(async (to, from, next) => {
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
       // 控制开不开sidebar
-      store.commit("app/OPEN_SIDE");
       if (to.path.includes("/device-monitor")) {
         store.dispatch("app/closeSideBar", { withoutAnimation: false });
-        if (to.path.includes("/room")) {
-          // side关快了, 造成好像挤过来一样
-          // store.commit("app/CLOSE_SIDE");
-        }
+        if (to.name == "device-group")
+          store.commit("app/CLOSE_SIDE");
+        else
+          store.commit("app/OPEN_SIDE");
       } else {
+        store.commit("app/OPEN_SIDE");
         store.dispatch("app/openSideBar", { withoutAnimation: false });
       }
-      
+
       const auth = store.getters.auth && store.getters.auth.length >= 0;
       // console.log(store.getters.auth, to, from);
       if (auth) {

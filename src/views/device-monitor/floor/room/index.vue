@@ -127,12 +127,6 @@ export default {
       return { "grid-template-columns": r };
     },
   },
-  beforeCreate() {
-    // console.log("room", this._uid);
-    // console.log(this.$route);
-    if (this.$route.name == "device-group")
-      this.$store.commit("app/CLOSE_SIDE");
-  },
   async created() {
     const { floorId, floorName, roomId, roomName } = this.$route.params;
     Object.assign(this, { floorId, floorName, roomId, roomName });
