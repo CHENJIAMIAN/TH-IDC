@@ -4,10 +4,9 @@
       <div
         class="col1"
         :style="
-          sidebar.showSide ? 'left:50px;' : 'left:-300px;'
+          sidebar.showSide ? 'left:50px;transition: all 0.28s;' : 'left:-300px;'
         "
       >
-          <!-- sidebar.showSide ? 'left:50px;transition: all 0.28s;' : 'left:-300px;' -->
         <el-button
           v-for="room in roomList"
           :key="room.id"
