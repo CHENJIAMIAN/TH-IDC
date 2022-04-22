@@ -28,10 +28,6 @@ module.exports = {
   devServer: {
     port: port,
     open: false,
-    overlay: {
-      warnings: false,
-      errors: true
-    },
     // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
@@ -41,21 +37,21 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src')
-      }
+      },
+      fallback: { "path": require.resolve("path-browserify") }
     }
   },
   chainWebpack(config) {
     //可以提高第一个屏幕的速度，建议打开预加载
-    //可以提高第一个屏幕的速度，建议打开预加载
-    config.plugin('preload').tap(() => [
-      {
-        rel: 'preload',
-        //忽略runtime.js 
-        // https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/config/app.js#L171
-        fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
-        include: 'initial'
-      }
-    ])
+    // config.plugin('preload').use().tap(() => [
+    //   {
+    //     rel: 'preload',
+    //     //忽略runtime.js 
+    //     // https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/config/app.js#L171
+    //     fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
+    //     include: 'initial'
+    //   }
+    // ])
 
 
     //当页面很多时，它将导致太多无意义的请求 
