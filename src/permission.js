@@ -9,7 +9,7 @@ import getPageTitle from '@/utils/get-page-title'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
-
+window.authTestFlag = false;
 router.beforeEach(async (to, from, next) => {
   // console.log(to, from)
   //开始进度条 
@@ -19,7 +19,7 @@ router.beforeEach(async (to, from, next) => {
   document.title = getPageTitle(to.meta.title)
 
   //确定用户是否已登录 
-  const hasToken = getToken()
+  const hasToken = true || getToken()
 
   if (hasToken) {
     // 跳到驾驶舱单页
@@ -40,9 +40,9 @@ router.beforeEach(async (to, from, next) => {
         store.dispatch("app/openSideBar", { withoutAnimation: false });
       }
 
-      const auth = store.getters.auth && store.getters.auth.length >= 0;
+      const auth =store.getters.auth && store.getters.auth.length >= 0;
       // console.log(store.getters.auth, to, from);
-      if (auth) {
+      if (window.authTestFlag) {
         next();
       } else {
         try {
@@ -53,6 +53,7 @@ router.beforeEach(async (to, from, next) => {
           const accessRoutes = await store.dispatch('permission/generateRoutes', menuList)
           //动态添加可访问的路由 
           router.addRoutes(accessRoutes)
+          window.authTestFlag = true;
           //hack方法以确保addRoutes是完整的
           //设置replace：true，因此导航不会留下历史记录
           next({ ...to, replace: true })
@@ -73,7 +74,8 @@ router.beforeEach(async (to, from, next) => {
       next()
     } else {
       //其他无权访问的页面将重定向到登录页面。 
-      next(`/login?redirect=${to.path}`)
+      // next(`/login?redirect=${to.path}`)
+      next()
       NProgress.done()
     }
   }

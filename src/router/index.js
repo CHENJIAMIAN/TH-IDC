@@ -75,8 +75,8 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/BIM',//系统默认
-    // redirect: '/system-setting',
+    // redirect: '/BIM',//系统默认
+    redirect: '/device-monitor',
     // children: [
     //   {
     //     path: 'nested',

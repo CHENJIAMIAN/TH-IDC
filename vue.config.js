@@ -16,11 +16,11 @@ const port = 9823;//process.env.port || process.env.npm_config_port || 9527 // d
 //所有配置项说明均可在https://cli.vuejs.org/config/中找到 
 module.exports = {
   /**
-    *如果您打算在子路径（例如GitHub Pages）下部署站点，则需要设置publicPath。如果您打算将站点部署到https://foo.github.io/bar/，则publicPath应该设置为“ /bar /”。
+    *如果您打算在子路径（例如GitHub Pages）下部署站点，则需要设置publicPath。如果您打算将站点部署到https://foo.github.io/bar/，则publicPath应该设置为“ /bar/”。
     *在大多数情况下，请使用'/'！
     *详细信息：https://cli.vuejs.org/config/#publicpath
     */
-  publicPath: '/',
+  publicPath: '/TH-IDC/',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: false,//process.env.NODE_ENV === 'development',
@@ -86,14 +86,6 @@ module.exports = {
     config
       .when(process.env.NODE_ENV !== 'development',
         config => {
-          config
-            .plugin('ScriptExtHtmlWebpackPlugin')
-            .after('html')
-            .use('script-ext-html-webpack-plugin', [{
-              // `runtime` must same as runtimeChunk name. default is `runtime`
-              inline: /runtime\..*\.js$/
-            }])
-            .end()
           config
             .optimization.splitChunks({
               chunks: 'all',
