@@ -12,7 +12,7 @@
 
 ## Online Demo
 
-[在线 Demo](https://chenjiamian.github.io/th-idc/)
+[在线 Demo](https://chenjiamian.github.io/TH-IDC/)
 
 ## Browsers support
 
