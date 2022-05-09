@@ -1,1 +1,0 @@
-"use strict";(self["webpackChunkTH_IDC"]=self["webpackChunkTH_IDC"]||[]).push([[574],{90574:function(e,r,t){t.r(r),t.d(r,{default:function(){return p}});var u,n,a={created(){const{params:e,query:r}=this.$route,{path:t}=e;this.$router.replace({path:"/"+t,query:r})},render:function(e){return e()}},l=a,s=t(1001),c=(0,s.Z)(l,u,n,!1,null,null,null),p=c.exports}}]);
