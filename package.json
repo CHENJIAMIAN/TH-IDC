@@ -33,6 +33,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
+    "sass-loader": "^12.6.0",
     "screenfull": "4.2.0",
     "script-loader": "0.7.2",
     "sortablejs": "1.8.4",
@@ -69,12 +70,12 @@
     "jest": "^27.1.0",
     "lint-staged": "8.1.5",
     "mockjs": "1.0.1-beta3",
-    "node-sass": "^4.11.0",
+    "sass": "1.51.0",
     "path-browserify": "^1.0.1",
     "plop": "2.3.0",
     "postcss": "^8.4.12",
     "runjs": "4.3.2",
-    "sass-loader": "8.0.2",
+    "sass-loader": "^8.0.2",
     "serve-static": "1.13.2",
     "svg-sprite-loader": "^6.0.11",
     "svgo": "1.2.0",
@@ -88,7 +89,7 @@
     "url": "https://github.com/PanJiaChen/vue-element-admin/issues"
   },
   "engines": {
-    "node": ">=8.9",
+    "node": ">=14.0",
     "npm": ">= 3.0.0"
   },
   "keywords": [
