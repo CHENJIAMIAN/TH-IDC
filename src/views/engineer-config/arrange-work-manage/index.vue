@@ -174,7 +174,7 @@ export default {
       userNotBindOpts: [],
       userBindOpts: [],
       listLoading: true,
-      listData: [], // 列表数据
+      listData: [{},{},{}], // 列表数据
 
       allRYOpts: [],
       clickedRow: {},

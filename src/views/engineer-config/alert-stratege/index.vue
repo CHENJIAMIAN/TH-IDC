@@ -257,7 +257,7 @@ export default {
         pageSize: 10, // 每页限制数量
       },
       listLoading: true,
-      listData: [], // 列表数据
+      listData: [{},{},{}], // 列表数据
       listTotal: 0, // 列表总条数
       dialog: {
         id: "",

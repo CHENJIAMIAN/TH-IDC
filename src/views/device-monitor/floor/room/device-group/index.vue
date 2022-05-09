@@ -586,7 +586,7 @@ export default {
       deviceGroupList: [],
       //
       listLoading: false,
-      listData: [],
+      listData: [{},{},{}],
       //
       dialogImgVisible: false,
       dialogImgUrl: "",

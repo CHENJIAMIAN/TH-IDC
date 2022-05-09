@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       hasAuth: true,
-      listData: [],
+      listData: [{},{},{}],
     };
   },
   created() {

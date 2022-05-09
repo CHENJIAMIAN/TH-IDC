@@ -57,7 +57,7 @@ export default {
     return {
       showPage: false,
       hasAuth: true,
-      listData: [],
+      listData: [{},{},{}],
       listLoading: true,
       deviceTypeOpts: [],
     };

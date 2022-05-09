@@ -47,7 +47,7 @@ export default {
       showPage: false,
       hasAuth: true,
       startDate_endDate: [],
-      listData: [],
+      listData: [{},{},{}],
       filterForm: {
         startTime: null,
         endTime: null,
