@@ -43,7 +43,7 @@
 import { mapGetters } from "vuex";
 import Logo from "./Logo";
 import SidebarItem from "./SidebarItem";
-import variables from "@/styles/variables.scss";
+import variables from "@/styles/variables.module.scss";
 
 export default {
   components: { SidebarItem, Logo },
@@ -70,6 +70,7 @@ export default {
       return this.$store.state.settings.sidebarLogo;
     },
     variables() {
+      console.log('奇奇怪怪的变量', variables)
       return variables;
     },
   },
